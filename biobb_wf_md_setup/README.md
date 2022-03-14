@@ -1,10 +1,10 @@
-# AMBER Protein MD Setup tutorials using BioExcel Building Blocks (biobb)
+# Protein MD Setup tutorial using BioExcel Building Blocks (biobb)
 
 **Based on the official [GROMACS tutorial](http://www.mdtutorials.com/gmx/lysozyme/index.html).**
 
 ***
 
-This tutorials aim to illustrate the process of **setting up a simulation** system containing a **protein**, step by step, using the **BioExcel Building Blocks library (biobb)** wrapping the **Ambertools MD package**.
+This tutorial aims to illustrate the process of **setting up a simulation** system containing a **protein**, step by step, using the **BioExcel Building Blocks library (biobb)**. The particular example used is the **Lysozyme** protein (PDB code 1AKI).
 
 ***
 
