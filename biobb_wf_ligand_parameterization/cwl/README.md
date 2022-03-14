@@ -2,13 +2,12 @@
 
 To execute the workflow through a CWL script, please follow the next steps:
 
-## <a name="download-files"></a>Download workflow files
+## <a name="files"></a>Workflow files
 
-First off, be sure to download all the files needed to execute this workflow by clicking the **Download CWL Workflow** button in the **CWL Workflow** dropdown. This action will download a zip file with the **input(s)** needed and the following files:
+Below you can find the list of all the needed **files** for executing this workflow:
 
 * **workflow.cwl:** the CWL file with all the steps to execute this workflow.
 * **workflow_input_descriptions.yml:** the configuration file with the I/O dependencies and settings for each step of the workflow.
-* **workflow.cwl.md:** this same README file
 
 ## <a name="requirements"></a>Requirements
 

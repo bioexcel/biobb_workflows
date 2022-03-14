@@ -2,14 +2,13 @@
 
 To execute the workflow through a python script, please follow the next steps:
 
-## <a name="download-files"></a>Download workflow files
+## <a name="files"></a>Workflow files
 
-First off, be sure to download all the files needed to execute this workflow by clicking the **Download Python Workflow** button in the **Python Workflow** dropdown. This action will download a zip file with the **input(s)** needed and the following files:
+Below you can find the list of all the needed **files** for executing this workflow:
 
 * **workflow.py:** the python file with all the steps to execute this workflow.
 * **workflow.yml:** the configuration file with the I/O dependencies and settings for each step of the workflow.
 * **workflow.env.yml:** the environment file needed for create a conda environment where this workflow will be run.
-* **workflow.py.md:** this same README file
 
 ## <a name="requirements"></a>Requirements
 
