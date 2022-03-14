@@ -1,0 +1,6 @@
+[submodule "biobb_wf_md_setup/jupyter"]
+	path = biobb_wf_md_setup/jupyter
+	url = https://github.com/bioexcel/biobb_wf_md_setup
+[submodule "biobb_wf_ligand_parameterization/jupyter"]
+	path = biobb_wf_ligand_parameterization/jupyter
+	url = https://github.com/bioexcel/biobb_wf_ligand_parameterization

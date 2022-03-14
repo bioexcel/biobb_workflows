@@ -1,0 +1,275 @@
+working_dir_path: wf_setup
+can_write_console_log: False
+run_md: true
+
+step0_reduce_remove_hydrogens:
+  tool: reduce_remove_hydrogens
+  paths:
+    input_path: /path/to/inputs/structure.pdb
+    output_path: structure.noH.pdb
+
+step1_extract_molecule:
+  tool: extract_molecule
+  paths:
+    input_structure_path: dependency/step0_reduce_remove_hydrogens/output_path
+    output_molecule_path: protein.pdb
+
+step00_cat_pdb:
+  tool: cat_pdb
+  paths:
+    input_structure1: dependency/step1_extract_molecule/output_molecule_path
+    input_structure2: /path/to/inputs/ions.pdb
+    output_structure_path: protein.ions.pdb
+
+step2_fix_side_chain:
+  tool: fix_side_chain
+  paths:
+    input_pdb_path: dependency/step00_cat_pdb/output_structure_path
+    output_pdb_path: fixsidechain.pdb
+
+step4_pdb2gmx:
+  tool: pdb2gmx
+  paths:
+    input_pdb_path: dependency/step2_fix_side_chain/output_pdb_path
+    output_gro_path: pdb2gmx.gro
+    output_top_zip_path: pdb2gmx_top.zip
+  properties:
+    force_field: amber99sb
+    water_type: tip3p
+
+step5_editconf:
+  tool: editconf
+  paths:
+    input_gro_path: dependency/step4_pdb2gmx/output_gro_path
+    output_gro_path: editconf.pdb
+  properties:
+    distance_to_molecule: 0.8
+    box_type: octahedron
+
+step6_solvate:
+  tool: solvate
+  paths:
+    input_solute_gro_path: dependency/step5_editconf/output_gro_path
+    output_gro_path: solvate.gro
+    input_top_zip_path: dependency/step4_pdb2gmx/output_top_zip_path
+    output_top_zip_path: solvate_top.zip
+
+step7_grompp_genion:
+  tool: grompp
+  paths:
+    input_gro_path: dependency/step6_solvate/output_gro_path
+    input_top_zip_path: dependency/step6_solvate/output_top_zip_path
+    output_tpr_path: gppion.tpr
+  properties:
+    simulation_type: minimization
+    maxwarn: 1
+    mdp:
+      nsteps: 5000
+
+step8_genion:
+  tool: genion
+  paths:
+    input_tpr_path: dependency/step7_grompp_genion/output_tpr_path
+    output_gro_path: genion.gro
+    input_top_zip_path: dependency/step6_solvate/output_top_zip_path
+    output_top_zip_path: genion_top.zip
+  properties:
+    neutral: True
+    concentration: 0.05
+
+step9_grompp_min:
+  tool: grompp
+  paths:
+    input_gro_path: dependency/step8_genion/output_gro_path
+    input_top_zip_path: dependency/step8_genion/output_top_zip_path
+    output_tpr_path: gppmin.tpr
+  properties:
+    mdp:
+      nsteps: 5000
+      emtol: 500
+    simulation_type: minimization
+
+step10_mdrun_min:
+  tool: mdrun
+  paths:
+    input_tpr_path: dependency/step9_grompp_min/output_tpr_path
+    output_trr_path: min.trr
+    output_gro_path: min.gro
+    output_edr_path: min.edr
+    output_log_path: min.log
+
+step100_make_ndx:
+  tool: make_ndx
+  paths:
+    input_structure_path: dependency/step10_mdrun_min/output_gro_path
+    output_ndx_path: str_index.ndx
+  properties:
+    selection: "System"
+
+step11_grompp_nvt:
+  tool: grompp
+  paths:
+    input_gro_path: dependency/step10_mdrun_min/output_gro_path
+    input_ndx_path: dependency/step100_make_ndx/output_ndx_path
+    input_top_zip_path: dependency/step8_genion/output_top_zip_path
+    output_tpr_path: gppnvt.tpr
+  properties:
+    mdp:
+      nsteps: 5000
+      dt: 0.002
+      Define: -DPOSRES
+      tc-grps: "Protein Water_and_ions"
+    simulation_type: nvt
+
+step12_mdrun_nvt:
+  tool: mdrun
+  paths:
+    input_tpr_path: dependency/step11_grompp_nvt/output_tpr_path
+    output_trr_path: nvt.trr
+    output_gro_path: nvt.gro
+    output_edr_path: nvt.edr
+    output_log_path: nvt.log
+    output_cpt_path: nvt.cpt
+
+step13_grompp_npt:
+  tool: grompp
+  paths:
+    input_gro_path: dependency/step12_mdrun_nvt/output_gro_path
+    input_ndx_path: dependency/step100_make_ndx/output_ndx_path
+    input_top_zip_path: dependency/step8_genion/output_top_zip_path
+    output_tpr_path: gppnpt.tpr
+    input_cpt_path: dependency/step12_mdrun_nvt/output_cpt_path
+  properties:
+    mdp:
+      nsteps: 5000
+      tc-grps: "Protein Water_and_ions"
+    simulation_type: npt
+
+step14_mdrun_npt:
+  tool: mdrun
+  paths:
+    input_tpr_path: dependency/step13_grompp_npt/output_tpr_path
+    output_trr_path: npt.trr
+    output_gro_path: npt.gro
+    output_edr_path: npt.edr
+    output_log_path: npt.log
+    output_cpt_path: npt.cpt
+
+step15_grompp_md:
+  tool: grompp
+  paths:
+    input_gro_path: dependency/step14_mdrun_npt/output_gro_path
+    input_ndx_path: dependency/step100_make_ndx/output_ndx_path
+    input_top_zip_path: dependency/step8_genion/output_top_zip_path
+    output_tpr_path: gppmd.tpr
+    input_cpt_path: dependency/step14_mdrun_npt/output_cpt_path
+  properties:
+    mdp:
+      #nsteps: 250000
+      nsteps: 25000
+      tc-grps: "Protein Water_and_ions"
+    simulation_type: free
+
+step16_mdrun_md:
+  tool: mdrun
+  paths:
+    input_tpr_path: dependency/step15_grompp_md/output_tpr_path
+    output_trr_path: md.trr
+    output_gro_path: md.gro
+    output_edr_path: md.edr
+    output_log_path: md.log
+    output_cpt_path: md.cpt
+
+step17_gmx_image1:
+  tool: gmx_image
+  paths:
+    input_traj_path: dependency/step16_mdrun_md/output_trr_path
+    input_top_path: dependency/step9_grompp_min/output_tpr_path
+    input_index_path: dependency/step100_make_ndx/output_ndx_path
+    output_traj_path: md.imaged.trr
+  properties:
+    center_selection: "Protein"
+    output_selection: System
+    pbc: "mol"
+    center: true
+    ur: compact
+
+step18_gmx_image2:
+  tool: gmx_image
+  paths:
+    input_traj_path: dependency/step17_gmx_image1/output_traj_path
+    input_top_path: dependency/step9_grompp_min/output_tpr_path
+    input_index_path: dependency/step100_make_ndx/output_ndx_path
+    output_traj_path: md.imaged.rot.xtc
+  properties:
+    fit_selection: "Protein"
+    output_selection: System  
+    fit: rot+trans
+
+step19_gmx_trjconv_str:
+  tool: gmx_trjconv_str
+  paths:
+    input_structure_path: dependency/step16_mdrun_md/output_gro_path
+    input_top_path: dependency/step9_grompp_min/output_tpr_path
+    input_index_path: dependency/step100_make_ndx/output_ndx_path
+    output_str_path: setup.top.pdb
+  properties:
+    pbc: "mol"
+    selection: System
+
+step20_gmx_energy:
+  tool: gmx_energy
+  paths:
+    input_energy_path: dependency/step16_mdrun_md/output_edr_path
+    output_xvg_path: setup.energy.xvg
+  properties:
+    xvg: xmgr
+    terms: [Potential,Total-Energy]
+
+step21_gmx_rgyr:
+  tool: gmx_rgyr
+  paths:
+    input_structure_path: dependency/step15_grompp_md/output_tpr_path
+    input_traj_path: dependency/step18_gmx_image2/output_traj_path
+    input_index_path: dependency/step100_make_ndx/output_ndx_path
+    output_xvg_path: setup.rgyr.xvg
+  properties:
+    xvg: xmgr
+    selection: "Protein-H"
+
+step22_rmsd_first:
+  tool: gmx_rms
+  paths:
+    input_structure_path: dependency/step15_grompp_md/output_tpr_path
+    input_traj_path: dependency/step18_gmx_image2/output_traj_path
+    input_index_path: dependency/step100_make_ndx/output_ndx_path
+    output_xvg_path: setup.rmsd_first.xvg
+  properties:
+    selection: "Protein-H"
+
+step23_rmsd_exp:
+  tool: gmx_rms
+  paths:
+    input_structure_path: dependency/step9_grompp_min/output_tpr_path
+    input_traj_path: dependency/step18_gmx_image2/output_traj_path
+    input_index_path: dependency/step100_make_ndx/output_ndx_path
+    output_xvg_path: setup.rmsd_exp.xvg
+  properties:
+    selection: "Protein-H"
+
+# production MD
+step24_grompp_md:
+  tool: grompp
+  paths:
+    input_gro_path: dependency/step16_mdrun_md/output_gro_path
+    input_top_zip_path: dependency/step8_genion/output_top_zip_path
+    output_tpr_path: gppmdsim.tpr
+    input_cpt_path: dependency/step16_mdrun_md/output_cpt_path
+  properties:
+    mdp:
+      nsteps: 5000000
+      dt: 0.002
+      ref-t: 300 300
+      nstxout: 100000
+      nstxout-compressed: 500
+    simulation_type: free

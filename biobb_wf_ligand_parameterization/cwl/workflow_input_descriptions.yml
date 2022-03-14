@@ -1,0 +1,10 @@
+step2_babel_minimize_config: '{"criteria": 1e-10, "method": "sd", "force_field": "GAFF", "hydrogens": false}'
+step2_babel_minimize_input_path:
+  class: File
+  path: ligand.pdb
+  format: https://edamontology.org/format_1476
+step2_babel_minimize_output_path: ligand.H.min.mol2
+step3_acpype_params_gmx_config: '{"basename": "biobb_GMX_LP", "charge": -1}'
+step3_acpype_params_gmx_output_path_gro: output.params.gro
+step3_acpype_params_gmx_output_path_itp: output.params.itp
+step3_acpype_params_gmx_output_path_top: output.params.top
