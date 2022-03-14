@@ -1,0 +1,102 @@
+step0_reduce_remove_hydrogens_input_path:
+  class: File
+  path: structure.pdb
+  format: https://edamontology.org/format_1476
+step0_reduce_remove_hydrogens_output_path: structure.noH.pdb
+step2_extract_molecule_output_molecule_path: protein.pdb
+step00_cat_pdb_input_structure2:
+  class: File
+  path: ions.pdb
+  format: https://edamontology.org/format_1476
+step00_cat_pdb_output_structure_path: protein.ions.pdb
+step4_fix_side_chain_output_pdb_path: fixsidechain.pdb
+step5_pdb2gmx_config: '{"force_field": "amber99sb", "water_type": "tip3p"}'
+step5_pdb2gmx_output_gro_path: pdb2gmx.gro
+step5_pdb2gmx_output_top_zip_path: pdb2gmx_top.zip
+step9_make_ndx_config: '{"selection": "0 & ! a H*"}'
+step9_make_ndx_input_structure_path:
+  class: File
+  path: ligand.gro
+  format: https://edamontology.org/format_2033
+step9_make_ndx_output_ndx_path: ligand.index.ndx
+step10_genrestr_config: '{"force_constants": "1000 1000 1000", "restrained_group": "System"}'
+step10_genrestr_input_structure_path:
+  class: File
+  path: ligand.gro
+  format: https://edamontology.org/format_2033
+step10_genrestr_output_itp_path: ligand.posres.itp
+step11_gmx_trjconv_str_protein_config: '{"selection": "System"}'
+step11_gmx_trjconv_str_protein_output_str_path: protein_H.pdb
+step12_gmx_trjconv_str_ligand_config: '{"selection": "System"}'
+step12_gmx_trjconv_str_ligand_input_structure_path:
+  class: File
+  path: ligand.gro
+  format: https://edamontology.org/format_2033
+step12_gmx_trjconv_str_ligand_input_top_path:
+  class: File
+  path: ligand.gro
+  format: https://edamontology.org/format_2033
+step12_gmx_trjconv_str_ligand_output_str_path: ligand_H.pdb
+step13_cat_pdb_hydrogens_output_structure_path: complex_H.pdb
+step14_append_ligand_config: '{"posres_name": "POSRES_LIGAND"}'
+step14_append_ligand_input_itp_path:
+  class: File
+  path: ligand.itp
+  format: https://edamontology.org/format_3883
+step14_append_ligand_output_top_zip_path: complex.top.zip
+step15_editconf_config: '{"distance_to_molecule": 0.8, "box_type": "octahedron"}'
+step15_editconf_output_gro_path: complex.editconf.pdb
+step16_solvate_output_gro_path: solvate.gro
+step16_solvate_output_top_zip_path: solvate_top.zip
+step17_grompp_genion_config: '{"simulation_type": "minimization", "maxwarn": 1, "mdp": {"nsteps": 5000}}'
+step17_grompp_genion_output_tpr_path: complex.gppion.tpr
+step18_genion_config: '{"neutral": true, "concentration": 0.05}'
+step18_genion_output_gro_path: genion.gro
+step18_genion_output_top_zip_path: genion_top.zip
+step19_grompp_min_config: '{"mdp": {"nsteps": 5000, "emtol": 500, "emstep": 0.01}, "simulation_type": "minimization"}'
+step19_grompp_min_output_tpr_path: gppmin.tpr
+step20_mdrun_min_output_trr_path: complex.min.trr
+step20_mdrun_min_output_gro_path: complex.min.gro
+step20_mdrun_min_output_edr_path: complex.min.edr
+step20_mdrun_min_output_log_path: complex.min.log
+step21_gmx_energy_min_config: '{"terms": ["Potential"]}'
+step21_gmx_energy_min_output_xvg_path: complex.min.energy.xvg
+step22_make_ndx_config: '{"selection": "\"Protein\"|\"Other\""}'
+step22_make_ndx_output_ndx_path: complex.index.ndx
+step23_grompp_nvt_config: '{"mdp": {"nsteps": 5000, "tc-grps": "Protein_Other Water_and_ions", "Define": "-DPOSRES -DPOSRES_LIGAND"}, "simulation_type": "nvt"}'
+step23_grompp_nvt_output_tpr_path: complex.gppnvt.tpr
+step24_mdrun_nvt_output_trr_path: complex.nvt.trr
+step24_mdrun_nvt_output_gro_path: complex.nvt.gro
+step24_mdrun_nvt_output_edr_path: complex.nvt.edr
+step24_mdrun_nvt_output_log_path: complex.nvt.log
+step24_mdrun_nvt_output_cpt_path: complex.nvt.cpt
+step25_gmx_energy_nvt_config: '{"terms": ["Temperature"]}'
+step25_gmx_energy_nvt_output_xvg_path: complex.nvt.temp.xvg
+step26_grompp_npt_config: '{"mdp": {"nsteps": 5000, "type": "npt", "tc-grps": "Protein_Other Water_and_ions", "Define": "-DPOSRES -DPOSRES_LIGAND"}, "simulation_type": "npt"}'
+step26_grompp_npt_output_tpr_path: complex.gppnpt.tpr
+step27_mdrun_npt_output_trr_path: complex.npt.trr
+step27_mdrun_npt_output_gro_path: complex.npt.gro
+step27_mdrun_npt_output_edr_path: complex.npt.edr
+step27_mdrun_npt_output_log_path: complex.npt.log
+step27_mdrun_npt_output_cpt_path: complex.npt.cpt
+step28_gmx_energy_npt_config: '{"terms": ["Pressure", "Density"]}'
+step28_gmx_energy_npt_output_xvg_path: complex.npt.PD.xvg
+step29_grompp_md_config: '{"mdp": {"nsteps": 250000, "tc-grps": "Protein_Other Water_and_ions"}, "simulation_type": "free"}'
+step29_grompp_md_output_tpr_path: complex.gppmd.tpr
+step30_mdrun_md_output_trr_path: complex.md.trr
+step30_mdrun_md_output_gro_path: complex.md.gro
+step30_mdrun_md_output_edr_path: complex.md.edr
+step30_mdrun_md_output_log_path: complex.md.log
+step30_mdrun_md_output_cpt_path: complex.md.cpt
+step31_rmsd_first_config: '{"selection": "Protein_Other"}'
+step31_rmsd_first_output_xvg_path: complex.rmsd_first.xvg
+step32_rmsd_exp_config: '{"selection": "Protein_Other"}'
+step32_rmsd_exp_output_xvg_path: complex.rmsd_exp.xvg
+step33_gmx_rgyr_config: '{"selection": "Protein_Other"}'
+step33_gmx_rgyr_output_xvg_path: complex.rgyr.xvg
+step34_gmx_image_config: '{"center_selection": "Protein_Other", "output_selection": "System", "pbc": "mol", "center": true}'
+step34_gmx_image_output_traj_path: complex.imaged.trr
+step35_gmx_trjconv_str_config: '{"pbc": "mol", "selection": "System"}'
+step35_gmx_trjconv_str_output_str_path: complex.md.gro
+step36_grompp_md_config: '{"mdp": {"nsteps": 5000000, "dt": 0.002, "ref-t": "300 300", "nstxout": 100000, "nstxout-compressed": 500}, "simulation_type": "free"}'
+step36_grompp_md_output_tpr_path: gppmdsim.tpr

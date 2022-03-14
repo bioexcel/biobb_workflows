@@ -1,0 +1,332 @@
+working_dir_path: wf_complex_setup
+can_write_console_log: False
+run_md: true
+
+step0_reduce_remove_hydrogens:
+  tool: reduce_remove_hydrogens
+  paths:
+    input_path: /path/to/inputs/structure.pdb
+    output_path: structure.noH.pdb
+
+step2_extract_molecule:
+  tool: extract_molecule
+  paths:
+    input_structure_path: dependency/step0_reduce_remove_hydrogens/output_path
+    output_molecule_path: protein.pdb
+
+step00_cat_pdb:
+  tool: cat_pdb
+  paths:
+    input_structure1: dependency/step2_extract_molecule/output_molecule_path
+    input_structure2: /path/to/inputs/ions.pdb
+    output_structure_path: protein.ions.pdb
+
+step4_fix_side_chain:
+  tool: fix_side_chain
+  paths:
+    input_pdb_path: dependency/step00_cat_pdb/output_structure_path
+    output_pdb_path: fixsidechain.pdb
+
+step5_pdb2gmx:
+  tool: pdb2gmx
+  paths:
+    input_pdb_path:  dependency/step4_fix_side_chain/output_pdb_path
+    output_gro_path: pdb2gmx.gro
+    output_top_zip_path: pdb2gmx_top.zip
+  properties:
+    force_field: amber99sb
+    water_type: tip3p
+
+step9_make_ndx:
+  tool: make_ndx
+  paths:
+    input_structure_path: /path/to/inputs/ligand.gro
+    output_ndx_path: ligand.index.ndx
+  properties:
+    selection: 0 & ! a H*
+
+step10_genrestr:
+  tool: genrestr
+  paths:
+    input_structure_path: /path/to/inputs/ligand.gro
+    input_ndx_path: dependency/step9_make_ndx/output_ndx_path
+    output_itp_path: ligand.posres.itp
+  properties:
+    force_constants: 1000 1000 1000
+    restrained_group: System
+
+step11_gmx_trjconv_str_protein:
+  tool: gmx_trjconv_str
+  paths:
+    input_structure_path: dependency/step5_pdb2gmx/output_gro_path
+    input_top_path: dependency/step5_pdb2gmx/output_gro_path
+    output_str_path: protein_H.pdb
+  properties:
+    selection: System
+
+step12_gmx_trjconv_str_ligand:
+  tool: gmx_trjconv_str
+  paths:
+    input_structure_path: /path/to/inputs/ligand.gro
+    input_top_path: /path/to/inputs/ligand.gro
+    output_str_path: ligand_H.pdb
+  properties:
+    selection: System
+
+step13_cat_pdb_hydrogens:
+  tool: cat_pdb
+  paths:
+    input_structure1: dependency/step11_gmx_trjconv_str_protein/output_str_path
+    input_structure2: dependency/step12_gmx_trjconv_str_ligand/output_str_path
+    output_structure_path: complex_H.pdb
+
+step14_append_ligand:
+  tool: append_ligand
+  paths:
+    input_top_zip_path: dependency/step5_pdb2gmx/output_top_zip_path
+    input_posres_itp_path: dependency/step10_genrestr/output_itp_path
+    input_itp_path: /path/to/inputs/ligand.itp
+    output_top_zip_path: complex.top.zip
+  properties:
+    posres_name: POSRES_LIGAND
+
+step15_editconf:
+  tool: editconf
+  paths:
+    input_gro_path: dependency/step13_cat_pdb_hydrogens/output_structure_path
+    output_gro_path: complex.editconf.pdb
+  properties:
+    distance_to_molecule: 0.8
+    box_type: octahedron
+
+step16_solvate:
+  tool: solvate
+  paths:
+    input_solute_gro_path: dependency/step15_editconf/output_gro_path
+    output_gro_path: solvate.gro
+    input_top_zip_path: dependency/step14_append_ligand/output_top_zip_path
+    output_top_zip_path: solvate_top.zip
+
+step17_grompp_genion:
+  tool: grompp
+  paths:
+    input_gro_path: dependency/step16_solvate/output_gro_path
+    input_top_zip_path: dependency/step16_solvate/output_top_zip_path
+    output_tpr_path: complex.gppion.tpr
+  properties:
+    simulation_type: minimization
+    maxwarn: 1
+    mdp:
+      nsteps: 5000
+
+step18_genion:
+  tool: genion
+  paths:
+    input_tpr_path: dependency/step17_grompp_genion/output_tpr_path
+    output_gro_path: genion.gro
+    input_top_zip_path: dependency/step16_solvate/output_top_zip_path
+    output_top_zip_path: genion_top.zip
+  properties:
+    neutral: True
+    concentration: 0.05
+
+step19_grompp_min:
+  tool: grompp
+  paths:
+    input_gro_path: dependency/step18_genion/output_gro_path
+    input_top_zip_path: dependency/step18_genion/output_top_zip_path
+    output_tpr_path: gppmin.tpr
+  properties:
+    mdp:
+      nsteps: 5000
+      emtol: 500
+      emstep: 0.01
+    simulation_type: minimization
+
+step20_mdrun_min:
+  tool: mdrun
+  paths:
+    input_tpr_path: dependency/step19_grompp_min/output_tpr_path
+    output_trr_path: complex.min.trr
+    output_gro_path: complex.min.gro
+    output_edr_path: complex.min.edr
+    output_log_path: complex.min.log
+
+step21_gmx_energy_min:
+  tool: gmx_energy
+  paths:
+    input_energy_path: dependency/step20_mdrun_min/output_edr_path
+    output_xvg_path: complex.min.energy.xvg
+  properties:
+    terms: [Potential]
+
+step22_make_ndx:
+  tool: make_ndx
+  paths:
+    input_structure_path: dependency/step20_mdrun_min/output_gro_path
+    output_ndx_path: complex.index.ndx
+  properties:
+    selection: "\"Protein\"|\"Other\"" 
+
+step23_grompp_nvt:
+  tool: grompp
+  paths:
+    input_gro_path: dependency/step20_mdrun_min/output_gro_path
+    input_top_zip_path: dependency/step18_genion/output_top_zip_path
+    input_ndx_path: dependency/step22_make_ndx/output_ndx_path
+    output_tpr_path: complex.gppnvt.tpr
+  properties:
+    mdp:
+      nsteps: 5000
+      tc-grps: "Protein_Other Water_and_ions"
+      Define: -DPOSRES -DPOSRES_LIGAND
+    simulation_type: nvt
+
+step24_mdrun_nvt:
+  tool: mdrun
+  paths:
+    input_tpr_path: dependency/step23_grompp_nvt/output_tpr_path
+    output_trr_path: complex.nvt.trr
+    output_gro_path: complex.nvt.gro
+    output_edr_path: complex.nvt.edr
+    output_log_path: complex.nvt.log
+    output_cpt_path: complex.nvt.cpt
+
+step25_gmx_energy_nvt:
+  tool: gmx_energy
+  paths:
+    input_energy_path: dependency/step24_mdrun_nvt/output_edr_path
+    output_xvg_path: complex.nvt.temp.xvg
+  properties:
+    terms: [Temperature]
+
+step26_grompp_npt:
+  tool: grompp
+  paths:
+    input_gro_path: dependency/step24_mdrun_nvt/output_gro_path
+    input_top_zip_path: dependency/step18_genion/output_top_zip_path
+    input_ndx_path: dependency/step22_make_ndx/output_ndx_path
+    output_tpr_path: complex.gppnpt.tpr
+    input_cpt_path: dependency/step24_mdrun_nvt/output_cpt_path
+  properties:
+    mdp:
+      nsteps: 5000
+      type: npt
+      tc-grps: "Protein_Other Water_and_ions"
+      Define: -DPOSRES -DPOSRES_LIGAND
+    simulation_type: npt
+
+step27_mdrun_npt:
+  tool: mdrun
+  paths:
+    input_tpr_path: dependency/step26_grompp_npt/output_tpr_path
+    output_trr_path: complex.npt.trr
+    output_gro_path: complex.npt.gro
+    output_edr_path: complex.npt.edr
+    output_log_path: complex.npt.log
+    output_cpt_path: complex.npt.cpt
+
+step28_gmx_energy_npt:
+  tool: gmx_energy
+  paths:
+    input_energy_path: dependency/step27_mdrun_npt/output_edr_path
+    output_xvg_path: complex.npt.PD.xvg
+  properties:
+    terms: [Pressure,Density]
+
+step29_grompp_md:
+  tool: grompp
+  paths:
+    input_gro_path: dependency/step27_mdrun_npt/output_gro_path
+    input_ndx_path: dependency/step22_make_ndx/output_ndx_path
+    input_top_zip_path: dependency/step18_genion/output_top_zip_path
+    output_tpr_path: complex.gppmd.tpr
+    input_cpt_path: dependency/step27_mdrun_npt/output_cpt_path
+  properties:
+    mdp:
+      nsteps: 250000
+      #nsteps: 25000
+      tc-grps: "Protein_Other Water_and_ions"
+    simulation_type: free
+
+step30_mdrun_md:
+  tool: mdrun
+  paths:
+    input_tpr_path: dependency/step29_grompp_md/output_tpr_path
+    output_trr_path: complex.md.trr
+    output_gro_path: complex.md.gro
+    output_edr_path: complex.md.edr
+    output_log_path: complex.md.log
+    output_cpt_path: complex.md.cpt
+
+step31_rmsd_first:
+  tool: gmx_rms
+  paths:
+    input_structure_path: dependency/step29_grompp_md/output_tpr_path
+    input_traj_path: dependency/step30_mdrun_md/output_trr_path
+    input_index_path: dependency/step22_make_ndx/output_ndx_path
+    output_xvg_path: complex.rmsd_first.xvg
+  properties:
+    selection: "Protein_Other"
+
+step32_rmsd_exp:
+  tool: gmx_rms
+  paths:
+    input_structure_path: dependency/step19_grompp_min/output_tpr_path
+    input_traj_path: dependency/step30_mdrun_md/output_trr_path
+    input_index_path: dependency/step22_make_ndx/output_ndx_path
+    output_xvg_path: complex.rmsd_exp.xvg
+  properties:
+    selection: "Protein_Other"
+
+step33_gmx_rgyr:
+  tool: gmx_rgyr
+  paths:
+    input_structure_path: dependency/step19_grompp_min/output_tpr_path
+    input_traj_path: dependency/step30_mdrun_md/output_trr_path
+    input_index_path: dependency/step22_make_ndx/output_ndx_path
+    output_xvg_path: complex.rgyr.xvg
+  properties:
+    selection: "Protein_Other"
+
+step34_gmx_image:
+  tool: gmx_image
+  paths:
+    input_traj_path: dependency/step30_mdrun_md/output_trr_path
+    input_top_path: dependency/step19_grompp_min/output_tpr_path
+    input_index_path: dependency/step22_make_ndx/output_ndx_path
+    output_traj_path: complex.imaged.trr
+  properties:
+    center_selection: "Protein_Other"
+    output_selection: System
+    pbc: "mol"
+    center: True
+
+step35_gmx_trjconv_str:
+  tool: gmx_trjconv_str
+  paths:
+    input_structure_path: dependency/step30_mdrun_md/output_gro_path
+    input_top_path: dependency/step19_grompp_min/output_tpr_path
+    input_index_path: dependency/step22_make_ndx/output_ndx_path
+    output_str_path: complex.md.gro
+  properties:
+    pbc: "mol"
+    selection: System
+    #selection: "Protein_Other"
+
+# production MD
+step36_grompp_md:
+  tool: grompp
+  paths:
+    input_gro_path: dependency/step30_mdrun_md/output_gro_path
+    input_top_zip_path: dependency/step18_genion/output_top_zip_path
+    output_tpr_path: gppmdsim.tpr
+    input_cpt_path: dependency/step30_mdrun_md/output_cpt_path
+  properties:
+    mdp:
+      nsteps: 5000000
+      dt: 0.002
+      ref-t: 300 300
+      nstxout: 100000
+      nstxout-compressed: 500
+    simulation_type: free
