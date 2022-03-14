@@ -1,0 +1,687 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "",
+    "format-version": "0.1",
+    "name": "Fpocket Protein-Ligand Docking",
+    "steps": {
+        "0": {
+            "annotation": "",
+            "content_id": "biobb_io_ideal_sdf_ext",
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [],
+            "label": null,
+            "name": "IdealSdf",
+            "outputs": [
+                {
+                    "name": "output_sdf_path",
+                    "type": "sdf"
+                }
+            ],
+            "position": {
+                "bottom": 795.78125,
+                "height": 61.78125,
+                "left": -539.5,
+                "right": -339.5,
+                "top": 734,
+                "width": 200,
+                "x": -539.5,
+                "y": 734
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_io_ideal_sdf_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"outname_output_sdf_path\": \"myideal_sdf.sdf\", \"properties\": {\"ligand_code\": \"STI\", \"api_id\": \"pdbe\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.6.0",
+            "type": "tool",
+            "uuid": "fdbbdba0-c722-49d1-b0cc-d94eefb74c4b",
+            "workflow_outputs": [
+                {
+                    "label": "myideal_sdf.sdf",
+                    "output_name": "output_sdf_path",
+                    "uuid": "2da3b383-40c9-47b2-a57e-d09cb9825d18"
+                }
+            ]
+        },
+        "1": {
+            "annotation": "",
+            "content_id": "biobb_io_pdb_ext",
+            "errors": null,
+            "id": 1,
+            "input_connections": {},
+            "inputs": [],
+            "label": null,
+            "name": "Pdb",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "bottom": 269.78125,
+                "height": 61.78125,
+                "left": -948.5,
+                "right": -748.5,
+                "top": 208,
+                "width": 200,
+                "x": -948.5,
+                "y": 208
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_io_pdb_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"outname_output_pdb_path\": \"mypdb.pdb\", \"properties\": {\"pdb_code\": \"3HEC\", \"filter\": \"[ATOM, HETATM]\", \"api_id\": \"pdbe\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.6.0",
+            "type": "tool",
+            "uuid": "b1346aab-0831-4856-9d55-54583694846a",
+            "workflow_outputs": [
+                {
+                    "label": "mypdb.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "8fb46ac4-713f-468e-bb56-32334f712c3a"
+                }
+            ]
+        },
+        "2": {
+            "annotation": "",
+            "content_id": "biobb_chemistry_babel_convert_ext",
+            "errors": null,
+            "id": 2,
+            "input_connections": {
+                "input_path": {
+                    "id": 0,
+                    "output_name": "output_sdf_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "BabelConvert",
+            "outputs": [
+                {
+                    "name": "output_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "bottom": 1010.6875,
+                "height": 276.6875,
+                "left": -271.5,
+                "right": -71.5,
+                "top": 734,
+                "width": 200,
+                "x": -271.5,
+                "y": 734
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_chemistry_babel_convert_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_path\": \"mybabel_convert.pdb\", \"properties\": {\"input_format\": \"sdf\", \"output_format\": \"pdb\", \"coordinates\": \"3\", \"ph\": \"7.4\", \"obabel_path\": \"obabel\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.6.0",
+            "type": "tool",
+            "uuid": "9c3622e1-366c-4a77-93d0-481aa0be0014",
+            "workflow_outputs": [
+                {
+                    "label": "mybabel_convert.ent",
+                    "output_name": "output_path",
+                    "uuid": "91086858-4dc8-445c-9d0a-84cd01b58bf7"
+                }
+            ]
+        },
+        "3": {
+            "annotation": "",
+            "content_id": "biobb_structure_utils_extract_molecule_ext",
+            "errors": null,
+            "id": 3,
+            "input_connections": {
+                "input_structure_path": {
+                    "id": 1,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "ExtractMolecule",
+            "outputs": [
+                {
+                    "name": "output_molecule_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "bottom": 304.5625,
+                "height": 113.5625,
+                "left": -701.5,
+                "right": -501.5,
+                "top": 191,
+                "width": 200,
+                "x": -701.5,
+                "y": 191
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_structure_utils_extract_molecule_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_molecule_path\": \"myextract_molecule.pdb\", \"properties\": {\"molecule_type\": \"protein\", \"chains\": \"[]\", \"check_structure_path\": \"check_structure\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.6.1",
+            "type": "tool",
+            "uuid": "01f7f21e-49f3-421a-bd45-0fb29079c71f",
+            "workflow_outputs": [
+                {
+                    "label": "myextract_molecule.pdb",
+                    "output_name": "output_molecule_path",
+                    "uuid": "6f8f1e3f-4f15-450e-ab1f-8597f85ba773"
+                }
+            ]
+        },
+        "4": {
+            "annotation": "",
+            "content_id": "biobb_chemistry_babel_convert_ext",
+            "errors": null,
+            "id": 4,
+            "input_connections": {
+                "input_path": {
+                    "id": 2,
+                    "output_name": "output_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "BabelConvert",
+            "outputs": [
+                {
+                    "name": "output_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "bottom": 917.6875,
+                "height": 276.6875,
+                "left": 62.5,
+                "right": 262.5,
+                "top": 641,
+                "width": 200,
+                "x": 62.5,
+                "y": 641
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_chemistry_babel_convert_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_path\": \"mybabel_convert.pdbqt\", \"properties\": {\"input_format\": \"pdb\", \"output_format\": \"pdbqt\", \"coordinates\": \"3\", \"ph\": \"7.4\", \"obabel_path\": \"obabel\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.6.0",
+            "type": "tool",
+            "uuid": "2c5f08f2-bd85-49a6-927b-7b4300dd4e60",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_path",
+                    "uuid": "6a0c6231-e715-43e0-8e6f-a9110e6e584c"
+                }
+            ]
+        },
+        "5": {
+            "annotation": "",
+            "content_id": "biobb_structure_utils_str_check_add_hydrogens_ext",
+            "errors": null,
+            "id": 5,
+            "input_connections": {
+                "input_structure_path": {
+                    "id": 3,
+                    "output_name": "output_molecule_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "StrCheckAddHydrogens",
+            "outputs": [
+                {
+                    "name": "output_structure_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "bottom": 305.453125,
+                "height": 133.953125,
+                "left": -181.5,
+                "right": 18.5,
+                "top": 171.5,
+                "width": 200,
+                "x": -181.5,
+                "y": 171.5
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_structure_path": {
+                    "action_arguments": {
+                        "newtype": "pdbqt"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_structure_path"
+                }
+            },
+            "tool_id": "biobb_structure_utils_str_check_add_hydrogens_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_structure_path\": \"mystr_check_add_hydrogens.pdbqt\", \"properties\": {\"charges\": \"true\", \"mode\": \"auto\", \"ph\": \"7.4\", \"list\": \"\", \"keep_canonical_resnames\": \"true\", \"check_structure_path\": \"check_structure\", \"output_format\": \"pdbqt\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.6.1",
+            "type": "tool",
+            "uuid": "3b953edf-bad3-4a40-84f8-a7dc253e4020",
+            "workflow_outputs": [
+                {
+                    "label": "mystr_check_add_hydrogens.pdb",
+                    "output_name": "output_structure_path",
+                    "uuid": "240690de-341d-487f-bd77-fbc7908d36c4"
+                }
+            ]
+        },
+        "6": {
+            "annotation": "",
+            "content_id": "biobb_vs_fpocket_run_ext",
+            "errors": null,
+            "id": 6,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 3,
+                    "output_name": "output_molecule_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool FpocketRun",
+                    "name": "input_pdb_path"
+                }
+            ],
+            "label": null,
+            "name": "FpocketRun",
+            "outputs": [
+                {
+                    "name": "output_pockets_zip",
+                    "type": "zip"
+                },
+                {
+                    "name": "output_summary",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "bottom": 604.5625,
+                "height": 123.5625,
+                "left": -697,
+                "right": -497,
+                "top": 481,
+                "width": 200,
+                "x": -697,
+                "y": 481
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_vs_fpocket_run_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_pockets_zip\": \"myfpocket_run.zip\", \"outname_output_summary\": \"myfpocket_run.json\", \"properties\": {\"min_radius\": \"3.0\", \"max_radius\": \"6.0\", \"num_spheres\": \"35\", \"sort_by\": \"druggability_score\", \"fpocket_path\": \"fpocket\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.6.0",
+            "type": "tool",
+            "uuid": "4d53e41c-88cc-4c89-ac5c-72d4c2515e85",
+            "workflow_outputs": [
+                {
+                    "label": "myfpocket_run.json",
+                    "output_name": "output_summary",
+                    "uuid": "28863c1b-947d-4c80-ada5-17a8e011d4ef"
+                },
+                {
+                    "label": "myfpocket_run.zip",
+                    "output_name": "output_pockets_zip",
+                    "uuid": "d96b5513-7ff9-4c37-9f9e-f2e4f41447d7"
+                }
+            ]
+        },
+        "7": {
+            "annotation": "",
+            "content_id": "biobb_vs_fpocket_filter_ext",
+            "errors": null,
+            "id": 7,
+            "input_connections": {
+                "input_pockets_zip": {
+                    "id": 6,
+                    "output_name": "output_pockets_zip"
+                },
+                "input_summary": {
+                    "id": 6,
+                    "output_name": "output_summary"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool FpocketFilter",
+                    "name": "input_pockets_zip"
+                },
+                {
+                    "description": "runtime parameter for tool FpocketFilter",
+                    "name": "input_summary"
+                }
+            ],
+            "label": null,
+            "name": "FpocketFilter",
+            "outputs": [
+                {
+                    "name": "output_filter_pockets_zip",
+                    "type": "zip"
+                }
+            ],
+            "position": {
+                "bottom": 603.5625,
+                "height": 123.5625,
+                "left": -425.5,
+                "right": -225.5,
+                "top": 480,
+                "width": 200,
+                "x": -425.5,
+                "y": 480
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_vs_fpocket_filter_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pockets_zip\": {\"__class__\": \"RuntimeValue\"}, \"input_summary\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_filter_pockets_zip\": \"myfpocket_filter.zip\", \"properties\": {\"score\": \"[]\", \"druggability_score\": \"[]\", \"volume\": \"[800,2000]\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.6.0",
+            "type": "tool",
+            "uuid": "02bac6e4-5520-4730-b76a-e0ebb85aea43",
+            "workflow_outputs": [
+                {
+                    "label": "myfpocket_filter.zip",
+                    "output_name": "output_filter_pockets_zip",
+                    "uuid": "d436fdb4-bfb2-418e-b4d1-c88630221e96"
+                }
+            ]
+        },
+        "8": {
+            "annotation": "",
+            "content_id": "biobb_vs_fpocket_select_ext",
+            "errors": null,
+            "id": 8,
+            "input_connections": {
+                "input_pockets_zip": {
+                    "id": 7,
+                    "output_name": "output_filter_pockets_zip"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool FpocketSelect",
+                    "name": "input_pockets_zip"
+                }
+            ],
+            "label": null,
+            "name": "FpocketSelect",
+            "outputs": [
+                {
+                    "name": "output_pocket_pdb",
+                    "type": "pdb"
+                },
+                {
+                    "name": "output_pocket_pqr",
+                    "type": "pqr"
+                }
+            ],
+            "position": {
+                "bottom": 634.34375,
+                "height": 164.34375,
+                "left": -162.5,
+                "right": 37.5,
+                "top": 470,
+                "width": 200,
+                "x": -162.5,
+                "y": 470
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_vs_fpocket_select_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pockets_zip\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_pocket_pdb\": \"myfpocket_select.pdb\", \"outname_output_pocket_pqr\": \"myfpocket_select.pqr\", \"properties\": {\"pocket\": \"6\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.6.0",
+            "type": "tool",
+            "uuid": "a673081c-9ebe-4a0d-a9c8-0cb3deca5083",
+            "workflow_outputs": [
+                {
+                    "label": "myfpocket_select.pqr",
+                    "output_name": "output_pocket_pqr",
+                    "uuid": "eb93630d-927b-47f4-b50b-c258a5b13966"
+                },
+                {
+                    "label": "myfpocket_select.pdb",
+                    "output_name": "output_pocket_pdb",
+                    "uuid": "06152869-ab55-42cf-a2ab-5b584567b4c5"
+                }
+            ]
+        },
+        "9": {
+            "annotation": "",
+            "content_id": "biobb_vs_box_ext",
+            "errors": null,
+            "id": 9,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 8,
+                    "output_name": "output_pocket_pqr"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Box",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "bottom": 584.171875,
+                "height": 93.171875,
+                "left": 81.5,
+                "right": 281.5,
+                "top": 491,
+                "width": 200,
+                "x": 81.5,
+                "y": 491
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_vs_box_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_pdb_path\": \"mybox.pdb\", \"properties\": {\"offset\": \"12.0\", \"box_coordinates\": \"true\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.6.0",
+            "type": "tool",
+            "uuid": "10b33b1b-d44c-4504-9853-652d4e43ba3f",
+            "workflow_outputs": [
+                {
+                    "label": "mybox.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "72e22240-8cf2-494a-ad81-81ab88666707"
+                }
+            ]
+        },
+        "10": {
+            "annotation": "",
+            "content_id": "biobb_vs_autodock_vina_run_ext",
+            "errors": null,
+            "id": 10,
+            "input_connections": {
+                "input_box_path": {
+                    "id": 9,
+                    "output_name": "output_pdb_path"
+                },
+                "input_ligand_pdbqt_path": {
+                    "id": 4,
+                    "output_name": "output_path"
+                },
+                "input_receptor_pdbqt_path": {
+                    "id": 5,
+                    "output_name": "output_structure_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "AutodockVinaRun",
+            "outputs": [
+                {
+                    "name": "output_pdbqt_path",
+                    "type": "pdbqt"
+                },
+                {
+                    "name": "output_log_path",
+                    "type": "log"
+                }
+            ],
+            "position": {
+                "bottom": 553.515625,
+                "height": 245.515625,
+                "left": 344.5,
+                "right": 544.5,
+                "top": 308,
+                "width": 200,
+                "x": 344.5,
+                "y": 308
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_vs_autodock_vina_run_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_box_path\": {\"__class__\": \"ConnectedValue\"}, \"input_ligand_pdbqt_path\": {\"__class__\": \"ConnectedValue\"}, \"input_receptor_pdbqt_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_log_path\": \"myautodock_vina_run.log\", \"outname_output_pdbqt_path\": \"myautodock_vina_run.pdbqt\", \"properties\": {\"vina_path\": \"vina\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.6.0",
+            "type": "tool",
+            "uuid": "f9972721-511d-400e-ab94-b1f982b533dc",
+            "workflow_outputs": [
+                {
+                    "label": "myautodock_vina_run.log",
+                    "output_name": "output_log_path",
+                    "uuid": "275d6031-7896-42f2-bd44-ecd9f745e3a5"
+                },
+                {
+                    "label": "myautodock_vina_run.pdbqt",
+                    "output_name": "output_pdbqt_path",
+                    "uuid": "9a6ec956-fd38-42a1-a767-64908b9e4778"
+                }
+            ]
+        },
+        "11": {
+            "annotation": "",
+            "content_id": "biobb_vs_extract_model_pdbqt_ext",
+            "errors": null,
+            "id": 11,
+            "input_connections": {
+                "input_pdbqt_path": {
+                    "id": 10,
+                    "output_name": "output_pdbqt_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "ExtractModelPdbqt",
+            "outputs": [
+                {
+                    "name": "output_pdbqt_path",
+                    "type": "pdbqt"
+                }
+            ],
+            "position": {
+                "bottom": 575.453125,
+                "height": 133.953125,
+                "left": 663.5,
+                "right": 863.5,
+                "top": 441.5,
+                "width": 200,
+                "x": 663.5,
+                "y": 441.5
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_vs_extract_model_pdbqt_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdbqt_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_pdbqt_path\": \"myextract_model_pdbqt.pdbqt\", \"properties\": {\"model\": \"1\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.6.0",
+            "type": "tool",
+            "uuid": "4c157b92-3933-412f-bcc3-95707e9727fc",
+            "workflow_outputs": [
+                {
+                    "label": "myextract_model_pdbqt.pdbqt",
+                    "output_name": "output_pdbqt_path",
+                    "uuid": "c1daf3ee-1d4b-42a0-a53e-a194bd4b2264"
+                }
+            ]
+        },
+        "12": {
+            "annotation": "",
+            "content_id": "biobb_chemistry_babel_convert_ext",
+            "errors": null,
+            "id": 12,
+            "input_connections": {
+                "input_path": {
+                    "id": 11,
+                    "output_name": "output_pdbqt_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "BabelConvert",
+            "outputs": [
+                {
+                    "name": "output_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "bottom": 616.1875,
+                "height": 276.6875,
+                "left": 979.5,
+                "right": 1179.5,
+                "top": 339.5,
+                "width": 200,
+                "x": 979.5,
+                "y": 339.5
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_chemistry_babel_convert_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_path\": \"poses.pdb\", \"properties\": {\"input_format\": \"pdbqt\", \"output_format\": \"pdb\", \"coordinates\": \"3\", \"ph\": \"7.4\", \"obabel_path\": \"obabel\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.6.0",
+            "type": "tool",
+            "uuid": "bc09e180-1fc1-48c4-97a9-a9a0b95f8328",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_path",
+                    "uuid": "d0f6d232-587b-4e7c-b0f3-a84835aa64d0"
+                }
+            ]
+        },
+        "13": {
+            "annotation": "",
+            "content_id": "biobb_structure_utils_cat_pdb_ext",
+            "errors": null,
+            "id": 13,
+            "input_connections": {
+                "input_structure1": {
+                    "id": 3,
+                    "output_name": "output_molecule_path"
+                },
+                "input_structure2": {
+                    "id": 12,
+                    "output_name": "output_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "CatPdb",
+            "outputs": [
+                {
+                    "name": "output_structure_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "bottom": 241.0625,
+                "height": 123.5625,
+                "left": 1238.5,
+                "right": 1438.5,
+                "top": 117.5,
+                "width": 200,
+                "x": 1238.5,
+                "y": 117.5
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_structure_utils_cat_pdb_ext",
+            "tool_state": "{\"input_structure1\": {\"__class__\": \"ConnectedValue\"}, \"input_structure2\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_structure_path\": \"docking1.pdb\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.6.1",
+            "type": "tool",
+            "uuid": "f4ad2bd2-13a0-4139-a965-a6efa81123fc",
+            "workflow_outputs": [
+                {
+                    "label": "mycat_pdb.pdb",
+                    "output_name": "output_structure_path",
+                    "uuid": "061363ca-547a-4876-bc50-3104ffe97d2e"
+                }
+            ]
+        }
+    },
+    "tags": [],
+    "uuid": "30f3bd45-7efa-4fee-b4fd-6078a38f401a",
+    "version": 5
+}

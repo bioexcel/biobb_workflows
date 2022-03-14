@@ -1,0 +1,25 @@
+step1_fpocket_select_config: '{"pocket": 8}'
+step1_fpocket_select_input_pockets_zip:
+  class: File
+  path: all_pockets.zip
+  format: https://edamontology.org/format_3987
+step1_fpocket_select_output_pocket_pdb: fpocket_cavity.pdb
+step1_fpocket_select_output_pocket_pqr: fpocket_pocket.pqr
+step2_box_config: '{"offset": 12, "box_coordinates": true}'
+step2_box_output_pdb_path: box.pdb
+step3_babel_convert_prep_lig_config: '{"input_format": "pdb", "output_format": "pdbqt", "flex": false, "obabel_path": "obabel"}'
+step3_babel_convert_prep_lig_input_path:
+  class: File
+  path: ligand.pdb
+  format: https://edamontology.org/format_1476
+step3_babel_convert_prep_lig_output_path: prep_ligand.pdbqt
+step4_str_check_add_hydrogens_config: '{"charges": true, "mode": "auto"}'
+step4_str_check_add_hydrogens_input_structure_path:
+  class: File
+  path: protein.pdb
+  format: https://edamontology.org/format_1476
+step4_str_check_add_hydrogens_output_structure_path: prep_receptor.pdbqt
+step5_autodock_vina_run_output_pdbqt_path: output_vina.pdbqt
+step5_autodock_vina_run_output_log_path: output_vina.log
+step6_babel_convert_pose_pdb_config: '{"input_format": "pdbqt", "output_format": "pdb", "obabel_path": "obabel"}'
+step6_babel_convert_pose_pdb_output_path: output_model.pdb
