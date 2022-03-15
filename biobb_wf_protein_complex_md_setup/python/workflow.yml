@@ -245,7 +245,6 @@ step29_grompp_md:
   properties:
     mdp:
       nsteps: 250000
-      #nsteps: 25000
       tc-grps: "Protein_Other Water_and_ions"
     simulation_type: free
 
@@ -312,7 +311,6 @@ step35_gmx_trjconv_str:
   properties:
     pbc: "mol"
     selection: System
-    #selection: "Protein_Other"
 
 # production MD
 step36_grompp_md:

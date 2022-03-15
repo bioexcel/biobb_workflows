@@ -165,8 +165,7 @@ step15_grompp_md:
     input_cpt_path: dependency/step14_mdrun_npt/output_cpt_path
   properties:
     mdp:
-      #nsteps: 250000
-      nsteps: 25000
+      nsteps: 250000
       tc-grps: "Protein Water_and_ions"
     simulation_type: free
 
