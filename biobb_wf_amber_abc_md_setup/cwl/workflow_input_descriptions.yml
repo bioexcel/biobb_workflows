@@ -1,0 +1,147 @@
+step1_leap_gen_top_config: '{"forcefield": ["DNA.bsc1"]}'
+step1_leap_gen_top_input_pdb_path:
+  class: File
+  path: sequence.pdb
+  format: https://edamontology.org/format_1476
+step1_leap_gen_top_output_pdb_path: structure.leap.pdb
+step1_leap_gen_top_output_top_path: structure.leap.top
+step1_leap_gen_top_output_crd_path: structure.leap.crd
+step2_leap_solvate_config: '{"forcefield": ["DNA.bsc1"], "water_type": "OPCBOX", "ions_type": "ionsjc_tip4pew", "box_type": "truncated_octahedron", "distance_to_molecule": 15, "neutralise": true, "iso": true, "closeness": 0.97, "positive_ions_type": "K+"}'
+step2_leap_solvate_output_pdb_path: structure.solv.pdb
+step2_leap_solvate_output_top_path: structure.solv.parmtop
+step2_leap_solvate_output_crd_path: structure.solv.crd
+step3_leap_add_ions_config: '{"forcefield": ["DNA.bsc1"], "water_type": "OPCBOX", "ions_type": "ionsjc_tip4pew", "box_type": "truncated_octahedron", "ionic_concentration": 100, "positive_ions_type": "K+"}'
+step3_leap_add_ions_output_pdb_path: structure.ions.pdb
+step3_leap_add_ions_output_top_path: structure.ions.parmtop
+step3_leap_add_ions_output_crd_path: structure.ions.crd
+step4_cpptraj_randomize_ions_config: '{"distance": 6.0, "overlap": 4.0}'
+step4_cpptraj_randomize_ions_output_pdb_path: structure.randIons.pdb
+step4_cpptraj_randomize_ions_output_crd_path: structure.randIons.crd
+step5_parmed_hmassrepartition_output_top_path: structure.leap.4fs.top
+step6_sander_mdrun_eq1_config: '{"mdin": {"maxcyc": 1000, "restraintmask": ":DA,DC,DG,DT,D=3,D=5&!@H="}}'
+step6_sander_mdrun_eq1_input_mdin_path:
+  class: File
+  path: ABCix_config_files/step1.in
+  format: https://edamontology.org/format_2330
+step6_sander_mdrun_eq1_output_traj_path: sander.eq1.nc
+step6_sander_mdrun_eq1_output_rst_path: sander.eq1.ncrst
+step6_sander_mdrun_eq1_output_log_path: sander.eq1.log
+step6_sander_mdrun_eq1_output_mdinfo_path: sander.eq1.mdinfo
+step7_process_minout_eq1_config: '{"terms": ["ENERGY"]}'
+step7_process_minout_eq1_output_dat_path: sander.eq1.energy.dat
+step8_sander_mdrun_eq2_config: '{"mdin": {"nstlim": 3750, "restraintmask": ":DA,DC,DG,DT,D=3,D=5&!@H="}}'
+step8_sander_mdrun_eq2_input_mdin_path:
+  class: File
+  path: ABCix_config_files/step2.in
+  format: https://edamontology.org/format_2330
+step8_sander_mdrun_eq2_output_traj_path: sander.eq2.nc
+step8_sander_mdrun_eq2_output_rst_path: sander.eq2.ncrst
+step8_sander_mdrun_eq2_output_log_path: sander.eq2.log
+step8_sander_mdrun_eq2_output_mdinfo_path: sander.eq2.mdinfo
+step9_process_mdout_eq2_config: '{"terms": ["TEMP"]}'
+step9_process_mdout_eq2_output_dat_path: sander.eq2.energy.dat
+step10_sander_mdrun_eq3_config: '{"mdin": {"maxcyc": 1000, "restraintmask": ":DA,DC,DG,DT,D=3,D=5&!@H="}}'
+step10_sander_mdrun_eq3_input_mdin_path:
+  class: File
+  path: ABCix_config_files/step3.in
+  format: https://edamontology.org/format_2330
+step10_sander_mdrun_eq3_output_traj_path: sander.eq3.nc
+step10_sander_mdrun_eq3_output_rst_path: sander.eq3.ncrst
+step10_sander_mdrun_eq3_output_log_path: sander.eq3.log
+step10_sander_mdrun_eq3_output_mdinfo_path: sander.eq3.mdinfo
+step11_process_minout_eq3_config: '{"terms": ["ENERGY"]}'
+step11_process_minout_eq3_output_dat_path: sander.eq3.energy.dat
+step12_sander_mdrun_eq4_config: '{"mdin": {"maxcyc": 1000, "restraintmask": ":DA,DC,DG,DT,D=3,D=5&!@H="}}'
+step12_sander_mdrun_eq4_input_mdin_path:
+  class: File
+  path: ABCix_config_files/step4.in
+  format: https://edamontology.org/format_2330
+step12_sander_mdrun_eq4_output_traj_path: sander.eq4.nc
+step12_sander_mdrun_eq4_output_rst_path: sander.eq4.ncrst
+step12_sander_mdrun_eq4_output_log_path: sander.eq4.log
+step12_sander_mdrun_eq4_output_mdinfo_path: sander.eq4.mdinfo
+step13_process_minout_eq4_config: '{"terms": ["ENERGY"]}'
+step13_process_minout_eq4_output_dat_path: sander.eq4.energy.dat
+step14_sander_mdrun_eq5_config: '{"mdin": {"maxcyc": 1000}}'
+step14_sander_mdrun_eq5_input_mdin_path:
+  class: File
+  path: ABCix_config_files/step5.in
+  format: https://edamontology.org/format_2330
+step14_sander_mdrun_eq5_output_traj_path: sander.eq5.nc
+step14_sander_mdrun_eq5_output_rst_path: sander.eq5.ncrst
+step14_sander_mdrun_eq5_output_log_path: sander.eq5.log
+step14_sander_mdrun_eq5_output_mdinfo_path: sander.eq5.mdinfo
+step15_process_minout_eq5_config: '{"terms": ["ENERGY"]}'
+step15_process_minout_eq5_output_dat_path: sander.eq5.energy.dat
+step16_sander_mdrun_eq6_config: '{"mdin": {"nstlim": 1000, "restraintmask": ":DA,DC,DG,DT,D=3,D=5&!@H="}}'
+step16_sander_mdrun_eq6_input_mdin_path:
+  class: File
+  path: ABCix_config_files/step6.in
+  format: https://edamontology.org/format_2330
+step16_sander_mdrun_eq6_output_traj_path: sander.eq6.nc
+step16_sander_mdrun_eq6_output_rst_path: sander.eq6.ncrst
+step16_sander_mdrun_eq6_output_log_path: sander.eq6.log
+step16_sander_mdrun_eq6_output_mdinfo_path: sander.eq6.mdinfo
+step17_process_mdout_eq6_config: '{"terms": ["PRES", "DENSITY"]}'
+step17_process_mdout_eq6_output_dat_path: sander.eq6.pressure_and_density.dat
+step18_sander_mdrun_eq7_config: '{"mdin": {"nstlim": 1250, "restraintmask": ":DA,DC,DG,DT,D=3,D=5&!@H="}}'
+step18_sander_mdrun_eq7_input_mdin_path:
+  class: File
+  path: ABCix_config_files/step7.in
+  format: https://edamontology.org/format_2330
+step18_sander_mdrun_eq7_output_traj_path: sander.eq7.nc
+step18_sander_mdrun_eq7_output_rst_path: sander.eq7.ncrst
+step18_sander_mdrun_eq7_output_log_path: sander.eq7.log
+step18_sander_mdrun_eq7_output_mdinfo_path: sander.eq7.mdinfo
+step19_process_mdout_eq7_config: '{"terms": ["PRES", "DENSITY"]}'
+step19_process_mdout_eq7_output_dat_path: sander.eq7.pressure_and_density.dat
+step20_sander_mdrun_eq8_config: '{"mdin": {"nstlim": 1250, "restraintmask": ":DA,DC,DG,DT,D=3,D=5&@P,O5=,C5=,C4=,C3=,O3="}}'
+step20_sander_mdrun_eq8_input_mdin_path:
+  class: File
+  path: ABCix_config_files/step8.in
+  format: https://edamontology.org/format_2330
+step20_sander_mdrun_eq8_output_traj_path: sander.eq8.nc
+step20_sander_mdrun_eq8_output_rst_path: sander.eq8.ncrst
+step20_sander_mdrun_eq8_output_log_path: sander.eq8.log
+step20_sander_mdrun_eq8_output_mdinfo_path: sander.eq8.mdinfo
+step21_process_mdout_eq8_config: '{"terms": ["PRES", "DENSITY"]}'
+step21_process_mdout_eq8_output_dat_path: sander.eq8.pressure_and_density.dat
+step22_sander_mdrun_eq9_config: '{"mdin": {"nstlim": 2500}}'
+step22_sander_mdrun_eq9_input_mdin_path:
+  class: File
+  path: ABCix_config_files/step9.in
+  format: https://edamontology.org/format_2330
+step22_sander_mdrun_eq9_output_traj_path: sander.eq9.nc
+step22_sander_mdrun_eq9_output_rst_path: sander.eq9.ncrst
+step22_sander_mdrun_eq9_output_log_path: sander.eq9.log
+step22_sander_mdrun_eq9_output_mdinfo_path: sander.eq9.mdinfo
+step23_process_mdout_eq9_config: '{"terms": ["PRES", "DENSITY"]}'
+step23_process_mdout_eq9_output_dat_path: sander.eq9.pressure_and_density.dat
+step24_sander_mdrun_eq10_config: '{"mdin": {"nstlim": 2500, "ntpr": 50}}'
+step24_sander_mdrun_eq10_input_mdin_path:
+  class: File
+  path: ABCix_config_files/step10.in
+  format: https://edamontology.org/format_2330
+step24_sander_mdrun_eq10_output_traj_path: sander.eq10.nc
+step24_sander_mdrun_eq10_output_rst_path: sander.eq10.ncrst
+step24_sander_mdrun_eq10_output_log_path: sander.eq10.log
+step24_sander_mdrun_eq10_output_mdinfo_path: sander.eq10.mdinfo
+step25_process_mdout_eq10_config: '{"terms": ["PRES", "DENSITY"]}'
+step25_process_mdout_eq10_output_dat_path: sander.eq10.pressure_and_density.dat
+step26_sander_mdrun_md_config: '{"mdin": {"nstlim": 25000, "ntpr": 50, "ntwx": 50}}'
+step26_sander_mdrun_md_input_mdin_path:
+  class: File
+  path: ABCix_config_files/md.in
+  format: https://edamontology.org/format_2330
+step26_sander_mdrun_md_output_traj_path: sander.md.netcdf
+step26_sander_mdrun_md_output_rst_path: sander.md.ncrst
+step26_sander_mdrun_md_output_mdinfo_path: sander.md.mdinfo
+step26_sander_mdrun_md_output_log_path: sander.md.log
+step27_rmsd_first_config: '{"mask": "backbone", "reference": "first"}'
+step27_rmsd_first_output_cpptraj_path: setup.rms_first.dat
+step28_rmsd_exp_config: '{"mask": "backbone", "reference": "experimental"}'
+step28_rmsd_exp_output_cpptraj_path: setup.rms_exp.dat
+step29_cpptraj_rgyr_config: '{"mask": "backbone"}'
+step29_cpptraj_rgyr_output_cpptraj_path: setup.rgyr.dat
+step30_cpptraj_image_config: '{"mask": "solute", "format": "xtc"}'
+step30_cpptraj_image_output_cpptraj_path: setup.imaged_traj.xtc

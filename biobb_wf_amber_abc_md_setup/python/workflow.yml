@@ -1,0 +1,358 @@
+working_dir_path: wf_abc_md_setup
+can_write_console_log: False
+run_md: False
+
+step1_leap_gen_top:
+  tool: leap_gen_top
+  paths:
+    input_pdb_path:  /path/to/inputs/sequence.pdb
+    output_pdb_path: structure.leap.pdb
+    output_top_path: structure.leap.top
+    output_crd_path: structure.leap.crd
+  properties:
+    forcefield: ["DNA.bsc1"]
+
+step2_leap_solvate:
+  tool: leap_solvate
+  paths:
+    input_pdb_path:  dependency/step1_leap_gen_top/output_pdb_path
+    output_pdb_path: structure.solv.pdb
+    output_top_path: structure.solv.parmtop
+    output_crd_path: structure.solv.crd
+  properties:
+    forcefield: ["DNA.bsc1"]
+    water_type: OPCBOX
+    ions_type : ionsjc_tip4pew
+    box_type: truncated_octahedron
+    distance_to_molecule : 15
+    neutralise : True
+    iso : True
+    closeness : 0.97
+    positive_ions_type : K+
+
+step3_leap_add_ions:
+  tool: leap_add_ions
+  paths:
+    input_pdb_path:  dependency/step2_leap_solvate/output_pdb_path
+    output_pdb_path: structure.ions.pdb
+    output_top_path: structure.ions.parmtop
+    output_crd_path: structure.ions.crd
+  properties:
+    forcefield: ["DNA.bsc1"]
+    water_type: OPCBOX
+    ions_type : ionsjc_tip4pew
+    box_type: truncated_octahedron
+    ionic_concentration : 100
+    positive_ions_type : K+
+
+step4_cpptraj_randomize_ions:
+  tool: cpptraj_randomize_ions
+  paths:
+    input_top_path:  dependency/step3_leap_add_ions/output_top_path
+    input_crd_path:  dependency/step3_leap_add_ions/output_crd_path
+    output_pdb_path: structure.randIons.pdb
+    output_crd_path: structure.randIons.crd
+  properties:
+    distance : 6.0
+    overlap : 4.0
+
+step5_parmed_hmassrepartition:
+  tool: parmed_hmassrepartition
+  paths:
+    input_top_path:  dependency/step3_leap_add_ions/output_top_path
+    output_top_path: structure.leap.4fs.top
+
+step6_sander_mdrun_eq1:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step5_parmed_hmassrepartition/output_top_path
+    input_mdin_path: /path/to/inputs/ABCix_config_files/step1.in
+    input_crd_path: dependency/step4_cpptraj_randomize_ions/output_crd_path
+    input_ref_path: dependency/step4_cpptraj_randomize_ions/output_crd_path
+    output_traj_path: sander.eq1.nc
+    output_rst_path: sander.eq1.ncrst
+    output_log_path: sander.eq1.log
+    output_mdinfo_path: sander.eq1.mdinfo
+  properties:
+    mdin: 
+      maxcyc: 1000
+      restraintmask: ":DA,DC,DG,DT,D=3,D=5&!@H="
+
+step7_process_minout_eq1:
+  tool: process_minout
+  paths:
+    input_log_path:  dependency/step6_sander_mdrun_eq1/output_log_path
+    output_dat_path: sander.eq1.energy.dat
+  properties:
+    terms: [ENERGY]
+
+step8_sander_mdrun_eq2:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step5_parmed_hmassrepartition/output_top_path
+    input_mdin_path: /path/to/inputs/ABCix_config_files/step2.in
+    input_crd_path: dependency/step6_sander_mdrun_eq1/output_rst_path
+    input_ref_path: dependency/step6_sander_mdrun_eq1/output_rst_path
+    output_traj_path: sander.eq2.nc
+    output_rst_path: sander.eq2.ncrst
+    output_log_path: sander.eq2.log
+    output_mdinfo_path: sander.eq2.mdinfo
+  properties:
+    mdin: 
+      nstlim: 15000
+      restraintmask: ":DA,DC,DG,DT,D=3,D=5&!@H="
+
+step9_process_mdout_eq2:
+  tool: process_mdout
+  paths:
+    input_log_path:  dependency/step8_sander_mdrun_eq2/output_log_path
+    output_dat_path: sander.eq2.energy.dat
+  properties:
+    terms: [TEMP]
+
+step10_sander_mdrun_eq3:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step5_parmed_hmassrepartition/output_top_path
+    input_mdin_path: /path/to/inputs/ABCix_config_files/step3.in
+    input_crd_path: dependency/step8_sander_mdrun_eq2/output_rst_path
+    input_ref_path: dependency/step8_sander_mdrun_eq2/output_rst_path
+    output_traj_path: sander.eq3.nc
+    output_rst_path: sander.eq3.ncrst
+    output_log_path: sander.eq3.log
+    output_mdinfo_path: sander.eq3.mdinfo
+  properties:
+    mdin: 
+      maxcyc: 1000
+      restraintmask: ":DA,DC,DG,DT,D=3,D=5&!@H="
+
+step11_process_minout_eq3:
+  tool: process_minout
+  paths:
+    input_log_path:  dependency/step10_sander_mdrun_eq3/output_log_path
+    output_dat_path: sander.eq3.energy.dat
+  properties:
+    terms: [ENERGY]
+
+step12_sander_mdrun_eq4:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step5_parmed_hmassrepartition/output_top_path
+    input_mdin_path: /path/to/inputs/ABCix_config_files/step4.in
+    input_crd_path: dependency/step10_sander_mdrun_eq3/output_rst_path
+    input_ref_path: dependency/step10_sander_mdrun_eq3/output_rst_path
+    output_traj_path: sander.eq4.nc
+    output_rst_path: sander.eq4.ncrst
+    output_log_path: sander.eq4.log
+    output_mdinfo_path: sander.eq4.mdinfo
+  properties:
+    mdin: 
+      maxcyc: 1000
+      restraintmask: ":DA,DC,DG,DT,D=3,D=5&!@H="
+
+step13_process_minout_eq4:
+  tool: process_minout
+  paths:
+    input_log_path:  dependency/step12_sander_mdrun_eq4/output_log_path
+    output_dat_path: sander.eq4.energy.dat
+  properties:
+    terms: [ENERGY]
+
+step14_sander_mdrun_eq5:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step5_parmed_hmassrepartition/output_top_path
+    input_mdin_path: /path/to/inputs/ABCix_config_files/step5.in
+    input_crd_path: dependency/step12_sander_mdrun_eq4/output_rst_path
+    input_ref_path: dependency/step12_sander_mdrun_eq4/output_rst_path
+    output_traj_path: sander.eq5.nc
+    output_rst_path: sander.eq5.ncrst
+    output_log_path: sander.eq5.log
+    output_mdinfo_path: sander.eq5.mdinfo
+  properties:
+    mdin: 
+      maxcyc: 1000
+
+step15_process_minout_eq5:
+  tool: process_minout
+  paths:
+    input_log_path:  dependency/step14_sander_mdrun_eq5/output_log_path
+    output_dat_path: sander.eq5.energy.dat
+  properties:
+    terms: [ENERGY]
+
+step16_sander_mdrun_eq6:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step5_parmed_hmassrepartition/output_top_path
+    input_mdin_path: /path/to/inputs/ABCix_config_files/step6.in
+    input_crd_path: dependency/step14_sander_mdrun_eq5/output_rst_path
+    input_ref_path: dependency/step14_sander_mdrun_eq5/output_rst_path
+    output_traj_path: sander.eq6.nc
+    output_rst_path: sander.eq6.ncrst
+    output_log_path: sander.eq6.log
+    output_mdinfo_path: sander.eq6.mdinfo
+  properties:
+    mdin: 
+      nstlim: 5000
+      restraintmask: ":DA,DC,DG,DT,D=3,D=5&!@H="
+
+step17_process_mdout_eq6:
+  tool: process_mdout
+  paths:
+    input_log_path:  dependency/step16_sander_mdrun_eq6/output_log_path
+    output_dat_path: sander.eq6.pressure_and_density.dat
+  properties:
+    terms: [PRES, DENSITY]
+
+step18_sander_mdrun_eq7:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step5_parmed_hmassrepartition/output_top_path
+    input_mdin_path: /path/to/inputs/ABCix_config_files/step7.in
+    input_crd_path: dependency/step16_sander_mdrun_eq6/output_rst_path
+    input_ref_path: dependency/step16_sander_mdrun_eq6/output_rst_path
+    output_traj_path: sander.eq7.nc
+    output_rst_path: sander.eq7.ncrst
+    output_log_path: sander.eq7.log
+    output_mdinfo_path: sander.eq7.mdinfo
+  properties:
+    mdin: 
+      nstlim: 5000
+      restraintmask: ":DA,DC,DG,DT,D=3,D=5&!@H="
+
+step19_process_mdout_eq7:
+  tool: process_mdout
+  paths:
+    input_log_path:  dependency/step18_sander_mdrun_eq7/output_log_path
+    output_dat_path: sander.eq7.pressure_and_density.dat
+  properties:
+    terms: [PRES, DENSITY]
+
+step20_sander_mdrun_eq8:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step5_parmed_hmassrepartition/output_top_path
+    input_mdin_path: /path/to/inputs/ABCix_config_files/step8.in
+    input_crd_path: dependency/step18_sander_mdrun_eq7/output_rst_path
+    input_ref_path: dependency/step18_sander_mdrun_eq7/output_rst_path
+    output_traj_path: sander.eq8.nc
+    output_rst_path: sander.eq8.ncrst
+    output_log_path: sander.eq8.log
+    output_mdinfo_path: sander.eq8.mdinfo
+  properties:
+    mdin: 
+      nstlim: 10000
+      restraintmask: ":DA,DC,DG,DT,D=3,D=5&@P,O5=,C5=,C4=,C3=,O3="
+
+step21_process_mdout_eq8:
+  tool: process_mdout
+  paths:
+    input_log_path:  dependency/step20_sander_mdrun_eq8/output_log_path
+    output_dat_path: sander.eq8.pressure_and_density.dat
+  properties:
+    terms: [PRES, DENSITY]
+
+step22_sander_mdrun_eq9:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step5_parmed_hmassrepartition/output_top_path
+    input_mdin_path: /path/to/inputs/ABCix_config_files/step9.in
+    input_crd_path: dependency/step20_sander_mdrun_eq8/output_rst_path
+    input_ref_path: dependency/step20_sander_mdrun_eq8/output_rst_path
+    output_traj_path: sander.eq9.nc
+    output_rst_path: sander.eq9.ncrst
+    output_log_path: sander.eq9.log
+    output_mdinfo_path: sander.eq9.mdinfo
+  properties:
+    mdin: 
+      nstlim: 10000
+
+step23_process_mdout_eq9:
+  tool: process_mdout
+  paths:
+    input_log_path:  dependency/step22_sander_mdrun_eq9/output_log_path
+    output_dat_path: sander.eq9.pressure_and_density.dat
+  properties:
+    terms: [PRES, DENSITY]
+
+step24_sander_mdrun_eq10:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step5_parmed_hmassrepartition/output_top_path
+    input_mdin_path: /path/to/inputs/ABCix_config_files/step10.in
+    input_crd_path: dependency/step22_sander_mdrun_eq9/output_rst_path
+    input_ref_path: dependency/step22_sander_mdrun_eq9/output_rst_path
+    output_traj_path: sander.eq10.nc
+    output_rst_path: sander.eq10.ncrst
+    output_log_path: sander.eq10.log
+    output_mdinfo_path: sander.eq10.mdinfo
+  properties:
+    mdin: 
+      nstlim: 10000
+      ntpr: 50
+
+step25_process_mdout_eq10:
+  tool: process_mdout
+  paths:
+    input_log_path:  dependency/step24_sander_mdrun_eq10/output_log_path
+    output_dat_path: sander.eq10.pressure_and_density.dat
+  properties:
+    terms: [PRES, DENSITY]
+
+step26_sander_mdrun_md:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step5_parmed_hmassrepartition/output_top_path
+    input_mdin_path: /path/to/inputs/ABCix_config_files/md.in
+    input_crd_path: dependency/step24_sander_mdrun_eq10/output_rst_path
+    input_ref_path: dependency/step24_sander_mdrun_eq10/output_rst_path
+    output_traj_path: sander.md.netcdf
+    output_rst_path: sander.md.ncrst
+    output_mdinfo_path: sander.md.mdinfo
+    output_log_path: sander.md.log
+  properties:
+    mdin: 
+      nstlim: 25000
+      ntpr: 50
+      ntwx: 50
+
+step27_rmsd_first:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step3_leap_add_ions/output_top_path
+    input_traj_path: dependency/step26_sander_mdrun_md/output_traj_path
+    output_cpptraj_path: setup.rms_first.dat
+  properties:
+    mask : backbone
+    reference: first
+
+step28_rmsd_exp:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step3_leap_add_ions/output_top_path
+    input_traj_path: dependency/step26_sander_mdrun_md/output_traj_path
+    input_exp_path: dependency/step1_leap_gen_top/output_pdb_path
+    output_cpptraj_path: setup.rms_exp.dat
+  properties:
+    mask : backbone
+    reference: experimental
+
+step29_cpptraj_rgyr:
+  tool: cpptraj_rgyr
+  paths:
+    input_top_path: dependency/step3_leap_add_ions/output_top_path
+    input_traj_path: dependency/step26_sander_mdrun_md/output_traj_path
+    output_cpptraj_path: setup.rgyr.dat
+  properties:
+    mask : backbone
+
+step30_cpptraj_image:
+  tool: cpptraj_image
+  paths:
+    input_top_path: dependency/step3_leap_add_ions/output_top_path
+    input_traj_path: dependency/step26_sander_mdrun_md/output_traj_path
+    output_cpptraj_path: setup.imaged_traj.xtc
+  properties:
+    mask : solute
+    format: xtc

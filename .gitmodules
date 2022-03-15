@@ -16,3 +16,6 @@
 [submodule "biobb_wf_amber_protein_complex_md_setup/jupyter"]
 	path = biobb_wf_amber_protein_complex_md_setup/jupyter
 	url = https://github.com/bioexcel/biobb_wf_amber_md_setup
+[submodule "biobb_wf_amber_abc_md_setup/jupyter"]
+	path = biobb_wf_amber_abc_md_setup/jupyter
+	url = https://github.com/bioexcel/biobb_wf_amber_md_setup
