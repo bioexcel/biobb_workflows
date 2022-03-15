@@ -1,0 +1,285 @@
+working_dir_path: wf_amber_setup
+can_write_console_log: False
+run_md: true
+
+step00_reduce_remove_hydrogens:
+  tool: reduce_remove_hydrogens
+  paths:
+    input_path: /path/to/inputs/structure.pdb
+    output_path: structure.noH.pdb
+
+step0_extract_molecule:
+  tool: extract_molecule
+  paths:
+    input_structure_path: dependency/step00_reduce_remove_hydrogens/output_path
+    output_molecule_path: protein.pdb
+
+step000_cat_pdb:
+  tool: cat_pdb
+  paths:
+    input_structure1: dependency/step0_extract_molecule/output_molecule_path
+    input_structure2: /path/to/inputs/ions.pdb
+    output_structure_path: protein.ions.pdb
+
+step1_pdb4amber_run:
+  tool: pdb4amber_run
+  paths:
+    input_pdb_path: dependency/step000_cat_pdb/output_structure_path
+    output_pdb_path: structure.pdb4amber.pdb
+
+step2_leap_gen_top:
+  tool: leap_gen_top
+  paths:
+    input_pdb_path: dependency/step1_pdb4amber_run/output_pdb_path
+    output_pdb_path: structure.leap.pdb
+    output_top_path: structure.leap.top
+    output_crd_path: structure.leap.crd
+  properties:
+    forcefield: ["protein.ff14SB","DNA.bsc1","RNA.OL3","water.tip3p"]
+
+step3_sander_mdrun_minH:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step2_leap_gen_top/output_top_path
+    input_crd_path: dependency/step2_leap_gen_top/output_crd_path
+    input_ref_path: dependency/step2_leap_gen_top/output_crd_path
+    output_traj_path: sander.h_min.x
+    output_rst_path: sander.h_min.rst
+    output_log_path: sander.h_min.log
+  properties:
+    simulation_type: min_vacuo
+    mdin : 
+      maxcyc: 500
+      ntwx: 100
+      ntpr: 5
+      ntr: 1
+      restraintmask: "\":*&!@H=\""
+      restraint_wt: 50.0
+
+step4_process_minout_minH:
+  tool: process_minout
+  paths:
+    input_log_path: dependency/step3_sander_mdrun_minH/output_log_path
+    output_dat_path: sander.h_min.energy.dat
+  properties:
+    terms : [ENERGY]
+
+step5_sander_mdrun_min:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step2_leap_gen_top/output_top_path
+    input_crd_path: dependency/step3_sander_mdrun_minH/output_rst_path
+    input_ref_path: dependency/step3_sander_mdrun_minH/output_rst_path
+    output_traj_path: sander.n_min.x
+    output_rst_path: sander.n_min.rst
+    output_log_path: sander.n_min.log
+  properties:
+    simulation_type: min_vacuo
+    mdin : 
+      maxcyc: 500
+      ntwx: 100
+      ntpr: 5
+      ntr: 1
+      restraintmask: "\":*&!@H=\""
+      restraint_wt: 50.0
+
+step6_process_minout_min:
+  tool: process_minout
+  paths:
+    input_log_path: dependency/step5_sander_mdrun_min/output_log_path
+    output_dat_path: sander.n_min.energy.dat
+  properties:
+    terms : [ENERGY]
+
+step7_amber_to_pdb:
+  tool: amber_to_pdb
+  paths:
+    input_top_path: dependency/step2_leap_gen_top/output_top_path
+    input_crd_path: dependency/step3_sander_mdrun_minH/output_rst_path
+    output_pdb_path: structure.ambpdb.pdb
+
+step8_leap_solvate:
+  tool: leap_solvate
+  paths:
+    input_pdb_path: dependency/step7_amber_to_pdb/output_pdb_path
+    output_pdb_path: structure.solv.pdb
+    output_top_path: structure.solv.parmtop
+    output_crd_path: structure.solv.crd
+  properties:
+    forcefield: ["protein.ff14SB","DNA.bsc1","RNA.OL3","water.tip3p"]
+    water_type: TIP3PBOX
+    distance_to_molecule: 9
+    box_type: truncated_octahedron
+
+step9_leap_add_ions:
+  tool: leap_add_ions
+  paths:
+    input_pdb_path: dependency/step8_leap_solvate/output_pdb_path
+    output_pdb_path: structure.ions.pdb
+    output_top_path: structure.ions.parmtop
+    output_crd_path: structure.ions.crd
+  properties:
+    forcefield: ["protein.ff14SB","DNA.bsc1","RNA.OL3","water.tip3p"]
+    neutralise: True
+    positive_ions_type: Na+
+    negative_ions_type: Cl-
+    ionic_concentration: 150
+    box_type: truncated_octahedron
+
+step10_sander_mdrun_energy:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step9_leap_add_ions/output_top_path
+    input_crd_path: dependency/step9_leap_add_ions/output_crd_path
+    input_ref_path: dependency/step9_leap_add_ions/output_crd_path
+    output_traj_path: sander.min.x
+    output_rst_path: sander.min.rst
+    output_log_path: sander.min.log
+  properties:
+    simulation_type: minimization
+    mdin : 
+      maxcyc: 300
+      ntwx: 100
+      ntr: 1
+      restraintmask: "\"!:WAT,Cl-,Na+\""
+      restraint_wt: 50.0
+
+step11_process_minout_energy:
+  tool: process_minout
+  paths:
+    input_log_path: dependency/step10_sander_mdrun_energy/output_log_path
+    output_dat_path: sander.min.energy.dat
+  properties:
+    terms : [ENERGY]
+
+step12_sander_mdrun_warm:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step9_leap_add_ions/output_top_path
+    input_crd_path: dependency/step10_sander_mdrun_energy/output_rst_path
+    input_ref_path: dependency/step10_sander_mdrun_energy/output_rst_path
+    output_traj_path: sander.heat.netcdf
+    output_rst_path: sander.heat.rst
+    output_log_path: sander.heat.log
+  properties:
+    simulation_type: heat
+    mdin : 
+      maxcyc: 2500
+      ntwx: 100
+      ntr: 1
+      restraintmask: "\"!:WAT,Cl-,Na+\""
+      restraint_wt: 10.0
+
+step13_process_mdout_warm:
+  tool: process_mdout
+  paths:
+    input_log_path: dependency/step12_sander_mdrun_warm/output_log_path
+    output_dat_path: sander.md.temp.dat
+  properties:
+    terms : [TEMP]
+
+step14_sander_mdrun_nvt:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step9_leap_add_ions/output_top_path
+    input_crd_path: dependency/step12_sander_mdrun_warm/output_rst_path
+    input_ref_path: dependency/step12_sander_mdrun_warm/output_rst_path
+    output_traj_path: sander.nvt.netcdf
+    output_rst_path: sander.nvt.rst
+    output_log_path: sander.nvt.log
+  properties:
+    simulation_type: nvt
+    mdin : 
+      nstlim: 500
+      ntwx: 100
+      ntr: 1
+      restraintmask: "\"!:WAT,Cl-,Na+ & !@H=\""
+      restraint_wt: 5.0
+
+step15_process_mdout_nvt:
+  tool: process_mdout
+  paths:
+    input_log_path: dependency/step14_sander_mdrun_nvt/output_log_path
+    output_dat_path: sander.md.nvt.temp.dat
+  properties:
+    terms : [TEMP]
+
+step16_sander_mdrun_npt:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step9_leap_add_ions/output_top_path
+    input_crd_path: dependency/step14_sander_mdrun_nvt/output_rst_path
+    input_ref_path: dependency/step14_sander_mdrun_nvt/output_rst_path
+    output_traj_path: sander.npt.netcdf
+    output_rst_path: sander.npt.rst
+    output_log_path: sander.npt.log
+  properties:
+    simulation_type: npt
+    mdin : 
+      nstlim: 500
+      ntwx: 100
+      ntr: 1
+      restraintmask: "\"!:WAT,Cl-,Na+ & !@H=\""
+      restraint_wt: 2.5
+
+step17_process_mdout_npt:
+  tool: process_mdout
+  paths:
+    input_log_path: dependency/step16_sander_mdrun_npt/output_log_path
+    output_dat_path: sander.md.npt.dat
+  properties:
+    terms : [PRES, DENSITY]
+
+step18_sander_mdrun_md:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step9_leap_add_ions/output_top_path
+    input_crd_path: dependency/step16_sander_mdrun_npt/output_rst_path
+    output_traj_path: sander.free.netcdf
+    output_rst_path: sander.free.rst
+    output_log_path: sander.free.log
+  properties:
+    simulation_type: free
+    mdin : 
+      nstlim: 2500
+      ntwx: 500
+
+step19_rmsd_first:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step9_leap_add_ions/output_top_path
+    input_traj_path: dependency/step18_sander_mdrun_md/output_traj_path
+    output_cpptraj_path: setup.rms_first.dat
+  properties:
+    mask : backbone
+    reference: first
+
+step20_rmsd_exp:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step9_leap_add_ions/output_top_path
+    input_traj_path: dependency/step18_sander_mdrun_md/output_traj_path
+    input_exp_path: dependency/step2_leap_gen_top/output_pdb_path
+    output_cpptraj_path: setup.rms_exp.dat
+  properties:
+    mask : backbone
+    reference: experimental
+
+step21_cpptraj_rgyr:
+  tool: cpptraj_rgyr
+  paths:
+    input_top_path: dependency/step9_leap_add_ions/output_top_path
+    input_traj_path: dependency/step18_sander_mdrun_md/output_traj_path
+    output_cpptraj_path: setup.rgyr.dat
+  properties:
+    mask : backbone
+
+step22_cpptraj_image:
+  tool: cpptraj_image
+  paths:
+    input_top_path: dependency/step9_leap_add_ions/output_top_path
+    input_traj_path: dependency/step18_sander_mdrun_md/output_traj_path
+    output_cpptraj_path: setup.imaged_traj.xtc
+  properties:
+    mask : solute
+    format: xtc
