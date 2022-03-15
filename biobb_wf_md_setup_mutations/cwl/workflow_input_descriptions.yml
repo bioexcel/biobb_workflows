@@ -1,0 +1,76 @@
+mutations_list: 
+  - '{"mutation_list":"A:Gly4Lys"}'
+  - '{"mutation_list":"A:Leu8Met"}'
+  - '{"mutation_list":"A:Tyr20Gln"}'
+
+step0_reduce_remove_hydrogens_input_path:
+  class: File
+  path: structure.pdb
+  format: https://edamontology.org/format_1476
+step0_reduce_remove_hydrogens_output_path: structure.noH.pdb
+step1_extract_molecule_output_molecule_path: protein.pdb
+step00_cat_pdb_input_structure2:
+  class: File
+  path: ions.pdb
+  format: https://edamontology.org/format_1476
+step00_cat_pdb_output_structure_path: protein.ions.pdb
+step2_fix_side_chain_output_pdb_path: fixsidechain.pdb
+step3_mutate_output_pdb_path: mutate.pdb
+step4_pdb2gmx_config: '{"force_field": "amber99sb", "water_type": "tip3p"}'
+step4_pdb2gmx_output_gro_path: pdb2gmx.gro
+step4_pdb2gmx_output_top_zip_path: pdb2gmx_top.zip
+step5_editconf_config: '{"distance_to_molecule": 0.8, "box_type": "octahedron"}'
+step5_editconf_output_gro_path: editconf.pdb
+step6_solvate_output_gro_path: solvate.gro
+step6_solvate_output_top_zip_path: solvate_top.zip
+step7_grompp_genion_config: '{"simulation_type": "minimization", "maxwarn": 1, "mdp": {"nsteps": 5000}}'
+step7_grompp_genion_output_tpr_path: gppion.tpr
+step8_genion_config: '{"neutral": true, "concentration": 0.05}'
+step8_genion_output_gro_path: genion.gro
+step8_genion_output_top_zip_path: genion_top.zip
+step9_grompp_min_config: '{"mdp": {"nsteps": 5000, "emtol": 500}, "simulation_type": "minimization"}'
+step9_grompp_min_output_tpr_path: gppmin.tpr
+step10_mdrun_min_output_trr_path: min.trr
+step10_mdrun_min_output_gro_path: min.gro
+step10_mdrun_min_output_edr_path: min.edr
+step10_mdrun_min_output_log_path: min.log
+step100_make_ndx_config: '{"selection": "System"}'
+step100_make_ndx_output_ndx_path: str_index.ndx
+step11_grompp_nvt_config: '{"mdp": {"nsteps": 5000, "dt": 0.002, "Define": "-DPOSRES", "tc-grps": "Protein Water_and_ions"}, "simulation_type": "nvt"}'
+step11_grompp_nvt_output_tpr_path: gppnvt.tpr
+step12_mdrun_nvt_output_trr_path: nvt.trr
+step12_mdrun_nvt_output_gro_path: nvt.gro
+step12_mdrun_nvt_output_edr_path: nvt.edr
+step12_mdrun_nvt_output_log_path: nvt.log
+step12_mdrun_nvt_output_cpt_path: nvt.cpt
+step13_grompp_npt_config: '{"mdp": {"nsteps": 5000, "tc-grps": "Protein Water_and_ions"}, "simulation_type": "npt"}'
+step13_grompp_npt_output_tpr_path: gppnpt.tpr
+step14_mdrun_npt_output_trr_path: npt.trr
+step14_mdrun_npt_output_gro_path: npt.gro
+step14_mdrun_npt_output_edr_path: npt.edr
+step14_mdrun_npt_output_log_path: npt.log
+step14_mdrun_npt_output_cpt_path: npt.cpt
+step15_grompp_md_config: '{"mdp": {"nsteps": 25000, "tc-grps": "Protein Water_and_ions"}, "simulation_type": "free"}'
+step15_grompp_md_output_tpr_path: gppmd.tpr
+step16_mdrun_md_output_trr_path: md.trr
+step16_mdrun_md_output_gro_path: md.gro
+step16_mdrun_md_output_edr_path: md.edr
+step16_mdrun_md_output_log_path: md.log
+step16_mdrun_md_output_cpt_path: md.cpt
+step17_gmx_image1_config: '{"center_selection": "Protein", "output_selection": "System", "pbc": "mol", "center": true, "ur": "compact"}'
+step17_gmx_image1_output_traj_path: md.imaged.trr
+step18_gmx_image2_config: '{"fit_selection": "Protein", "output_selection": "System", "fit": "rot+trans"}'
+step18_gmx_image2_output_traj_path: md.imaged.rot.xtc
+step19_gmx_trjconv_str_config: '{"pbc": "mol", "selection": "System"}'
+step19_gmx_trjconv_str_output_str_path: setup.top.pdb
+step20_gmx_energy_config: '{"xvg": "xmgr", "terms": ["Potential", "Total-Energy"]}'
+step20_gmx_energy_output_xvg_path: setup.energy.xvg
+step21_gmx_rgyr_config: '{"xvg": "xmgr", "selection": "Protein-H"}'
+step21_gmx_rgyr_output_xvg_path: setup.rgyr.xvg
+step22_rmsd_first_config: '{"selection": "Protein-H"}'
+step22_rmsd_first_output_xvg_path: setup.rmsd_first.xvg
+step23_rmsd_exp_config: '{"selection": "Protein-H"}'
+step23_rmsd_exp_output_xvg_path: setup.rmsd_exp.xvg
+step24_grompp_md_config: '{"mdp": {"nsteps": 5000000, "dt": 0.002, "ref-t": "300 300", "nstxout": 100000, "nstxout-compresse
+d": 500}, "simulation_type": "free"}'
+step24_grompp_md_output_tpr_path: gppmdsim.tpr
