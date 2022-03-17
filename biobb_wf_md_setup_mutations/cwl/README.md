@@ -6,8 +6,10 @@ To execute the workflow through a CWL script, please follow the next steps:
 
 Below you can find the list of all the needed **files** for executing this workflow:
 
-* **workflow.cwl:** the CWL file with all the steps to execute this workflow.
+* **workflow.cwl:** the CWL file with all the common steps to execute this workflow.
 * **workflow_input_descriptions.yml:** the configuration file with the I/O dependencies and settings for each step of the workflow.
+* **workflow_list.cwl:** the CWL file with all the steps to execute each mutation for this workflow.
+* **workflow_gather.cwl:** the CWL file with code needed to wrap up the outcome of this workflow.
 
 ## <a name="requirements"></a>Requirements
 
