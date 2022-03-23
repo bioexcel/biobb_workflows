@@ -63,7 +63,7 @@ step21_gmx_energy_min_config: '{"terms": ["Potential"]}'
 step21_gmx_energy_min_output_xvg_path: complex.min.energy.xvg
 step22_make_ndx_config: '{"selection": "\"Protein\"|\"Other\""}'
 step22_make_ndx_output_ndx_path: complex.index.ndx
-step23_grompp_nvt_config: '{"mdp": {"nsteps": 5000, "tc-grps": "Protein_Other Water_and_ions", "Define": "-DPOSRES -DPOSRES_LIGAND"}, "simulation_type": "nvt"}'
+step23_grompp_nvt_config: '{"mdp": {"nsteps": 50000, "tc-grps": "Protein_Other Water_and_ions", "Define": "-DPOSRES -DPOSRES_LIGAND"}, "simulation_type": "nvt"}'
 step23_grompp_nvt_output_tpr_path: complex.gppnvt.tpr
 step24_mdrun_nvt_output_trr_path: complex.nvt.trr
 step24_mdrun_nvt_output_gro_path: complex.nvt.gro
@@ -72,7 +72,7 @@ step24_mdrun_nvt_output_log_path: complex.nvt.log
 step24_mdrun_nvt_output_cpt_path: complex.nvt.cpt
 step25_gmx_energy_nvt_config: '{"terms": ["Temperature"]}'
 step25_gmx_energy_nvt_output_xvg_path: complex.nvt.temp.xvg
-step26_grompp_npt_config: '{"mdp": {"nsteps": 5000, "type": "npt", "tc-grps": "Protein_Other Water_and_ions", "Define": "-DPOSRES -DPOSRES_LIGAND"}, "simulation_type": "npt"}'
+step26_grompp_npt_config: '{"mdp": {"nsteps": 50000, "type": "npt", "tc-grps": "Protein_Other Water_and_ions", "Define": "-DPOSRES -DPOSRES_LIGAND"}, "simulation_type": "npt"}'
 step26_grompp_npt_output_tpr_path: complex.gppnpt.tpr
 step27_mdrun_npt_output_trr_path: complex.npt.trr
 step27_mdrun_npt_output_gro_path: complex.npt.gro
@@ -88,15 +88,17 @@ step30_mdrun_md_output_gro_path: complex.md.gro
 step30_mdrun_md_output_edr_path: complex.md.edr
 step30_mdrun_md_output_log_path: complex.md.log
 step30_mdrun_md_output_cpt_path: complex.md.cpt
+step34_gmx_image_config: '{"center_selection": "Protein_Other", "output_selection": "System", "pbc": "mol", "center": true}'
+step34_gmx_image_output_traj_path: complex.imaged.trr
+step34b_gmx_image2_config: '{"fit_selection": "Protein_Other", "output_selection": "System", "fit": "rot+trans"}'
+step34b_gmx_image2_output_traj_path: complex.imaged.rot.xtc
+step35_gmx_trjconv_str_config: '{"pbc": "mol", "selection": "System"}'
+step35_gmx_trjconv_str_output_str_path: complex.md.gro
 step31_rmsd_first_config: '{"selection": "Protein_Other"}'
 step31_rmsd_first_output_xvg_path: complex.rmsd_first.xvg
 step32_rmsd_exp_config: '{"selection": "Protein_Other"}'
 step32_rmsd_exp_output_xvg_path: complex.rmsd_exp.xvg
 step33_gmx_rgyr_config: '{"selection": "Protein_Other"}'
 step33_gmx_rgyr_output_xvg_path: complex.rgyr.xvg
-step34_gmx_image_config: '{"center_selection": "Protein_Other", "output_selection": "System", "pbc": "mol", "center": true}'
-step34_gmx_image_output_traj_path: complex.imaged.trr
-step35_gmx_trjconv_str_config: '{"pbc": "mol", "selection": "System"}'
-step35_gmx_trjconv_str_output_str_path: complex.md.gro
 step36_grompp_md_config: '{"mdp": {"nsteps": 5000000, "dt": 0.002, "ref-t": "300 300", "nstxout": 100000, "nstxout-compressed": 500}, "simulation_type": "free"}'
 step36_grompp_md_output_tpr_path: gppmdsim.tpr

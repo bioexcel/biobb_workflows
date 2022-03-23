@@ -36,21 +36,21 @@ step10_mdrun_min_output_edr_path: min.edr
 step10_mdrun_min_output_log_path: min.log
 step100_make_ndx_config: '{"selection": "System"}'
 step100_make_ndx_output_ndx_path: str_index.ndx
-step11_grompp_nvt_config: '{"mdp": {"nsteps": 5000, "dt": 0.002, "Define": "-DPOSRES", "tc-grps": "Protein Water_and_ions"}, "simulation_type": "nvt"}'
+step11_grompp_nvt_config: '{"mdp": {"nsteps": 50000, "dt": 0.002, "Define": "-DPOSRES", "tc-grps": "Protein Water_and_ions"}, "simulation_type": "nvt"}'
 step11_grompp_nvt_output_tpr_path: gppnvt.tpr
 step12_mdrun_nvt_output_trr_path: nvt.trr
 step12_mdrun_nvt_output_gro_path: nvt.gro
 step12_mdrun_nvt_output_edr_path: nvt.edr
 step12_mdrun_nvt_output_log_path: nvt.log
 step12_mdrun_nvt_output_cpt_path: nvt.cpt
-step13_grompp_npt_config: '{"mdp": {"nsteps": 5000, "tc-grps": "Protein Water_and_ions"}, "simulation_type": "npt"}'
+step13_grompp_npt_config: '{"mdp": {"nsteps": 50000, "tc-grps": "Protein Water_and_ions"}, "simulation_type": "npt"}'
 step13_grompp_npt_output_tpr_path: gppnpt.tpr
 step14_mdrun_npt_output_trr_path: npt.trr
 step14_mdrun_npt_output_gro_path: npt.gro
 step14_mdrun_npt_output_edr_path: npt.edr
 step14_mdrun_npt_output_log_path: npt.log
 step14_mdrun_npt_output_cpt_path: npt.cpt
-step15_grompp_md_config: '{"mdp": {"nsteps": 25000, "tc-grps": "Protein Water_and_ions"}, "simulation_type": "free"}'
+step15_grompp_md_config: '{"mdp": {"nsteps": 250000, "tc-grps": "Protein Water_and_ions"}, "simulation_type": "free"}'
 step15_grompp_md_output_tpr_path: gppmd.tpr
 step16_mdrun_md_output_trr_path: md.trr
 step16_mdrun_md_output_gro_path: md.gro

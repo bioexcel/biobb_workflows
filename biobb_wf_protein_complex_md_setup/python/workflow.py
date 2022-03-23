@@ -113,6 +113,15 @@ def main(config, system=None):
     global_log.info("step30_mdrun_md: Running short free MD simulation")
     mdrun(**global_paths["step30_mdrun_md"], properties=global_prop["step30_mdrun_md"])
 
+    global_log.info("step34_gmx_image: Image Trajectory, step1, moving ligand to center of the water box")
+    gmx_image(**global_paths["step34_gmx_image"], properties=global_prop["step34_gmx_image"])
+
+    global_log.info("step34b_gmx_image2: Image Trajectory, step2, removing rotation")
+    gmx_image(**global_paths["step34b_gmx_image2"], properties=global_prop["step34b_gmx_image2"])
+
+    global_log.info("step35_gmx_trjconv_str: Generating the output dry structure")
+    gmx_trjconv_str(**global_paths["step35_gmx_trjconv_str"], properties=global_prop["step35_gmx_trjconv_str"])
+
     global_log.info("step31_rmsd_first: Generate RMSd (against 1st snp.) plot for the resulting setup trajectory from the free md step")
     gmx_rms(**global_paths["step31_rmsd_first"], properties=global_prop["step31_rmsd_first"])
 
@@ -121,12 +130,6 @@ def main(config, system=None):
 
     global_log.info("step33_gmx_rgyr: Generate Radius of Gyration plot for the resulting setup trajectory from the free md step")
     gmx_rgyr(**global_paths["step33_gmx_rgyr"], properties=global_prop["step33_gmx_rgyr"])
-
-    global_log.info("step34_gmx_image: Imaging the resulting trajectory")
-    gmx_image(**global_paths["step34_gmx_image"], properties=global_prop["step34_gmx_image"])
-
-    global_log.info("step35_gmx_trjconv_str: Generating the output dry structure")
-    gmx_trjconv_str(**global_paths["step35_gmx_trjconv_str"], properties=global_prop["step35_gmx_trjconv_str"])
 
     if conf.properties['run_md']:
         global_log.info("step36_grompp_md: Preprocess long MD simulation after setup")

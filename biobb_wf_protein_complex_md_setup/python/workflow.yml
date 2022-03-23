@@ -1,6 +1,6 @@
 working_dir_path: wf_complex_setup
 can_write_console_log: False
-run_md: true
+run_md: false
 
 step0_reduce_remove_hydrogens:
   tool: reduce_remove_hydrogens
@@ -177,7 +177,7 @@ step23_grompp_nvt:
     output_tpr_path: complex.gppnvt.tpr
   properties:
     mdp:
-      nsteps: 5000
+      nsteps: 50000
       tc-grps: "Protein_Other Water_and_ions"
       Define: -DPOSRES -DPOSRES_LIGAND
     simulation_type: nvt
@@ -210,7 +210,7 @@ step26_grompp_npt:
     input_cpt_path: dependency/step24_mdrun_nvt/output_cpt_path
   properties:
     mdp:
-      nsteps: 5000
+      nsteps: 50000
       type: npt
       tc-grps: "Protein_Other Water_and_ions"
       Define: -DPOSRES -DPOSRES_LIGAND
@@ -258,36 +258,6 @@ step30_mdrun_md:
     output_log_path: complex.md.log
     output_cpt_path: complex.md.cpt
 
-step31_rmsd_first:
-  tool: gmx_rms
-  paths:
-    input_structure_path: dependency/step29_grompp_md/output_tpr_path
-    input_traj_path: dependency/step30_mdrun_md/output_trr_path
-    input_index_path: dependency/step22_make_ndx/output_ndx_path
-    output_xvg_path: complex.rmsd_first.xvg
-  properties:
-    selection: "Protein_Other"
-
-step32_rmsd_exp:
-  tool: gmx_rms
-  paths:
-    input_structure_path: dependency/step19_grompp_min/output_tpr_path
-    input_traj_path: dependency/step30_mdrun_md/output_trr_path
-    input_index_path: dependency/step22_make_ndx/output_ndx_path
-    output_xvg_path: complex.rmsd_exp.xvg
-  properties:
-    selection: "Protein_Other"
-
-step33_gmx_rgyr:
-  tool: gmx_rgyr
-  paths:
-    input_structure_path: dependency/step19_grompp_min/output_tpr_path
-    input_traj_path: dependency/step30_mdrun_md/output_trr_path
-    input_index_path: dependency/step22_make_ndx/output_ndx_path
-    output_xvg_path: complex.rgyr.xvg
-  properties:
-    selection: "Protein_Other"
-
 step34_gmx_image:
   tool: gmx_image
   paths:
@@ -301,6 +271,18 @@ step34_gmx_image:
     pbc: "mol"
     center: True
 
+step34b_gmx_image2:
+  tool: gmx_image
+  paths:
+    input_traj_path: dependency/step34_gmx_image/output_traj_path
+    input_top_path: dependency/step19_grompp_min/output_tpr_path
+    input_index_path: dependency/step22_make_ndx/output_ndx_path
+    output_traj_path: complex.imaged.rot.xtc
+  properties:
+    fit_selection: "Protein_Other"
+    output_selection: System
+    fit: rot+trans
+
 step35_gmx_trjconv_str:
   tool: gmx_trjconv_str
   paths:
@@ -311,6 +293,36 @@ step35_gmx_trjconv_str:
   properties:
     pbc: "mol"
     selection: System
+
+step31_rmsd_first:
+  tool: gmx_rms
+  paths:
+    input_structure_path: dependency/step29_grompp_md/output_tpr_path
+    input_traj_path: dependency/step34b_gmx_image2/output_traj_path
+    input_index_path: dependency/step22_make_ndx/output_ndx_path
+    output_xvg_path: complex.rmsd_first.xvg
+  properties:
+    selection: "Protein_Other"
+
+step32_rmsd_exp:
+  tool: gmx_rms
+  paths:
+    input_structure_path: dependency/step19_grompp_min/output_tpr_path
+    input_traj_path: dependency/step34b_gmx_image2/output_traj_path
+    input_index_path: dependency/step22_make_ndx/output_ndx_path
+    output_xvg_path: complex.rmsd_exp.xvg
+  properties:
+    selection: "Protein_Other"
+
+step33_gmx_rgyr:
+  tool: gmx_rgyr
+  paths:
+    input_structure_path: dependency/step29_grompp_md/output_tpr_path
+    input_traj_path: dependency/step34b_gmx_image2/output_traj_path
+    input_index_path: dependency/step22_make_ndx/output_ndx_path
+    output_xvg_path: complex.rgyr.xvg
+  properties:
+    selection: "Protein_Other"
 
 # production MD
 step36_grompp_md:

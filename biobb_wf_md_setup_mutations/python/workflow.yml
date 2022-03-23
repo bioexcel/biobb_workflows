@@ -123,7 +123,7 @@ step11_grompp_nvt:
     output_tpr_path: gppnvt.tpr
   properties:
     mdp:
-      nsteps: 5000
+      nsteps: 50000
       dt: 0.002
       Define: -DPOSRES
       tc-grps: "Protein Water_and_ions"
@@ -149,7 +149,7 @@ step13_grompp_npt:
     input_cpt_path: dependency/step12_mdrun_nvt/output_cpt_path
   properties:
     mdp:
-      nsteps: 5000
+      nsteps: 50000
       tc-grps: "Protein Water_and_ions"
     simulation_type: npt
 
@@ -173,8 +173,7 @@ step15_grompp_md:
     input_cpt_path: dependency/step14_mdrun_npt/output_cpt_path
   properties:
     mdp:
-      nsteps: 25000
-      #nsteps: 250000
+      nsteps: 250000
       tc-grps: "Protein Water_and_ions"
     simulation_type: free
 

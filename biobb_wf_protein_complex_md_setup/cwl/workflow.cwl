@@ -74,16 +74,18 @@ inputs:
   step30_mdrun_md_output_edr_path: string
   step30_mdrun_md_output_log_path: string
   step30_mdrun_md_output_cpt_path: string
+  step34_gmx_image_config: string
+  step34_gmx_image_output_traj_path: string
+  step34b_gmx_image2_config: string
+  step34b_gmx_image2_output_traj_path: string
+  step35_gmx_trjconv_str_config: string
+  step35_gmx_trjconv_str_output_str_path: string
   step31_rmsd_first_config: string
   step31_rmsd_first_output_xvg_path: string
   step32_rmsd_exp_config: string
   step32_rmsd_exp_output_xvg_path: string
   step33_gmx_rgyr_config: string
   step33_gmx_rgyr_output_xvg_path: string
-  step34_gmx_image_config: string
-  step34_gmx_image_output_traj_path: string
-  step35_gmx_trjconv_str_config: string
-  step35_gmx_trjconv_str_output_str_path: string
   step36_grompp_md_config: string
   step36_grompp_md_output_tpr_path: string
 outputs:
@@ -357,6 +359,24 @@ outputs:
       Path to the output GROMACS checkpoint file CPT
     type: File
     outputSource: step30_mdrun_md/output_cpt_path
+  step34_gmx_image_out1:
+    label: output_traj_path
+    doc: |-
+      Path to the output file
+    type: File
+    outputSource: step34_gmx_image/output_traj_path
+  step34b_gmx_image2_out1:
+    label: output_traj_path
+    doc: |-
+      Path to the output file
+    type: File
+    outputSource: step34b_gmx_image2/output_traj_path
+  step35_gmx_trjconv_str_out1:
+    label: output_str_path
+    doc: |-
+      Path to the output file
+    type: File
+    outputSource: step35_gmx_trjconv_str/output_str_path
   step31_rmsd_first_out1:
     label: output_xvg_path
     doc: |-
@@ -375,18 +395,6 @@ outputs:
       Path to the XVG output file
     type: File
     outputSource: step33_gmx_rgyr/output_xvg_path
-  step34_gmx_image_out1:
-    label: output_traj_path
-    doc: |-
-      Path to the output file
-    type: File
-    outputSource: step34_gmx_image/output_traj_path
-  step35_gmx_trjconv_str_out1:
-    label: output_str_path
-    doc: |-
-      Path to the output file
-    type: File
-    outputSource: step35_gmx_trjconv_str/output_str_path
   step36_grompp_md_out1:
     label: output_tpr_path
     doc: |-
@@ -736,45 +744,6 @@ steps:
     - output_edr_path
     - output_log_path
     - output_cpt_path
-  step31_rmsd_first:
-    label: GMXRms
-    doc: |-
-      Wrapper of the GROMACS module for calculating the Root Mean Square deviation (RMSd) of a given cpptraj compatible trajectory.
-    run: /path/to/biobb_adapters/biobb_adapters/cwl/biobb_analysis/gmx_rms.cwl
-    in:
-      config: step31_rmsd_first_config
-      input_structure_path: step29_grompp_md/output_tpr_path
-      input_traj_path: step30_mdrun_md/output_trr_path
-      input_index_path: step22_make_ndx/output_ndx_path
-      output_xvg_path: step31_rmsd_first_output_xvg_path
-    out:
-    - output_xvg_path
-  step32_rmsd_exp:
-    label: GMXRms
-    doc: |-
-      Wrapper of the GROMACS module for calculating the Root Mean Square deviation (RMSd) of a given cpptraj compatible trajectory.
-    run: /path/to/biobb_adapters/biobb_adapters/cwl/biobb_analysis/gmx_rms.cwl
-    in:
-      config: step32_rmsd_exp_config
-      input_structure_path: step19_grompp_min/output_tpr_path
-      input_traj_path: step30_mdrun_md/output_trr_path
-      input_index_path: step22_make_ndx/output_ndx_path
-      output_xvg_path: step32_rmsd_exp_output_xvg_path
-    out:
-    - output_xvg_path
-  step33_gmx_rgyr:
-    label: GMXRgyr
-    doc: |-
-      Wrapper of the GROMACS gyrate module for computing the radius of gyration (Rgyr) of a molecule about the x-, y- and z-axes, as a function of time, from a given GROMACS compatible trajectory.
-    run: /path/to/biobb_adapters/biobb_adapters/cwl/biobb_analysis/gmx_rgyr.cwl
-    in:
-      config: step33_gmx_rgyr_config
-      input_structure_path: step19_grompp_min/output_tpr_path
-      input_traj_path: step30_mdrun_md/output_trr_path
-      input_index_path: step22_make_ndx/output_ndx_path
-      output_xvg_path: step33_gmx_rgyr_output_xvg_path
-    out:
-    - output_xvg_path
   step34_gmx_image:
     label: GMXImage
     doc: |-
@@ -786,6 +755,19 @@ steps:
       input_top_path: step19_grompp_min/output_tpr_path
       input_index_path: step22_make_ndx/output_ndx_path
       output_traj_path: step34_gmx_image_output_traj_path
+    out:
+    - output_traj_path
+  step34b_gmx_image2:
+    label: GMXImage
+    doc: |-
+      Wrapper of the GROMACS trjconv module for correcting periodicity (image) from a given GROMACS compatible trajectory file.
+    run: /path/to/biobb_adapters/biobb_adapters/cwl/biobb_analysis/gmx_image.cwl
+    in:
+      config: step34b_gmx_image2_config
+      input_traj_path: step34_gmx_image/output_traj_path
+      input_top_path: step19_grompp_min/output_tpr_path
+      input_index_path: step22_make_ndx/output_ndx_path
+      output_traj_path: step34b_gmx_image2_output_traj_path
     out:
     - output_traj_path
   step35_gmx_trjconv_str:
@@ -801,6 +783,45 @@ steps:
       output_str_path: step35_gmx_trjconv_str_output_str_path
     out:
     - output_str_path
+  step31_rmsd_first:
+    label: GMXRms
+    doc: |-
+      Wrapper of the GROMACS module for calculating the Root Mean Square deviation (RMSd) of a given cpptraj compatible trajectory.
+    run: /path/to/biobb_adapters/biobb_adapters/cwl/biobb_analysis/gmx_rms.cwl
+    in:
+      config: step31_rmsd_first_config
+      input_structure_path: step29_grompp_md/output_tpr_path
+      input_traj_path: step34b_gmx_image2/output_traj_path
+      input_index_path: step22_make_ndx/output_ndx_path
+      output_xvg_path: step31_rmsd_first_output_xvg_path
+    out:
+    - output_xvg_path
+  step32_rmsd_exp:
+    label: GMXRms
+    doc: |-
+      Wrapper of the GROMACS module for calculating the Root Mean Square deviation (RMSd) of a given cpptraj compatible trajectory.
+    run: /path/to/biobb_adapters/biobb_adapters/cwl/biobb_analysis/gmx_rms.cwl
+    in:
+      config: step32_rmsd_exp_config
+      input_structure_path: step19_grompp_min/output_tpr_path
+      input_traj_path: step34b_gmx_image2/output_traj_path
+      input_index_path: step22_make_ndx/output_ndx_path
+      output_xvg_path: step32_rmsd_exp_output_xvg_path
+    out:
+    - output_xvg_path
+  step33_gmx_rgyr:
+    label: GMXRgyr
+    doc: |-
+      Wrapper of the GROMACS gyrate module for computing the radius of gyration (Rgyr) of a molecule about the x-, y- and z-axes, as a function of time, from a given GROMACS compatible trajectory.
+    run: /path/to/biobb_adapters/biobb_adapters/cwl/biobb_analysis/gmx_rgyr.cwl
+    in:
+      config: step33_gmx_rgyr_config
+      input_structure_path: step29_grompp_md/output_tpr_path
+      input_traj_path: step34b_gmx_image2/output_traj_path
+      input_index_path: step22_make_ndx/output_ndx_path
+      output_xvg_path: step33_gmx_rgyr_output_xvg_path
+    out:
+    - output_xvg_path
   step36_grompp_md:
     label: Grompp
     doc: |-
