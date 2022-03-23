@@ -35,31 +35,31 @@ step9_leap_add_ions_config: '{"forcefield": ["protein.ff14SB","DNA.bsc1","RNA.OL
 step9_leap_add_ions_output_pdb_path: structure.ions.pdb
 step9_leap_add_ions_output_top_path: structure.ions.parmtop
 step9_leap_add_ions_output_crd_path: structure.ions.crd
-step10_sander_mdrun_energy_config: '{"simulation_type": "minimization", "mdin": {"maxcyc": 300, "ntwx": 100, "ntr": 1, "restraintmask": "\"!:WAT,Cl-,Na+\"", "restraint_wt": 50.0}}'
+step10_sander_mdrun_energy_config: '{"simulation_type": "minimization", "mdin": {"maxcyc": 500, "ntwx": 100, "ntr": 1, "restraintmask": "\"!:WAT,Cl-,Na+\"", "restraint_wt": 50.0}}'
 step10_sander_mdrun_energy_output_traj_path: sander.min.x
 step10_sander_mdrun_energy_output_rst_path: sander.min.rst
 step10_sander_mdrun_energy_output_log_path: sander.min.log
 step11_process_minout_energy_config: '{"terms": ["ENERGY"]}'
 step11_process_minout_energy_output_dat_path: sander.min.energy.dat
-step12_sander_mdrun_warm_config: '{"simulation_type": "heat", "mdin": {"maxcyc": 2500, "ntwx": 100, "ntr": 1, "restraintmask": "\"!:WAT,Cl-,Na+\"", "restraint_wt": 10.0}}'
+step12_sander_mdrun_warm_config: '{"simulation_type": "heat", "mdin": {"maxcyc": 50000, "ntwx": 100, "ntr": 1, "restraintmask": "\"!:WAT,Cl-,Na+\"", "restraint_wt": 10.0}}'
 step12_sander_mdrun_warm_output_traj_path: sander.heat.netcdf
 step12_sander_mdrun_warm_output_rst_path: sander.heat.rst
 step12_sander_mdrun_warm_output_log_path: sander.heat.log
 step13_process_mdout_warm_config: '{"terms": ["TEMP"]}'
 step13_process_mdout_warm_output_dat_path: sander.md.temp.dat
-step14_sander_mdrun_nvt_config: '{"simulation_type": "nvt", "mdin": {"nstlim": 500, "ntwx": 100, "ntr": 1, "restraintmask": "\"!:WAT,Cl-,Na+ & !@H=\"", "restraint_wt": 5.0}}'
+step14_sander_mdrun_nvt_config: '{"simulation_type": "nvt", "mdin": {"nstlim": 25000, "ntwx": 100, "ntr": 1, "restraintmask": "\"!:WAT,Cl-,Na+ & !@H=\"", "restraint_wt": 5.0}}'
 step14_sander_mdrun_nvt_output_traj_path: sander.nvt.netcdf
 step14_sander_mdrun_nvt_output_rst_path: sander.nvt.rst
 step14_sander_mdrun_nvt_output_log_path: sander.nvt.log
 step15_process_mdout_nvt_config: '{"terms": ["TEMP"]}'
 step15_process_mdout_nvt_output_dat_path: sander.md.nvt.temp.dat
-step16_sander_mdrun_npt_config: '{"simulation_type": "npt", "mdin": {"nstlim": 500, "ntwx": 100, "ntr": 1, "restraintmask": "\"!:WAT,Cl-,Na+ & !@H=\"", "restraint_wt": 2.5}}'
+step16_sander_mdrun_npt_config: '{"simulation_type": "npt", "mdin": {"nstlim": 25000, "ntwx": 100, "ntr": 1, "restraintmask": "\"!:WAT,Cl-,Na+ & !@H=\"", "restraint_wt": 2.5}}'
 step16_sander_mdrun_npt_output_traj_path: sander.npt.netcdf
 step16_sander_mdrun_npt_output_rst_path: sander.npt.rst
 step16_sander_mdrun_npt_output_log_path: sander.npt.log
 step17_process_mdout_npt_config: '{"terms": ["PRES", "DENSITY"]}'
 step17_process_mdout_npt_output_dat_path: sander.md.npt.dat
-step18_sander_mdrun_md_config: '{"simulation_type": "free", "mdin": {"nstlim": 2500, "ntwx": 500}}'
+step18_sander_mdrun_md_config: '{"simulation_type": "free", "mdin": {"nstlim": 250000, "ntwx": 500}}'
 step18_sander_mdrun_md_output_traj_path: sander.free.netcdf
 step18_sander_mdrun_md_output_rst_path: sander.free.rst
 step18_sander_mdrun_md_output_log_path: sander.free.log
@@ -69,5 +69,5 @@ step20_rmsd_exp_config: '{"mask": "backbone", "reference": "experimental"}'
 step20_rmsd_exp_output_cpptraj_path: setup.rms_exp.dat
 step21_cpptraj_rgyr_config: '{"mask": "backbone"}'
 step21_cpptraj_rgyr_output_cpptraj_path: setup.rgyr.dat
-step22_cpptraj_image_config: '{"mask": "solute", "format": "xtc"}'
+step22_cpptraj_image_config: '{"mask": "all-atoms", "format": "xtc"}'
 step22_cpptraj_image_output_cpptraj_path: setup.imaged_traj.xtc
