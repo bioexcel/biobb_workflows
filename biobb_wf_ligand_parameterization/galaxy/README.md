@@ -4,7 +4,7 @@ To execute the workflow through Galaxy, please follow the next steps:
 
 ## <a name="galaxy"></a>Access to INB's Galaxy server
 
-Go to the [INB's Galaxy server](https://dev.usegalaxy.es/), click to the **Login or Register** button and then the **Workflows** button. 
+Go to the [INB's Galaxy server](https://biobb.usegalaxy.es/), click to the **Login or Register** button and then the **Workflows** button. 
 
 ## <a name="workflows"></a>Upload workflow
 
