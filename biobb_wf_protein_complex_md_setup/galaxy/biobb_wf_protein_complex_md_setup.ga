@@ -20,61 +20,14 @@
                 }
             ],
             "position": {
-                "bottom": -26.71875,
+                "bottom": 679.40625,
                 "height": 61.78125,
-                "left": -5737,
-                "right": -5537,
-                "top": -88.5,
+                "left": 1110.1875,
+                "right": 1310.1875,
+                "top": 617.625,
                 "width": 200,
-                "x": -5737,
-                "y": -88.5
-            },
-            "post_job_actions": {
-                "ChangeDatatypeActionoutput_pdb_path": {
-                    "action_arguments": {
-                        "newtype": "pdb"
-                    },
-                    "action_type": "ChangeDatatypeAction",
-                    "output_name": "output_pdb_path"
-                }
-            },
-            "tool_id": "biobb_io_pdb_ext",
-            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"outname_output_pdb_path\": \"mypdb_lig.pdb\", \"properties\": {\"pdb_code\": \"3htb\", \"filter\": \"\", \"api_id\": \"pdbe\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.7.0",
-            "type": "tool",
-            "uuid": "20d6fd96-4a9d-47e8-87c8-72106454a35a",
-            "workflow_outputs": [
-                {
-                    "label": "mypdb_lig.pdb",
-                    "output_name": "output_pdb_path",
-                    "uuid": "3d62560c-cc5a-4945-b0a6-fda29135ba15"
-                }
-            ]
-        },
-        "1": {
-            "annotation": "",
-            "content_id": "biobb_io_pdb_ext",
-            "errors": null,
-            "id": 1,
-            "input_connections": {},
-            "inputs": [],
-            "label": null,
-            "name": "Pdb",
-            "outputs": [
-                {
-                    "name": "output_pdb_path",
-                    "type": "pdb"
-                }
-            ],
-            "position": {
-                "bottom": 201.78125,
-                "height": 61.78125,
-                "left": -5752,
-                "right": -5552,
-                "top": 140,
-                "width": 200,
-                "x": -5752,
-                "y": 140
+                "x": 1110.1875,
+                "y": 617.625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_pdb_path": {
@@ -94,15 +47,15 @@
                 {
                     "label": "mypdb_prot.pdb",
                     "output_name": "output_pdb_path",
-                    "uuid": "f719914e-4c60-45da-84cd-7a38ba211e60"
+                    "uuid": "59101321-c8d1-4c72-b840-267a059976a3"
                 }
             ]
         },
-        "2": {
+        "1": {
             "annotation": "",
             "content_id": "biobb_structure_utils_extract_heteroatoms_ext",
             "errors": null,
-            "id": 2,
+            "id": 1,
             "input_connections": {
                 "input_structure_path": {
                     "id": 0,
@@ -119,14 +72,14 @@
                 }
             ],
             "position": {
-                "bottom": 19.453125,
+                "bottom": 497.078125,
                 "height": 133.953125,
-                "left": -5412.015625,
-                "right": -5212.015625,
-                "top": -114.5,
+                "left": 1450.171875,
+                "right": 1650.171875,
+                "top": 363.125,
                 "width": 200,
-                "x": -5412.015625,
-                "y": -114.5
+                "x": 1450.171875,
+                "y": 363.125
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_heteroatom_path": {
@@ -146,18 +99,18 @@
                 {
                     "label": "myextract_heteroatoms.pdb",
                     "output_name": "output_heteroatom_path",
-                    "uuid": "995857e2-e66d-4786-a6d9-6e48499dadb8"
+                    "uuid": "0e682c8e-7ecd-4227-a43b-9aea252b9131"
                 }
             ]
         },
-        "3": {
+        "2": {
             "annotation": "",
             "content_id": "biobb_structure_utils_extract_molecule_ext",
             "errors": null,
-            "id": 3,
+            "id": 2,
             "input_connections": {
                 "input_structure_path": {
-                    "id": 1,
+                    "id": 0,
                     "output_name": "output_pdb_path"
                 }
             },
@@ -171,14 +124,14 @@
                 }
             ],
             "position": {
-                "bottom": 233.0625,
+                "bottom": 710.6875,
                 "height": 113.5625,
-                "left": -5412,
-                "right": -5212,
-                "top": 119.5,
+                "left": 1450.1875,
+                "right": 1650.1875,
+                "top": 597.125,
                 "width": 200,
-                "x": -5412,
-                "y": 119.5
+                "x": 1450.1875,
+                "y": 597.125
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_molecule_path": {
@@ -198,18 +151,18 @@
                 {
                     "label": "myextract_molecule.pdb",
                     "output_name": "output_molecule_path",
-                    "uuid": "bbe8122a-ae76-4729-8745-d834d820bf71"
+                    "uuid": "1084133c-a5dd-4ba5-928c-8d01be331672"
                 }
             ]
         },
-        "4": {
+        "3": {
             "annotation": "",
             "content_id": "biobb_chemistry_reduce_add_hydrogens_ext",
             "errors": null,
-            "id": 4,
+            "id": 3,
             "input_connections": {
                 "input_path": {
-                    "id": 2,
+                    "id": 1,
                     "output_name": "output_heteroatom_path"
                 }
             },
@@ -223,14 +176,14 @@
                 }
             ],
             "position": {
-                "bottom": 21.484375,
+                "bottom": 499.109375,
                 "height": 133.953125,
-                "left": -5093.671875,
-                "right": -4893.671875,
-                "top": -112.46875,
+                "left": 1768.515625,
+                "right": 1968.515625,
+                "top": 365.15625,
                 "width": 200,
-                "x": -5093.671875,
-                "y": -112.46875
+                "x": 1768.515625,
+                "y": 365.15625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_path": {
@@ -250,18 +203,18 @@
                 {
                     "label": "myreduce_add_hydrogens.pdb",
                     "output_name": "output_path",
-                    "uuid": "d0f12769-d2f9-4558-a709-4ffb899c3a37"
+                    "uuid": "03979ca8-b9dd-4d47-8467-e025ad34b56a"
                 }
             ]
         },
-        "5": {
+        "4": {
             "annotation": "",
             "content_id": "biobb_model_fix_side_chain_ext",
             "errors": null,
-            "id": 5,
+            "id": 4,
             "input_connections": {
                 "input_pdb_path": {
-                    "id": 3,
+                    "id": 2,
                     "output_name": "output_molecule_path"
                 }
             },
@@ -275,14 +228,14 @@
                 }
             ],
             "position": {
-                "bottom": 227.078125,
+                "bottom": 704.703125,
                 "height": 113.5625,
-                "left": -5075.671875,
-                "right": -4875.671875,
-                "top": 113.515625,
+                "left": 1786.515625,
+                "right": 1986.515625,
+                "top": 591.140625,
                 "width": 200,
-                "x": -5075.671875,
-                "y": 113.515625
+                "x": 1786.515625,
+                "y": 591.140625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_pdb_path": {
@@ -302,18 +255,18 @@
                 {
                     "label": "myfix_side_chain.pdb",
                     "output_name": "output_pdb_path",
-                    "uuid": "a5237abc-1e02-4cf5-b669-138c060dfb7f"
+                    "uuid": "0d541bf0-0ad2-4ac5-a423-89b5b113c394"
                 }
             ]
         },
-        "6": {
+        "5": {
             "annotation": "",
             "content_id": "biobb_chemistry_babel_minimize_ext",
             "errors": null,
-            "id": 6,
+            "id": 5,
             "input_connections": {
                 "input_path": {
-                    "id": 4,
+                    "id": 3,
                     "output_name": "output_path"
                 }
             },
@@ -327,14 +280,14 @@
                 }
             ],
             "position": {
-                "bottom": 10.078125,
+                "bottom": 487.703125,
                 "height": 113.5625,
-                "left": -4771.984375,
-                "right": -4571.984375,
-                "top": -103.484375,
+                "left": 2090.203125,
+                "right": 2290.203125,
+                "top": 374.140625,
                 "width": 200,
-                "x": -4771.984375,
-                "y": -103.484375
+                "x": 2090.203125,
+                "y": 374.140625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_path": {
@@ -354,18 +307,18 @@
                 {
                     "label": "mybabel_minimize.mol2",
                     "output_name": "output_path",
-                    "uuid": "5d449bc7-a9f5-4ad9-95b3-ae1789b36210"
+                    "uuid": "8ba25478-e515-425e-a4be-870074de156d"
                 }
             ]
         },
-        "7": {
+        "6": {
             "annotation": "",
             "content_id": "biobb_md_pdb2gmx_ext",
             "errors": null,
-            "id": 7,
+            "id": 6,
             "input_connections": {
                 "input_pdb_path": {
-                    "id": 5,
+                    "id": 4,
                     "output_name": "output_pdb_path"
                 }
             },
@@ -383,14 +336,14 @@
                 }
             ],
             "position": {
-                "bottom": 238.09375,
+                "bottom": 715.71875,
                 "height": 123.5625,
-                "left": -4792.6875,
-                "right": -4592.6875,
-                "top": 114.53125,
+                "left": 2069.5,
+                "right": 2269.5,
+                "top": 592.15625,
                 "width": 200,
-                "x": -4792.6875,
-                "y": 114.53125
+                "x": 2069.5,
+                "y": 592.15625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_gro_path": {
@@ -415,25 +368,25 @@
             "uuid": "79108de4-0d00-472e-8c35-b9a41784b3c5",
             "workflow_outputs": [
                 {
-                    "label": "mypdb2gmx.gro",
-                    "output_name": "output_gro_path",
-                    "uuid": "45dd42c2-8a09-4533-996d-55d2373f1d5b"
-                },
-                {
                     "label": "mypdb2gmx.zip",
                     "output_name": "output_top_zip_path",
-                    "uuid": "6ed313a3-11bc-47b6-b2a5-1a529582bc5d"
+                    "uuid": "aae4e0ca-9816-41da-bba1-e019ac8c6ca3"
+                },
+                {
+                    "label": "mypdb2gmx.gro",
+                    "output_name": "output_gro_path",
+                    "uuid": "9efe6bfe-1ac1-48cc-a633-cb1b0316e1d9"
                 }
             ]
         },
-        "8": {
+        "7": {
             "annotation": "",
             "content_id": "biobb_chemistry_acpype_params_gmx_ext",
             "errors": null,
-            "id": 8,
+            "id": 7,
             "input_connections": {
                 "input_path": {
-                    "id": 6,
+                    "id": 5,
                     "output_name": "output_path"
                 }
             },
@@ -455,14 +408,14 @@
                 }
             ],
             "position": {
-                "bottom": -61.984375,
+                "bottom": 415.640625,
                 "height": 235.515625,
-                "left": -4427,
-                "right": -4227,
-                "top": -297.5,
+                "left": 2435.1875,
+                "right": 2635.1875,
+                "top": 180.125,
                 "width": 200,
-                "x": -4427,
-                "y": -297.5
+                "x": 2435.1875,
+                "y": 180.125
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_path_gro": {
@@ -496,32 +449,32 @@
                 {
                     "label": "myacpype_params_gmx.gro",
                     "output_name": "output_path_gro",
-                    "uuid": "ed0832f0-d8de-4c54-bd38-87eb9c61931b"
-                },
-                {
-                    "label": "myacpype_params_gmx.top",
-                    "output_name": "output_path_top",
-                    "uuid": "892adfac-486a-41b4-8479-0a4f47a4c5da"
+                    "uuid": "a22e46f5-debc-42e2-95b7-3a71e5cf5c4f"
                 },
                 {
                     "label": "myacpype_params_gmx.itp",
                     "output_name": "output_path_itp",
-                    "uuid": "d395d4e3-46b1-4b22-a3e3-446b5a916cf3"
+                    "uuid": "7a4736e3-6a56-4274-b3f6-4ec664cb8bba"
+                },
+                {
+                    "label": "myacpype_params_gmx.top",
+                    "output_name": "output_path_top",
+                    "uuid": "f47c6314-f2f9-43dc-84b1-ff9007d71ab1"
                 }
             ]
         },
-        "9": {
+        "8": {
             "annotation": "",
             "content_id": "biobb_analysis_gmx_trjconv_str_ext",
             "errors": null,
-            "id": 9,
+            "id": 8,
             "input_connections": {
                 "input_structure_path": {
-                    "id": 7,
+                    "id": 6,
                     "output_name": "output_gro_path"
                 },
                 "input_top_path": {
-                    "id": 7,
+                    "id": 6,
                     "output_name": "output_gro_path"
                 }
             },
@@ -540,14 +493,14 @@
                 }
             ],
             "position": {
-                "bottom": 381.8125,
+                "bottom": 859.4375,
                 "height": 276.296875,
-                "left": -4427.46875,
-                "right": -4227.46875,
-                "top": 105.515625,
+                "left": 2434.71875,
+                "right": 2634.71875,
+                "top": 583.140625,
                 "width": 200,
-                "x": -4427.46875,
-                "y": 105.515625
+                "x": 2434.71875,
+                "y": 583.140625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_str_path": {
@@ -567,79 +520,18 @@
                 {
                     "label": "mygmx_trjconv_str_prot.pdb",
                     "output_name": "output_str_path",
-                    "uuid": "b73a09ff-0657-4d45-b0b2-8f2a70894620"
+                    "uuid": "07efe3cf-a4d0-4144-8f4d-c6fe0b0dc554"
                 }
             ]
         },
-        "10": {
-            "annotation": "",
-            "content_id": "biobb_analysis_gmx_trjconv_str_ext",
-            "errors": null,
-            "id": 10,
-            "input_connections": {
-                "input_structure_path": {
-                    "id": 8,
-                    "output_name": "output_path_gro"
-                },
-                "input_top_path": {
-                    "id": 8,
-                    "output_name": "output_path_gro"
-                }
-            },
-            "inputs": [
-                {
-                    "description": "runtime parameter for tool GmxTrjconvStr",
-                    "name": "input_index_path"
-                }
-            ],
-            "label": null,
-            "name": "GmxTrjconvStr",
-            "outputs": [
-                {
-                    "name": "output_str_path",
-                    "type": "text"
-                }
-            ],
-            "position": {
-                "bottom": 81.828125,
-                "height": 276.296875,
-                "left": -4095.484375,
-                "right": -3895.484375,
-                "top": -194.46875,
-                "width": 200,
-                "x": -4095.484375,
-                "y": -194.46875
-            },
-            "post_job_actions": {
-                "ChangeDatatypeActionoutput_str_path": {
-                    "action_arguments": {
-                        "newtype": "pdb"
-                    },
-                    "action_type": "ChangeDatatypeAction",
-                    "output_name": "output_str_path"
-                }
-            },
-            "tool_id": "biobb_analysis_gmx_trjconv_str_ext",
-            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_index_path\": {\"__class__\": \"RuntimeValue\"}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_str_path\": \"mygmx_trjconv_str_lig.pdb\", \"properties\": {\"selection\": \"System\", \"gmx_path\": \"gmx\", \"output_format\": \"pdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.7.0",
-            "type": "tool",
-            "uuid": "026efb90-0682-49b3-a8cc-9a8edd37560e",
-            "workflow_outputs": [
-                {
-                    "label": "mygmx_trjconv_str_lig.pdb",
-                    "output_name": "output_str_path",
-                    "uuid": "33494b91-2854-4f90-ba04-8acdbed74bce"
-                }
-            ]
-        },
-        "11": {
+        "9": {
             "annotation": "",
             "content_id": "biobb_md_make_ndx_ext",
             "errors": null,
-            "id": 11,
+            "id": 9,
             "input_connections": {
                 "input_structure_path": {
-                    "id": 8,
+                    "id": 7,
                     "output_name": "output_path_gro"
                 }
             },
@@ -658,14 +550,14 @@
                 }
             ],
             "position": {
-                "bottom": -257.90625,
+                "bottom": 219.71875,
                 "height": 123.5625,
-                "left": -4113.5,
-                "right": -3913.5,
-                "top": -381.46875,
+                "left": 2748.6875,
+                "right": 2948.6875,
+                "top": 96.15625,
                 "width": 200,
-                "x": -4113.5,
-                "y": -381.46875
+                "x": 2748.6875,
+                "y": 96.15625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_ndx_path": {
@@ -685,70 +577,83 @@
                 {
                     "label": "mymake_ndx.ndx",
                     "output_name": "output_ndx_path",
-                    "uuid": "77fb9362-d520-4b0e-b23b-1a9d2efe7734"
+                    "uuid": "893c3d91-ac33-4cf8-a31f-cb79ac395e42"
                 }
             ]
         },
-        "12": {
+        "10": {
             "annotation": "",
-            "content_id": "biobb_structure_utils_cat_pdb_ext",
+            "content_id": "biobb_analysis_gmx_trjconv_str_ext",
             "errors": null,
-            "id": 12,
+            "id": 10,
             "input_connections": {
-                "input_structure1": {
-                    "id": 9,
-                    "output_name": "output_str_path"
+                "input_structure_path": {
+                    "id": 7,
+                    "output_name": "output_path_gro"
                 },
-                "input_structure2": {
-                    "id": 10,
-                    "output_name": "output_str_path"
+                "input_top_path": {
+                    "id": 7,
+                    "output_name": "output_path_gro"
                 }
             },
-            "inputs": [],
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool GmxTrjconvStr",
+                    "name": "input_index_path"
+                }
+            ],
             "label": null,
-            "name": "CatPdb",
+            "name": "GmxTrjconvStr",
             "outputs": [
                 {
-                    "name": "output_structure_path",
+                    "name": "output_str_path",
                     "type": "text"
                 }
             ],
             "position": {
-                "bottom": 421.484375,
-                "height": 143.953125,
-                "left": -3812.4375,
-                "right": -3612.4375,
-                "top": 277.53125,
+                "bottom": 559.453125,
+                "height": 276.296875,
+                "left": 2766.703125,
+                "right": 2966.703125,
+                "top": 283.15625,
                 "width": 200,
-                "x": -3812.4375,
-                "y": 277.53125
+                "x": 2766.703125,
+                "y": 283.15625
             },
-            "post_job_actions": {},
-            "tool_id": "biobb_structure_utils_cat_pdb_ext",
-            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_structure1\": {\"__class__\": \"ConnectedValue\"}, \"input_structure2\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_structure_path\": \"mycat_pdb.pdb\", \"properties\": {\"output_format\": \"pdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.7.6",
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_str_path": {
+                    "action_arguments": {
+                        "newtype": "pdb"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_str_path"
+                }
+            },
+            "tool_id": "biobb_analysis_gmx_trjconv_str_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_index_path\": {\"__class__\": \"RuntimeValue\"}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_str_path\": \"mygmx_trjconv_str_lig.pdb\", \"properties\": {\"selection\": \"System\", \"gmx_path\": \"gmx\", \"output_format\": \"pdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.7.0",
             "type": "tool",
-            "uuid": "12835a64-8559-4c90-9301-8d7bea609693",
+            "uuid": "026efb90-0682-49b3-a8cc-9a8edd37560e",
             "workflow_outputs": [
                 {
-                    "label": "mycat_pdb.pdb",
-                    "output_name": "output_structure_path",
-                    "uuid": "c9836534-c45c-4f56-b930-bd4a457ddeb4"
+                    "label": "mygmx_trjconv_str_lig.pdb",
+                    "output_name": "output_str_path",
+                    "uuid": "f8e8312c-1e0b-4619-86a0-5712c37b367e"
                 }
             ]
         },
-        "13": {
+        "11": {
             "annotation": "",
             "content_id": "biobb_md_genrestr_ext",
             "errors": null,
-            "id": 13,
+            "id": 11,
             "input_connections": {
                 "input_ndx_path": {
-                    "id": 11,
+                    "id": 9,
                     "output_name": "output_ndx_path"
                 },
                 "input_structure_path": {
-                    "id": 8,
+                    "id": 7,
                     "output_name": "output_path_gro"
                 }
             },
@@ -762,14 +667,14 @@
                 }
             ],
             "position": {
-                "bottom": -425.9375,
+                "bottom": 51.6875,
                 "height": 123.5625,
-                "left": -3863.4375,
-                "right": -3663.4375,
-                "top": -549.5,
+                "left": 2998.75,
+                "right": 3198.75,
+                "top": -71.875,
                 "width": 200,
-                "x": -3863.4375,
-                "y": -549.5
+                "x": 2998.75,
+                "y": -71.875
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_itp_path": {
@@ -789,7 +694,115 @@
                 {
                     "label": "mygenrestr.itp",
                     "output_name": "output_itp_path",
-                    "uuid": "1778152e-34e5-48c5-9324-03a36fce2e41"
+                    "uuid": "007da3a4-778a-4899-81f7-43abfba30bc0"
+                }
+            ]
+        },
+        "12": {
+            "annotation": "",
+            "content_id": "biobb_structure_utils_cat_pdb_ext",
+            "errors": null,
+            "id": 12,
+            "input_connections": {
+                "input_structure1": {
+                    "id": 8,
+                    "output_name": "output_str_path"
+                },
+                "input_structure2": {
+                    "id": 10,
+                    "output_name": "output_str_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "CatPdb",
+            "outputs": [
+                {
+                    "name": "output_structure_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "bottom": 899.109375,
+                "height": 143.953125,
+                "left": 3049.75,
+                "right": 3249.75,
+                "top": 755.15625,
+                "width": 200,
+                "x": 3049.75,
+                "y": 755.15625
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_structure_utils_cat_pdb_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_structure1\": {\"__class__\": \"ConnectedValue\"}, \"input_structure2\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_structure_path\": \"mycat_pdb.pdb\", \"properties\": {\"output_format\": \"pdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.7.6",
+            "type": "tool",
+            "uuid": "12835a64-8559-4c90-9301-8d7bea609693",
+            "workflow_outputs": [
+                {
+                    "label": "mycat_pdb.pdb",
+                    "output_name": "output_structure_path",
+                    "uuid": "9f54bf71-352a-4ab3-991d-c4b2a6a58343"
+                }
+            ]
+        },
+        "13": {
+            "annotation": "",
+            "content_id": "biobb_md_append_ligand_ext",
+            "errors": null,
+            "id": 13,
+            "input_connections": {
+                "input_itp_path": {
+                    "id": 7,
+                    "output_name": "output_path_itp"
+                },
+                "input_posres_itp_path": {
+                    "id": 11,
+                    "output_name": "output_itp_path"
+                },
+                "input_top_zip_path": {
+                    "id": 6,
+                    "output_name": "output_top_zip_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "AppendLigand",
+            "outputs": [
+                {
+                    "name": "output_top_zip_path",
+                    "type": "zip"
+                }
+            ],
+            "position": {
+                "bottom": 521.5,
+                "height": 174.34375,
+                "left": 3269.75,
+                "right": 3469.75,
+                "top": 347.15625,
+                "width": 200,
+                "x": 3269.75,
+                "y": 347.15625
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_top_zip_path": {
+                    "action_arguments": {
+                        "newtype": "zip"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_top_zip_path"
+                }
+            },
+            "tool_id": "biobb_md_append_ligand_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_itp_path\": {\"__class__\": \"ConnectedValue\"}, \"input_posres_itp_path\": {\"__class__\": \"ConnectedValue\"}, \"input_top_zip_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_top_zip_path\": \"myappend_ligand.zip\", \"properties\": {\"posres_name\": \"POSRES_JZ4\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.7.1",
+            "type": "tool",
+            "uuid": "c1f49b24-c36a-4ee2-8ead-f2cde4d73ce0",
+            "workflow_outputs": [
+                {
+                    "label": "myappend_ligand.zip",
+                    "output_name": "output_top_zip_path",
+                    "uuid": "36a4e79c-9a87-4fa9-a8a7-1f1526f9f742"
                 }
             ]
         },
@@ -814,14 +827,14 @@
                 }
             ],
             "position": {
-                "bottom": 367.09375,
+                "bottom": 844.71875,
                 "height": 113.5625,
-                "left": -3309.4375,
-                "right": -3109.4375,
-                "top": 253.53125,
+                "left": 3552.75,
+                "right": 3752.75,
+                "top": 731.15625,
                 "width": 200,
-                "x": -3309.4375,
-                "y": 253.53125
+                "x": 3552.75,
+                "y": 731.15625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_gro_path": {
@@ -841,82 +854,22 @@
                 {
                     "label": "myeditconf.gro",
                     "output_name": "output_gro_path",
-                    "uuid": "a6704a61-93dd-4f70-8fac-d831ea629194"
+                    "uuid": "8236d384-c5e2-4c66-9761-dacb4ae31fb7"
                 }
             ]
         },
         "15": {
             "annotation": "",
-            "content_id": "biobb_md_append_ligand_ext",
-            "errors": null,
-            "id": 15,
-            "input_connections": {
-                "input_itp_path": {
-                    "id": 8,
-                    "output_name": "output_path_itp"
-                },
-                "input_posres_itp_path": {
-                    "id": 13,
-                    "output_name": "output_itp_path"
-                },
-                "input_top_zip_path": {
-                    "id": 7,
-                    "output_name": "output_top_zip_path"
-                }
-            },
-            "inputs": [],
-            "label": null,
-            "name": "AppendLigand",
-            "outputs": [
-                {
-                    "name": "output_top_zip_path",
-                    "type": "zip"
-                }
-            ],
-            "position": {
-                "bottom": 43.875,
-                "height": 174.34375,
-                "left": -3592.4375,
-                "right": -3392.4375,
-                "top": -130.46875,
-                "width": 200,
-                "x": -3592.4375,
-                "y": -130.46875
-            },
-            "post_job_actions": {
-                "ChangeDatatypeActionoutput_top_zip_path": {
-                    "action_arguments": {
-                        "newtype": "zip"
-                    },
-                    "action_type": "ChangeDatatypeAction",
-                    "output_name": "output_top_zip_path"
-                }
-            },
-            "tool_id": "biobb_md_append_ligand_ext",
-            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_itp_path\": {\"__class__\": \"ConnectedValue\"}, \"input_posres_itp_path\": {\"__class__\": \"ConnectedValue\"}, \"input_top_zip_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_top_zip_path\": \"myappend_ligand.zip\", \"properties\": {\"posres_name\": \"POSRES_JZ4\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.7.1",
-            "type": "tool",
-            "uuid": "c1f49b24-c36a-4ee2-8ead-f2cde4d73ce0",
-            "workflow_outputs": [
-                {
-                    "label": "myappend_ligand.zip",
-                    "output_name": "output_top_zip_path",
-                    "uuid": "41dd7c4b-4574-4a08-b8dd-ae2667d0a6db"
-                }
-            ]
-        },
-        "16": {
-            "annotation": "",
             "content_id": "biobb_md_solvate_ext",
             "errors": null,
-            "id": 16,
+            "id": 15,
             "input_connections": {
                 "input_solute_gro_path": {
                     "id": 14,
                     "output_name": "output_gro_path"
                 },
                 "input_top_zip_path": {
-                    "id": 15,
+                    "id": 13,
                     "output_name": "output_top_zip_path"
                 }
             },
@@ -939,14 +892,14 @@
                 }
             ],
             "position": {
-                "bottom": 237.265625,
+                "bottom": 714.890625,
                 "height": 204.734375,
-                "left": -3008.453125,
-                "right": -2808.453125,
-                "top": 32.53125,
+                "left": 3853.734375,
+                "right": 4053.734375,
+                "top": 510.15625,
                 "width": 200,
-                "x": -3008.453125,
-                "y": 32.53125
+                "x": 3853.734375,
+                "y": 510.15625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_gro_path": {
@@ -971,29 +924,29 @@
             "uuid": "f2d0081c-1493-4aef-8911-ed5b2c00a4b0",
             "workflow_outputs": [
                 {
-                    "label": "mysolvate.gro",
-                    "output_name": "output_gro_path",
-                    "uuid": "9bb31d2a-6957-484a-9fd4-2e5a28e7ef15"
-                },
-                {
                     "label": "mysolvate.zip",
                     "output_name": "output_top_zip_path",
-                    "uuid": "d03c5e77-cb6a-4f07-8d19-02ed41e4e444"
+                    "uuid": "f8a07217-11e8-48db-9070-ce72b15e7bd9"
+                },
+                {
+                    "label": "mysolvate.gro",
+                    "output_name": "output_gro_path",
+                    "uuid": "a1804660-c7d8-4fc8-b5b5-414cf1561ce8"
                 }
             ]
         },
-        "17": {
+        "16": {
             "annotation": "",
             "content_id": "biobb_md_grompp_ext",
             "errors": null,
-            "id": 17,
+            "id": 16,
             "input_connections": {
                 "input_gro_path": {
-                    "id": 16,
+                    "id": 15,
                     "output_name": "output_gro_path"
                 },
                 "input_top_zip_path": {
-                    "id": 16,
+                    "id": 15,
                     "output_name": "output_top_zip_path"
                 }
             },
@@ -1020,14 +973,14 @@
                 }
             ],
             "position": {
-                "bottom": 268.765625,
+                "bottom": 746.390625,
                 "height": 214.734375,
-                "left": -2663.9375,
-                "right": -2463.9375,
-                "top": 54.03125,
+                "left": 4198.25,
+                "right": 4398.25,
+                "top": 531.65625,
                 "width": 200,
-                "x": -2663.9375,
-                "y": 54.03125
+                "x": 4198.25,
+                "y": 531.65625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_tpr_path": {
@@ -1047,22 +1000,22 @@
                 {
                     "label": "mygrompp_ion.tpr",
                     "output_name": "output_tpr_path",
-                    "uuid": "95e9dfe3-aa3a-4026-9a9c-b89c90602826"
+                    "uuid": "25e7135c-c815-4b65-bb88-e3b903302293"
                 }
             ]
         },
-        "18": {
+        "17": {
             "annotation": "",
             "content_id": "biobb_md_genion_ext",
             "errors": null,
-            "id": 18,
+            "id": 17,
             "input_connections": {
                 "input_top_zip_path": {
-                    "id": 16,
+                    "id": 15,
                     "output_name": "output_top_zip_path"
                 },
                 "input_tpr_path": {
-                    "id": 17,
+                    "id": 16,
                     "output_name": "output_tpr_path"
                 }
             },
@@ -1085,14 +1038,14 @@
                 }
             ],
             "position": {
-                "bottom": 869.375,
+                "bottom": 1347,
                 "height": 184.34375,
-                "left": -2374.9375,
-                "right": -2174.9375,
-                "top": 685.03125,
+                "left": 4487.25,
+                "right": 4687.25,
+                "top": 1162.65625,
                 "width": 200,
-                "x": -2374.9375,
-                "y": 685.03125
+                "x": 4487.25,
+                "y": 1162.65625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_gro_path": {
@@ -1119,27 +1072,27 @@
                 {
                     "label": "mygenion.gro",
                     "output_name": "output_gro_path",
-                    "uuid": "420ad952-2a1f-42dd-8b3a-4a5ebead25f0"
+                    "uuid": "0737fa91-d2cc-4556-a418-feec79ea48ef"
                 },
                 {
                     "label": "mygenion.zip",
                     "output_name": "output_top_zip_path",
-                    "uuid": "281b6a15-e486-46ed-a69c-f6f6247cbd2e"
+                    "uuid": "9816f6dc-3ece-43c3-a45a-61dca777cf7e"
                 }
             ]
         },
-        "19": {
+        "18": {
             "annotation": "",
             "content_id": "biobb_md_grompp_ext",
             "errors": null,
-            "id": 19,
+            "id": 18,
             "input_connections": {
                 "input_gro_path": {
-                    "id": 18,
+                    "id": 17,
                     "output_name": "output_gro_path"
                 },
                 "input_top_zip_path": {
-                    "id": 18,
+                    "id": 17,
                     "output_name": "output_top_zip_path"
                 }
             },
@@ -1166,14 +1119,14 @@
                 }
             ],
             "position": {
-                "bottom": 269.765625,
+                "bottom": 747.390625,
                 "height": 214.734375,
-                "left": -2128.9375,
-                "right": -1928.9375,
-                "top": 55.03125,
+                "left": 4733.25,
+                "right": 4933.25,
+                "top": 532.65625,
                 "width": 200,
-                "x": -2128.9375,
-                "y": 55.03125
+                "x": 4733.25,
+                "y": 532.65625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_tpr_path": {
@@ -1193,18 +1146,18 @@
                 {
                     "label": null,
                     "output_name": "output_tpr_path",
-                    "uuid": "1f37e1ef-2401-481e-906b-50715a529a9d"
+                    "uuid": "e1f7ffec-a8cc-42f8-aef1-ce0a47db5cce"
                 }
             ]
         },
-        "20": {
+        "19": {
             "annotation": "",
             "content_id": "biobb_md_mdrun_ext",
             "errors": null,
-            "id": 20,
+            "id": 19,
             "input_connections": {
                 "input_tpr_path": {
-                    "id": 19,
+                    "id": 18,
                     "output_name": "output_tpr_path"
                 }
             },
@@ -1247,14 +1200,14 @@
                 }
             ],
             "position": {
-                "bottom": 466.9375,
+                "bottom": 944.5625,
                 "height": 305.90625,
-                "left": -1843.9375,
-                "right": -1643.9375,
-                "top": 161.03125,
+                "left": 5018.25,
+                "right": 5218.25,
+                "top": 638.65625,
                 "width": 200,
-                "x": -1843.9375,
-                "y": 161.03125
+                "x": 5018.25,
+                "y": 638.65625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_edr_path": {
@@ -1293,39 +1246,83 @@
             "uuid": "4cbabe52-959c-415e-9521-54b267760f6c",
             "workflow_outputs": [
                 {
-                    "label": "mymdrun.xvg",
-                    "output_name": "output_dhdl_path",
-                    "uuid": "a47d85fa-df60-43a6-af43-a48dd1d0597b"
-                },
-                {
-                    "label": "mymdrun.trr",
-                    "output_name": "output_trr_path",
-                    "uuid": "fda9b3cd-6b5c-4d9f-823c-8a5b368ba5db"
-                },
-                {
-                    "label": "mymdrun.gro",
-                    "output_name": "output_gro_path",
-                    "uuid": "d2e4eb81-83fe-4167-9e23-165be1fecdc1"
-                },
-                {
                     "label": "mymdrun.edr",
                     "output_name": "output_edr_path",
-                    "uuid": "9abde443-f6b0-460f-b377-52ded30f99a0"
+                    "uuid": "fe565576-161a-403a-b880-17553742dbf4"
                 },
                 {
                     "label": "mymdrun.log",
                     "output_name": "output_log_path",
-                    "uuid": "20644dc2-3239-4606-ad6f-ea787d054587"
+                    "uuid": "deae38ab-f86f-4a35-951a-26bdd0c8e7ce"
                 },
                 {
                     "label": "mymdrun.xtc",
                     "output_name": "output_xtc_path",
-                    "uuid": "ee4b54f3-51a8-466d-b3cd-004be6b88260"
+                    "uuid": "090e734a-be0e-4f7c-bb68-eb66e5525c91"
                 },
                 {
                     "label": "mymdrun.cpt",
                     "output_name": "output_cpt_path",
-                    "uuid": "4e9e6420-1791-429e-ae72-09d558f26f2f"
+                    "uuid": "419fccb4-53ef-4d74-8234-f8cc84096d9b"
+                },
+                {
+                    "label": "mymdrun.xvg",
+                    "output_name": "output_dhdl_path",
+                    "uuid": "a8e4a7e2-5b3b-43b2-a6ec-c8d51ef77ccb"
+                },
+                {
+                    "label": "mymdrun.trr",
+                    "output_name": "output_trr_path",
+                    "uuid": "34862e10-8dd2-4fa4-b11e-63799dc2c403"
+                },
+                {
+                    "label": "mymdrun.gro",
+                    "output_name": "output_gro_path",
+                    "uuid": "64e904cc-a3a0-49a0-b452-353eaab11579"
+                }
+            ]
+        },
+        "20": {
+            "annotation": "",
+            "content_id": "biobb_analysis_gmx_energy_ext",
+            "errors": null,
+            "id": 20,
+            "input_connections": {
+                "input_energy_path": {
+                    "id": 19,
+                    "output_name": "output_edr_path"
+                }
+            },
+            "inputs": [],
+            "label": "GmxEnergy Min",
+            "name": "GmxEnergy",
+            "outputs": [
+                {
+                    "name": "output_xvg_path",
+                    "type": "xvg"
+                }
+            ],
+            "position": {
+                "bottom": 1101.8125,
+                "height": 93.171875,
+                "left": 5289.25,
+                "right": 5489.25,
+                "top": 1008.640625,
+                "width": 200,
+                "x": 5289.25,
+                "y": 1008.640625
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_analysis_gmx_energy_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_energy_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_xvg_path\": \"mygmx_energy.xvg\", \"properties\": {\"xvg\": \"none\", \"terms\": [\"Potential\"], \"gmx_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.7.0",
+            "type": "tool",
+            "uuid": "d89cf6a2-ff9c-46c8-b581-26eaf2ee3f7c",
+            "workflow_outputs": [
+                {
+                    "label": "mygmx_energy.xvg",
+                    "output_name": "output_xvg_path",
+                    "uuid": "87e66790-923f-4975-a33e-742da81984f9"
                 }
             ]
         },
@@ -1336,7 +1333,7 @@
             "id": 21,
             "input_connections": {
                 "input_structure_path": {
-                    "id": 20,
+                    "id": 19,
                     "output_name": "output_gro_path"
                 }
             },
@@ -1355,14 +1352,14 @@
                 }
             ],
             "position": {
-                "bottom": 203.59375,
+                "bottom": 681.21875,
                 "height": 123.5625,
-                "left": -1498.9375,
-                "right": -1298.9375,
-                "top": 80.03125,
+                "left": 5363.25,
+                "right": 5563.25,
+                "top": 557.65625,
                 "width": 200,
-                "x": -1498.9375,
-                "y": 80.03125
+                "x": 5363.25,
+                "y": 557.65625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_ndx_path": {
@@ -1382,62 +1379,18 @@
                 {
                     "label": null,
                     "output_name": "output_ndx_path",
-                    "uuid": "46d7efdb-d2ce-4bf6-a649-ca146810744c"
+                    "uuid": "d61baae6-8864-4b92-9708-c53144d2a6d7"
                 }
             ]
         },
         "22": {
             "annotation": "",
-            "content_id": "biobb_analysis_gmx_energy_ext",
+            "content_id": "biobb_md_grompp_ext",
             "errors": null,
             "id": 22,
             "input_connections": {
-                "input_energy_path": {
-                    "id": 20,
-                    "output_name": "output_edr_path"
-                }
-            },
-            "inputs": [],
-            "label": "GmxEnergy Min",
-            "name": "GmxEnergy",
-            "outputs": [
-                {
-                    "name": "output_xvg_path",
-                    "type": "xvg"
-                }
-            ],
-            "position": {
-                "bottom": 624.1875,
-                "height": 93.171875,
-                "left": -1572.9375,
-                "right": -1372.9375,
-                "top": 531.015625,
-                "width": 200,
-                "x": -1572.9375,
-                "y": 531.015625
-            },
-            "post_job_actions": {},
-            "tool_id": "biobb_analysis_gmx_energy_ext",
-            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_energy_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_xvg_path\": \"mygmx_energy.xvg\", \"properties\": {\"xvg\": \"none\", \"terms\": [\"Potential\"], \"gmx_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.7.0",
-            "type": "tool",
-            "uuid": "d89cf6a2-ff9c-46c8-b581-26eaf2ee3f7c",
-            "workflow_outputs": [
-                {
-                    "label": "mygmx_energy.xvg",
-                    "output_name": "output_xvg_path",
-                    "uuid": "b97a1f5c-86c4-45d2-92ce-c476a880bd06"
-                }
-            ]
-        },
-        "23": {
-            "annotation": "",
-            "content_id": "biobb_md_grompp_ext",
-            "errors": null,
-            "id": 23,
-            "input_connections": {
                 "input_gro_path": {
-                    "id": 20,
+                    "id": 19,
                     "output_name": "output_gro_path"
                 },
                 "input_ndx_path": {
@@ -1445,7 +1398,7 @@
                     "output_name": "output_ndx_path"
                 },
                 "input_top_zip_path": {
-                    "id": 18,
+                    "id": 17,
                     "output_name": "output_top_zip_path"
                 }
             },
@@ -1468,14 +1421,14 @@
                 }
             ],
             "position": {
-                "bottom": 399.734375,
+                "bottom": 877.359375,
                 "height": 214.734375,
-                "left": -1157.328125,
-                "right": -957.328125,
-                "top": 185,
+                "left": 5704.859375,
+                "right": 5904.859375,
+                "top": 662.625,
                 "width": 200,
-                "x": -1157.328125,
-                "y": 185
+                "x": 5704.859375,
+                "y": 662.625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_tpr_path": {
@@ -1495,18 +1448,18 @@
                 {
                     "label": null,
                     "output_name": "output_tpr_path",
-                    "uuid": "fb380b25-67ce-4cbd-ac42-9d32ac1d49af"
+                    "uuid": "d886e6be-f4b2-4118-a804-e227b9a5b660"
                 }
             ]
         },
-        "24": {
+        "23": {
             "annotation": "",
             "content_id": "biobb_md_mdrun_ext",
             "errors": null,
-            "id": 24,
+            "id": 23,
             "input_connections": {
                 "input_tpr_path": {
-                    "id": 23,
+                    "id": 22,
                     "output_name": "output_tpr_path"
                 }
             },
@@ -1549,14 +1502,14 @@
                 }
             ],
             "position": {
-                "bottom": 407.6875,
+                "bottom": 885.3125,
                 "height": 305.90625,
-                "left": -816.953125,
-                "right": -616.953125,
-                "top": 101.78125,
+                "left": 6045.234375,
+                "right": 6245.234375,
+                "top": 579.40625,
                 "width": 200,
-                "x": -816.953125,
-                "y": 101.78125
+                "x": 6045.234375,
+                "y": 579.40625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_edr_path": {
@@ -1597,37 +1550,81 @@
                 {
                     "label": null,
                     "output_name": "output_cpt_path",
-                    "uuid": "bae4f514-2ef6-4fc5-b8bb-0ffd4d346057"
+                    "uuid": "358ddce4-3d6e-40af-af06-a83243f1a563"
                 },
                 {
                     "label": null,
                     "output_name": "output_gro_path",
-                    "uuid": "4a22994f-0103-4a5f-9aa8-f47e1441c760"
+                    "uuid": "db133129-9fe0-4ca3-a410-6d7000199f82"
                 },
                 {
                     "label": null,
                     "output_name": "output_edr_path",
-                    "uuid": "1591750b-5714-4a38-9963-288fe1a6d454"
+                    "uuid": "a3be9d20-4a32-4f6c-9eb7-f596b7fc5dc5"
                 },
                 {
                     "label": null,
                     "output_name": "output_dhdl_path",
-                    "uuid": "b3e6aefd-0ab5-4d3c-a9d1-784c61136098"
+                    "uuid": "3dd1fec8-d174-441f-9661-8e5ae86ea75b"
                 },
                 {
                     "label": null,
                     "output_name": "output_log_path",
-                    "uuid": "df02baa7-83ec-4ed3-aa7a-386cf3361de5"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_xtc_path",
-                    "uuid": "233fb504-8288-4202-b27e-bdc2b3013026"
+                    "uuid": "b2447b93-5322-41c6-a165-5f2877e7ef28"
                 },
                 {
                     "label": null,
                     "output_name": "output_trr_path",
-                    "uuid": "37c713b2-57f3-4d53-894c-4daece4a06cd"
+                    "uuid": "4491ec30-d46a-4ad1-9d82-c2659c99435a"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_xtc_path",
+                    "uuid": "7b1b177b-ee39-4773-8f28-5f73375a2f0c"
+                }
+            ]
+        },
+        "24": {
+            "annotation": "",
+            "content_id": "biobb_analysis_gmx_energy_ext",
+            "errors": null,
+            "id": 24,
+            "input_connections": {
+                "input_energy_path": {
+                    "id": 23,
+                    "output_name": "output_edr_path"
+                }
+            },
+            "inputs": [],
+            "label": "GmxEnergy NVT",
+            "name": "GmxEnergy",
+            "outputs": [
+                {
+                    "name": "output_xvg_path",
+                    "type": "xvg"
+                }
+            ],
+            "position": {
+                "bottom": 1077.578125,
+                "height": 93.171875,
+                "left": 6327.234375,
+                "right": 6527.234375,
+                "top": 984.40625,
+                "width": 200,
+                "x": 6327.234375,
+                "y": 984.40625
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_analysis_gmx_energy_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_energy_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_xvg_path\": \"mygmx_energy.xvg\", \"properties\": {\"xvg\": \"none\", \"terms\": [\"Temperature\"], \"gmx_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.7.0",
+            "type": "tool",
+            "uuid": "4273d422-5276-4425-b706-c4c5664b406c",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_xvg_path",
+                    "uuid": "1e845355-2ec9-477d-9ec7-163ce02f659c"
                 }
             ]
         },
@@ -1638,11 +1635,11 @@
             "id": 25,
             "input_connections": {
                 "input_cpt_path": {
-                    "id": 24,
+                    "id": 23,
                     "output_name": "output_cpt_path"
                 },
                 "input_gro_path": {
-                    "id": 24,
+                    "id": 23,
                     "output_name": "output_gro_path"
                 },
                 "input_ndx_path": {
@@ -1650,7 +1647,7 @@
                     "output_name": "output_ndx_path"
                 },
                 "input_top_zip_path": {
-                    "id": 18,
+                    "id": 17,
                     "output_name": "output_top_zip_path"
                 }
             },
@@ -1669,14 +1666,14 @@
                 }
             ],
             "position": {
-                "bottom": 403.515625,
+                "bottom": 881.140625,
                 "height": 214.734375,
-                "left": -457.953125,
-                "right": -257.953125,
-                "top": 188.78125,
+                "left": 6404.234375,
+                "right": 6604.234375,
+                "top": 666.40625,
                 "width": 200,
-                "x": -457.953125,
-                "y": 188.78125
+                "x": 6404.234375,
+                "y": 666.40625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_tpr_path": {
@@ -1696,59 +1693,15 @@
                 {
                     "label": null,
                     "output_name": "output_tpr_path",
-                    "uuid": "93b5732d-5531-45eb-9e6d-0fb154a8af67"
+                    "uuid": "42bbe1f3-beda-4953-951f-737821d4576d"
                 }
             ]
         },
         "26": {
             "annotation": "",
-            "content_id": "biobb_analysis_gmx_energy_ext",
-            "errors": null,
-            "id": 26,
-            "input_connections": {
-                "input_energy_path": {
-                    "id": 24,
-                    "output_name": "output_edr_path"
-                }
-            },
-            "inputs": [],
-            "label": "GmxEnergy NVT",
-            "name": "GmxEnergy",
-            "outputs": [
-                {
-                    "name": "output_xvg_path",
-                    "type": "xvg"
-                }
-            ],
-            "position": {
-                "bottom": 599.953125,
-                "height": 93.171875,
-                "left": -534.953125,
-                "right": -334.953125,
-                "top": 506.78125,
-                "width": 200,
-                "x": -534.953125,
-                "y": 506.78125
-            },
-            "post_job_actions": {},
-            "tool_id": "biobb_analysis_gmx_energy_ext",
-            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_energy_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_xvg_path\": \"mygmx_energy.xvg\", \"properties\": {\"xvg\": \"none\", \"terms\": [\"Temperature\"], \"gmx_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.7.0",
-            "type": "tool",
-            "uuid": "4273d422-5276-4425-b706-c4c5664b406c",
-            "workflow_outputs": [
-                {
-                    "label": null,
-                    "output_name": "output_xvg_path",
-                    "uuid": "8f146f02-3f45-4c83-b6b9-a9babd2a4a1b"
-                }
-            ]
-        },
-        "27": {
-            "annotation": "",
             "content_id": "biobb_md_mdrun_ext",
             "errors": null,
-            "id": 27,
+            "id": 26,
             "input_connections": {
                 "input_tpr_path": {
                     "id": 25,
@@ -1794,14 +1747,14 @@
                 }
             ],
             "position": {
-                "bottom": 437.6875,
+                "bottom": 915.3125,
                 "height": 305.90625,
-                "left": -148.953125,
-                "right": 51.046875,
-                "top": 131.78125,
+                "left": 6713.234375,
+                "right": 6913.234375,
+                "top": 609.40625,
                 "width": 200,
-                "x": -148.953125,
-                "y": 131.78125
+                "x": 6713.234375,
+                "y": 609.40625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_edr_path": {
@@ -1841,38 +1794,82 @@
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "output_log_path",
-                    "uuid": "a6c78695-613f-498c-8a14-30d9dbbd0634"
-                },
-                {
-                    "label": null,
                     "output_name": "output_xtc_path",
-                    "uuid": "c28c4377-6c2c-4927-aee1-aed6ca726a87"
+                    "uuid": "49b491ef-2575-438d-a479-471c82cd893e"
                 },
                 {
                     "label": null,
                     "output_name": "output_trr_path",
-                    "uuid": "3d5781d8-1f66-4dc2-82dc-4b7536b38b92"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_gro_path",
-                    "uuid": "9ee45944-a6c5-4722-a8b5-81bcea6547bc"
+                    "uuid": "6d531a56-b214-4a66-8050-13ba0009a5b3"
                 },
                 {
                     "label": null,
                     "output_name": "output_cpt_path",
-                    "uuid": "b9c54840-4589-453d-8226-638d5ef662f6"
+                    "uuid": "65aaf7b7-5dd4-4b6c-b093-aa1b96105ea7"
                 },
                 {
                     "label": null,
                     "output_name": "output_dhdl_path",
-                    "uuid": "90447ceb-a25d-4591-b719-ff678a935dff"
+                    "uuid": "ce6c8b4b-9449-4d6b-9887-a57e4034456e"
                 },
                 {
                     "label": null,
                     "output_name": "output_edr_path",
-                    "uuid": "23441cdd-efd4-4bec-867a-2aba38b77728"
+                    "uuid": "6069c594-be26-4b46-b63e-644ec521ec19"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_log_path",
+                    "uuid": "0c380ffa-a281-46db-abe8-9738be099a80"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_gro_path",
+                    "uuid": "716f70fe-cc46-4667-bd59-8f4faca9d75d"
+                }
+            ]
+        },
+        "27": {
+            "annotation": "",
+            "content_id": "biobb_analysis_gmx_energy_ext",
+            "errors": null,
+            "id": 27,
+            "input_connections": {
+                "input_energy_path": {
+                    "id": 26,
+                    "output_name": "output_edr_path"
+                }
+            },
+            "inputs": [],
+            "label": "GmxEnergy NPT",
+            "name": "GmxEnergy",
+            "outputs": [
+                {
+                    "name": "output_xvg_path",
+                    "type": "xvg"
+                }
+            ],
+            "position": {
+                "bottom": 1108.578125,
+                "height": 93.171875,
+                "left": 6995.234375,
+                "right": 7195.234375,
+                "top": 1015.40625,
+                "width": 200,
+                "x": 6995.234375,
+                "y": 1015.40625
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_analysis_gmx_energy_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_energy_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_xvg_path\": \"mygmx_energy.xvg\", \"properties\": {\"xvg\": \"none\", \"terms\": [\"Pressure\", \"Density\"], \"gmx_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "3.7.0",
+            "type": "tool",
+            "uuid": "b2423992-58f0-4dcd-b4ff-ea316aa9d282",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_xvg_path",
+                    "uuid": "eb779f3f-8c80-4621-99d5-e64211c7ad0d"
                 }
             ]
         },
@@ -1883,15 +1880,15 @@
             "id": 28,
             "input_connections": {
                 "input_cpt_path": {
-                    "id": 27,
+                    "id": 26,
                     "output_name": "output_cpt_path"
                 },
                 "input_gro_path": {
-                    "id": 27,
+                    "id": 26,
                     "output_name": "output_gro_path"
                 },
                 "input_top_zip_path": {
-                    "id": 18,
+                    "id": 17,
                     "output_name": "output_top_zip_path"
                 }
             },
@@ -1914,14 +1911,14 @@
                 }
             ],
             "position": {
-                "bottom": 421.515625,
+                "bottom": 899.140625,
                 "height": 214.734375,
-                "left": 187.046875,
-                "right": 387.046875,
-                "top": 206.78125,
+                "left": 7049.234375,
+                "right": 7249.234375,
+                "top": 684.40625,
                 "width": 200,
-                "x": 187.046875,
-                "y": 206.78125
+                "x": 7049.234375,
+                "y": 684.40625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_tpr_path": {
@@ -1941,59 +1938,15 @@
                 {
                     "label": null,
                     "output_name": "output_tpr_path",
-                    "uuid": "cfc9f75a-31d3-4629-b678-fd52316b30c0"
+                    "uuid": "b7f58134-70d0-436b-9ad2-fdd8a7127d6f"
                 }
             ]
         },
         "29": {
             "annotation": "",
-            "content_id": "biobb_analysis_gmx_energy_ext",
-            "errors": null,
-            "id": 29,
-            "input_connections": {
-                "input_energy_path": {
-                    "id": 27,
-                    "output_name": "output_edr_path"
-                }
-            },
-            "inputs": [],
-            "label": "GmxEnergy NPT",
-            "name": "GmxEnergy",
-            "outputs": [
-                {
-                    "name": "output_xvg_path",
-                    "type": "xvg"
-                }
-            ],
-            "position": {
-                "bottom": 630.953125,
-                "height": 93.171875,
-                "left": 133.046875,
-                "right": 333.046875,
-                "top": 537.78125,
-                "width": 200,
-                "x": 133.046875,
-                "y": 537.78125
-            },
-            "post_job_actions": {},
-            "tool_id": "biobb_analysis_gmx_energy_ext",
-            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_energy_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_xvg_path\": \"mygmx_energy.xvg\", \"properties\": {\"xvg\": \"none\", \"terms\": [\"Pressure\", \"Density\"], \"gmx_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.7.0",
-            "type": "tool",
-            "uuid": "b2423992-58f0-4dcd-b4ff-ea316aa9d282",
-            "workflow_outputs": [
-                {
-                    "label": null,
-                    "output_name": "output_xvg_path",
-                    "uuid": "77758cd1-f52c-4926-9a7b-5659a805d2d7"
-                }
-            ]
-        },
-        "30": {
-            "annotation": "",
             "content_id": "biobb_md_mdrun_ext",
             "errors": null,
-            "id": 30,
+            "id": 29,
             "input_connections": {
                 "input_tpr_path": {
                     "id": 28,
@@ -2039,14 +1992,14 @@
                 }
             ],
             "position": {
-                "bottom": 484.6875,
+                "bottom": 962.3125,
                 "height": 305.90625,
-                "left": 548.046875,
-                "right": 748.046875,
-                "top": 178.78125,
+                "left": 7410.234375,
+                "right": 7610.234375,
+                "top": 656.40625,
                 "width": 200,
-                "x": 548.046875,
-                "y": 178.78125
+                "x": 7410.234375,
+                "y": 656.40625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_edr_path": {
@@ -2086,53 +2039,53 @@
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "output_trr_path",
-                    "uuid": "66856a2e-46c6-4c31-876f-937b63b012d2"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_gro_path",
-                    "uuid": "4f007ddf-72a3-4887-b6bc-e1b21c1579ed"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_edr_path",
-                    "uuid": "d8517c6b-cde9-4edf-b032-67f66b1570d3"
-                },
-                {
-                    "label": null,
                     "output_name": "output_log_path",
-                    "uuid": "8fb3ed71-a16d-4e22-98d5-b39396be6303"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_cpt_path",
-                    "uuid": "d78ec6ef-4ef1-4f36-8676-ca0a8a80d365"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_xtc_path",
-                    "uuid": "f8c70d6e-16ae-4d20-8957-95afe8c82b27"
+                    "uuid": "ce2616f1-9ccc-489f-96c8-b5db7e324286"
                 },
                 {
                     "label": null,
                     "output_name": "output_dhdl_path",
-                    "uuid": "0a297177-d825-470e-b2d8-aa719562c67a"
+                    "uuid": "cbb201bf-4e30-4bb0-ac1b-07086d2732f2"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_xtc_path",
+                    "uuid": "9c4b9349-22c5-434b-9edd-5105b70891fe"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_trr_path",
+                    "uuid": "7bff52bb-5529-41e4-aca5-3ac940c1b3eb"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_gro_path",
+                    "uuid": "c2f68c5b-65eb-459f-928a-bc1ac808c24a"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_edr_path",
+                    "uuid": "3672b4d6-8d59-4e3f-8d0c-d06000bc5ff5"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_cpt_path",
+                    "uuid": "efdffdff-0c91-4a0c-b575-1a9cb10a389c"
                 }
             ]
         },
-        "31": {
+        "30": {
             "annotation": "",
             "content_id": "biobb_analysis_gmx_rgyr_ext",
             "errors": null,
-            "id": 31,
+            "id": 30,
             "input_connections": {
                 "input_structure_path": {
-                    "id": 19,
+                    "id": 18,
                     "output_name": "output_tpr_path"
                 },
                 "input_traj_path": {
-                    "id": 30,
+                    "id": 29,
                     "output_name": "output_trr_path"
                 }
             },
@@ -2151,14 +2104,14 @@
                 }
             ],
             "position": {
-                "bottom": 43.296875,
+                "bottom": 520.921875,
                 "height": 235.515625,
-                "left": 864.046875,
-                "right": 1064.046875,
-                "top": -192.21875,
+                "left": 7726.234375,
+                "right": 7926.234375,
+                "top": 285.40625,
                 "width": 200,
-                "x": 864.046875,
-                "y": -192.21875
+                "x": 7726.234375,
+                "y": 285.40625
             },
             "post_job_actions": {},
             "tool_id": "biobb_analysis_gmx_rgyr_ext",
@@ -2170,22 +2123,22 @@
                 {
                     "label": "mygmx_rgyr.xvg",
                     "output_name": "output_xvg_path",
-                    "uuid": "2e4d9cbc-6415-4ea4-bc16-37e63246b1dd"
+                    "uuid": "1d2e167b-7128-4981-9a30-51e91806bcdd"
                 }
             ]
         },
-        "32": {
+        "31": {
             "annotation": "",
             "content_id": "biobb_analysis_gmx_rms_ext",
             "errors": null,
-            "id": 32,
+            "id": 31,
             "input_connections": {
                 "input_structure_path": {
-                    "id": 19,
+                    "id": 18,
                     "output_name": "output_tpr_path"
                 },
                 "input_traj_path": {
-                    "id": 30,
+                    "id": 29,
                     "output_name": "output_trr_path"
                 }
             },
@@ -2204,14 +2157,14 @@
                 }
             ],
             "position": {
-                "bottom": 343.296875,
+                "bottom": 820.921875,
                 "height": 235.515625,
-                "left": 908.046875,
-                "right": 1108.046875,
-                "top": 107.78125,
+                "left": 7770.234375,
+                "right": 7970.234375,
+                "top": 585.40625,
                 "width": 200,
-                "x": 908.046875,
-                "y": 107.78125
+                "x": 7770.234375,
+                "y": 585.40625
             },
             "post_job_actions": {},
             "tool_id": "biobb_analysis_gmx_rms_ext",
@@ -2223,22 +2176,22 @@
                 {
                     "label": null,
                     "output_name": "output_xvg_path",
-                    "uuid": "42e535ce-d404-4fe6-8cdb-907c3c2a6d12"
+                    "uuid": "0fc89b41-0c47-41ca-887f-b2f57f94097d"
                 }
             ]
         },
-        "33": {
+        "32": {
             "annotation": "",
             "content_id": "biobb_analysis_gmx_rms_ext",
             "errors": null,
-            "id": 33,
+            "id": 32,
             "input_connections": {
                 "input_structure_path": {
                     "id": 28,
                     "output_name": "output_tpr_path"
                 },
                 "input_traj_path": {
-                    "id": 30,
+                    "id": 29,
                     "output_name": "output_trr_path"
                 }
             },
@@ -2246,14 +2199,6 @@
                 {
                     "description": "runtime parameter for tool GmxRms",
                     "name": "input_index_path"
-                },
-                {
-                    "description": "runtime parameter for tool GmxRms",
-                    "name": "input_structure_path"
-                },
-                {
-                    "description": "runtime parameter for tool GmxRms",
-                    "name": "input_traj_path"
                 }
             ],
             "label": null,
@@ -2265,18 +2210,18 @@
                 }
             ],
             "position": {
-                "bottom": 793.6875,
+                "bottom": 1271.3125,
                 "height": 255.90625,
-                "left": 914.046875,
-                "right": 1114.046875,
-                "top": 537.78125,
+                "left": 7776.234375,
+                "right": 7976.234375,
+                "top": 1015.40625,
                 "width": 200,
-                "x": 914.046875,
-                "y": 537.78125
+                "x": 7776.234375,
+                "y": 1015.40625
             },
             "post_job_actions": {},
             "tool_id": "biobb_analysis_gmx_rms_ext",
-            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_index_path\": {\"__class__\": \"RuntimeValue\"}, \"input_structure_path\": {\"__class__\": \"RuntimeValue\"}, \"input_traj_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_xvg_path\": \"mygmx_rms_exp.xvg\", \"properties\": {\"xvg\": \"none\", \"selection\": \"Backbone\", \"gmx_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_index_path\": {\"__class__\": \"RuntimeValue\"}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_xvg_path\": \"mygmx_rms_exp.xvg\", \"properties\": {\"xvg\": \"none\", \"selection\": \"Backbone\", \"gmx_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
             "tool_version": "3.7.0",
             "type": "tool",
             "uuid": "cec18808-d7d4-472f-b994-353e86f7af52",
@@ -2284,22 +2229,22 @@
                 {
                     "label": "mygmx_rms_exp.xvg",
                     "output_name": "output_xvg_path",
-                    "uuid": "dff87c11-3183-455d-ad07-9714e2310246"
+                    "uuid": "cc96bc42-bcc6-405c-9ea4-059549d45d92"
                 }
             ]
         },
-        "34": {
+        "33": {
             "annotation": "",
             "content_id": "biobb_analysis_gmx_trjconv_str_ext",
             "errors": null,
-            "id": 34,
+            "id": 33,
             "input_connections": {
                 "input_index_path": {
                     "id": 21,
                     "output_name": "output_ndx_path"
                 },
                 "input_structure_path": {
-                    "id": 30,
+                    "id": 29,
                     "output_name": "output_trr_path"
                 },
                 "input_top_path": {
@@ -2317,14 +2262,14 @@
                 }
             ],
             "position": {
-                "bottom": 585.078125,
+                "bottom": 1062.703125,
                 "height": 276.296875,
-                "left": 1195.046875,
-                "right": 1395.046875,
-                "top": 308.78125,
+                "left": 8057.234375,
+                "right": 8257.234375,
+                "top": 786.40625,
                 "width": 200,
-                "x": 1195.046875,
-                "y": 308.78125
+                "x": 8057.234375,
+                "y": 786.40625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_str_path": {
@@ -2344,15 +2289,15 @@
                 {
                     "label": null,
                     "output_name": "output_str_path",
-                    "uuid": "14e4f16d-ba30-449f-a692-a8e98c8729e4"
+                    "uuid": "fec6b906-986a-4a63-954e-dac4fa5dc885"
                 }
             ]
         },
-        "35": {
+        "34": {
             "annotation": "",
             "content_id": "biobb_analysis_gmx_image_ext",
             "errors": null,
-            "id": 35,
+            "id": 34,
             "input_connections": {
                 "input_index_path": {
                     "id": 21,
@@ -2363,7 +2308,7 @@
                     "output_name": "output_tpr_path"
                 },
                 "input_traj_path": {
-                    "id": 30,
+                    "id": 29,
                     "output_name": "output_trr_path"
                 }
             },
@@ -2377,14 +2322,14 @@
                 }
             ],
             "position": {
-                "bottom": 164.078125,
+                "bottom": 641.703125,
                 "height": 276.296875,
-                "left": 1250.046875,
-                "right": 1450.046875,
-                "top": -112.21875,
+                "left": 8112.234375,
+                "right": 8312.234375,
+                "top": 365.40625,
                 "width": 200,
-                "x": 1250.046875,
-                "y": -112.21875
+                "x": 8112.234375,
+                "y": 365.40625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_traj_path": {
@@ -2404,12 +2349,12 @@
                 {
                     "label": "mygmx_image.trr",
                     "output_name": "output_traj_path",
-                    "uuid": "1ba67721-829c-47d6-83e1-dcc2f0d3bdd3"
+                    "uuid": "6c9ef69a-1e37-4886-9005-3ffa7a3a66e7"
                 }
             ]
         }
     },
     "tags": [],
-    "uuid": "8b0fd9e8-2eb8-4f5a-863d-c4a384c99b5f",
-    "version": 43
+    "uuid": "31023af3-949f-4b2e-a4f7-2a4ee377cce7",
+    "version": 45
 }
