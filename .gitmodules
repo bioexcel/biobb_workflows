@@ -22,3 +22,9 @@
 [submodule "biobb_wf_amber_complex_md_setup/jupyter"]
 	path = biobb_wf_amber_complex_md_setup/jupyter
 	url = https://github.com/bioexcel/biobb_wf_amber_md_setup
+[submodule "jupyter"]
+	path = jupyter
+	url = https://github.com/bioexcel/biobb_wf_pmx_tutorial
+[submodule "biobb_wf_pmx_tutorial/jupyter"]
+	path = biobb_wf_pmx_tutorial/jupyter
+	url = https://github.com/bioexcel/biobb_wf_pmx_tutorial
