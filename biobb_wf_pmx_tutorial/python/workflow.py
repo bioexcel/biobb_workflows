@@ -15,10 +15,10 @@ from biobb_pmx.pmx.pmxgentop import pmxgentop
 from biobb_pmx.pmx.pmxanalyse import pmxanalyse
 
 # biobb md modules
-from biobb_md.gromacs.pdb2gmx import pdb2gmx
-from biobb_md.gromacs.make_ndx import make_ndx
-from biobb_md.gromacs.grompp import grompp
-from biobb_md.gromacs.mdrun import mdrun
+from biobb_gromacs.gromacs.pdb2gmx import pdb2gmx
+from biobb_gromacs.gromacs.make_ndx import make_ndx
+from biobb_gromacs.gromacs.grompp import grompp
+from biobb_gromacs.gromacs.mdrun import mdrun
 
 # biobb analysis module
 from biobb_analysis.gromacs.gmx_trjconv_str_ens import gmx_trjconv_str_ens
