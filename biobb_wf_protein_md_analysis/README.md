@@ -4,7 +4,7 @@ Launch workflow:
 
 WorkflowHub flavours:
 
-[![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/287?version=1)
+[![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/287?version=2)
 
 # Protein MD Analysis tutorial using BioExcel Building Blocks (biobb)
 
