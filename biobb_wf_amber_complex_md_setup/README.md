@@ -12,8 +12,8 @@ WorkflowHub flavours:
 
 [![CWL - WorkflowHub](https://img.shields.io/badge/CWL-WorkflowHub-1f8787?logo=Common+Workflow+Language&logoColor=ffffff)](https://workflowhub.eu/workflows/261?version=1)
 [![Galaxy - WorkflowHub](https://img.shields.io/badge/Galaxy-WorkflowHub-1f8787?logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABmJLR0QA%2FwD%2FAP%2BgvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH5gMQDgQGnOEySwAAAKVJREFUKM%2BNkrsNAjEQRN%2FcJ4NGrg6aISFHQqIaSiAmoAEiWkCE5NwNyYHWBiyPZMnr%2Fcx4bNluqcMkye%2BgA9YVTQLOwOVz4nps46SGejgGHbApFDfAYt6f8sahcK%2B7pL3tHhhTfvv5Z422r1ltwqgCY5KTlDQeQq4Nhgm4zUz9r6lRygCsgCmYs8wd%2Ffbb3tU%2BalNSUEKXxUfgEaQW%2F2CUqtrf9AKgwZfhDysMRQAAAABJRU5ErkJggg%3D%3D&logoColor=ffffff)](https://workflowhub.eu/workflows/298?version=2)
-[![Jupyter - WorkflowHub](https://img.shields.io/badge/Jupyter-WorkflowHub-1f8787?logo=Jupyter&logoColor=ffffff)](https://workflowhub.eu/workflows/131?version=2)
-[![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/284?version=2)
+[![Jupyter - WorkflowHub](https://img.shields.io/badge/Jupyter-WorkflowHub-1f8787?logo=Jupyter&logoColor=ffffff)](https://workflowhub.eu/workflows/131?version=3)
+[![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/284?version=3)
 
 # AMBER Protein Complex MD Setup tutorial using BioExcel Building Blocks (biobb)
 
