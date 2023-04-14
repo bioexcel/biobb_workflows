@@ -29,7 +29,7 @@ step3_babel_convert_prep_lig:
     input_format: pdb
     output_format: pdbqt
     flex: False
-    obabel_path: obabel
+    binary_path: obabel
 
 step4_str_check_add_hydrogens:
   tool: str_check_add_hydrogens
@@ -57,4 +57,4 @@ step6_babel_convert_pose_pdb:
   properties:
     input_format: pdbqt
     output_format: pdb
-    obabel_path: obabel
+    binary_path: obabel
