@@ -20,26 +20,20 @@
                 }
             ],
             "position": {
-                "bottom": 373.765625,
-                "height": 61.78125,
-                "left": -1523.5,
-                "right": -1323.5,
-                "top": 311.984375,
-                "width": 200,
-                "x": -1523.5,
-                "y": 311.984375
+                "left": 0,
+                "top": 389.484375
             },
             "post_job_actions": {},
             "tool_id": "biobb_io_pdb_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"outname_output_pdb_path\": \"mypdb.pdb\", \"properties\": {\"pdb_code\": \"1AKI\", \"filter\": \"[ATOM, MODEL, ENDMDL]\", \"api_id\": \"pdbe\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "bef135ee-d4d6-4129-828f-e3cccc33af64",
             "workflow_outputs": [
                 {
                     "label": "mypdb.pdb",
                     "output_name": "output_pdb_path",
-                    "uuid": "7df2de37-133b-4a5c-889d-8bb2ae61b01b"
+                    "uuid": "7b6f3dbd-3299-407b-9f1a-4ada1a240cb4"
                 }
             ]
         },
@@ -64,26 +58,20 @@
                 }
             ],
             "position": {
-                "bottom": 407.5625,
-                "height": 113.5625,
-                "left": -1204.484375,
-                "right": -1004.484375,
-                "top": 294,
-                "width": 200,
-                "x": -1204.484375,
-                "y": 294
+                "left": 319.015625,
+                "top": 371.5
             },
             "post_job_actions": {},
             "tool_id": "biobb_model_fix_side_chain_ext",
-            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_pdb_path\": \"myfix_side_chain.pdb\", \"properties\": {\"use_modeller\": \"false\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_pdb_path\": \"myfix_side_chain.pdb\", \"properties\": {\"use_modeller\": \"false\", \"modeller_key\": null, \"binary_path\": \"check_structure\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "30a03e09-8941-4a95-80d2-a9e46693406e",
             "workflow_outputs": [
                 {
                     "label": "myfix_side_chain.pdb",
                     "output_name": "output_pdb_path",
-                    "uuid": "659d8f9b-29af-4dcc-8ff7-f832088fc30d"
+                    "uuid": "bf11d3eb-774f-4ed0-aded-fa02c50bba3c"
                 }
             ]
         },
@@ -112,31 +100,25 @@
                 }
             ],
             "position": {
-                "bottom": 410.546875,
-                "height": 123.5625,
-                "left": -919.46875,
-                "right": -719.46875,
-                "top": 286.984375,
-                "width": 200,
-                "x": -919.46875,
-                "y": 286.984375
+                "left": 604.03125,
+                "top": 364.484375
             },
             "post_job_actions": {},
             "tool_id": "biobb_gromacs_pdb2gmx_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_gro_path\": \"mypdb2gmx.gro\", \"outname_output_top_zip_path\": \"mypdb2gmx.zip\", \"properties\": {\"water_type\": \"spce\", \"force_field\": \"amber99sb-ildn\", \"ignh\": \"false\", \"his\": null, \"merge\": \"false\", \"gmx_lib\": null, \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "0a7280e4-ef3d-475b-a0fe-43d0dfe9d035",
             "workflow_outputs": [
                 {
-                    "label": "mypdb2gmx.zip",
-                    "output_name": "output_top_zip_path",
-                    "uuid": "418c1e0f-e642-4ff4-80e4-82111a278857"
-                },
-                {
                     "label": "mypdb2gmx.gro",
                     "output_name": "output_gro_path",
-                    "uuid": "fe889423-c312-4e7e-85d0-8db97fafedca"
+                    "uuid": "1b7fc3b1-9ed7-41d8-b090-cc20fcaf6f2d"
+                },
+                {
+                    "label": "mypdb2gmx.zip",
+                    "output_name": "output_top_zip_path",
+                    "uuid": "9a166a79-d068-4844-9a6a-a026f969e991"
                 }
             ]
         },
@@ -161,26 +143,20 @@
                 }
             ],
             "position": {
-                "bottom": 148.578125,
-                "height": 113.5625,
-                "left": -722.4375,
-                "right": -522.4375,
-                "top": 35.015625,
-                "width": 200,
-                "x": -722.4375,
-                "y": 35.015625
+                "left": 801.0625,
+                "top": 112.515625
             },
             "post_job_actions": {},
             "tool_id": "biobb_gromacs_editconf_ext",
-            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_gro_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_gro_path\": \"myeditconf.gro\", \"properties\": {\"distance_to_molecule\": \"1.0\", \"box_type\": \"cubic\", \"center_molecule\": \"true\", \"gmx_lib\": \"\", \"binary_path\": \"gmx\", \"output_format\": \"gro\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_gro_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_gro_path\": \"myeditconf.gro\", \"properties\": {\"distance_to_molecule\": \"1.0\", \"box_vector_lenghts\": null, \"box_type\": \"cubic\", \"center_molecule\": \"true\", \"gmx_lib\": \"\", \"binary_path\": \"gmx\", \"output_format\": \"gro\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "e68e81e1-7721-4d97-88f9-9a3f122cac81",
             "workflow_outputs": [
                 {
                     "label": "myeditconf.pdb",
                     "output_name": "output_gro_path",
-                    "uuid": "2499f3b5-846f-4f0d-a2df-a092198007ce"
+                    "uuid": "ba47612b-10b2-4d9b-b846-c0f07cb079d3"
                 }
             ]
         },
@@ -218,31 +194,25 @@
                 }
             ],
             "position": {
-                "bottom": 583.734375,
-                "height": 204.734375,
-                "left": -524.453125,
-                "right": -324.453125,
-                "top": 379,
-                "width": 200,
-                "x": -524.453125,
-                "y": 379
+                "left": 999.046875,
+                "top": 456.5
             },
             "post_job_actions": {},
             "tool_id": "biobb_gromacs_solvate_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_solute_gro_path\": {\"__class__\": \"ConnectedValue\"}, \"input_solvent_gro_path\": {\"__class__\": \"RuntimeValue\"}, \"input_top_zip_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_gro_path\": \"mysolvate.gro\", \"outname_output_top_zip_path\": \"mysolvate.zip\", \"properties\": {\"shell\": \"0.0\", \"gmx_lib\": \"\", \"binary_path\": \"gmx\", \"output_format\": \"gro\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "9778252d-3af3-48c1-a7c7-7f62803ebba9",
             "workflow_outputs": [
                 {
-                    "label": "mysolvate.zip",
-                    "output_name": "output_top_zip_path",
-                    "uuid": "970f76ba-2cb5-43cc-a40d-2dd568586561"
-                },
-                {
                     "label": "mysolvate.gro",
                     "output_name": "output_gro_path",
-                    "uuid": "3bf1b266-d7db-4527-8a7c-d31cb98755f9"
+                    "uuid": "fdf85f8e-0a8f-46e4-aeec-7b4157cdbb91"
+                },
+                {
+                    "label": "mysolvate.zip",
+                    "output_name": "output_top_zip_path",
+                    "uuid": "edd17000-f1ab-480c-b354-b2418f1481b9"
                 }
             ]
         },
@@ -284,26 +254,20 @@
                 }
             ],
             "position": {
-                "bottom": 472.25,
-                "height": 214.734375,
-                "left": -179.46875,
-                "right": 20.53125,
-                "top": 257.515625,
-                "width": 200,
-                "x": -179.46875,
-                "y": 257.515625
+                "left": 1344.03125,
+                "top": 335.015625
             },
             "post_job_actions": {},
             "tool_id": "biobb_gromacs_grompp_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_cpt_path\": {\"__class__\": \"RuntimeValue\"}, \"input_gro_path\": {\"__class__\": \"ConnectedValue\"}, \"input_mdp_path\": {\"__class__\": \"RuntimeValue\"}, \"input_ndx_path\": {\"__class__\": \"RuntimeValue\"}, \"input_top_zip_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_tpr_path\": \"mygrompp.tpr\", \"properties\": {\"mdp\": \"{}\", \"simulation_type\": \"minimization\", \"maxwarn\": \"1\", \"gmx_lib\": \"\", \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "2303c9fe-4545-4dd2-82ee-7693454ec5ce",
             "workflow_outputs": [
                 {
                     "label": "mygrompp.tpr",
                     "output_name": "output_tpr_path",
-                    "uuid": "9e2e71b8-cb61-4d23-91a2-e6f3f8221e0d"
+                    "uuid": "1f5ab94f-f986-48e7-bc24-3ca546523b2c"
                 }
             ]
         },
@@ -341,31 +305,25 @@
                 }
             ],
             "position": {
-                "bottom": 764.84375,
-                "height": 184.34375,
-                "left": 72.546875,
-                "right": 272.546875,
-                "top": 580.5,
-                "width": 200,
-                "x": 72.546875,
-                "y": 580.5
+                "left": 1596.046875,
+                "top": 658.0
             },
             "post_job_actions": {},
             "tool_id": "biobb_gromacs_genion_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_ndx_path\": {\"__class__\": \"RuntimeValue\"}, \"input_top_zip_path\": {\"__class__\": \"ConnectedValue\"}, \"input_tpr_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_gro_path\": \"mygenion.gro\", \"outname_output_top_zip_path\": \"mygenion.zip\", \"properties\": {\"replaced_group\": \"SOL\", \"neutral\": \"true\", \"concentration\": \"0.05\", \"seed\": \"1993\", \"gmx_lib\": \"\", \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "dae8df36-c4cc-4554-bb74-86da473e93c8",
             "workflow_outputs": [
                 {
                     "label": "mygenion.zip",
                     "output_name": "output_top_zip_path",
-                    "uuid": "0aa76579-22ec-4369-b3a9-42a7393f0055"
+                    "uuid": "49c57344-caa8-40e4-ad81-57e5117e969e"
                 },
                 {
                     "label": "mygenion.gro",
                     "output_name": "output_gro_path",
-                    "uuid": "2379b042-6dc1-4f72-82b7-d63dc223ca9a"
+                    "uuid": "4d3e7bcd-49f1-4563-bf9e-a5bde3a0f2cd"
                 }
             ]
         },
@@ -407,26 +365,20 @@
                 }
             ],
             "position": {
-                "bottom": 357.25,
-                "height": 214.734375,
-                "left": 423.5625,
-                "right": 623.5625,
-                "top": 142.515625,
-                "width": 200,
-                "x": 423.5625,
-                "y": 142.515625
+                "left": 1947.0625,
+                "top": 220.015625
             },
             "post_job_actions": {},
             "tool_id": "biobb_gromacs_grompp_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_cpt_path\": {\"__class__\": \"RuntimeValue\"}, \"input_gro_path\": {\"__class__\": \"ConnectedValue\"}, \"input_mdp_path\": {\"__class__\": \"RuntimeValue\"}, \"input_ndx_path\": {\"__class__\": \"RuntimeValue\"}, \"input_top_zip_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_tpr_path\": \"mygrompp_min.tpr\", \"properties\": {\"mdp\": \"{\\\"emtol\\\":\\\"500\\\", \\\"nsteps\\\":\\\"5000\\\"}\", \"simulation_type\": \"minimization\", \"maxwarn\": \"1\", \"gmx_lib\": \"\", \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "6e19ee19-059b-4c83-b66a-69d7b45febe6",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "output_tpr_path",
-                    "uuid": "787e0297-a7a8-4e89-a79d-a24bb007284c"
+                    "uuid": "edee49a8-ecab-483f-a131-8ec41f6f4948"
                 }
             ]
         },
@@ -480,56 +432,50 @@
                 }
             ],
             "position": {
-                "bottom": 742.421875,
-                "height": 305.90625,
-                "left": 751.5625,
-                "right": 951.5625,
-                "top": 436.515625,
-                "width": 200,
-                "x": 751.5625,
-                "y": 436.515625
+                "left": 2275.0625,
+                "top": 514.015625
             },
             "post_job_actions": {},
             "tool_id": "biobb_gromacs_mdrun_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_cpt_path\": {\"__class__\": \"RuntimeValue\"}, \"input_tpr_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpt_path\": \"mymdrun.cpt\", \"outname_output_dhdl_path\": \"mymdrun.xvg\", \"outname_output_edr_path\": \"mymdrun.edr\", \"outname_output_gro_path\": \"mymdrun.gro\", \"outname_output_log_path\": \"mymdrun.log\", \"outname_output_trr_path\": \"mymdrun.trr\", \"outname_output_xtc_path\": \"mymdrun.xtc\", \"properties\": {\"mpi_bin\": \"\", \"mpi_np\": \"0\", \"mpi_flags\": \"\", \"checkpoint_time\": \"15\", \"num_threads\": \"0\", \"num_threads_mpi\": \"0\", \"num_threads_omp\": \"0\", \"num_threads_omp_pme\": \"0\", \"use_gpu\": \"false\", \"gpu_id\": \"\", \"gpu_tasks\": \"\", \"gmx_lib\": \"\", \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "1c7df020-03d0-4371-8435-cf8158e312d5",
             "workflow_outputs": [
                 {
-                    "label": "mymdrun.gro",
-                    "output_name": "output_gro_path",
-                    "uuid": "8c1fa94a-e50c-4f65-a431-08f5a41faa3d"
-                },
-                {
-                    "label": "mymdrun.edr",
-                    "output_name": "output_edr_path",
-                    "uuid": "8a8d13e2-0d7e-4722-858b-654a5b55e03a"
-                },
-                {
-                    "label": "mymdrun.trr",
-                    "output_name": "output_trr_path",
-                    "uuid": "730cc60a-05fe-4c62-8e9a-7d8e3245d89e"
-                },
-                {
                     "label": "mymdrun.xtc",
                     "output_name": "output_xtc_path",
-                    "uuid": "883edf4f-ac17-4cda-b314-ebf8266009e9"
+                    "uuid": "f0d66cfa-5f38-4a49-82cf-8232cf071420"
                 },
                 {
                     "label": "mymdrun.log",
                     "output_name": "output_log_path",
-                    "uuid": "a1b3fece-dde0-46df-a4aa-048f58f55696"
+                    "uuid": "801cff6b-b7d3-43e0-94c8-486d144308fe"
                 },
                 {
                     "label": "mymdrun.cpt",
                     "output_name": "output_cpt_path",
-                    "uuid": "d3af23e3-b790-42e6-92b7-7f489bcda583"
+                    "uuid": "863314e1-4fd0-458f-be1b-2f338026ec49"
                 },
                 {
                     "label": "mymdrun.xvg",
                     "output_name": "output_dhdl_path",
-                    "uuid": "bd928aae-ad96-4700-93b6-26acda5c09ff"
+                    "uuid": "c76f2642-492a-49d8-8680-7cc134776cf1"
+                },
+                {
+                    "label": "mymdrun.gro",
+                    "output_name": "output_gro_path",
+                    "uuid": "6d236562-0126-40ca-8928-5bb91deec5a0"
+                },
+                {
+                    "label": "mymdrun.edr",
+                    "output_name": "output_edr_path",
+                    "uuid": "eaaac92d-136d-4a85-8285-9ec4731ede10"
+                },
+                {
+                    "label": "mymdrun.trr",
+                    "output_name": "output_trr_path",
+                    "uuid": "9a0ecba6-9519-4eb2-9486-422feb619380"
                 }
             ]
         },
@@ -571,26 +517,20 @@
                 }
             ],
             "position": {
-                "bottom": 351.25,
-                "height": 214.734375,
-                "left": 1096.5625,
-                "right": 1296.5625,
-                "top": 136.515625,
-                "width": 200,
-                "x": 1096.5625,
-                "y": 136.515625
+                "left": 2620.0625,
+                "top": 214.015625
             },
             "post_job_actions": {},
             "tool_id": "biobb_gromacs_grompp_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_cpt_path\": {\"__class__\": \"RuntimeValue\"}, \"input_gro_path\": {\"__class__\": \"ConnectedValue\"}, \"input_mdp_path\": {\"__class__\": \"RuntimeValue\"}, \"input_ndx_path\": {\"__class__\": \"RuntimeValue\"}, \"input_top_zip_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_tpr_path\": \"mygrompp.tpr\", \"properties\": {\"mdp\": \"{\\\"nsteps\\\": 5000,\\\"dt\\\": 0.002,\\\"Define\\\": \\\"-DPOSRES\\\"}\", \"simulation_type\": \"nvt\", \"maxwarn\": \"0\", \"gmx_lib\": \"\", \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "79b2a2ea-bdbf-4a02-a0d2-0784d98b0899",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "output_tpr_path",
-                    "uuid": "bb57f408-2378-4832-a6e2-d6c0543495a1"
+                    "uuid": "acb3c299-bb46-4ba6-b230-1867fe73da7f"
                 }
             ]
         },
@@ -615,26 +555,20 @@
                 }
             ],
             "position": {
-                "bottom": 898.078125,
-                "height": 113.5625,
-                "left": 1043.5625,
-                "right": 1243.5625,
-                "top": 784.515625,
-                "width": 200,
-                "x": 1043.5625,
-                "y": 784.515625
+                "left": 2567.0625,
+                "top": 862.015625
             },
             "post_job_actions": {},
             "tool_id": "biobb_analysis_gmx_energy_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_energy_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_xvg_path\": \"mygmx_energy.xvg\", \"properties\": {\"xvg\": \"none\", \"terms\": [\"Potential\"], \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "6fb6d56f-bdaa-4831-ac69-3f0e59154cc3",
             "workflow_outputs": [
                 {
                     "label": "mygmx_energy.xvg",
                     "output_name": "output_xvg_path",
-                    "uuid": "4eb9f0c1-be0c-46b8-88d7-e0cd5749e2ac"
+                    "uuid": "37ef3026-532a-4b74-9af3-7e074032765b"
                 }
             ]
         },
@@ -688,56 +622,50 @@
                 }
             ],
             "position": {
-                "bottom": 781.40625,
-                "height": 305.90625,
-                "left": 1356.5625,
-                "right": 1556.5625,
-                "top": 475.5,
-                "width": 200,
-                "x": 1356.5625,
-                "y": 475.5
+                "left": 2880.0625,
+                "top": 553.0
             },
             "post_job_actions": {},
             "tool_id": "biobb_gromacs_mdrun_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_cpt_path\": {\"__class__\": \"RuntimeValue\"}, \"input_tpr_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpt_path\": \"mymdrun.cpt\", \"outname_output_dhdl_path\": \"mymdrun.xvg\", \"outname_output_edr_path\": \"mymdrun.edr\", \"outname_output_gro_path\": \"mymdrun.gro\", \"outname_output_log_path\": \"mymdrun.log\", \"outname_output_trr_path\": \"mymdrun.trr\", \"outname_output_xtc_path\": \"mymdrun.xtc\", \"properties\": {\"mpi_bin\": \"\", \"mpi_np\": \"0\", \"mpi_flags\": \"\", \"checkpoint_time\": \"15\", \"num_threads\": \"0\", \"num_threads_mpi\": \"0\", \"num_threads_omp\": \"0\", \"num_threads_omp_pme\": \"0\", \"use_gpu\": \"false\", \"gpu_id\": \"\", \"gpu_tasks\": \"\", \"gmx_lib\": \"\", \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "d6261b55-895b-4512-92cc-bfb032885576",
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "output_dhdl_path",
-                    "uuid": "bcd19a7c-121e-4ca5-ad31-8b38330e34cc"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_cpt_path",
-                    "uuid": "20827cc0-47b8-4a21-9c63-41f617cde5eb"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_xtc_path",
-                    "uuid": "de300af3-a238-4001-aedf-56169e9b3b4c"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_gro_path",
-                    "uuid": "750f4823-8ab2-4665-8614-8fccbb58aa02"
+                    "output_name": "output_log_path",
+                    "uuid": "46685cfd-5cf0-4472-bb48-c59338e2610c"
                 },
                 {
                     "label": null,
                     "output_name": "output_trr_path",
-                    "uuid": "da7a8db9-c0a7-453e-87c4-545a50beda55"
+                    "uuid": "6d7763ee-6d68-440b-8a92-fe79813ca76f"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_dhdl_path",
+                    "uuid": "0a932285-b457-4b32-a596-ccb6710b2849"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_cpt_path",
+                    "uuid": "7d6f9faa-4f5a-44e7-9e0e-92a4e34715db"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_xtc_path",
+                    "uuid": "79311137-28b5-4078-b0bf-ed692bc2d8d3"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_gro_path",
+                    "uuid": "390da717-dc8a-441b-b164-fd9287faa45c"
                 },
                 {
                     "label": null,
                     "output_name": "output_edr_path",
-                    "uuid": "48addbb3-aeea-4d88-a063-e768050afca3"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_log_path",
-                    "uuid": "aa9d451c-e2bd-4d31-afd5-05a54475d9ea"
+                    "uuid": "35e4d470-34cf-412f-98d7-e270def85a54"
                 }
             ]
         },
@@ -779,26 +707,20 @@
                 }
             ],
             "position": {
-                "bottom": 342.234375,
-                "height": 214.734375,
-                "left": 1692.546875,
-                "right": 1892.546875,
-                "top": 127.5,
-                "width": 200,
-                "x": 1692.546875,
-                "y": 127.5
+                "left": 3216.046875,
+                "top": 205.0
             },
             "post_job_actions": {},
             "tool_id": "biobb_gromacs_grompp_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_cpt_path\": {\"__class__\": \"ConnectedValue\"}, \"input_gro_path\": {\"__class__\": \"ConnectedValue\"}, \"input_mdp_path\": {\"__class__\": \"RuntimeValue\"}, \"input_ndx_path\": {\"__class__\": \"RuntimeValue\"}, \"input_top_zip_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_tpr_path\": \"mygrompp.tpr\", \"properties\": {\"mdp\": \"{\\\"nsteps\\\":\\\"5000\\\"}\", \"simulation_type\": \"npt\", \"maxwarn\": \"0\", \"gmx_lib\": \"\", \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "f6e616d7-9b54-44f3-b27d-e968e2c765ec",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "output_tpr_path",
-                    "uuid": "093f963b-f3f9-4da4-a82d-cd5e20eeb9ec"
+                    "uuid": "6c1be000-9d79-4285-9b84-715b82751d47"
                 }
             ]
         },
@@ -823,26 +745,20 @@
                 }
             ],
             "position": {
-                "bottom": 898.078125,
-                "height": 113.5625,
-                "left": 1636.546875,
-                "right": 1836.546875,
-                "top": 784.515625,
-                "width": 200,
-                "x": 1636.546875,
-                "y": 784.515625
+                "left": 3160.046875,
+                "top": 862.015625
             },
             "post_job_actions": {},
             "tool_id": "biobb_analysis_gmx_energy_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_energy_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_xvg_path\": \"mygmx_energy.xvg\", \"properties\": {\"xvg\": \"none\", \"terms\": [\"Temperature\"], \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "91ec1e4f-42b6-4847-9f0f-584fa035e6c4",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "output_xvg_path",
-                    "uuid": "3bfcdf1a-d792-4274-acb2-942c306a2436"
+                    "uuid": "ac45718c-94fc-4298-9046-ce01e951f431"
                 }
             ]
         },
@@ -896,56 +812,50 @@
                 }
             ],
             "position": {
-                "bottom": 777.421875,
-                "height": 305.90625,
-                "left": 1962.5625,
-                "right": 2162.5625,
-                "top": 471.515625,
-                "width": 200,
-                "x": 1962.5625,
-                "y": 471.515625
+                "left": 3486.0625,
+                "top": 549.015625
             },
             "post_job_actions": {},
             "tool_id": "biobb_gromacs_mdrun_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_cpt_path\": {\"__class__\": \"RuntimeValue\"}, \"input_tpr_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpt_path\": \"mymdrun.cpt\", \"outname_output_dhdl_path\": \"mymdrun.xvg\", \"outname_output_edr_path\": \"mymdrun.edr\", \"outname_output_gro_path\": \"mymdrun.gro\", \"outname_output_log_path\": \"mymdrun.log\", \"outname_output_trr_path\": \"mymdrun.trr\", \"outname_output_xtc_path\": \"mymdrun.xtc\", \"properties\": {\"mpi_bin\": \"\", \"mpi_np\": \"0\", \"mpi_flags\": \"\", \"checkpoint_time\": \"15\", \"num_threads\": \"0\", \"num_threads_mpi\": \"0\", \"num_threads_omp\": \"0\", \"num_threads_omp_pme\": \"0\", \"use_gpu\": \"false\", \"gpu_id\": \"\", \"gpu_tasks\": \"\", \"gmx_lib\": \"\", \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "1ba2205b-7147-4060-aca0-51c1fba3e670",
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "output_xtc_path",
-                    "uuid": "0df1e87a-0c4e-42ee-9560-d9058266cd9d"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_cpt_path",
-                    "uuid": "15e10e72-110b-40d4-8fd7-48fa2b0c14c8"
-                },
-                {
-                    "label": null,
                     "output_name": "output_edr_path",
-                    "uuid": "2de32927-df24-4172-9117-f7696aabd510"
+                    "uuid": "534fec93-7b44-41dc-9572-d317a663de7a"
                 },
                 {
                     "label": null,
                     "output_name": "output_gro_path",
-                    "uuid": "cd5559e1-a63f-402d-99f8-d9d0d1a5e83c"
+                    "uuid": "008ee06a-5ae7-485e-a1ca-cf815a240e80"
                 },
                 {
                     "label": null,
                     "output_name": "output_trr_path",
-                    "uuid": "7e6dac2c-cc1b-4c61-addb-732206fcdfe8"
+                    "uuid": "9f2ce6de-6a06-4b54-bf5e-e3b75dc2ad85"
                 },
                 {
                     "label": null,
                     "output_name": "output_dhdl_path",
-                    "uuid": "f9ead1a6-a779-4a2f-ba1d-f344cb7df110"
+                    "uuid": "fe844eaf-cdd4-43ac-ba78-46a2726dd7b7"
                 },
                 {
                     "label": null,
                     "output_name": "output_log_path",
-                    "uuid": "8d40a49e-c4af-4de3-9fff-1451b5997c87"
+                    "uuid": "66002bb8-4eb5-479b-a184-085c4bdf7047"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_xtc_path",
+                    "uuid": "9aed944a-4ddf-4c98-8161-eaab0d932d45"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_cpt_path",
+                    "uuid": "6550835a-45a6-4d04-8563-8fbc92da4744"
                 }
             ]
         },
@@ -987,26 +897,20 @@
                 }
             ],
             "position": {
-                "bottom": 330.234375,
-                "height": 214.734375,
-                "left": 2336.5625,
-                "right": 2536.5625,
-                "top": 115.5,
-                "width": 200,
-                "x": 2336.5625,
-                "y": 115.5
+                "left": 3860.0625,
+                "top": 193.0
             },
             "post_job_actions": {},
             "tool_id": "biobb_gromacs_grompp_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_cpt_path\": {\"__class__\": \"ConnectedValue\"}, \"input_gro_path\": {\"__class__\": \"ConnectedValue\"}, \"input_mdp_path\": {\"__class__\": \"RuntimeValue\"}, \"input_ndx_path\": {\"__class__\": \"RuntimeValue\"}, \"input_top_zip_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_tpr_path\": \"mygrompp.tpr\", \"properties\": {\"mdp\": \"{\\\"nsteps\\\":\\\"50000\\\"}\", \"simulation_type\": \"free\", \"maxwarn\": \"0\", \"gmx_lib\": \"\", \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "1972b4a8-b01a-4f5e-90ff-ba89461abd69",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "output_tpr_path",
-                    "uuid": "4a883d2b-c72e-47db-a13d-ff027743e113"
+                    "uuid": "18c94ebe-d3d6-4263-a0c1-fc91c88f4481"
                 }
             ]
         },
@@ -1031,26 +935,20 @@
                 }
             ],
             "position": {
-                "bottom": 896.0625,
-                "height": 113.5625,
-                "left": 2287.5625,
-                "right": 2487.5625,
-                "top": 782.5,
-                "width": 200,
-                "x": 2287.5625,
-                "y": 782.5
+                "left": 3811.0625,
+                "top": 860.0
             },
             "post_job_actions": {},
             "tool_id": "biobb_analysis_gmx_energy_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_energy_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_xvg_path\": \"mygmx_energy.xvg\", \"properties\": {\"xvg\": \"none\", \"terms\": [\"Pressure\", \"Density\"], \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "4e66c81d-1b2e-43b4-809c-b4a60be74a12",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "output_xvg_path",
-                    "uuid": "90767d18-fb52-4804-92fc-18ed3e369bf5"
+                    "uuid": "7b4e1eac-151f-4dc8-885c-c68655d2b001"
                 }
             ]
         },
@@ -1104,56 +1002,50 @@
                 }
             ],
             "position": {
-                "bottom": 774.421875,
-                "height": 305.90625,
-                "left": 2652.546875,
-                "right": 2852.546875,
-                "top": 468.515625,
-                "width": 200,
-                "x": 2652.546875,
-                "y": 468.515625
+                "left": 4176.046875,
+                "top": 546.015625
             },
             "post_job_actions": {},
             "tool_id": "biobb_gromacs_mdrun_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_cpt_path\": {\"__class__\": \"RuntimeValue\"}, \"input_tpr_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpt_path\": \"mymdrun.cpt\", \"outname_output_dhdl_path\": \"mymdrun.xvg\", \"outname_output_edr_path\": \"mymdrun.edr\", \"outname_output_gro_path\": \"mymdrun.gro\", \"outname_output_log_path\": \"mymdrun.log\", \"outname_output_trr_path\": \"mymdrun.trr\", \"outname_output_xtc_path\": \"mymdrun.xtc\", \"properties\": {\"mpi_bin\": \"\", \"mpi_np\": \"0\", \"mpi_flags\": \"\", \"checkpoint_time\": \"15\", \"num_threads\": \"0\", \"num_threads_mpi\": \"0\", \"num_threads_omp\": \"0\", \"num_threads_omp_pme\": \"0\", \"use_gpu\": \"false\", \"gpu_id\": \"\", \"gpu_tasks\": \"\", \"gmx_lib\": \"\", \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "f287f0e7-a327-4deb-89ba-6dfc52dd1ebb",
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "output_cpt_path",
-                    "uuid": "c97f4c1d-d258-4653-a9fe-8e3fdac27a53"
-                },
-                {
-                    "label": null,
                     "output_name": "output_trr_path",
-                    "uuid": "347a52fb-e693-4aec-a36f-626f194d92dd"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_log_path",
-                    "uuid": "8c76db67-4567-4508-9f9f-1af7abfd29ec"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_edr_path",
-                    "uuid": "74d42bd1-f472-4a05-b55d-642b385922d7"
+                    "uuid": "c72ed345-24ac-41bc-a256-310b0250336c"
                 },
                 {
                     "label": null,
                     "output_name": "output_xtc_path",
-                    "uuid": "2740fb1b-9c78-4b03-b71c-f81f141a2881"
+                    "uuid": "d4f3b6a5-2ef5-47a2-9c9d-47e0c2454f25"
                 },
                 {
                     "label": null,
                     "output_name": "output_gro_path",
-                    "uuid": "e5cc3521-dd73-42c5-8e39-db73dc74dbd8"
+                    "uuid": "4131271a-8db9-44c7-99d9-ea945f3f3284"
                 },
                 {
                     "label": null,
                     "output_name": "output_dhdl_path",
-                    "uuid": "cfd4176b-ba94-4379-b310-fb51ded5d17b"
+                    "uuid": "fca874eb-9257-4c64-830a-37cefe22c9c0"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_cpt_path",
+                    "uuid": "8595dd56-7218-498b-b849-9d547e4f5113"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_log_path",
+                    "uuid": "1c74dd5a-c30c-47b9-b4dc-de8258cf1bcb"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_edr_path",
+                    "uuid": "a2153aed-4dcf-4675-bcfc-01156f1163cf"
                 }
             ]
         },
@@ -1187,26 +1079,20 @@
                 }
             ],
             "position": {
-                "bottom": 158.015625,
-                "height": 235.515625,
-                "left": 3014.5625,
-                "right": 3214.5625,
-                "top": -77.5,
-                "width": 200,
-                "x": 3014.5625,
-                "y": -77.5
+                "left": 4538.0625,
+                "top": 0.0
             },
             "post_job_actions": {},
             "tool_id": "biobb_analysis_gmx_rms_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_index_path\": {\"__class__\": \"RuntimeValue\"}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_xvg_path\": \"mygmx_rms.xvg\", \"properties\": {\"xvg\": \"none\", \"selection\": \"Backbone\", \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "a92275ca-ac0e-4a62-b49d-b63c1d72f38c",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "output_xvg_path",
-                    "uuid": "99154dfd-8edc-43b1-a2d1-7303ad1f593b"
+                    "uuid": "45682214-2411-4ed2-a14f-ecdcc02151ff"
                 }
             ]
         },
@@ -1240,26 +1126,20 @@
                 }
             ],
             "position": {
-                "bottom": 454.03125,
-                "height": 235.515625,
-                "left": 3012.5625,
-                "right": 3212.5625,
-                "top": 218.515625,
-                "width": 200,
-                "x": 3012.5625,
-                "y": 218.515625
+                "left": 4536.0625,
+                "top": 296.015625
             },
             "post_job_actions": {},
             "tool_id": "biobb_analysis_gmx_rms_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_index_path\": {\"__class__\": \"RuntimeValue\"}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_xvg_path\": \"mygmx_rms.xvg\", \"properties\": {\"xvg\": \"none\", \"selection\": \"Backbone\", \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "59ed629d-0a0c-43f2-b4e7-79dc415a0d58",
             "workflow_outputs": [
                 {
                     "label": "mygmx_rms.xvg",
                     "output_name": "output_xvg_path",
-                    "uuid": "226e00eb-ca76-412f-abb9-11737531f05c"
+                    "uuid": "dcef1445-0fd4-468a-93bd-e54b7b5ff966"
                 }
             ]
         },
@@ -1293,26 +1173,20 @@
                 }
             ],
             "position": {
-                "bottom": 755.53125,
-                "height": 235.515625,
-                "left": 3027.546875,
-                "right": 3227.546875,
-                "top": 520.015625,
-                "width": 200,
-                "x": 3027.546875,
-                "y": 520.015625
+                "left": 4551.046875,
+                "top": 597.515625
             },
             "post_job_actions": {},
             "tool_id": "biobb_analysis_gmx_rgyr_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_index_path\": {\"__class__\": \"RuntimeValue\"}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_xvg_path\": \"mygmx_rgyr.xvg\", \"properties\": {\"xvg\": \"none\", \"selection\": \"Backbone\", \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "c0753c68-aa05-4c01-85cb-d1e56700a68a",
             "workflow_outputs": [
                 {
                     "label": "mygmx_rgyr.xvg",
                     "output_name": "output_xvg_path",
-                    "uuid": "f6c23d1f-2a73-47a9-bdf9-d4a7bb33defd"
+                    "uuid": "af983df8-92e1-4984-b9a7-0131d276b75a"
                 }
             ]
         },
@@ -1346,14 +1220,8 @@
                 }
             ],
             "position": {
-                "bottom": 1105.3125,
-                "height": 276.296875,
-                "left": 3026.5625,
-                "right": 3226.5625,
-                "top": 829.015625,
-                "width": 200,
-                "x": 3026.5625,
-                "y": 829.015625
+                "left": 4550.0625,
+                "top": 906.515625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_traj_path": {
@@ -1365,15 +1233,15 @@
                 }
             },
             "tool_id": "biobb_analysis_gmx_image_ext",
-            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_index_path\": {\"__class__\": \"RuntimeValue\"}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_traj_path\": \"mygmx_image.trr\", \"properties\": {\"fit_selection\": \"System\", \"center_selection\": \"Protein\", \"output_selection\": \"Protein\", \"pbc\": \"mol\", \"center\": \"true\", \"ur\": \"compact\", \"fit\": \"none\", \"binary_path\": \"gmx\", \"output_format\": \"trr\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_index_path\": {\"__class__\": \"RuntimeValue\"}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_traj_path\": \"mygmx_image.trr\", \"properties\": {\"fit_selection\": \"System\", \"center_selection\": \"Protein\", \"cluster_selection\": \"System\", \"output_selection\": \"Protein\", \"pbc\": \"mol\", \"center\": \"true\", \"ur\": \"compact\", \"fit\": \"none\", \"binary_path\": \"gmx\", \"output_format\": \"trr\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "0c8b5d3f-120f-4593-bff3-105f3a27093e",
             "workflow_outputs": [
                 {
                     "label": "mygmx_image.xtc",
                     "output_name": "output_traj_path",
-                    "uuid": "23c0ef55-e4d9-4a1c-bedd-d14efcce1413"
+                    "uuid": "59da7ff9-2a13-4535-908b-c6ecdf68623f"
                 }
             ]
         },
@@ -1407,14 +1275,8 @@
                 }
             ],
             "position": {
-                "bottom": 1090.3125,
-                "height": 276.296875,
-                "left": 3395.5625,
-                "right": 3595.5625,
-                "top": 814.015625,
-                "width": 200,
-                "x": 3395.5625,
-                "y": 814.015625
+                "left": 4919.0625,
+                "top": 891.515625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_str_path": {
@@ -1427,19 +1289,19 @@
             },
             "tool_id": "biobb_analysis_gmx_trjconv_str_ext",
             "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_index_path\": {\"__class__\": \"RuntimeValue\"}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_str_path\": \"mygmx_trjconv_str.gro\", \"properties\": {\"selection\": \"Protein\", \"pbc\": \"none\", \"center\": \"true\", \"ur\": \"compact\", \"fit\": \"none\", \"binary_path\": \"gmx\", \"output_format\": \"gro\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "ff65299a-0825-4430-99f8-2a8d1dab8442",
             "workflow_outputs": [
                 {
                     "label": "mygmx_trjconv_str.pdb",
                     "output_name": "output_str_path",
-                    "uuid": "69d17633-d980-48a6-8915-46525529e002"
+                    "uuid": "c70aff2b-7829-473b-8c7d-f7a2cf6a7b56"
                 }
             ]
         }
     },
     "tags": [],
-    "uuid": "15afbde3-f0cc-4aab-bd61-085c5e43ce92",
-    "version": 3
+    "uuid": "ea549eb1-bec9-47d0-a152-f871912feeab",
+    "version": 5
 }

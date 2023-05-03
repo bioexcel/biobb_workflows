@@ -2,7 +2,7 @@
     "a_galaxy_workflow": "true",
     "annotation": "",
     "format-version": "0.1",
-    "name": "GMX ligand parameterization (imported from uploaded file)",
+    "name": "GMX ligand parameterization",
     "steps": {
         "0": {
             "annotation": "",
@@ -20,26 +20,20 @@
                 }
             ],
             "position": {
-                "bottom": 622.90625,
-                "height": 61.78125,
-                "left": 236.171875,
-                "right": 436.171875,
-                "top": 561.125,
-                "width": 200,
-                "x": 236.171875,
-                "y": 561.125
+                "left": 0,
+                "top": 83
             },
             "post_job_actions": {},
             "tool_id": "biobb_io_ligand_ext",
-            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"outname_output_pdb_path\": \"myligand.pdb\", \"properties\": {\"ligand_code\": \"IBP\", \"api_id\": \"pdbe\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"outname_output_pdb_path\": \"myligand.pdb\", \"properties\": {\"ligand_code\": \"IBP\", \"api_id\": \"mmb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "a3d58ded-3df2-4960-a3dc-c02e633e5f62",
             "workflow_outputs": [
                 {
                     "label": "myligand.pdb",
                     "output_name": "output_pdb_path",
-                    "uuid": "2e228e95-0092-4fc4-817e-077331181ae2"
+                    "uuid": "a2b831a1-d1af-4be8-b318-46b743c4221d"
                 }
             ]
         },
@@ -54,12 +48,7 @@
                     "output_name": "output_pdb_path"
                 }
             },
-            "inputs": [
-                {
-                    "description": "runtime parameter for tool BabelAddHydrogens",
-                    "name": "input_path"
-                }
-            ],
+            "inputs": [],
             "label": null,
             "name": "BabelAddHydrogens",
             "outputs": [
@@ -69,14 +58,8 @@
                 }
             ],
             "position": {
-                "bottom": 775.203125,
-                "height": 297.078125,
-                "left": 555.171875,
-                "right": 755.171875,
-                "top": 478.125,
-                "width": 200,
-                "x": 555.171875,
-                "y": 478.125
+                "left": 319,
+                "top": 0
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_path": {
@@ -88,15 +71,15 @@
                 }
             },
             "tool_id": "biobb_chemistry_babel_add_hydrogens_ext",
-            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_path\": \"mybabel_add_hydrogens.mol2\", \"properties\": {\"input_format\": \"pdb\", \"output_format\": \"mol2\", \"coordinates\": \"3\", \"ph\": \"7.4\", \"binary_path\": \"obabel\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_path\": \"mybabel_add_hydrogens.mol2\", \"properties\": {\"input_format\": \"pdb\", \"output_format\": \"mol2\", \"coordinates\": \"3\", \"ph\": \"7.4\", \"binary_path\": \"obabel\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "e4170789-4d5e-4e4d-9ace-08644470a90c",
             "workflow_outputs": [
                 {
                     "label": null,
                     "output_name": "output_path",
-                    "uuid": "a2facb72-cad5-4f8d-8694-c645a9617d8d"
+                    "uuid": "dd137df3-4190-4fe8-bab7-f58c88d13ef5"
                 }
             ]
         },
@@ -111,12 +94,7 @@
                     "output_name": "output_path"
                 }
             },
-            "inputs": [
-                {
-                    "description": "runtime parameter for tool BabelMinimize",
-                    "name": "input_path"
-                }
-            ],
+            "inputs": [],
             "label": null,
             "name": "BabelMinimize",
             "outputs": [
@@ -126,14 +104,8 @@
                 }
             ],
             "position": {
-                "bottom": 620.1875,
-                "height": 113.5625,
-                "left": 903.171875,
-                "right": 1103.171875,
-                "top": 506.625,
-                "width": 200,
-                "x": 903.171875,
-                "y": 506.625
+                "left": 667,
+                "top": 28.5
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_path": {
@@ -145,15 +117,15 @@
                 }
             },
             "tool_id": "biobb_chemistry_babel_minimize_ext",
-            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_path\": \"mybabel_minimize.pdb\", \"properties\": {\"criteria\": \"1e-10\", \"method\": \"sd\", \"force_field\": \"GAFF\", \"hydrogens\": \"false\", \"steps\": \"2500\", \"cutoff\": \"false\", \"rvdw\": \"6.0\", \"rele\": \"10.0\", \"frequency\": \"10\", \"binary_path\": \"obminimize\", \"output_format\": \"pdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_path\": \"mybabel_minimize.pdb\", \"properties\": {\"criteria\": \"1e-10\", \"method\": \"sd\", \"force_field\": \"GAFF\", \"hydrogens\": \"false\", \"steps\": \"2500\", \"cutoff\": \"false\", \"rvdw\": \"6.0\", \"rele\": \"10.0\", \"frequency\": \"10\", \"binary_path\": \"obminimize\", \"output_format\": \"pdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "8fb24568-ffea-41cc-ba9d-98cb87b29874",
             "workflow_outputs": [
                 {
                     "label": "mybabel_minimize.pdb",
                     "output_name": "output_path",
-                    "uuid": "d15dd99f-ee44-40f4-94a5-2d2973b25c96"
+                    "uuid": "ecabedf1-09cd-4373-97bc-efa553937361"
                 }
             ]
         },
@@ -168,12 +140,7 @@
                     "output_name": "output_path"
                 }
             },
-            "inputs": [
-                {
-                    "description": "runtime parameter for tool AcpypeParamsGmx",
-                    "name": "input_path"
-                }
-            ],
+            "inputs": [],
             "label": null,
             "name": "AcpypeParamsGmx",
             "outputs": [
@@ -191,14 +158,8 @@
                 }
             ],
             "position": {
-                "bottom": 729.640625,
-                "height": 235.515625,
-                "left": 1247.171875,
-                "right": 1447.171875,
-                "top": 494.125,
-                "width": 200,
-                "x": 1247.171875,
-                "y": 494.125
+                "left": 1011,
+                "top": 16
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_path_gro": {
@@ -224,30 +185,30 @@
                 }
             },
             "tool_id": "biobb_chemistry_acpype_params_gmx_ext",
-            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_path_gro\": \"myacpype_params_gmx.gro\", \"outname_output_path_itp\": \"myacpype_params_gmx.itp\", \"outname_output_path_top\": \"myacpype_params_gmx.top\", \"properties\": {\"basename\": \"IBPparams\", \"charge\": \"0\", \"binary_path\": \"acpype\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
-            "tool_version": "3.8.0",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_path_gro\": \"myacpype_params_gmx.gro\", \"outname_output_path_itp\": \"myacpype_params_gmx.itp\", \"outname_output_path_top\": \"myacpype_params_gmx.top\", \"properties\": {\"basename\": \"IBPparams\", \"charge\": \"0\", \"binary_path\": \"acpype\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "8d2e027b-c116-40b0-a263-5c7f32b5b8e0",
             "workflow_outputs": [
                 {
                     "label": "myacpype_params_gmx.itp",
                     "output_name": "output_path_itp",
-                    "uuid": "26ccc445-ece6-4e4f-a5f9-91fac24109be"
+                    "uuid": "c5461a46-de63-4e30-aa5f-ed9ab0336f00"
                 },
                 {
                     "label": "myacpype_params_gmx.top",
                     "output_name": "output_path_top",
-                    "uuid": "478edfa8-e5d4-4dec-a51d-0d4fcd58657a"
+                    "uuid": "3afd0646-bbbe-4afd-baa5-c509703704e1"
                 },
                 {
                     "label": "myacpype_params_gmx.gro",
                     "output_name": "output_path_gro",
-                    "uuid": "d3bb9c92-6c1f-4746-9eda-5aa0dfdc4b28"
+                    "uuid": "667389d6-e590-465f-9f58-d984e1394788"
                 }
             ]
         }
     },
     "tags": [],
-    "uuid": "8555e2a7-d87e-43d0-a812-ebd9ffe6b293",
-    "version": 2
+    "uuid": "3e558b2b-ead6-4442-b213-69376cdb6024",
+    "version": 6
 }
