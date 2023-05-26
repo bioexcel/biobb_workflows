@@ -25,3 +25,6 @@
 [submodule "biobb_wf_pmx_tutorial/jupyter"]
 	path = biobb_wf_pmx_tutorial/jupyter
 	url = https://github.com/bioexcel/biobb_wf_pmx_tutorial
+[submodule "biobb_wf_flexdyn/jupyter"]
+	path = biobb_wf_flexdyn/jupyter
+	url = https://github.com/bioexcel/biobb_wf_flexdyn
