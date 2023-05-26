@@ -1,0 +1,430 @@
+working_dir_path: wf_flexdyn
+can_write_console_log: False
+
+step0_extract_model:
+  tool: extract_model
+  paths:
+    input_structure_path: /path/to/inputs/structure.pdb
+    output_structure_path: structure_model.pdb
+  properties:
+    models: [1]
+
+step1_extract_chain:
+  tool: extract_chain
+  paths:
+    input_structure_path: dependency/step0_extract_model/output_structure_path
+    output_structure_path: structure_monomer.pdb
+  properties:
+    chains: ['A']
+
+step2_cpptraj_mask:
+  tool: cpptraj_mask
+  paths:
+    input_top_path: dependency/step1_extract_chain/output_structure_path
+    input_traj_path: dependency/step1_extract_chain/output_structure_path
+    output_cpptraj_path: structure_backbone.pdb
+  properties:
+    mask: backbone
+    format: pdb
+
+step3_cpptraj_mask:
+  tool: cpptraj_mask
+  paths:
+    input_top_path: dependency/step1_extract_chain/output_structure_path
+    input_traj_path: dependency/step1_extract_chain/output_structure_path
+    output_cpptraj_path: structure_ca.pdb
+  properties:
+    mask: c-alpha
+    format: pdb
+
+step4_concoord_dist:
+  tool: concoord_dist
+  paths:
+    input_structure_path: dependency/step1_extract_chain/output_structure_path
+    output_pdb_path: structure_dist.pdb
+    output_gro_path: structure_dist.gro
+    output_dat_path: structure_dist.dat
+  properties:
+    retain_hydrogens: False
+    cutoff: 4.0
+    env_vars_dict: 
+      CONCOORD_OVERWRITE: '1'
+      CONCOORDLIB: /path/to/anaconda/envs/flexdyn_env/share/concoord/lib
+
+step5_concoord_disco:
+  tool: concoord_disco
+  paths:
+    input_pdb_path: dependency/step4_concoord_dist/output_pdb_path
+    input_dat_path: dependency/step4_concoord_dist/output_dat_path
+    output_traj_path: structure_disco_traj.pdb
+    output_rmsd_path: structure_disco_rmsd.dat
+    output_bfactor_path: structure_disco_bfactor.pdb
+  properties:
+    vdw: 4
+    num_structs: 300
+    env_vars_dict: 
+      CONCOORD_OVERWRITE: '1'
+      CONCOORDLIB: /path/to/anaconda/envs/flexdyn_env/share/concoord/lib
+
+step6_cpptraj_rms:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step4_concoord_dist/output_pdb_path
+    input_traj_path: dependency/step5_concoord_disco/output_traj_path
+    input_exp_path: dependency/step1_extract_chain/output_structure_path
+    output_cpptraj_path: structure_concoord_rmsd.dat
+  properties:
+    start: 1
+    end: -1
+    steps: 1
+    mask: c-alpha
+    reference: experimental
+
+step7_cpptraj_convert:
+  tool: cpptraj_convert
+  paths:
+    input_top_path: dependency/step4_concoord_dist/output_pdb_path
+    input_traj_path: dependency/step5_concoord_disco/output_traj_path
+    output_cpptraj_path: structure_concoord_disco_traj.trr
+  properties:
+    mask: c-alpha
+    format: trr
+
+step8_prody_anm:
+  tool: prody_anm
+  paths:
+    input_pdb_path: dependency/step1_extract_chain/output_structure_path
+    output_pdb_path: structure_prody_anm_traj.pdb
+  properties:
+    selection: backbone
+    num_structs: 300
+    rmsd: 2.0
+
+step9_cpptraj_rms:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step8_prody_anm/output_pdb_path
+    input_traj_path: dependency/step8_prody_anm/output_pdb_path
+    input_exp_path: dependency/step1_extract_chain/output_structure_path
+    output_cpptraj_path: structure_prody_rmsd.dat
+  properties:
+    start: 1
+    end: -1
+    steps: 1
+    mask: c-alpha
+    reference: experimental
+
+step10_cpptraj_convert:
+  tool: cpptraj_convert
+  paths:
+    input_top_path: dependency/step2_cpptraj_mask/output_cpptraj_path
+    input_traj_path: dependency/step8_prody_anm/output_pdb_path
+    output_cpptraj_path: structure_prody_anm_traj.trr
+  properties:
+    mask: c-alpha
+    format: trr
+
+step11_bd_run:
+  tool: bd_run
+  paths:
+    input_pdb_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    output_crd_path: structure_flexserv_bd_ensemble.mdcrd
+    output_log_path: structure_flexserv_bd_ensemble.log
+  properties:
+    time: 30000
+    wfreq: 100
+
+step12_cpptraj_rms:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    input_traj_path: dependency/step11_bd_run/output_crd_path
+    input_exp_path: dependency/step1_extract_chain/output_structure_path
+    output_cpptraj_path: structure_flexserv_bd_rmsd.dat
+    output_traj_path: structure_flexserv_bd_traj_fitted.trr
+  properties:
+    start: 1
+    end: -1
+    steps: 1
+    mask: c-alpha
+    reference: experimental
+
+step13_dmd_run:
+  tool: dmd_run
+  paths:
+    input_pdb_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    output_crd_path: structure_flexserv_dmd_ensemble.mdcrd
+    output_log_path: structure_flexserv_dmd_ensemble.log
+  properties:
+    frames: 300
+
+step14_cpptraj_rms:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    input_traj_path: dependency/step13_dmd_run/output_crd_path
+    input_exp_path: dependency/step1_extract_chain/output_structure_path
+    output_cpptraj_path: structure_flexserv_dmd_rmsd.dat
+    output_traj_path: structure_flexserv_dmd_traj_fitted.trr
+  properties:
+    start: 1
+    end: -1
+    steps: 1
+    mask: c-alpha
+    reference: experimental
+
+step15_nma_run:
+  tool: nma_run
+  paths:
+    input_pdb_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    output_crd_path: structure_flexserv_nma_ensemble.mdcrd
+    output_log_path: structure_flexserv_nma_ensemble.log
+  properties:
+    frames: 300
+
+step16_cpptraj_rms:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    input_traj_path: dependency/step15_nma_run/output_crd_path
+    input_exp_path: dependency/step1_extract_chain/output_structure_path
+    output_cpptraj_path: structure_flexserv_nma_rmsd.dat
+  properties:
+    start: 1
+    end: -1
+    steps: 1
+    mask: c-alpha
+    reference: experimental
+
+step17_cpptraj_convert:
+  tool: cpptraj_convert
+  paths:
+    input_top_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    input_traj_path: dependency/step15_nma_run/output_crd_path
+    output_cpptraj_path: structure_flexserv_nma_ensemble.trr
+  properties:
+    mask: c-alpha
+    format: trr
+  
+step18_nolb_nma:
+  tool: nolb_nma
+  paths:
+    input_pdb_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    output_pdb_path: structure_nolb_ensemble.pdb
+  properties:
+    num_structs: 300
+    rmsd: 4
+
+step19_cpptraj_rms:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    input_traj_path: dependency/step18_nolb_nma/output_pdb_path
+    input_exp_path: dependency/step1_extract_chain/output_structure_path
+    output_cpptraj_path: structure_nolb_rmsd.dat
+  properties:
+    start: 1
+    end: -1
+    steps: 1
+    mask: c-alpha
+    reference: experimental
+
+step20_cpptraj_convert:
+  tool: cpptraj_convert
+  paths:
+    input_top_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    input_traj_path: dependency/step18_nolb_nma/output_pdb_path
+    output_cpptraj_path: structure_nolb_ensemble.trr
+  properties:
+    mask: c-alpha
+    format: trr
+
+step21_imod_imode:
+  tool: imod_imode
+  paths:
+    input_pdb_path: dependency/step1_extract_chain/output_structure_path
+    output_dat_path: structure_imode_evecs.dat
+  properties:
+    cg: 2
+
+step22_imod_imc:
+  tool: imod_imc
+  paths:
+    input_pdb_path: dependency/step1_extract_chain/output_structure_path
+    input_dat_path: dependency/step21_imod_imode/output_dat_path
+    output_traj_path: structure_imc.pdb
+  properties:
+    num_structs: 300
+    num_modes: 10
+    amplitude: 6.0
+
+step23_cpptraj_rms:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step22_imod_imc/output_traj_path
+    input_traj_path: dependency/step22_imod_imc/output_traj_path
+    input_exp_path: dependency/step1_extract_chain/output_structure_path
+    output_cpptraj_path: structure_imods_rmsd.dat
+  properties:
+    start: 1
+    end: -1
+    steps: 1
+    mask: c-alpha
+    reference: experimental
+
+step24_cpptraj_convert:
+  tool: cpptraj_convert
+  paths:
+    input_top_path: dependency/step22_imod_imc/output_traj_path
+    input_traj_path: dependency/step22_imod_imc/output_traj_path
+    output_cpptraj_path: structure_imods_ensemble.trr
+  properties:
+    mask: c-alpha
+    format: trr
+
+step25_trjcat:
+  tool: trjcat
+  paths:
+    input_trj_zip_path: concat_trr.zip
+    output_trj_path: structure_concat_traj.trr
+
+step26_make_ndx:
+  tool: make_ndx
+  paths:
+    input_structure_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    output_ndx_path: structure_gmx_ndx.ndx
+  properties:
+    selection: 3
+
+step27_gmx_cluster:
+  tool: gmx_cluster
+  paths:
+    input_structure_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    input_traj_path: dependency/step25_trjcat/output_trj_path
+    input_index_path: dependency/step26_make_ndx/output_ndx_path
+    output_pdb_path: structure_concat_cluster.pdb
+  properties:
+    fit_selection: System
+    output_selection: System
+    method: linkage
+    cutoff: 0.12
+
+step28_cpptraj_rms:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    input_traj_path: dependency/step27_gmx_cluster/output_pdb_path
+    input_exp_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    output_cpptraj_path: structure_meta_traj_rmsd.dat
+    output_traj_path: structure_meta_traj_fitted.crd
+  properties:
+    start: 1
+    end: -1
+    steps: 1
+    mask: c-alpha
+    reference: experimental
+
+step29_pcz_zip:
+  tool: pcz_zip
+  paths:
+    input_pdb_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    input_crd_path: dependency/step28_cpptraj_rms/output_traj_path
+    output_pcz_path: structure_concat_ensemble.pcz
+  properties:
+    variance: 90
+    neigenv: 10
+
+step30_pcz_zip:
+  tool: pcz_zip
+  paths:
+    input_pdb_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    input_crd_path: dependency/step28_cpptraj_rms/output_traj_path
+    output_pcz_path: structure_concat_ensemble.pcz
+  properties:
+    variance: 90
+    neigenv: 10
+    gauss_rmsd: True
+
+step31_pcz_info:
+  tool: pcz_info
+  paths:
+    input_pcz_path: dependency/step29_pcz_zip/output_pcz_path
+    output_json_path: structure_pcz_report.json
+
+step32_pcz_evecs:
+  tool: pcz_evecs
+  paths:
+    input_pcz_path: dependency/step29_pcz_zip/output_pcz_path
+    output_json_path: structure_pcz_evecs.json
+  properties:
+    eigenvector: 1
+
+step33_pcz_animate:
+  tool: pcz_animate
+  paths:
+    input_pcz_path: dependency/step29_pcz_zip/output_pcz_path
+    output_crd_path: structure_pcz_proj1.crd
+  properties:
+    eigenvector: 1
+
+step34_cpptraj_convert:
+  tool: cpptraj_convert
+  paths:
+    input_top_path: dependency/step3_cpptraj_mask/output_cpptraj_path
+    input_traj_path: dependency/step33_pcz_animate/output_crd_path
+    output_cpptraj_path: structure_pcz_proj1.dcd
+  properties:
+    format: dcd
+
+step35_pcz_bfactor:
+  tool: pcz_bfactor
+  paths:
+    input_pcz_path: dependency/step29_pcz_zip/output_pcz_path
+    output_dat_path: structure_bfactor_all.dat
+    output_pdb_path: structure_bfactor_all.pdb
+  properties:
+    eigenvector: 0
+    pdb: True
+
+step36_pcz_hinges:
+  tool: pcz_hinges
+  paths:
+    input_pcz_path: dependency/step30_pcz_zip/output_pcz_path
+    output_json_path: structure_hinges_bfactor_report.json
+  properties:
+    eigenvector: 0
+    method: Bfactor_slope
+
+step37_pcz_hinges:
+  tool: pcz_hinges
+  paths:
+    input_pcz_path: dependency/step30_pcz_zip/output_pcz_path
+    output_json_path: structure_hinges_dyndom_report.json
+  properties:
+    eigenvector: 0
+    method: Dynamic_domain
+
+step38_pcz_hinges:
+  tool: pcz_hinges
+  paths:
+    input_pcz_path: dependency/step30_pcz_zip/output_pcz_path
+    output_json_path: structure_hinges_fcte_report.json
+  properties:
+    eigenvector: 0
+    method: Force_constant
+
+step39_pcz_stiffness:
+  tool: pcz_stiffness
+  paths:
+    input_pcz_path: dependency/step29_pcz_zip/output_pcz_path
+    output_json_path: structure_pcz_stiffness.json
+  properties:
+    eigenvector: 0
+
+step40_pcz_collectivity:
+  tool: pcz_collectivity
+  paths:
+    input_pcz_path: dependency/step29_pcz_zip/output_pcz_path
+    output_json_path: structure_pcz_collectivity.json
+  properties:
+    eigenvector: 0

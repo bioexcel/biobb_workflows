@@ -29,7 +29,7 @@ This tutorial aims to illustrate the process of **setting up a simulation** syst
 
 * [Common Workflow Language (CWL)](cwl) 
 * [Galaxy](galaxy) 
-* [Jupyter Notebooks](https://github.com/bioexcel/biobb_wf_ligand_parameterization) (this link switches to a different repository) 
+* [Jupyter Notebooks](https://github.com/bioexcel/biobb_wf_md_setup) (this link switches to a different repository) 
 * [Pure Python](python)
 
 ## Copyright & Licensing
