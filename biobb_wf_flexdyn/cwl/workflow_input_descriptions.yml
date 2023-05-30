@@ -10,7 +10,99 @@ step2_cpptraj_mask_output_cpptraj_path: structure_backbone.pdb
 step2_cpptraj_mask_config: '{"mask": "backbone", "format": "pdb"}'
 step3_cpptraj_mask_output_cpptraj_path: structure_ca.pdb
 step3_cpptraj_mask_config: '{"mask": "c-alpha", "format": "pdb"}'
-step4_concoord_dist_output_pdb_path: structure_dist.pdb
-step4_concoord_dist_output_gro_path: structure_dist.gro
-step4_concoord_dist_output_dat_path: structure_dist.dat
-step4_concoord_dist_config: '{"retain_hydrogens": false, "cutoff": 4.0}'
+# step4_concoord_dist_output_pdb_path: structure_dist.pdb
+# step4_concoord_dist_output_gro_path: structure_dist.gro
+# step4_concoord_dist_output_dat_path: structure_dist.dat
+# step4_concoord_dist_config: '{"retain_hydrogens": false, "cutoff": 4.0, "env_vars_dict": {"CONCOORD_OVERWRITE": "1", "CONCOORDLIB": "/usr/local/share/concoord/lib"}}'
+# step5_concoord_disco_output_traj_path: structure_disco_traj.pdb
+# step5_concoord_disco_output_rmsd_path: structure_disco_rmsd.dat
+# step5_concoord_disco_output_bfactor_path: structure_disco_bfactor.pdb
+# step5_concoord_disco_config: '{"vdw": 4, "num_structs": 300, "env_vars_dict": {"CONCOORD_OVERWRITE": "1", "CONCOORDLIB": "/usr/local/share/concoord/lib"}}'
+# step6_cpptraj_rms_output_cpptraj_path: structure_concoord_rmsd.dat
+# step6_cpptraj_rms_config: '{"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}'
+# step7_cpptraj_convert_output_cpptraj_path: structure_concoord_disco_traj.trr
+# step7_cpptraj_convert_config: '{"mask": "c-alpha", "format": "trr"}'
+
+# PRODY WORKS
+step8_prody_anm_output_pdb_path: structure_prody_anm_traj.pdb
+step8_prody_anm_config: '{"selection": "backbone", "num_structs": 300, "rmsd": 2.0}'
+step9_cpptraj_rms_output_cpptraj_path: structure_prody_rmsd.dat
+step9_cpptraj_rms_config: '{"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}'
+step10_cpptraj_convert_output_cpptraj_path: structure_prody_anm_traj.trr
+step10_cpptraj_convert_config: '{"mask": "c-alpha", "format": "trr"}'
+# PRODY WORKS
+
+# BD WORK
+step11_bd_run_output_crd_path: structure_flexserv_bd_ensemble.mdcrd
+step11_bd_run_output_log_path: structure_flexserv_bd_ensemble.log
+step11_bd_run_config: '{"time": 30000, "wfreq": 100}'
+step12_cpptraj_rms_output_cpptraj_path: structure_flexserv_bd_rmsd.dat
+step12_cpptraj_rms_output_traj_path: structure_flexserv_bd_traj_fitted.trr
+step12_cpptraj_rms_config: '{"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}'
+# BD WORK
+
+step13_dmd_run_output_crd_path: structure_flexserv_dmd_ensemble.mdcrd
+step13_dmd_run_output_log_path: structure_flexserv_dmd_ensemble.log
+step13_dmd_run_config: '{"frames": 300}'
+step14_cpptraj_rms_output_cpptraj_path: structure_flexserv_dmd_rmsd.dat
+step14_cpptraj_rms_output_traj_path: structure_flexserv_dmd_traj_fitted.trr
+step14_cpptraj_rms_config: '{"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}'
+
+# PERL ERROR (/usr/local/bin/perl)
+# step15_nma_run_output_crd_path: structure_flexserv_nma_ensemble.mdcrd
+# step15_nma_run_output_log_path: structure_flexserv_nma_ensemble.log
+# step15_nma_run_config: '{"frames": 300}'
+# step16_cpptraj_rms_output_cpptraj_path: structure_flexserv_nma_rmsd.dat
+# step16_cpptraj_rms_config: '{"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}'
+# step17_cpptraj_convert_output_cpptraj_path: structure_flexserv_nma_ensemble.trr
+# step17_cpptraj_convert_config: '{"mask": "c-alpha", "format": "trr"}'
+# PERL ERROR
+
+# NOLB & IMODS WORK
+step18_nolb_nma_output_pdb_path: structure_nolb_ensemble.pdb
+step18_nolb_nma_config: '{"num_structs": 300, "rmsd": 4}'
+step19_cpptraj_rms_output_cpptraj_path: structure_nolb_rmsd.dat
+step19_cpptraj_rms_config: '{"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}'
+step20_cpptraj_convert_output_cpptraj_path: structure_nolb_ensemble.trr
+step20_cpptraj_convert_config: '{"mask": "c-alpha", "format": "trr"}'
+step21_imod_imode_output_dat_path: structure_imode_evecs.dat
+step21_imod_imode_config: '{"cg": 2}'
+step22_imod_imc_output_traj_path: structure_imc.pdb
+step22_imod_imc_config: '{"num_structs": 300, "num_modes": 10, "amplitude": 6.0}'
+step23_cpptraj_rms_output_cpptraj_path: structure_imods_rmsd.dat
+step23_cpptraj_rms_config: '{"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}'
+step24_cpptraj_convert_output_cpptraj_path: structure_imods_ensemble.trr
+step24_cpptraj_convert_config: '{"mask": "c-alpha", "format": "trr"}'
+# NOLB & IMODS WORK
+
+step26_make_ndx_output_ndx_path: structure_gmx_ndx.ndx
+step26_make_ndx_config: '{"selection": 3}'
+step27_gmx_cluster_output_pdb_path: structure_concat_cluster.pdb
+step27_gmx_cluster_config: '{"fit_selection": "System", "output_selection": "System", "method": "linkage", "cutoff": 0.07}'
+step28_cpptraj_rms_output_cpptraj_path: structure_meta_traj_rmsd.dat
+step28_cpptraj_rms_output_traj_path: structure_meta_traj_fitted.crd
+step28_cpptraj_rms_config: '{"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}'
+step29_pcz_zip_output_pcz_path: structure_concat_ensemble.pcz
+step29_pcz_zip_config: '{"variance": 90, "neigenv": 10}'
+step30_pcz_zip_output_pcz_path: structure_concat_ensemble_gaussian.pcz
+step30_pcz_zip_config: '{"variance": 90, "neigenv": 10, "gauss_rmsd": true}'
+step31_pcz_info_output_json_path: structure_pcz_report.json
+step32_pcz_evecs_output_json_path: structure_pcz_evecs.json
+step32_pcz_evecs_config: '{"eigenvector": 1}'
+step33_pcz_animate_output_crd_path: structure_pcz_proj1.crd
+step33_pcz_animate_config: '{"eigenvector": 1}'
+step34_cpptraj_convert_output_cpptraj_path: structure_pcz_proj1.dcd
+step34_cpptraj_convert_config: '{"format": "dcd"}'
+step35_pcz_bfactor_output_dat_path: structure_bfactor_all.dat
+step35_pcz_bfactor_output_pdb_path: structure_bfactor_all.pdb
+step35_pcz_bfactor_config: '{"eigenvector": 0, "pdb": true}'
+step36_pcz_hinges_output_json_path: structure_hinges_bfactor_report.json
+step36_pcz_hinges_config: '{"eigenvector": 0, "method": "Bfactor_slope"}'
+step37_pcz_hinges_output_json_path: structure_hinges_dyndom_report.json
+step37_pcz_hinges_config: '{"eigenvector": 0, "method": "Dynamic_domain"}'
+step38_pcz_hinges_output_json_path: structure_hinges_fcte_report.json
+step38_pcz_hinges_config: '{"eigenvector": 0, "method": "Force_constant"}'
+step39_pcz_stiffness_output_json_path: structure_pcz_stiffness.json
+step39_pcz_stiffness_config: '{"eigenvector": 0}'
+step40_pcz_collectivity_output_json_path: structure_pcz_collectivity.json
+step40_pcz_collectivity_config: '{"eigenvector": 0}'

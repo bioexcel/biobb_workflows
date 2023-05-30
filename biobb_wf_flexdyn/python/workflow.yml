@@ -339,7 +339,7 @@ step30_pcz_zip:
   paths:
     input_pdb_path: dependency/step3_cpptraj_mask/output_cpptraj_path
     input_crd_path: dependency/step28_cpptraj_rms/output_traj_path
-    output_pcz_path: structure_concat_ensemble.pcz
+    output_pcz_path: structure_concat_ensemble_gaussian.pcz
   properties:
     variance: 90
     neigenv: 10

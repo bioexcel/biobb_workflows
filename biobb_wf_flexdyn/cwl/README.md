@@ -13,10 +13,6 @@ Below you can find the list of all the needed **files** for executing this workf
 
 For executing a BioBB workflow in CWL, you should have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git), [cwltool](https://github.com/common-workflow-language/cwltool#install) and [docker](https://docs.docker.com/engine/install/) installed in your computer.
 
-The [**biobb_adapters**](https://github.com/bioexcel/biobb_adapters) must be installed in your computer as well. Biobb_adapters is the Biobb module collection to use the building blocks with several workflow managers, **CWL** amongst them. Install biobb_adapters is very easy, just execute the following script somewhere in your computer:
-
-    git clone git@github.com:bioexcel/biobb_adapters.git
-
 ## <a name="custom-paths"></a>Custom paths
 
 To run this workflow properly in your computer, you should open in a text/code editor the **workflow.cwl** file and replace all the occurrences of **/path/to/** with the absolute path to the folder where you have installed the **biobb_adapters**.
