@@ -15,7 +15,7 @@ inputs:
   step3_cpptraj_mask_output_cpptraj_path: string
   step3_cpptraj_mask_config: string
 
-  # COMMENT IN CASE OF EXECUTION WITH MAC ARM
+  # INIT COMMENT IN CASE OF EXECUTION WITH MAC ARM
   step4_concoord_dist_output_pdb_path: string
   step4_concoord_dist_output_gro_path: string
   step4_concoord_dist_output_dat_path: string
@@ -28,7 +28,7 @@ inputs:
   step6_cpptraj_rms_config: string
   step7_cpptraj_convert_output_cpptraj_path: string
   step7_cpptraj_convert_config: string
-  # COMMENT IN CASE OF EXECUTION WITH MAC ARM
+  # END COMMENT IN CASE OF EXECUTION WITH MAC ARM
 
   step8_prody_anm_output_pdb_path: string
   step8_prody_anm_config: string
@@ -127,7 +127,7 @@ outputs:
     type: File
     outputSource: step3_cpptraj_mask/output_cpptraj_path
 
-  # COMMENT IN CASE OF EXECUTION WITH MAC ARM
+  # INIT COMMENT IN CASE OF EXECUTION WITH MAC ARM
   step4_concoord_dist_out1:
     label: output_pdb_path
     doc: |-
@@ -176,7 +176,7 @@ outputs:
       Path to the output file
     type: File
     outputSource: step7_cpptraj_convert/output_cpptraj_path
-  # COMMENT IN CASE OF EXECUTION WITH MAC ARM
+  # END COMMENT IN CASE OF EXECUTION WITH MAC ARM
 
   step8_prody_anm_out1:
     label: output_pdb_path
@@ -461,7 +461,7 @@ steps:
     out:
     - output_cpptraj_path
 
-  # COMMENT IN CASE OF EXECUTION WITH MAC ARM
+  # INIT COMMENT IN CASE OF EXECUTION WITH MAC ARM
   step4_concoord_dist:
     label: concoord_dist
     doc: |-
@@ -518,7 +518,7 @@ steps:
       output_cpptraj_path: step7_cpptraj_convert_output_cpptraj_path
     out:
     - output_cpptraj_path
-  # COMMENT IN CASE OF EXECUTION WITH MAC ARM
+  # END COMMENT IN CASE OF EXECUTION WITH MAC ARM
 
   step8_prody_anm:
     label: prody_anm
