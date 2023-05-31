@@ -13,7 +13,7 @@ baseCommand: pcz_collectivity
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_flexserv:4.0.0--pypl5321hdfd78af_1
+    dockerPull: quay.io/biocontainers/biobb_flexserv:4.0.2--pypl5321hdfd78af_0
 
 inputs:
   input_pcz_path:

@@ -9,13 +9,15 @@ Below you can find the list of all the needed **files** for executing this workf
 * **workflow.cwl:** the CWL file with all the steps to execute this workflow.
 * **workflow_input_descriptions.yml:** the configuration file with the I/O dependencies and settings for each step of the workflow.
 
+> **IMPORTANT!** The Concoord software doesn't work with dockers on Mac ARM, so in case you are using this type of computer, please comment the steps 4 to 7 as indicated in both **workflow.cwl** and **workflow_input_descriptions.yml** files.
+
 ## <a name="requirements"></a>Requirements
 
 For executing a BioBB workflow in CWL, you should have [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git), [cwltool](https://github.com/common-workflow-language/cwltool#install) and [docker](https://docs.docker.com/engine/install/) installed in your computer.
 
-## <a name="custom-paths"></a>Custom paths
+## <a name="biobb_adapters"></a>Biobb adapters
 
-To run this workflow properly in your computer, you should open in a text/code editor the **workflow.cwl** file and replace all the occurrences of **/path/to/** with the absolute path to the folder where you have installed the **biobb_adapters**.
+Please be sure to have the **biobb_adapters** folder at the same level where the **workflow.cwl** and **workflow_input_descriptions.yml** files are.
 
 ## <a name="run-wf"></a>Run workflow
 
