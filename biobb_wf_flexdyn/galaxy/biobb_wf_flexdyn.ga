@@ -1,0 +1,2121 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "",
+    "format-version": "0.1",
+    "name": "Protein conformational ensembles generation",
+    "steps": {
+        "0": {
+            "annotation": "",
+            "content_id": "biobb_io_pdb_ext",
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [],
+            "label": null,
+            "name": "Pdb",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 0.0,
+                "top": 772.2343546409054
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_io_pdb_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"outname_output_pdb_path\": \"mypdb.pdb\", \"properties\": {\"pdb_code\": \"1ake\", \"filter\": \"[ATOM, MODEL, ENDMDL]\", \"api_id\": \"pdbe\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "1916ee05-27a6-41fc-935e-8222d9eb33f2",
+            "workflow_outputs": [
+                {
+                    "label": "mypdb.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "5c54abe8-223c-41b6-8dad-2b2d7153cde5"
+                }
+            ]
+        },
+        "1": {
+            "annotation": "",
+            "content_id": "biobb_structure_utils_extract_model_ext",
+            "errors": null,
+            "id": 1,
+            "input_connections": {
+                "input_structure_path": {
+                    "id": 0,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "ExtractModel",
+            "outputs": [
+                {
+                    "name": "output_structure_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 270.93750026595814,
+                "top": 759.9062380584801
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_structure_utils_extract_model_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_structure_path\": \"myextract_model.pdb\", \"properties\": {\"models\": \"[1]\", \"binary_path\": \"check_structure\", \"output_format\": \"pdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "b219f249-e13d-4805-9b81-26b3078cd0d8",
+            "workflow_outputs": [
+                {
+                    "label": "myextract_model.pdb",
+                    "output_name": "output_structure_path",
+                    "uuid": "a620b6eb-b442-4b2a-bb09-e4b0bb6dc120"
+                }
+            ]
+        },
+        "2": {
+            "annotation": "",
+            "content_id": "biobb_structure_utils_extract_chain_ext",
+            "errors": null,
+            "id": 2,
+            "input_connections": {
+                "input_structure_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "ExtractChain",
+            "outputs": [
+                {
+                    "name": "output_structure_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 578.8906269547923,
+                "top": 761.062496329778
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_structure_utils_extract_chain_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_structure_path\": \"myextract_monomer.pdb\", \"properties\": {\"chains\": \"[\\\"A\\\"]\", \"permissive\": \"false\", \"binary_path\": \"check_structure\", \"output_format\": \"pdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "caac315c-9699-4c8c-9d62-de40eeb21827",
+            "workflow_outputs": [
+                {
+                    "label": "myextract_monomer.pdb",
+                    "output_name": "output_structure_path",
+                    "uuid": "129de6a6-cc75-41d0-a352-53cb1196ba3d"
+                }
+            ]
+        },
+        "3": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_mask_ext",
+            "errors": null,
+            "id": 3,
+            "input_connections": {
+                "input_top_path": {
+                    "id": 2,
+                    "output_name": "output_structure_path"
+                },
+                "input_traj_path": {
+                    "id": 2,
+                    "output_name": "output_structure_path"
+                }
+            },
+            "inputs": [],
+            "label": "Protein backbone",
+            "name": "CpptrajMask",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 864.1875255851718,
+                "top": 266.1874881382676
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_cpptraj_path": {
+                    "action_arguments": {
+                        "newtype": "pdb"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_cpptraj_path"
+                }
+            },
+            "tool_id": "biobb_analysis_cpptraj_mask_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpptraj_path\": \"mycpptraj_mask_backbone.pdb\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"backbone\", \"format\": \"pdb\", \"binary_path\": \"cpptraj\", \"output_format\": \"mdcrd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "ba7b2a09-c16b-4c29-8d1c-399cf1ad242a",
+            "workflow_outputs": [
+                {
+                    "label": "mycpptraj_mask_backbone",
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "225c1e37-c361-4214-b8f3-7a693bb911f0"
+                }
+            ]
+        },
+        "4": {
+            "annotation": "",
+            "content_id": "biobb_flexdyn_concoord_dist_ext",
+            "errors": null,
+            "id": 4,
+            "input_connections": {
+                "input_structure_path": {
+                    "id": 2,
+                    "output_name": "output_structure_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "ConcoordDist",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                },
+                {
+                    "name": "output_gro_path",
+                    "type": "gro"
+                },
+                {
+                    "name": "output_dat_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 860.2968773537294,
+                "top": 632.3281250930854
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexdyn_concoord_dist_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_dat_path\": \"myconcoord_dist.dat\", \"outname_output_gro_path\": \"myconcoord_dist.gro\", \"outname_output_pdb_path\": \"myconcoord_dist.pdb\", \"properties\": {\"binary_path\": \"dist\", \"vdw\": \"1\", \"bond_angle\": \"1\", \"retain_hydrogens\": \"false\", \"nb_interactions\": \"false\", \"cutoff\": \"4.0\", \"min_distances\": \"50\", \"damp\": \"1.0\", \"fixed_atoms\": \"false\", \"output_format\": \"dat\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "137dd385-8590-4cc1-b444-363df3567133",
+            "workflow_outputs": [
+                {
+                    "label": "myconcoord_dist.dat",
+                    "output_name": "output_dat_path",
+                    "uuid": "cc56a6ec-5a95-4664-8640-0f4491523c54"
+                },
+                {
+                    "label": "myconcoord_dist.gro",
+                    "output_name": "output_gro_path",
+                    "uuid": "b0a07171-2e0a-415d-a88f-160b01f994f7"
+                },
+                {
+                    "label": "myconcoord_dist.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "b7863cfa-2171-4390-ac4b-8a0b7e8bf442"
+                }
+            ]
+        },
+        "5": {
+            "annotation": "",
+            "content_id": "biobb_flexdyn_prody_anm_ext",
+            "errors": null,
+            "id": 5,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 2,
+                    "output_name": "output_structure_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "ProdyAnm",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 1148.4062938033035,
+                "top": 287.968735239324
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexdyn_prody_anm_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_pdb_path\": \"myprody_anm_traj.pdb\", \"properties\": {\"num_structs\": \"300\", \"selection\": \"backbone\", \"cutoff\": \"15.0\", \"gamma\": \"1.0\", \"rmsd\": \"2.0\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "7680e05e-1709-489b-bd6b-86704f364081",
+            "workflow_outputs": [
+                {
+                    "label": "myprody_anm_traj.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "458e3a92-7ec6-4a01-bd21-8530ecf2520f"
+                }
+            ]
+        },
+        "6": {
+            "annotation": "",
+            "content_id": "biobb_flexdyn_imod_imode_ext",
+            "errors": null,
+            "id": 6,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 2,
+                    "output_name": "output_structure_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "ImodImode",
+            "outputs": [
+                {
+                    "name": "output_dat_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 728.1250505320439,
+                "top": 1118.031280079864
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexdyn_imod_imode_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_dat_path\": \"myimod_imode_evecs.dat\", \"properties\": {\"cg\": \"2\", \"output_format\": \"dat\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "f23c817c-c668-402e-9fe1-a548884bf864",
+            "workflow_outputs": [
+                {
+                    "label": "myimod_imode_evecs.dat",
+                    "output_name": "output_dat_path",
+                    "uuid": "e354a1c2-0699-4152-9c11-59313eb41509"
+                }
+            ]
+        },
+        "7": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_mask_ext",
+            "errors": null,
+            "id": 7,
+            "input_connections": {
+                "input_top_path": {
+                    "id": 2,
+                    "output_name": "output_structure_path"
+                },
+                "input_traj_path": {
+                    "id": 2,
+                    "output_name": "output_structure_path"
+                }
+            },
+            "inputs": [],
+            "label": "Protein CA",
+            "name": "CpptrajMask",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 827.2499844680455,
+                "top": 1372.609376875005
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_cpptraj_path": {
+                    "action_arguments": {
+                        "newtype": "pdb"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_cpptraj_path"
+                }
+            },
+            "tool_id": "biobb_analysis_cpptraj_mask_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpptraj_path\": \"mycpptraj_mask_ca.pdb\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"format\": \"pdb\", \"binary_path\": \"cpptraj\", \"output_format\": \"mdcrd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "579abae3-7835-43da-a69b-60e1fb8e0588",
+            "workflow_outputs": [
+                {
+                    "label": "mycpptraj_mask_ca.pdb",
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "79e72f6b-f671-4068-b6fe-edb1acda5c7f"
+                }
+            ]
+        },
+        "8": {
+            "annotation": "",
+            "content_id": "biobb_flexdyn_concoord_disco_ext",
+            "errors": null,
+            "id": 8,
+            "input_connections": {
+                "input_dat_path": {
+                    "id": 4,
+                    "output_name": "output_dat_path"
+                },
+                "input_pdb_path": {
+                    "id": 4,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "ConcoordDisco",
+            "outputs": [
+                {
+                    "name": "output_traj_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_rmsd_path",
+                    "type": "dat"
+                },
+                {
+                    "name": "output_bfactor_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 1128.6718604387927,
+                "top": 604.3593728324413
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexdyn_concoord_disco_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_dat_path\": {\"__class__\": \"ConnectedValue\"}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_bfactor_path\": \"myconcoord_disco_bfactor.pdb\", \"outname_output_rmsd_path\": \"myconcoord_disco_rmsd.dat\", \"outname_output_traj_path\": \"myconcoord_disco_traj.pdb\", \"properties\": {\"binary_path\": \"disco\", \"vdw\": \"4\", \"num_structs\": \"300\", \"num_iterations\": \"2500\", \"chirality_check\": \"2\", \"bs\": \"0\", \"nofit\": \"false\", \"seed\": \"741265\", \"violation\": \"1.0\", \"convergence\": \"50\", \"trials\": \"25\", \"damp\": \"1\", \"dyn\": \"1\", \"bump\": \"false\", \"pairlist_freq\": \"10\", \"cutoff\": \"0.5\", \"ref\": \"false\", \"scale\": \"1\", \"output_format\": \"pdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "398a5273-126e-4491-a44c-32124c610cc4",
+            "workflow_outputs": [
+                {
+                    "label": "myconcoord_disco_rmsd.dat",
+                    "output_name": "output_rmsd_path",
+                    "uuid": "441bc6c3-8d8e-45b4-80fc-c720f9dc705c"
+                },
+                {
+                    "label": "myconcoord_disco_bfactor.pdb",
+                    "output_name": "output_bfactor_path",
+                    "uuid": "8587bf0a-ea1b-42c6-9e10-be6591dc84b9"
+                },
+                {
+                    "label": "myconcoord_disco_traj.pdb",
+                    "output_name": "output_traj_path",
+                    "uuid": "2e555d33-e04c-4a83-b667-0bafd737f31b"
+                }
+            ]
+        },
+        "9": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_rms_ext",
+            "errors": null,
+            "id": 9,
+            "input_connections": {
+                "input_exp_path": {
+                    "id": 2,
+                    "output_name": "output_structure_path"
+                },
+                "input_top_path": {
+                    "id": 5,
+                    "output_name": "output_pdb_path"
+                },
+                "input_traj_path": {
+                    "id": 5,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": "CpptrajRms Prody",
+            "name": "CpptrajRms",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_traj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1524.6406161037007,
+                "top": 0.0
+            },
+            "post_job_actions": {
+                "HideDatasetActionoutput_traj_path": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "output_traj_path"
+                }
+            },
+            "tool_id": "biobb_analysis_cpptraj_rms_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_exp_path\": {\"__class__\": \"ConnectedValue\"}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpptraj_path\": \"mycpptraj_prody_rms.dat\", \"outname_output_traj_path\": \"mycpptraj_rms.mdcrd\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"reference\": \"experimental\", \"nofit\": \"false\", \"norotate\": \"false\", \"nomod\": \"false\", \"binary_path\": \"cpptraj\", \"output_cpptraj_path_format\": \"dat\", \"output_traj_path_format\": \"mdcrd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "3f27c127-9d3a-4294-9c08-139ecefdb5a9",
+            "workflow_outputs": [
+                {
+                    "label": "mycpptraj_prody_rms.dat",
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "d64b9948-6bbd-4975-b68e-e7bf5d1693e6"
+                }
+            ]
+        },
+        "10": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_convert_ext",
+            "errors": null,
+            "id": 10,
+            "input_connections": {
+                "input_top_path": {
+                    "id": 3,
+                    "output_name": "output_cpptraj_path"
+                },
+                "input_traj_path": {
+                    "id": 5,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": "CpptrajConvert Prody",
+            "name": "CpptrajConvert",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1822.4063125267555,
+                "top": 23.437485372303072
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_cpptraj_path": {
+                    "action_arguments": {
+                        "newtype": "trr"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_cpptraj_path"
+                }
+            },
+            "tool_id": "biobb_analysis_cpptraj_convert_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpptraj_path\": \"mycpptraj_prody_anm_traj.trr\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"format\": \"trr\", \"binary_path\": \"cpptraj\", \"output_format\": \"mdcrd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "648eefcb-d46c-4304-a2f8-95bc4f5818be",
+            "workflow_outputs": [
+                {
+                    "label": "mycpptraj_prody_anm_traj.trr",
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "60fdfc39-0d63-479d-81a4-d536c7b64db4"
+                }
+            ]
+        },
+        "11": {
+            "annotation": "",
+            "content_id": "biobb_flexdyn_imod_imc_ext",
+            "errors": null,
+            "id": 11,
+            "input_connections": {
+                "input_dat_path": {
+                    "id": 6,
+                    "output_name": "output_dat_path"
+                },
+                "input_pdb_path": {
+                    "id": 2,
+                    "output_name": "output_structure_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "ImodImc",
+            "outputs": [
+                {
+                    "name": "output_traj_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 964.7968888431205,
+                "top": 954.1874574998915
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexdyn_imod_imc_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_dat_path\": {\"__class__\": \"ConnectedValue\"}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_traj_path\": \"myimod_imc.pdb\", \"properties\": {\"num_structs\": \"300\", \"num_modes\": \"10\", \"amplitude\": \"6\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "b94bf5e4-04d9-402c-b441-46d471198b58",
+            "workflow_outputs": [
+                {
+                    "label": "myimod_imc.pdb",
+                    "output_name": "output_traj_path",
+                    "uuid": "eaf2cb2a-42df-4e86-ba13-f67ba4ef6bf1"
+                }
+            ]
+        },
+        "12": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_bd_run_ext",
+            "errors": null,
+            "id": 12,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "BdRun",
+            "outputs": [
+                {
+                    "name": "output_log_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_crd_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1152.8125178191945,
+                "top": 1429.90620401584
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_crd_path": {
+                    "action_arguments": {
+                        "newtype": "mdcrd"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_crd_path"
+                }
+            },
+            "tool_id": "biobb_flexserv_bd_run_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_crd_path\": \"mybd_flexserv_bd_ensemble.mdcrd\", \"outname_output_log_path\": \"mybd_flexserv_bd_ensemble.log\", \"properties\": {\"binary_path\": \"bd\", \"time\": \"30000\", \"dt\": \"1e-15\", \"wfreq\": \"100\", \"output_log_path_format\": \"log\", \"output_crd_path_format\": \"crd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "aa181f1f-d10d-440a-a2a2-7d849beb1888",
+            "workflow_outputs": [
+                {
+                    "label": "mybd_flexserv_bd_ensemble.mdcrd",
+                    "output_name": "output_crd_path",
+                    "uuid": "a755aab2-4aa0-426c-870a-142117081929"
+                },
+                {
+                    "label": "mybd_flexserv_bd_ensemble.log",
+                    "output_name": "output_log_path",
+                    "uuid": "eceb971e-8062-4a37-8a37-f1b13fc62492"
+                }
+            ]
+        },
+        "13": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_dmd_run_ext",
+            "errors": null,
+            "id": 13,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "DmdRun",
+            "outputs": [
+                {
+                    "name": "output_log_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_crd_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1144.3281557314615,
+                "top": 1706.9062303988862
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_crd_path": {
+                    "action_arguments": {
+                        "newtype": "mdcrd"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_crd_path"
+                }
+            },
+            "tool_id": "biobb_flexserv_dmd_run_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_crd_path\": \"mydmd_flexserv_dmd_ensemble.mdcrd\", \"outname_output_log_path\": \"mydmd_flexserv_dmd_ensemble.log\", \"properties\": {\"binary_path\": \"dmdgoopt\", \"dt\": \"1e-12\", \"temperature\": \"300\", \"frames\": \"300\", \"output_log_path_format\": \"log\", \"output_crd_path_format\": \"crd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "9ef5b294-1bf5-4148-a3b9-b8e80009a201",
+            "workflow_outputs": [
+                {
+                    "label": "mydmd_flexserv_dmd_ensemble.mdcrd",
+                    "output_name": "output_crd_path",
+                    "uuid": "07b9f078-e7ed-4932-81d9-5196350bd380"
+                },
+                {
+                    "label": "mydmd_flexserv_dmd_ensemble.log",
+                    "output_name": "output_log_path",
+                    "uuid": "d774a14d-da84-4915-a328-d66d7d4c2141"
+                }
+            ]
+        },
+        "14": {
+            "annotation": "",
+            "content_id": "biobb_flexdyn_nolb_nma_ext",
+            "errors": null,
+            "id": 14,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "NolbNma",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 1080.03122561164,
+                "top": 2126.7811747604464
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexdyn_nolb_nma_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_pdb_path\": \"mynolb_ensemble.pdb\", \"properties\": {\"num_structs\": \"300\", \"cutoff\": \"5.0\", \"rmsd\": \"4.0\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "e9cfa083-7d56-48c1-9cb8-bb5abf436cda",
+            "workflow_outputs": [
+                {
+                    "label": "mynolb_ensemble.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "4d27c0d4-6b72-4709-8b1c-0c8abb4a0049"
+                }
+            ]
+        },
+        "15": {
+            "annotation": "",
+            "content_id": "biobb_gromacs_make_ndx_ext",
+            "errors": null,
+            "id": 15,
+            "input_connections": {
+                "input_structure_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool MakeNdx",
+                    "name": "input_ndx_path"
+                }
+            ],
+            "label": null,
+            "name": "MakeNdx",
+            "outputs": [
+                {
+                    "name": "output_ndx_path",
+                    "type": "ndx"
+                }
+            ],
+            "position": {
+                "left": 2069.1718787367117,
+                "top": 1391.6249998936169
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_gromacs_make_ndx_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_ndx_path\": {\"__class__\": \"RuntimeValue\"}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_ndx_path\": \"mymake_gmx_ndx.ndx\", \"properties\": {\"selection\": \"3\", \"gmx_lib\": \"\", \"binary_path\": \"gmx\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "94da0922-024a-4d94-9428-7023dc6af818",
+            "workflow_outputs": [
+                {
+                    "label": "mymake_gmx_ndx.ndx",
+                    "output_name": "output_ndx_path",
+                    "uuid": "1f5772cd-b5c6-49df-8163-8babc1d67a66"
+                }
+            ]
+        },
+        "16": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_nma_run_ext",
+            "errors": null,
+            "id": 16,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "NmaRun",
+            "outputs": [
+                {
+                    "name": "output_log_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_crd_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 934.3593643217813,
+                "top": 2476.1718540557977
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_crd_path": {
+                    "action_arguments": {
+                        "newtype": "mdcrd"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_crd_path"
+                }
+            },
+            "tool_id": "biobb_flexserv_nma_run_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_crd_path\": \"mynma_flexserv_nma_ensemble.mdcrd\", \"outname_output_log_path\": \"mynma_flexserv_nma_ensemble.log\", \"properties\": {\"binary_path\": \"diaghess\", \"frames\": \"300\", \"nvecs\": \"50\", \"output_log_path_format\": \"log\", \"output_crd_path_format\": \"crd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "7be484df-bd5a-4d9e-8422-0a3d8960619c",
+            "workflow_outputs": [
+                {
+                    "label": "mynma_flexserv_nma_ensemble.log",
+                    "output_name": "output_log_path",
+                    "uuid": "ab88fe6d-b7f7-44f8-8aa0-4c06660a5c8c"
+                },
+                {
+                    "label": "mynma_flexserv_nma_ensemble.mdcrd",
+                    "output_name": "output_crd_path",
+                    "uuid": "e38280b2-ba3a-43d2-9ca7-45a39f45da68"
+                }
+            ]
+        },
+        "17": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_rms_ext",
+            "errors": null,
+            "id": 17,
+            "input_connections": {
+                "input_exp_path": {
+                    "id": 2,
+                    "output_name": "output_structure_path"
+                },
+                "input_top_path": {
+                    "id": 4,
+                    "output_name": "output_pdb_path"
+                },
+                "input_traj_path": {
+                    "id": 8,
+                    "output_name": "output_traj_path"
+                }
+            },
+            "inputs": [],
+            "label": "CpptrajRms Concoord",
+            "name": "CpptrajRms",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_traj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1446.468671834907,
+                "top": 558.3281063696334
+            },
+            "post_job_actions": {
+                "HideDatasetActionoutput_traj_path": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "output_traj_path"
+                }
+            },
+            "tool_id": "biobb_analysis_cpptraj_rms_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_exp_path\": {\"__class__\": \"ConnectedValue\"}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpptraj_path\": \"mycpptraj_concoord_rmsd.dat\", \"outname_output_traj_path\": \"mycpptraj_rms.mdcrd\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"reference\": \"experimental\", \"nofit\": \"false\", \"norotate\": \"false\", \"nomod\": \"false\", \"binary_path\": \"cpptraj\", \"output_cpptraj_path_format\": \"dat\", \"output_traj_path_format\": \"mdcrd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "d5e5936d-3a03-41e1-bd54-23b815cda2f1",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "f175ec8b-3df4-4b5b-85d1-4a6e8e79beb7"
+                }
+            ]
+        },
+        "18": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_convert_ext",
+            "errors": null,
+            "id": 18,
+            "input_connections": {
+                "input_top_path": {
+                    "id": 4,
+                    "output_name": "output_pdb_path"
+                },
+                "input_traj_path": {
+                    "id": 8,
+                    "output_name": "output_traj_path"
+                }
+            },
+            "inputs": [],
+            "label": "CpptrajConvert Concoord",
+            "name": "CpptrajConvert",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1742.0312988033163,
+                "top": 591.2656372739675
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_analysis_cpptraj_convert_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpptraj_path\": \"mycpptraj_disco_traj.trr\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"format\": \"trr\", \"binary_path\": \"cpptraj\", \"output_format\": \"mdcrd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "39492fd2-1ec0-4d4b-97d9-cef2db4a4bca",
+            "workflow_outputs": [
+                {
+                    "label": "mycpptraj_disco_traj.trr",
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "7d02c6b2-4d09-4537-8c62-6af26aa62e89"
+                }
+            ]
+        },
+        "19": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_rms_ext",
+            "errors": null,
+            "id": 19,
+            "input_connections": {
+                "input_exp_path": {
+                    "id": 2,
+                    "output_name": "output_structure_path"
+                },
+                "input_top_path": {
+                    "id": 11,
+                    "output_name": "output_traj_path"
+                },
+                "input_traj_path": {
+                    "id": 11,
+                    "output_name": "output_traj_path"
+                }
+            },
+            "inputs": [],
+            "label": "CpptrajRms Imod",
+            "name": "CpptrajRms",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_traj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1217.8749818084643,
+                "top": 899.4531049866512
+            },
+            "post_job_actions": {
+                "HideDatasetActionoutput_traj_path": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "output_traj_path"
+                }
+            },
+            "tool_id": "biobb_analysis_cpptraj_rms_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_exp_path\": {\"__class__\": \"ConnectedValue\"}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpptraj_path\": \"mycpptraj_rms.dat\", \"outname_output_traj_path\": \"mycpptraj_rms.mdcrd\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"reference\": \"experimental\", \"nofit\": \"false\", \"norotate\": \"false\", \"nomod\": \"false\", \"binary_path\": \"cpptraj\", \"output_cpptraj_path_format\": \"dat\", \"output_traj_path_format\": \"mdcrd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "c9cc62aa-5356-4ba8-a591-9ea4312b116e",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "caff7087-5728-4f85-a899-6c8f97df5edc"
+                }
+            ]
+        },
+        "20": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_convert_ext",
+            "errors": null,
+            "id": 20,
+            "input_connections": {
+                "input_top_path": {
+                    "id": 11,
+                    "output_name": "output_traj_path"
+                },
+                "input_traj_path": {
+                    "id": 11,
+                    "output_name": "output_traj_path"
+                }
+            },
+            "inputs": [],
+            "label": "CpptrajConvert Imod",
+            "name": "CpptrajConvert",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1698.0938249204041,
+                "top": 1060.7500274468787
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_cpptraj_path": {
+                    "action_arguments": {
+                        "newtype": "trr"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_cpptraj_path"
+                }
+            },
+            "tool_id": "biobb_analysis_cpptraj_convert_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpptraj_path\": \"mycpptraj_imods_ensemble.trr\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"format\": \"trr\", \"binary_path\": \"cpptraj\", \"output_format\": \"mdcrd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "5605bda2-ab8a-438e-8f1d-a17de3042e59",
+            "workflow_outputs": [
+                {
+                    "label": "mycpptraj_imods_ensemble.trr",
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "b3bf387e-6578-42f0-a7fe-d9ed9a04f031"
+                }
+            ]
+        },
+        "21": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_rms_ext",
+            "errors": null,
+            "id": 21,
+            "input_connections": {
+                "input_exp_path": {
+                    "id": 2,
+                    "output_name": "output_structure_path"
+                },
+                "input_top_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                },
+                "input_traj_path": {
+                    "id": 12,
+                    "output_name": "output_crd_path"
+                }
+            },
+            "inputs": [],
+            "label": "CpptrajRms BD",
+            "name": "CpptrajRms",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_traj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1448.7968479919523,
+                "top": 1416.3593609175173
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_traj_path": {
+                    "action_arguments": {
+                        "newtype": "trr"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_traj_path"
+                }
+            },
+            "tool_id": "biobb_analysis_cpptraj_rms_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_exp_path\": {\"__class__\": \"ConnectedValue\"}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpptraj_path\": \"mycpptraj_flexserv_bd_rmsd.dat\", \"outname_output_traj_path\": \"mycpptraj_flexserv_bd_traj_fitted.trr\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"reference\": \"experimental\", \"nofit\": \"false\", \"norotate\": \"false\", \"nomod\": \"false\", \"binary_path\": \"cpptraj\", \"output_cpptraj_path_format\": \"dat\", \"output_traj_path_format\": \"mdcrd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "f112e2e2-da31-4416-8fde-d7b1de5e3325",
+            "workflow_outputs": [
+                {
+                    "label": "mycpptraj_flexserv_bd_rmsd.dat",
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "1a821e36-23df-4ee9-bb7d-8e396b2a9f4d"
+                },
+                {
+                    "label": "mycpptraj_flexserv_bd_traj_fitted.trr",
+                    "output_name": "output_traj_path",
+                    "uuid": "03655d06-757c-427b-ab6d-7dabe746b057"
+                }
+            ]
+        },
+        "22": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_rms_ext",
+            "errors": null,
+            "id": 22,
+            "input_connections": {
+                "input_exp_path": {
+                    "id": 2,
+                    "output_name": "output_structure_path"
+                },
+                "input_top_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                },
+                "input_traj_path": {
+                    "id": 13,
+                    "output_name": "output_crd_path"
+                }
+            },
+            "inputs": [],
+            "label": "CpptrajRms DMD",
+            "name": "CpptrajRms",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_traj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1759.2030873270317,
+                "top": 1581.5780806248868
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_traj_path": {
+                    "action_arguments": {
+                        "newtype": "trr"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_traj_path"
+                }
+            },
+            "tool_id": "biobb_analysis_cpptraj_rms_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_exp_path\": {\"__class__\": \"ConnectedValue\"}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpptraj_path\": \"mycpptraj_flexserv_dmd_rmsd.dat\", \"outname_output_traj_path\": \"mycpptraj_flexserv_dmd_traj_fitted.trr\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"reference\": \"experimental\", \"nofit\": \"false\", \"norotate\": \"false\", \"nomod\": \"false\", \"binary_path\": \"cpptraj\", \"output_cpptraj_path_format\": \"dat\", \"output_traj_path_format\": \"trr\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "cd7f9f9b-066a-4230-a009-ed195f390be6",
+            "workflow_outputs": [
+                {
+                    "label": "mycpptraj_flexserv_dmd_traj_fitted.trr",
+                    "output_name": "output_traj_path",
+                    "uuid": "0e6bf7c0-5031-4b42-98c9-53a814002b50"
+                },
+                {
+                    "label": "mycpptraj_flexserv_dmd_rmsd.dat",
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "7f70409d-fda4-4a72-9c91-ff649bc45ee8"
+                }
+            ]
+        },
+        "23": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_rms_ext",
+            "errors": null,
+            "id": 23,
+            "input_connections": {
+                "input_exp_path": {
+                    "id": 2,
+                    "output_name": "output_structure_path"
+                },
+                "input_top_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                },
+                "input_traj_path": {
+                    "id": 14,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": "CpptrajRms NOLB",
+            "name": "CpptrajRms",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_traj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1447.5156532314552,
+                "top": 1903.6561795476925
+            },
+            "post_job_actions": {
+                "HideDatasetActionoutput_traj_path": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "output_traj_path"
+                }
+            },
+            "tool_id": "biobb_analysis_cpptraj_rms_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_exp_path\": {\"__class__\": \"ConnectedValue\"}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpptraj_path\": \"mycpptraj_nolb_rmsd.dat\", \"outname_output_traj_path\": \"mycpptraj_rms.mdcrd\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"reference\": \"experimental\", \"nofit\": \"false\", \"norotate\": \"false\", \"nomod\": \"false\", \"binary_path\": \"cpptraj\", \"output_cpptraj_path_format\": \"dat\", \"output_traj_path_format\": \"mdcrd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "870fcbab-c2bc-4fba-bdca-9731cb639f23",
+            "workflow_outputs": [
+                {
+                    "label": "mycpptraj_nolb_rmsd.dat",
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "9659c686-ce03-4d94-9107-542a6cad2912"
+                }
+            ]
+        },
+        "24": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_convert_ext",
+            "errors": null,
+            "id": 24,
+            "input_connections": {
+                "input_top_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                },
+                "input_traj_path": {
+                    "id": 14,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": "CpptrajConvert NOLB",
+            "name": "CpptrajConvert",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1804.015627273942,
+                "top": 2079.98428932159
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_cpptraj_path": {
+                    "action_arguments": {
+                        "newtype": "trr"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_cpptraj_path"
+                }
+            },
+            "tool_id": "biobb_analysis_cpptraj_convert_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpptraj_path\": \"mycpptraj_nolb_ensemble.trr\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"format\": \"trr\", \"binary_path\": \"cpptraj\", \"output_format\": \"trr\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "c52146c7-3118-443a-bb77-2f3e1a16509d",
+            "workflow_outputs": [
+                {
+                    "label": "mycpptraj_nolb_ensemble.trr",
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "b5e0f660-cff8-4af6-8997-0b26760a680a"
+                }
+            ]
+        },
+        "25": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_rms_ext",
+            "errors": null,
+            "id": 25,
+            "input_connections": {
+                "input_exp_path": {
+                    "id": 2,
+                    "output_name": "output_structure_path"
+                },
+                "input_top_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                },
+                "input_traj_path": {
+                    "id": 16,
+                    "output_name": "output_crd_path"
+                }
+            },
+            "inputs": [],
+            "label": "CpptrajRms NMA",
+            "name": "CpptrajRms",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_traj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1319.2343895346116,
+                "top": 2479.125053085242
+            },
+            "post_job_actions": {
+                "HideDatasetActionoutput_traj_path": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "output_traj_path"
+                }
+            },
+            "tool_id": "biobb_analysis_cpptraj_rms_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_exp_path\": {\"__class__\": \"ConnectedValue\"}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpptraj_path\": \"mycpptraj_flexserv_nma_rmsd.dat\", \"outname_output_traj_path\": \"mycpptraj_rms.mdcrd\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"reference\": \"experimental\", \"nofit\": \"false\", \"norotate\": \"false\", \"nomod\": \"false\", \"binary_path\": \"cpptraj\", \"output_cpptraj_path_format\": \"dat\", \"output_traj_path_format\": \"mdcrd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "5e51b912-bf39-4767-9966-77dd0f5121a4",
+            "workflow_outputs": [
+                {
+                    "label": "mycpptraj_flexserv_nma_rmsd.dat",
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "0b6d3dc5-234e-4864-8709-3233cc4c7294"
+                }
+            ]
+        },
+        "26": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_convert_ext",
+            "errors": null,
+            "id": 26,
+            "input_connections": {
+                "input_top_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                },
+                "input_traj_path": {
+                    "id": 16,
+                    "output_name": "output_crd_path"
+                }
+            },
+            "inputs": [],
+            "label": "CpptrajConvert NMA",
+            "name": "CpptrajConvert",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1704.8594592156408,
+                "top": 2464.562462712671
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_cpptraj_path": {
+                    "action_arguments": {
+                        "newtype": "trr"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_cpptraj_path"
+                }
+            },
+            "tool_id": "biobb_analysis_cpptraj_convert_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpptraj_path\": \"mycpptraj_flexserv_nma_ensemble.trr\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"format\": \"trr\", \"binary_path\": \"cpptraj\", \"output_format\": \"mdcrd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "cbf1eea0-ddd3-4775-9ec8-51b33460b7de",
+            "workflow_outputs": [
+                {
+                    "label": "mycpptraj_flexserv_nma_ensemble.trr",
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "ed195c3e-ccdd-4f31-9470-3c5fc9d5307d"
+                }
+            ]
+        },
+        "27": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/cmonjeau/ziptool/zip/1.0.1",
+            "errors": null,
+            "id": 27,
+            "input_connections": {
+                "files_0|file": {
+                    "id": 10,
+                    "output_name": "output_cpptraj_path"
+                },
+                "files_1|file": {
+                    "id": 18,
+                    "output_name": "output_cpptraj_path"
+                },
+                "files_2|file": {
+                    "id": 22,
+                    "output_name": "output_traj_path"
+                },
+                "files_3|file": {
+                    "id": 20,
+                    "output_name": "output_cpptraj_path"
+                },
+                "files_4|file": {
+                    "id": 26,
+                    "output_name": "output_cpptraj_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Zip",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "zip"
+                }
+            ],
+            "position": {
+                "left": 2159.6561948668805,
+                "top": 898.2656125930534
+            },
+            "post_job_actions": {},
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/cmonjeau/ziptool/zip/1.0.1",
+            "tool_shed_repository": {
+                "changeset_revision": "e466f86a4520",
+                "name": "ziptool",
+                "owner": "cmonjeau",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"files\": [{\"__index__\": 0, \"file_name\": \"mycpptraj_prody_anm_traj.trr\", \"file\": {\"__class__\": \"ConnectedValue\"}}, {\"__index__\": 1, \"file_name\": \"mycpptraj_disco_traj.trr\", \"file\": {\"__class__\": \"ConnectedValue\"}}, {\"__index__\": 2, \"file_name\": \"mycpptraj_flexserv_dmd_traj_fitted.trr\", \"file\": {\"__class__\": \"ConnectedValue\"}}, {\"__index__\": 3, \"file_name\": \"mycpptraj_imods_ensemble.trr\", \"file\": {\"__class__\": \"ConnectedValue\"}}, {\"__index__\": 4, \"file_name\": \"mycpptraj_flexserv_nma_ensemble.trr\", \"file\": {\"__class__\": \"ConnectedValue\"}}], \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.1",
+            "type": "tool",
+            "uuid": "00b13571-b550-49ee-8fca-b309ad4ddca7",
+            "workflow_outputs": [
+                {
+                    "label": "concat_traj.zip",
+                    "output_name": "output",
+                    "uuid": "834618e0-b38c-4f4b-82bf-2db736c92854"
+                }
+            ]
+        },
+        "28": {
+            "annotation": "",
+            "content_id": "biobb_gromacs_trjcat_ext",
+            "errors": null,
+            "id": 28,
+            "input_connections": {
+                "input_trj_zip_path": {
+                    "id": 27,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Trjcat",
+            "outputs": [
+                {
+                    "name": "output_trj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 2288.156267633024,
+                "top": 1158.7812564627825
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_trj_path": {
+                    "action_arguments": {
+                        "newtype": "trr"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_trj_path"
+                }
+            },
+            "tool_id": "biobb_gromacs_trjcat_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_trj_zip_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_trj_path\": \"mytrjcat_concat_traj.trr\", \"properties\": {\"concatenate\": \"true\", \"gmx_lib\": \"\", \"binary_path\": \"gmx\", \"output_format\": \"pdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "073b10ad-ea74-4de0-b72a-c1449c43df02",
+            "workflow_outputs": [
+                {
+                    "label": "mytrjcat_concat_traj.trr",
+                    "output_name": "output_trj_path",
+                    "uuid": "84f263d9-1634-4eb5-991c-b9e49cdfab57"
+                }
+            ]
+        },
+        "29": {
+            "annotation": "",
+            "content_id": "biobb_analysis_gmx_cluster_ext",
+            "errors": null,
+            "id": 29,
+            "input_connections": {
+                "input_index_path": {
+                    "id": 15,
+                    "output_name": "output_ndx_path"
+                },
+                "input_structure_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                },
+                "input_traj_path": {
+                    "id": 28,
+                    "output_name": "output_trj_path"
+                }
+            },
+            "inputs": [],
+            "label": "GmxCluster Ensemble",
+            "name": "GmxCluster",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_cluster_log_path",
+                    "type": "log"
+                },
+                {
+                    "name": "output_rmsd_cluster_xpm_path",
+                    "type": "xpm"
+                },
+                {
+                    "name": "output_rmsd_dist_xvg_path",
+                    "type": "xvg"
+                }
+            ],
+            "position": {
+                "left": 2402.9688160905944,
+                "top": 1355.2969071410396
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_pdb_path": {
+                    "action_arguments": {
+                        "newtype": "pdb"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "tool_id": "biobb_analysis_gmx_cluster_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_index_path\": {\"__class__\": \"ConnectedValue\"}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cluster_log_path\": \"mygmx_cluster.log\", \"outname_output_pdb_path\": \"mygmx_concat.cluster.pdb\", \"outname_output_rmsd_cluster_xpm_path\": \"mygmx_cluster.xpm\", \"outname_output_rmsd_dist_xvg_path\": \"mygmx_cluster.xvg\", \"properties\": {\"fit_selection\": \"System\", \"output_selection\": \"System\", \"dista\": \"false\", \"nofit\": \"false\", \"method\": \"linkage\", \"cutoff\": \"0.12\", \"binary_path\": \"gmx\", \"output_format\": \"xtc\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "fcae496a-d084-4c23-bc0e-64571880167c",
+            "workflow_outputs": [
+                {
+                    "label": "mygmx_cluster.xvg",
+                    "output_name": "output_rmsd_dist_xvg_path",
+                    "uuid": "29308cee-77a4-41a6-abee-512e07369902"
+                },
+                {
+                    "label": "mygmx_cluster.log",
+                    "output_name": "output_cluster_log_path",
+                    "uuid": "4d2ec89a-9202-4c33-a4ee-867f42bbb7a7"
+                },
+                {
+                    "label": "mygmx_concat.cluster.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "175d1f25-55c9-499c-b6b3-440fa5619083"
+                },
+                {
+                    "label": "mygmx_cluster.xpm",
+                    "output_name": "output_rmsd_cluster_xpm_path",
+                    "uuid": "6c50b290-f799-4859-97aa-bba50970284f"
+                }
+            ]
+        },
+        "30": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_rms_ext",
+            "errors": null,
+            "id": 30,
+            "input_connections": {
+                "input_exp_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                },
+                "input_top_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                },
+                "input_traj_path": {
+                    "id": 29,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": "CpptrajRms Ensemble",
+            "name": "CpptrajRms",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_traj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 2689.156270186222,
+                "top": 1343.093727047814
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_traj_path": {
+                    "action_arguments": {
+                        "newtype": "crd"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_traj_path"
+                }
+            },
+            "tool_id": "biobb_analysis_cpptraj_rms_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_exp_path\": {\"__class__\": \"ConnectedValue\"}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpptraj_path\": \"mycpptraj_meta_traj_rmsd.dat\", \"outname_output_traj_path\": \"mycpptraj_meta_traj_fitted.crd\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"reference\": \"experimental\", \"nofit\": \"false\", \"norotate\": \"false\", \"nomod\": \"false\", \"binary_path\": \"cpptraj\", \"output_cpptraj_path_format\": \"dat\", \"output_traj_path_format\": \"mdcrd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "357560b0-2923-4e0d-93e8-4065f7a35c9d",
+            "workflow_outputs": [
+                {
+                    "label": "mycpptraj_meta_traj_rmsd.dat",
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "c3dfe62f-fb6c-4e33-b920-aea354bebbfe"
+                },
+                {
+                    "label": "mycpptraj_meta_traj_fitted.crd",
+                    "output_name": "output_traj_path",
+                    "uuid": "17590cd2-1190-4fa5-9580-b1fd83e2ae1d"
+                }
+            ]
+        },
+        "31": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_zip_ext",
+            "errors": null,
+            "id": 31,
+            "input_connections": {
+                "input_crd_path": {
+                    "id": 30,
+                    "output_name": "output_traj_path"
+                },
+                "input_pdb_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "PczZip",
+            "outputs": [
+                {
+                    "name": "output_pcz_path",
+                    "type": "pcz"
+                }
+            ],
+            "position": {
+                "left": 2955.3123539889893,
+                "top": 1425.593767473449
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_pcz_path": {
+                    "action_arguments": {
+                        "newtype": "pcz"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_pcz_path"
+                },
+                "RenameDatasetActionoutput_pcz_path": {
+                    "action_arguments": {
+                        "newname": "mypcz_concat_ensemble.pcz"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "tool_id": "biobb_flexserv_pcz_zip_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_crd_path\": {\"__class__\": \"ConnectedValue\"}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_pcz_path\": \"mypcz_concat_ensemble.pcz\", \"properties\": {\"binary_path\": \"pcazip\", \"neigenv\": \"10\", \"variance\": \"90\", \"verbose\": \"false\", \"gauss_rmsd\": \"false\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "75cd9bde-72b5-43f8-801d-1aaeeda858cd",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_pcz_path",
+                    "uuid": "ae7a228b-3e2a-4229-92d7-5ce1eec2ee3c"
+                }
+            ]
+        },
+        "32": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_zip_ext",
+            "errors": null,
+            "id": 32,
+            "input_connections": {
+                "input_crd_path": {
+                    "id": 30,
+                    "output_name": "output_traj_path"
+                },
+                "input_pdb_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                }
+            },
+            "inputs": [],
+            "label": "PczZip Gaussian",
+            "name": "PczZip",
+            "outputs": [
+                {
+                    "name": "output_pcz_path",
+                    "type": "pcz"
+                }
+            ],
+            "position": {
+                "left": 2718.6094517688134,
+                "top": 1879.562501010641
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_pcz_path": {
+                    "action_arguments": {
+                        "newtype": "pcz"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_pcz_path"
+                },
+                "RenameDatasetActionoutput_pcz_path": {
+                    "action_arguments": {
+                        "newname": "mypcz_concat_ensemble_gaussian.pcz"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "tool_id": "biobb_flexserv_pcz_zip_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_crd_path\": {\"__class__\": \"ConnectedValue\"}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_pcz_path\": \"mypcz_concat_ensemble_gaussian.pcz\", \"properties\": {\"binary_path\": \"pcazip\", \"neigenv\": \"10\", \"variance\": \"90\", \"verbose\": \"false\", \"gauss_rmsd\": \"true\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "da658083-ced0-492c-bc70-a2b498ea529d",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_pcz_path",
+                    "uuid": "0e25e414-1111-49a1-9f89-8f091ae37f55"
+                }
+            ]
+        },
+        "33": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_info_ext",
+            "errors": null,
+            "id": 33,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 31,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "PczInfo",
+            "outputs": [
+                {
+                    "name": "output_json_path",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 3206.6563148671867,
+                "top": 1084.062512500032
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_info_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_json_path\": \"mypcz_report.json\", \"properties\": {\"binary_path\": \"pczdump\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "b8844964-4a8c-4cda-a6d1-05b9ba5934df",
+            "workflow_outputs": [
+                {
+                    "label": "mypcz_report.json",
+                    "output_name": "output_json_path",
+                    "uuid": "76d4579f-7498-482c-bc8c-cdb97729f475"
+                }
+            ]
+        },
+        "34": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_evecs_ext",
+            "errors": null,
+            "id": 34,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 31,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "PczEvecs",
+            "outputs": [
+                {
+                    "name": "output_json_path",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 3209.62483308468,
+                "top": 1215.0780810504198
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_evecs_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_json_path\": \"mypcz_evecs.json\", \"properties\": {\"binary_path\": \"pczdump\", \"eigenvector\": \"1\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "3c66b5d2-ff62-4442-980c-9a71d1d8d3d1",
+            "workflow_outputs": [
+                {
+                    "label": "mypcz_evecs.json",
+                    "output_name": "output_json_path",
+                    "uuid": "b603a110-3aae-4404-9617-495897a6487c"
+                }
+            ]
+        },
+        "35": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_animate_ext",
+            "errors": null,
+            "id": 35,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 31,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "PczAnimate",
+            "outputs": [
+                {
+                    "name": "output_crd_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 3211.5468805452274,
+                "top": 1327.9375181383443
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_animate_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_crd_path\": \"mypcz_proj1.crd\", \"properties\": {\"binary_path\": \"pczdump\", \"eigenvector\": \"1\", \"pdb\": \"false\", \"output_format\": \"crd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "f3149036-440f-4333-800a-fb6c6e2deae0",
+            "workflow_outputs": [
+                {
+                    "label": "mypcz_proj1.crd",
+                    "output_name": "output_crd_path",
+                    "uuid": "6a389c6c-0c92-4d57-b57d-260fa4932bca"
+                }
+            ]
+        },
+        "36": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_bfactor_ext",
+            "errors": null,
+            "id": 36,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 31,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "PczBfactor",
+            "outputs": [
+                {
+                    "name": "output_dat_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 3216.390467379917,
+                "top": 1491.7343618749667
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_bfactor_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_dat_path\": \"mypcz_bfactor_all.dat\", \"outname_output_pdb_path\": \"mypcz_bfactor_all.pdb\", \"properties\": {\"binary_path\": \"pczdump\", \"eigenvector\": \"0\", \"pdb\": \"true\", \"output_format\": \"dat\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "2b605f06-ac52-45e3-87cb-a5bc42251432",
+            "workflow_outputs": [
+                {
+                    "label": "mypcz_bfactor_all.dat",
+                    "output_name": "output_dat_path",
+                    "uuid": "83a59800-dbdf-4ad7-b8f0-7cb2e7c29b23"
+                },
+                {
+                    "label": "mypcz_bfactor_all.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "6f6b371f-fc84-4c59-ab83-6b9719e1d24c"
+                }
+            ]
+        },
+        "37": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_stiffness_ext",
+            "errors": null,
+            "id": 37,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 31,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "PczStiffness",
+            "outputs": [
+                {
+                    "name": "output_json_path",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 3246.546799693957,
+                "top": 1703.000007659594
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_stiffness_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_json_path\": \"mypcz_stiffness.json\", \"properties\": {\"binary_path\": \"pczdump\", \"eigenvector\": \"0\", \"temperature\": \"300\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "0fd0751a-5d52-4cae-b2b2-3711a946f5e2",
+            "workflow_outputs": [
+                {
+                    "label": "mypcz_stiffness.json",
+                    "output_name": "output_json_path",
+                    "uuid": "74cfd3cc-9be1-43b5-b875-a10acb8769a3"
+                }
+            ]
+        },
+        "38": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_collectivity_ext",
+            "errors": null,
+            "id": 38,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 31,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "PczCollectivity",
+            "outputs": [
+                {
+                    "name": "output_json_path",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 3250.953279029649,
+                "top": 1860.656239973379
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_collectivity_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_json_path\": \"mypcz_collectivity.json\", \"properties\": {\"eigenvector\": \"0\", \"binary_path\": \"pczdump\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "ea481c9e-d372-409f-88d7-019f3b2a344c",
+            "workflow_outputs": [
+                {
+                    "label": "mypcz_collectivity.json",
+                    "output_name": "output_json_path",
+                    "uuid": "7b09314f-351b-453c-a4bd-6cf066a019f0"
+                }
+            ]
+        },
+        "39": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_hinges_ext",
+            "errors": null,
+            "id": 39,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 32,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "PczHinges",
+            "outputs": [
+                {
+                    "name": "output_json_path",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 2964.82795275222,
+                "top": 1886.999966808426
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_hinges_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_json_path\": \"mypcz_hinges_bfactor_report.json\", \"properties\": {\"binary_path\": \"pczdump\", \"eigenvector\": \"0\", \"method\": \"Bfactor_slope\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "0ae5036b-19c3-4fa6-8530-114b1e454c97",
+            "workflow_outputs": [
+                {
+                    "label": "mypcz_hinges_bfactor_report.json",
+                    "output_name": "output_json_path",
+                    "uuid": "95959314-b533-4f97-ad43-653502e8fe3e"
+                }
+            ]
+        },
+        "40": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_hinges_ext",
+            "errors": null,
+            "id": 40,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 32,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "PczHinges",
+            "outputs": [
+                {
+                    "name": "output_json_path",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 2966.968553962266,
+                "top": 2040.5469120346693
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput_json_path": {
+                    "action_arguments": {
+                        "newname": "mypcz_hinges_dyndom_report.json"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output_json_path"
+                }
+            },
+            "tool_id": "biobb_flexserv_pcz_hinges_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_json_path\": \"mypcz_hinges_dyndom_report.json\", \"properties\": {\"binary_path\": \"pczdump\", \"eigenvector\": \"0\", \"method\": \"Dynamic_domain\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "35888dd6-5c80-47ab-a307-e5fd13902edb",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_json_path",
+                    "uuid": "6dd2bf9e-b34d-4b44-8505-b2c349d8c1cd"
+                }
+            ]
+        },
+        "41": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_hinges_ext",
+            "errors": null,
+            "id": 41,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 32,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "PczHinges",
+            "outputs": [
+                {
+                    "name": "output_json_path",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 2935.6717932045785,
+                "top": 2185.03119582433
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_hinges_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_json_path\": \"mypcz_hinges_fcte_report.json\", \"properties\": {\"binary_path\": \"pczdump\", \"eigenvector\": \"0\", \"method\": \"Force_constant\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "f19cfb01-fe97-4503-9040-1d6923416549",
+            "workflow_outputs": [
+                {
+                    "label": "mypcz_hinges_fcte_report.json",
+                    "output_name": "output_json_path",
+                    "uuid": "b480a612-70ed-49b3-a446-617574fb3fc3"
+                }
+            ]
+        },
+        "42": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_convert_ext",
+            "errors": null,
+            "id": 42,
+            "input_connections": {
+                "input_top_path": {
+                    "id": 7,
+                    "output_name": "output_cpptraj_path"
+                },
+                "input_traj_path": {
+                    "id": 35,
+                    "output_name": "output_crd_path"
+                }
+            },
+            "inputs": [],
+            "label": "CpptrajConvert PCZ",
+            "name": "CpptrajConvert",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 3536.906349548127,
+                "top": 1331.6405914227867
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_cpptraj_path": {
+                    "action_arguments": {
+                        "newtype": "dcd"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_cpptraj_path"
+                }
+            },
+            "tool_id": "biobb_analysis_cpptraj_convert_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"input_traj_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_cpptraj_path\": \"mycpptraj_pcz_proj1.dcd\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"all-atoms\", \"format\": \"dcd\", \"binary_path\": \"cpptraj\", \"output_format\": \"dcd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "b720726d-7080-45b4-9468-2aafe59808cf",
+            "workflow_outputs": [
+                {
+                    "label": "mycpptraj_pcz_proj1.dcd",
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "260cd239-b280-46b1-813d-6593d029dfa9"
+                }
+            ]
+        }
+    },
+    "tags": [],
+    "uuid": "57f1a609-3ea0-46e4-8020-f1234c855ca1",
+    "version": 135
+}
