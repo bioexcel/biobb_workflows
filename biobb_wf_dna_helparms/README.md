@@ -9,8 +9,8 @@ Launch workflow:
 
 WorkflowHub flavours:
 
-[![Jupyter - WorkflowHub](https://img.shields.io/badge/Jupyter-WorkflowHub-1f8787?logo=Jupyter&logoColor=ffffff)](https://workflowhub.eu/workflows/195?version=3)
-[![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/286?version=3)
+[![Jupyter - WorkflowHub](https://img.shields.io/badge/Jupyter-WorkflowHub-1f8787?logo=Jupyter&logoColor=ffffff)](https://workflowhub.eu/workflows/195)
+[![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/286)
 
 # Structural DNA helical parameters from MD trajectory tutorial using BioExcel Building Blocks (biobb)
 

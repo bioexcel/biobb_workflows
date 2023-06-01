@@ -8,8 +8,8 @@ Launch workflow:
 
 WorkflowHub flavours:
 
-[![Jupyter - WorkflowHub](https://img.shields.io/badge/Jupyter-WorkflowHub-1f8787?logo=Jupyter&logoColor=ffffff)](https://workflowhub.eu/workflows/55?version=4)
-[![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/328?version=3)
+[![Jupyter - WorkflowHub](https://img.shields.io/badge/Jupyter-WorkflowHub-1f8787?logo=Jupyter&logoColor=ffffff)](https://workflowhub.eu/workflows/55)
+[![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/328)
 
 # Mutation Free Energy Calculations using BioExcel Building Blocks (biobb)
 
