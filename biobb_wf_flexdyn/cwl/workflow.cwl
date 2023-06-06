@@ -376,261 +376,261 @@ inputs:
 outputs:
   step0_extract_model_out1:
     label: output_structure_path
-    doc: Path to the output file
+    doc: Output structure file path.
     type: File
     outputSource: step0_extract_model/output_structure_path
   step1_extract_chain_out1:
     label: output_structure_path
-    doc: Path to the output file
+    doc: Output structure file path.
     type: File
     outputSource: step1_extract_chain/output_structure_path
   step2_cpptraj_mask_out1:
     label: output_cpptraj_path
-    doc: Path to the output file
+    doc: Path to the output processed trajectory.
     type: File
     outputSource: step2_cpptraj_mask/output_cpptraj_path
   step3_cpptraj_mask_out1:
     label: output_cpptraj_path
-    doc: Path to the output file
+    doc: Path to the output processed trajectory.
     type: File
     outputSource: step3_cpptraj_mask/output_cpptraj_path
 
   # INIT COMMENT IN CASE OF EXECUTION WITH MAC ARM
   step4_concoord_dist_out1:
     label: output_pdb_path
-    doc: Path to the output file
+    doc: Output pdb file.
     type: File
     outputSource: step4_concoord_dist/output_pdb_path
   step4_concoord_dist_out2:
     label: output_gro_path
-    doc: Path to the output file
+    doc: Output gro file.
     type: File
     outputSource: step4_concoord_dist/output_gro_path
   step4_concoord_dist_out3:
     label: output_dat_path
-    doc: Path to the output file
+    doc: Output dat with structure interpretation and bond definitions.
     type: File
     outputSource: step4_concoord_dist/output_dat_path
   step5_concoord_disco_out1:
     label: output_traj_path
-    doc: Path to the output file
+    doc: Output trajectory file.
     type: File
     outputSource: step5_concoord_disco/output_traj_path
   step5_concoord_disco_out2:
     label: output_rmsd_path
-    doc: Path to the output file
+    doc: Output rmsd file.
     type: File
     outputSource: step5_concoord_disco/output_rmsd_path
   step5_concoord_disco_out3:
     label: output_bfactor_path
-    doc: Path to the output file
+    doc: Output B-factor file.
     type: File
     outputSource: step5_concoord_disco/output_bfactor_path
   step6_cpptraj_rms_out1:
     label: output_cpptraj_path
-    doc: Path to the output file
+    doc: Path to the output processed analysis.
     type: File
     outputSource: step6_cpptraj_rms/output_cpptraj_path
   step7_cpptraj_convert_out1:
     label: output_cpptraj_path
-    doc: Path to the output file
+    doc: Path to the output processed trajectory.
     type: File
     outputSource: step7_cpptraj_convert/output_cpptraj_path
   # END COMMENT IN CASE OF EXECUTION WITH MAC ARM
 
   step8_prody_anm_out1:
     label: output_pdb_path
-    doc: Path to the output file
+    doc: Output multi-model PDB file with the generated ensemble.
     type: File
     outputSource: step8_prody_anm/output_pdb_path
   step9_cpptraj_rms_out1:
     label: output_cpptraj_path
-    doc: Path to the output file
+    doc: Path to the output processed analysis.
     type: File
     outputSource: step9_cpptraj_rms/output_cpptraj_path
   step10_cpptraj_convert_out1:
     label: output_cpptraj_path
-    doc: Path to the output file
+    doc: Path to the output processed trajectory.
     type: File
     outputSource: step10_cpptraj_convert/output_cpptraj_path
   step11_bd_run_out1:
     label: output_crd_path
-    doc: Path to the output file
+    doc: Output ensemble.
     type: File
     outputSource: step11_bd_run/output_crd_path
   step11_bd_run_out2:
     label: output_log_path
-    doc: Path to the output file
+    doc: Output log file.
     type: File
     outputSource: step11_bd_run/output_log_path
   step12_cpptraj_rms_out1:
     label: output_cpptraj_path
-    doc: Path to the output file
+    doc: Path to the output processed analysis.
     type: File
     outputSource: step12_cpptraj_rms/output_cpptraj_path
   step12_cpptraj_rms_out2:
     label: output_traj_path
-    doc: Path to the output file
+    doc: Path to the output processed trajectory.
     type: File
     outputSource: step12_cpptraj_rms/output_traj_path
   step13_dmd_run_out1:
     label: output_crd_path
-    doc: Path to the output file
+    doc: Output ensemble.
     type: File
     outputSource: step13_dmd_run/output_crd_path
   step13_dmd_run_out2:
     label: output_log_path
-    doc: Path to the output file
+    doc: Output log file.
     type: File
     outputSource: step13_dmd_run/output_log_path
   step14_cpptraj_rms_out1:
     label: output_cpptraj_path
-    doc: Path to the output file
+    doc: Path to the output processed analysis.
     type: File
     outputSource: step14_cpptraj_rms/output_cpptraj_path
   step14_cpptraj_rms_out2:
     label: output_traj_path
-    doc: Path to the output file
+    doc: Path to the output processed trajectory.
     type: File
     outputSource: step14_cpptraj_rms/output_traj_path
   step15_nma_run_out1:
     label: output_crd_path
-    doc: Path to the output file
+    doc: Output ensemble.
     type: File
     outputSource: step15_nma_run/output_crd_path
   step15_nma_run_out2:
     label: output_log_path
-    doc: Path to the output file
+    doc: Output log file.
     type: File
     outputSource: step15_nma_run/output_log_path
   step16_cpptraj_rms_out1:
     label: output_cpptraj_path
-    doc: Path to the output file
+    doc: Path to the output processed analysis.
     type: File
     outputSource: step16_cpptraj_rms/output_cpptraj_path
   step17_cpptraj_convert_out1:
     label: output_cpptraj_path
-    doc: Path to the output file
+    doc: Path to the output processed trajectory.
     type: File
     outputSource: step17_cpptraj_convert/output_cpptraj_path
   step18_nolb_nma_out1:
     label: output_pdb_path
-    doc: Path to the output file
+    doc: Output multi-model PDB file with the generated ensemble.
     type: File
     outputSource: step18_nolb_nma/output_pdb_path
   step19_cpptraj_rms_out1:
     label: output_cpptraj_path
-    doc: Path to the output file
+    doc: Path to the output processed analysis.
     type: File
     outputSource: step19_cpptraj_rms/output_cpptraj_path
   step20_cpptraj_convert_out1:
     label: output_cpptraj_path
-    doc: Path to the output file
+    doc: Path to the output processed trajectory.
     type: File
     outputSource: step20_cpptraj_convert/output_cpptraj_path
   step21_imod_imode_out1:
     label: output_dat_path
-    doc: Path to the output file
+    doc: Output dat with normal modes.
     type: File
     outputSource: step21_imod_imode/output_dat_path
   step22_imod_imc_out1:
     label: output_traj_path
-    doc: Path to the output file
+    doc: Output multi-model PDB file with the generated ensemble.
     type: File
     outputSource: step22_imod_imc/output_traj_path
   step23_cpptraj_rms_out1:
     label: output_cpptraj_path
-    doc: Path to the output file
+    doc: Path to the output processed analysis.
     type: File
     outputSource: step23_cpptraj_rms/output_cpptraj_path
   step24_cpptraj_convert_out1:
     label: output_cpptraj_path
-    doc: Path to the output file
+    doc: Path to the output processed trajectory.
     type: File
     outputSource: step24_cpptraj_convert/output_cpptraj_path
   step26_make_ndx_out1:
     label: output_ndx_path
-    doc: Path to the output file
+    doc: Path to the output index NDX file.
     type: File
     outputSource: step26_make_ndx/output_ndx_path
   step27_gmx_cluster_out1:
     label: output_pdb_path
-    doc: Path to the output file
+    doc: Path to the output cluster file.
     type: File
     outputSource: step27_gmx_cluster/output_pdb_path
   step28_cpptraj_rms_out1:
     label: output_cpptraj_path
-    doc: Path to the output file
+    doc: Path to the output processed analysis.
     type: File
     outputSource: step28_cpptraj_rms/output_cpptraj_path
   step28_cpptraj_rms_out2:
     label: output_traj_path
-    doc: Path to the output file
+    doc: Path to the output processed trajectory.
     type: File
     outputSource: step28_cpptraj_rms/output_traj_path
   step29_pcz_zip_out1:
     label: output_pcz_path
-    doc: Path to the output file
+    doc: Output compressed trajectory.
     type: File
     outputSource: step29_pcz_zip/output_pcz_path
   step30_pcz_zip_out1:
     label: output_pcz_path
-    doc: Path to the output file
+    doc: Output compressed trajectory.
     type: File
     outputSource: step30_pcz_zip/output_pcz_path
   step31_pcz_info_out1:
     label: output_json_path
-    doc: Path to the output file
+    doc: Output json file with PCA info such as number of components, variance and dimensionality.
     type: File
     outputSource: step31_pcz_info/output_json_path
   step32_pcz_evecs_out1:
     label: output_json_path
-    doc: Path to the output file
+    doc: Output json file with PCA Eigen Vectors.
     type: File
     outputSource: step32_pcz_evecs/output_json_path
   step33_pcz_animate_out1:
     label: output_crd_path
-    doc: Path to the output file
+    doc: Output PCA animated trajectory file.
     type: File
     outputSource: step33_pcz_animate/output_crd_path
   step34_cpptraj_convert_out1:
     label: output_cpptraj_path
-    doc: Path to the output file
+    doc: Path to the output processed trajectory.
     type: File
     outputSource: step34_cpptraj_convert/output_cpptraj_path
   step35_pcz_bfactor_out1:
     label: output_dat_path
-    doc: Path to the output file
+    doc: Output Bfactor x residue x PCA mode file.
     type: File
     outputSource: step35_pcz_bfactor/output_dat_path
   step35_pcz_bfactor_out2:
     label: output_pdb_path
-    doc: Path to the output file
+    doc: Output PDB with Bfactor x residue x PCA mode file.
     type: File
     outputSource: step35_pcz_bfactor/output_pdb_path
   step36_pcz_hinges_out1:
     label: output_json_path
-    doc: Path to the output file
+    doc: Output hinge regions x PCA mode file.
     type: File
     outputSource: step36_pcz_hinges/output_json_path
   step37_pcz_hinges_out1:
     label: output_json_path
-    doc: Path to the output file
+    doc: Output hinge regions x PCA mode file.
     type: File
     outputSource: step37_pcz_hinges/output_json_path
   step38_pcz_hinges_out1:
     label: output_json_path
-    doc: Path to the output file
+    doc: Output hinge regions x PCA mode file.
     type: File
     outputSource: step38_pcz_hinges/output_json_path
   step39_pcz_stiffness_out1:
     label: output_json_path
-    doc: Path to the output file
+    doc: Output json file with PCA Stiffness.
     type: File
     outputSource: step39_pcz_stiffness/output_json_path
   step40_pcz_collectivity_out1:
     label: output_json_path
-    doc: Path to the output file
+    doc: Output json file with PCA Collectivity indexes per mode.
     type: File
     outputSource: step40_pcz_collectivity/output_json_path
 steps:
