@@ -7,371 +7,371 @@ doc: |-
 inputs:
   step0_extract_model_input_structure_path:
     label: Input file
-    doc: Input structure file path
+    doc: Input structure file path.
     type: File
   step0_extract_model_output_structure_path:
     label: Output file
-    doc: Output structure file path
+    doc: Output structure file path.
     type: string
   step0_extract_model_config:
     label: Config file
-    doc: Output structure file path
+    doc: Configuration file for biobb_structure_utils.extract_model tool.
     type: string
   step1_extract_chain_output_structure_path:
     label: Output file
-    doc: Output structure file path
+    doc: Output structure file path.
     type: string
   step1_extract_chain_config:
     label: Config file
-    doc: Output structure file path
+    doc: Configuration file for biobb_structure_utils.extract_chain tool.
     type: string
   step2_cpptraj_mask_output_cpptraj_path:
     label: Output file
-    doc: Path to the output processed trajectory
+    doc: Path to the output processed trajectory.
     type: string
   step2_cpptraj_mask_config:
     label: Config file
-    doc: Path to the output processed trajectory
+    doc: Configuration file for biobb_analysis.cpptraj_mask tool.
     type: string
   step3_cpptraj_mask_output_cpptraj_path:
     label: Output file
-    doc: Path to the output processed trajectory
+    doc: Path to the output processed trajectory.
     type: string
   step3_cpptraj_mask_config:
     label: Config file
-    doc: Path to the output processed trajectory
+    doc: Configuration file for biobb_analysis.cpptraj_mask tool.
     type: string
-
+  
   # INIT COMMENT IN CASE OF EXECUTION WITH MAC ARM
   step4_concoord_dist_output_pdb_path:
     label: Output file
-    doc: Output pdb file
+    doc: Output pdb file.
     type: string
   step4_concoord_dist_output_gro_path:
     label: Output file
-    doc: Output gro file
+    doc: Output gro file.
     type: string
   step4_concoord_dist_output_dat_path:
     label: Output file
-    doc: Output dat with structure interpretation and bond definitions
+    doc: Output dat with structure interpretation and bond definitions.
     type: string
   step4_concoord_dist_config:
     label: Config file
-    doc: Output dat with structure interpretation and bond definitions
+    doc: Configuration file for biobb_flexdyn.concoord_dist tool.
     type: string
   step5_concoord_disco_output_traj_path:
     label: Output file
-    doc: Output trajectory file
+    doc: Output trajectory file.
     type: string
   step5_concoord_disco_output_rmsd_path:
     label: Output file
-    doc: Output rmsd file
+    doc: Output rmsd file.
     type: string
   step5_concoord_disco_output_bfactor_path:
     label: Output file
-    doc: Output B-factor file
+    doc: Output B-factor file.
     type: string
   step5_concoord_disco_config:
     label: Config file
-    doc: Output B-factor file
+    doc: Configuration file for biobb_flexdyn.concoord_disco tool.
     type: string
   step6_cpptraj_rms_output_cpptraj_path:
     label: Output file
-    doc: Path to the output processed analysis
+    doc: Path to the output processed analysis.
     type: string
   step6_cpptraj_rms_config:
     label: Config file
-    doc: Path to the output processed analysis
+    doc: Configuration file for biobb_analysis.cpptraj_rms tool.
     type: string
   step7_cpptraj_convert_output_cpptraj_path:
     label: Output file
-    doc: Path to the output processed trajectory
+    doc: Path to the output processed trajectory.
     type: string
   step7_cpptraj_convert_config:
     label: Config file
-    doc: Path to the output processed trajectory
+    doc: Configuration file for biobb_analysis.cpptraj_convert tool.
     type: string
   # END COMMENT IN CASE OF EXECUTION WITH MAC ARM
 
   step8_prody_anm_output_pdb_path:
     label: Output file
-    doc: Output multi-model PDB file with the generated ensemble
+    doc: Output multi-model PDB file with the generated ensemble.
     type: string
   step8_prody_anm_config:
     label: Config file
-    doc: Output multi-model PDB file with the generated ensemble
+    doc: Configuration file for biobb_flexdyn.prody_anm tool.
     type: string
   step9_cpptraj_rms_output_cpptraj_path:
     label: Output file
-    doc: Path to the output processed analysis
+    doc: Path to the output processed analysis.
     type: string
   step9_cpptraj_rms_config:
     label: Config file
-    doc: Path to the output processed analysis
+    doc: Configuration file for biobb_analysis.cpptraj_rms tool.
     type: string
   step10_cpptraj_convert_output_cpptraj_path:
     label: Output file
-    doc: Path to the output processed trajectory
+    doc: Path to the output processed trajectory.
     type: string
   step10_cpptraj_convert_config:
     label: Config file
-    doc: Path to the output processed trajectory
+    doc: Configuration file for biobb_analysis.cpptraj_convert tool.
     type: string
   step11_bd_run_output_crd_path:
     label: Output file
-    doc: Output ensemble
+    doc: Output ensemble.
     type: string
   step11_bd_run_output_log_path:
     label: Output file
-    doc: Output log file
+    doc: Output log file.
     type: string
   step11_bd_run_config:
     label: Config file
-    doc: Output log file
+    doc: Configuration file for biobb_flexserv.bd_run tool.
     type: string
   step12_cpptraj_rms_output_cpptraj_path:
     label: Output file
-    doc: Path to the output processed analysis
+    doc: Path to the output processed analysis.
     type: string
   step12_cpptraj_rms_output_traj_path:
     label: Output file
-    doc: Path to the output processed trajectory
+    doc: Path to the output processed trajectory.
     type: string
   step12_cpptraj_rms_config:
     label: Config file
-    doc: Path to the output processed trajectory
+    doc: Configuration file for biobb_analysis.cpptraj_rms tool.
     type: string
   step13_dmd_run_output_crd_path:
     label: Output file
-    doc: Output ensemble
+    doc: Output ensemble.
     type: string
   step13_dmd_run_output_log_path:
     label: Output file
-    doc: Output log file
+    doc: Output log file.
     type: string
   step13_dmd_run_config:
     label: Config file
-    doc: Output log file
+    doc: Configuration file for biobb_flexserv.dmd_run tool.
     type: string
   step14_cpptraj_rms_output_cpptraj_path:
     label: Output file
-    doc: Path to the output processed analysis
+    doc: Path to the output processed analysis.
     type: string
   step14_cpptraj_rms_output_traj_path:
     label: Output file
-    doc: Path to the output processed trajectory
+    doc: Path to the output processed trajectory.
     type: string
   step14_cpptraj_rms_config:
     label: Config file
-    doc: Path to the output processed trajectory
+    doc: Configuration file for biobb_analysis.cpptraj_rms tool.
     type: string
   step15_nma_run_output_crd_path:
     label: Output file
-    doc: Output ensemble
+    doc: Output ensemble.
     type: string
   step15_nma_run_output_log_path:
     label: Output file
-    doc: Output log file
+    doc: Output log file.
     type: string
   step15_nma_run_config:
     label: Config file
-    doc: Output log file
+    doc: Configuration file for biobb_flexserv.nma_run tool.
     type: string
   step16_cpptraj_rms_output_cpptraj_path:
     label: Output file
-    doc: Path to the output processed analysis
+    doc: Path to the output processed analysis.
     type: string
   step16_cpptraj_rms_config:
     label: Config file
-    doc: Path to the output processed analysis
+    doc: Configuration file for biobb_analysis.cpptraj_rms tool.
     type: string
   step17_cpptraj_convert_output_cpptraj_path:
     label: Output file
-    doc: Path to the output processed trajectory
+    doc: Path to the output processed trajectory.
     type: string
   step17_cpptraj_convert_config:
     label: Config file
-    doc: Path to the output processed trajectory
+    doc: Configuration file for biobb_analysis.cpptraj_convert tool.
     type: string
   step18_nolb_nma_output_pdb_path:
     label: Output file
-    doc: Output multi-model PDB file with the generated ensemble
+    doc: Output multi-model PDB file with the generated ensemble.
     type: string
   step18_nolb_nma_config:
     label: Config file
-    doc: Output multi-model PDB file with the generated ensemble
+    doc: Configuration file for biobb_flexdyn.nolb_nma tool.
     type: string
   step19_cpptraj_rms_output_cpptraj_path:
     label: Output file
-    doc: Path to the output processed analysis
+    doc: Path to the output processed analysis.
     type: string
   step19_cpptraj_rms_config:
     label: Config file
-    doc: Path to the output processed analysis
+    doc: Configuration file for biobb_analysis.cpptraj_rms tool.
     type: string
   step20_cpptraj_convert_output_cpptraj_path:
     label: Output file
-    doc: Path to the output processed trajectory
+    doc: Path to the output processed trajectory.
     type: string
   step20_cpptraj_convert_config:
     label: Config file
-    doc: Path to the output processed trajectory
+    doc: Configuration file for biobb_analysis.cpptraj_convert tool.
     type: string
   step21_imod_imode_output_dat_path:
     label: Output file
-    doc: Output dat with normal modes
+    doc: Output dat with normal modes.
     type: string
   step21_imod_imode_config:
     label: Config file
-    doc: Output dat with normal modes
+    doc: Configuration file for biobb_flexdyn.imod_imode tool.
     type: string
   step22_imod_imc_output_traj_path:
     label: Output file
-    doc: Output multi-model PDB file with the generated ensemble
+    doc: Output multi-model PDB file with the generated ensemble.
     type: string
   step22_imod_imc_config:
     label: Config file
-    doc: Output multi-model PDB file with the generated ensemble
+    doc: Configuration file for biobb_flexdyn.imod_imc tool.
     type: string
   step23_cpptraj_rms_output_cpptraj_path:
     label: Output file
-    doc: Path to the output processed analysis
+    doc: Path to the output processed analysis.
     type: string
   step23_cpptraj_rms_config:
     label: Config file
-    doc: Path to the output processed analysis
+    doc: Configuration file for biobb_analysis.cpptraj_rms tool.
     type: string
   step24_cpptraj_convert_output_cpptraj_path:
     label: Output file
-    doc: Path to the output processed trajectory
+    doc: Path to the output processed trajectory.
     type: string
   step24_cpptraj_convert_config:
     label: Config file
-    doc: Path to the output processed trajectory
+    doc: Configuration file for biobb_analysis.cpptraj_convert tool.
     type: string
   step26_make_ndx_output_ndx_path:
     label: Output file
-    doc: Path to the output index NDX file
+    doc: Path to the output index NDX file.
     type: string
   step26_make_ndx_config:
     label: Config file
-    doc: Path to the output index NDX file
+    doc: Configuration file for biobb_gromacs.make_ndx tool.
     type: string
   step27_gmx_cluster_output_pdb_path:
     label: Output file
-    doc: Path to the output cluster file
+    doc: Path to the output cluster file.
     type: string
   step27_gmx_cluster_config:
     label: Config file
-    doc: Path to the output cluster file
+    doc: Configuration file for biobb_analysis.gmx_cluster tool.
     type: string
   step28_cpptraj_rms_output_cpptraj_path:
     label: Output file
-    doc: Path to the output processed analysis
+    doc: Path to the output processed analysis.
     type: string
   step28_cpptraj_rms_output_traj_path:
     label: Output file
-    doc: Path to the output processed trajectory
+    doc: Path to the output processed trajectory.
     type: string
   step28_cpptraj_rms_config:
     label: Config file
-    doc: Path to the output processed trajectory
+    doc: Configuration file for biobb_analysis.cpptraj_rms tool.
     type: string
   step29_pcz_zip_output_pcz_path:
     label: Output file
-    doc: Output compressed trajectory
+    doc: Output compressed trajectory.
     type: string
   step29_pcz_zip_config:
     label: Config file
-    doc: Output compressed trajectory
+    doc: Configuration file for biobb_flexserv.pcz_zip tool.
     type: string
   step30_pcz_zip_output_pcz_path:
     label: Output file
-    doc: Output compressed trajectory
+    doc: Output compressed trajectory.
     type: string
   step30_pcz_zip_config:
     label: Config file
-    doc: Output compressed trajectory
+    doc: Configuration file for biobb_flexserv.pcz_zip tool.
     type: string
   step31_pcz_info_output_json_path:
     label: Output file
-    doc: Output json file with PCA info such as number of components, variance and dimensionality
+    doc: Output json file with PCA info such as number of components, variance and dimensionality.
     type: string
   step32_pcz_evecs_output_json_path:
     label: Output file
-    doc: Output json file with PCA Eigen Vectors
+    doc: Output json file with PCA Eigen Vectors.
     type: string
   step32_pcz_evecs_config:
     label: Config file
-    doc: Output json file with PCA Eigen Vectors
+    doc: Configuration file for biobb_flexserv.pcz_evecs tool.
     type: string
   step33_pcz_animate_output_crd_path:
     label: Output file
-    doc: Output PCA animated trajectory file
+    doc: Output PCA animated trajectory file.
     type: string
   step33_pcz_animate_config:
     label: Config file
-    doc: Output PCA animated trajectory file
+    doc: Configuration file for biobb_flexserv.pcz_animate tool.
     type: string
   step34_cpptraj_convert_output_cpptraj_path:
     label: Output file
-    doc: Path to the output processed trajectory
+    doc: Path to the output processed trajectory.
     type: string
   step34_cpptraj_convert_config:
     label: Config file
-    doc: Path to the output processed trajectory
+    doc: Configuration file for biobb_analysis.cpptraj_convert tool.
     type: string
   step35_pcz_bfactor_output_dat_path:
     label: Output file
-    doc: Output Bfactor x residue x PCA mode file
+    doc: Output Bfactor x residue x PCA mode file.
     type: string
   step35_pcz_bfactor_output_pdb_path:
     label: Output file
-    doc: Output PDB with Bfactor x residue x PCA mode file
+    doc: Output PDB with Bfactor x residue x PCA mode file.
     type: string
   step35_pcz_bfactor_config:
     label: Config file
-    doc: Output PDB with Bfactor x residue x PCA mode file
+    doc: Configuration file for biobb_flexserv.pcz_bfactor tool.
     type: string
   step36_pcz_hinges_output_json_path:
     label: Output file
-    doc: Output hinge regions x PCA mode file
+    doc: Output hinge regions x PCA mode file.
     type: string
   step36_pcz_hinges_config:
     label: Config file
-    doc: Output hinge regions x PCA mode file
+    doc: Configuration file for biobb_flexserv.pcz_hinges tool.
     type: string
   step37_pcz_hinges_output_json_path:
     label: Output file
-    doc: Output hinge regions x PCA mode file
+    doc: Output hinge regions x PCA mode file.
     type: string
   step37_pcz_hinges_config:
     label: Config file
-    doc: Output hinge regions x PCA mode file
+    doc: Configuration file for biobb_flexserv.pcz_hinges tool.
     type: string
   step38_pcz_hinges_output_json_path:
     label: Output file
-    doc: Output hinge regions x PCA mode file
+    doc: Output hinge regions x PCA mode file.
     type: string
   step38_pcz_hinges_config:
     label: Config file
-    doc: Output hinge regions x PCA mode file
+    doc: Configuration file for biobb_flexserv.pcz_hinges tool.
     type: string
   step39_pcz_stiffness_output_json_path:
     label: Output file
-    doc: Output json file with PCA Stiffness
+    doc: Output json file with PCA Stiffness.
     type: string
   step39_pcz_stiffness_config:
     label: Config file
-    doc: Output json file with PCA Stiffness
+    doc: Configuration file for biobb_flexserv.pcz_stiffness tool.
     type: string
   step40_pcz_collectivity_output_json_path:
     label: Output file
-    doc: Output json file with PCA Collectivity indexes per mode
+    doc: Output json file with PCA Collectivity indexes per mode.
     type: string
   step40_pcz_collectivity_config:
     label: Config file
-    doc: Output json file with PCA Collectivity indexes per mode
+    doc: Configuration file for biobb_flexserv.pcz_collectivity tool.
     type: string
 outputs:
   step0_extract_model_out1:
@@ -394,7 +394,7 @@ outputs:
     doc: Path to the output file
     type: File
     outputSource: step3_cpptraj_mask/output_cpptraj_path
-  
+
   # INIT COMMENT IN CASE OF EXECUTION WITH MAC ARM
   step4_concoord_dist_out1:
     label: output_pdb_path
@@ -548,7 +548,6 @@ outputs:
     doc: Path to the output file
     type: File
     outputSource: step24_cpptraj_convert/output_cpptraj_path
-
   step26_make_ndx_out1:
     label: output_ndx_path
     doc: Path to the output file
@@ -677,7 +676,7 @@ steps:
       output_cpptraj_path: step3_cpptraj_mask_output_cpptraj_path
     out:
     - output_cpptraj_path
-  
+
   # INIT COMMENT IN CASE OF EXECUTION WITH MAC ARM
   step4_concoord_dist:
     label: concoord_dist
@@ -731,8 +730,8 @@ steps:
       output_cpptraj_path: step7_cpptraj_convert_output_cpptraj_path
     out:
     - output_cpptraj_path
-  # END COMMENT IN CASE OF EXECUTION WITH MAC ARM
-  
+  # END COMMENT IN CASE OF EXECUTION WITH MAC ARM  
+
   step8_prody_anm:
     label: prody_anm
     doc: Wrapper of the Prody software.
@@ -930,7 +929,6 @@ steps:
       output_cpptraj_path: step24_cpptraj_convert_output_cpptraj_path
     out:
     - output_cpptraj_path
-
   step26_make_ndx:
     label: make_ndx
     doc: Creates a GROMACS index file (NDX) from an input selection and an input GROMACS structure file.
