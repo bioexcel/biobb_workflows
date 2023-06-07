@@ -79,7 +79,7 @@ steps:
     label: Pdb2gmx
     doc: |-
       Creates a compressed (ZIP) GROMACS topology (TOP and ITP files) from a given PDB file.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_md/pdb2gmx.cwl
+    run:  biobb_adapters/pdb2gmx.cwl
     in:
       config: step4_pdb2gmx_config
       input_pdb_path: step3_mutate_output_pdb_path
@@ -93,7 +93,7 @@ steps:
     label: Editconf
     doc: |-
       Creates a GROMACS structure file (GRO) adding the information of the solvent box to the input structure file.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_md/editconf.cwl
+    run:  biobb_adapters/editconf.cwl
     in:
       config: step5_editconf_config
       input_gro_path: step4_pdb2gmx/output_gro_path
@@ -105,7 +105,7 @@ steps:
     label: Solvate
     doc: |-
       Creates a new compressed GROMACS topology file adding solvent molecules to a given input compressed GROMACS topology file.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_md/solvate.cwl
+    run:  biobb_adapters/solvate.cwl
     in:
       input_solute_gro_path: step5_editconf/output_gro_path
       output_gro_path: step6_solvate_output_gro_path
@@ -119,7 +119,7 @@ steps:
     label: Grompp
     doc: |-
       Creates a GROMACS portable binary run input file (TPR) applying the desired properties from the input compressed GROMACS topology.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_md/grompp.cwl
+    run:  biobb_adapters/grompp.cwl
     in:
       config: step7_grompp_genion_config
       input_gro_path: step6_solvate/output_gro_path
@@ -132,7 +132,7 @@ steps:
     label: Genion
     doc: |-
       Creates a new compressed GROMACS topology adding ions until reaching the desired concentration to the input compressed GROMACS topology. 
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_md/genion.cwl
+    run:  biobb_adapters/genion.cwl
     in:
       config: step8_genion_config
       input_tpr_path: step7_grompp_genion/output_tpr_path
@@ -147,7 +147,7 @@ steps:
     label: Grompp
     doc: |-
       Creates a GROMACS portable binary run input file (TPR) applying the desired properties from the input compressed GROMACS topology.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_md/grompp.cwl
+    run:  biobb_adapters/grompp.cwl
     in:
       config: step9_grompp_min_config
       input_gro_path: step8_genion/output_gro_path
@@ -160,7 +160,7 @@ steps:
     label: Mdrun
     doc: |-
       Performs molecular dynamics simulations from an input GROMACS TPR file.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_md/mdrun.cwl
+    run:  biobb_adapters/mdrun.cwl
     in:
       input_tpr_path: step9_grompp_min/output_tpr_path
       output_trr_path: step10_mdrun_min_output_trr_path
@@ -177,7 +177,7 @@ steps:
     label: MakeNdx
     doc: |-
       Creates a GROMACS index file (NDX) from an input selection and an input GROMACS structure file.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_md/make_ndx.cwl
+    run:  biobb_adapters/make_ndx.cwl
     in:
       config: step100_make_ndx_config
       input_structure_path: step10_mdrun_min/output_gro_path
@@ -189,7 +189,7 @@ steps:
     label: Grompp
     doc: |-
       Creates a GROMACS portable binary run input file (TPR) applying the desired properties from the input compressed GROMACS topology.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_md/grompp.cwl
+    run:  biobb_adapters/grompp.cwl
     in:
       config: step11_grompp_nvt_config
       input_gro_path: step10_mdrun_min/output_gro_path
@@ -203,7 +203,7 @@ steps:
     label: Mdrun
     doc: |-
       Performs molecular dynamics simulations from an input GROMACS TPR file.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_md/mdrun.cwl
+    run:  biobb_adapters/mdrun.cwl
     in:
       input_tpr_path: step11_grompp_nvt/output_tpr_path
       output_trr_path: step12_mdrun_nvt_output_trr_path
@@ -222,7 +222,7 @@ steps:
     label: Grompp
     doc: |-
       Creates a GROMACS portable binary run input file (TPR) applying the desired properties from the input compressed GROMACS topology.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_md/grompp.cwl
+    run:  biobb_adapters/grompp.cwl
     in:
       config: step13_grompp_npt_config
       input_gro_path: step12_mdrun_nvt/output_gro_path
@@ -237,7 +237,7 @@ steps:
     label: Mdrun
     doc: |-
       Performs molecular dynamics simulations from an input GROMACS TPR file.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_md/mdrun.cwl
+    run:  biobb_adapters/mdrun.cwl
     in:
       input_tpr_path: step13_grompp_npt/output_tpr_path
       output_trr_path: step14_mdrun_npt_output_trr_path
@@ -256,7 +256,7 @@ steps:
     label: Grompp
     doc: |-
       Creates a GROMACS portable binary run input file (TPR) applying the desired properties from the input compressed GROMACS topology.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_md/grompp.cwl
+    run:  biobb_adapters/grompp.cwl
     in:
       config: step15_grompp_md_config
       input_gro_path: step14_mdrun_npt/output_gro_path
@@ -271,7 +271,7 @@ steps:
     label: Mdrun
     doc: |-
       Performs molecular dynamics simulations from an input GROMACS TPR file.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_md/mdrun.cwl
+    run:  biobb_adapters/mdrun.cwl
     in:
       input_tpr_path: step15_grompp_md/output_tpr_path
       output_trr_path: step16_mdrun_md_output_trr_path
@@ -290,7 +290,7 @@ steps:
     label: GMXImage
     doc: |-
       Wrapper of the GROMACS trjconv module for correcting periodicity (image) from a given GROMACS compatible trajectory file.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_analysis/gmx_image.cwl
+    run:  biobb_adapters/gmx_image.cwl
     in:
       config: step17_gmx_image1_config
       input_traj_path: step16_mdrun_md/output_trr_path
@@ -304,7 +304,7 @@ steps:
     label: GMXImage
     doc: |-
       Wrapper of the GROMACS trjconv module for correcting periodicity (image) from a given GROMACS compatible trajectory file.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_analysis/gmx_image.cwl
+    run:  biobb_adapters/gmx_image.cwl
     in:
       config: step18_gmx_image2_config
       input_traj_path: step17_gmx_image1/output_traj_path
@@ -318,7 +318,7 @@ steps:
     label: GMXTrjconvStr
     doc: |-
       Wrapper of the GROMACS trjconv module for converting between GROMACS compatible structure file formats and/or extracting a selection of atoms.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_analysis/gmx_trjconv_str.cwl
+    run:  biobb_adapters/gmx_trjconv_str.cwl
     in:
       config: step19_gmx_trjconv_str_config
       input_structure_path: step16_mdrun_md/output_gro_path
@@ -332,7 +332,7 @@ steps:
     label: GMXEnergy
     doc: |-
       Wrapper of the GROMACS energy module for extracting energy components from a given GROMACS energy file.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_analysis/gmx_energy.cwl
+    run:  biobb_adapters/gmx_energy.cwl
     in:
       config: step20_gmx_energy_config
       input_energy_path: step16_mdrun_md/output_edr_path
@@ -344,7 +344,7 @@ steps:
     label: GMXRgyr
     doc: |-
       Wrapper of the GROMACS gyrate module for computing the radius of gyration (Rgyr) of a molecule about the x-, y- and z-axes, as a function of time, from a given GROMACS compatible trajectory.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_analysis/gmx_rgyr.cwl
+    run:  biobb_adapters/gmx_rgyr.cwl
     in:
       config: step21_gmx_rgyr_config
       input_structure_path: step15_grompp_md/output_tpr_path
@@ -358,7 +358,7 @@ steps:
     label: GMXRms
     doc: |-
       Wrapper of the Ambertools GROMACS module for calculating the Root Mean Square deviation (RMSd) of a given GROMACS compatible trajectory.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_analysis/gmx_rms.cwl
+    run:  biobb_adapters/gmx_rms.cwl
     in:
       config: step22_rmsd_first_config
       input_structure_path: step15_grompp_md/output_tpr_path
@@ -372,7 +372,7 @@ steps:
     label: GMXRms
     doc: |-
       Wrapper of the Ambertools GROMACS module for calculating the Root Mean Square deviation (RMSd) of a given GROMACS compatible trajectory.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_analysis/gmx_rms.cwl
+    run:  biobb_adapters/gmx_rms.cwl
     in:
       config: step23_rmsd_exp_config
       input_structure_path: step9_grompp_min/output_tpr_path
@@ -386,7 +386,7 @@ steps:
     label: Grompp
     doc: |-
       Creates a GROMACS portable binary run input file (TPR) applying the desired properties from the input compressed GROMACS topology.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_md/grompp.cwl
+    run:  biobb_adapters/grompp.cwl
     in:
       config: step24_grompp_md_config
       input_gro_path: step16_mdrun_md/output_gro_path

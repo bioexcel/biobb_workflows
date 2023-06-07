@@ -12,73 +12,267 @@ requirements:
 
 inputs:
   mutations_list:  
+    label: List of mutations
+    doc: List of mutations to perform the workflow on.
     type:
       type: array
       items: string
-  step0_reduce_remove_hydrogens_input_path: File
-  step0_reduce_remove_hydrogens_output_path: string
-  step1_extract_molecule_output_molecule_path: string
-  step00_cat_pdb_input_structure2: File
-  step00_cat_pdb_output_structure_path: string
-  step2_fix_side_chain_output_pdb_path: string
-  step3_mutate_output_pdb_path: string
-  step4_pdb2gmx_config: string
-  step4_pdb2gmx_output_gro_path: string
-  step4_pdb2gmx_output_top_zip_path: string
-  step5_editconf_config: string
-  step5_editconf_output_gro_path: string
-  step6_solvate_output_gro_path: string
-  step6_solvate_output_top_zip_path: string
-  step7_grompp_genion_config: string
-  step7_grompp_genion_output_tpr_path: string
-  step8_genion_config: string
-  step8_genion_output_gro_path: string
-  step8_genion_output_top_zip_path: string
-  step9_grompp_min_config: string
-  step9_grompp_min_output_tpr_path: string
-  step10_mdrun_min_output_trr_path: string
-  step10_mdrun_min_output_gro_path: string
-  step10_mdrun_min_output_edr_path: string
-  step10_mdrun_min_output_log_path: string
-  step100_make_ndx_config: string
-  step100_make_ndx_output_ndx_path: string
-  step11_grompp_nvt_config: string
-  step11_grompp_nvt_output_tpr_path: string
-  step12_mdrun_nvt_output_trr_path: string
-  step12_mdrun_nvt_output_gro_path: string
-  step12_mdrun_nvt_output_edr_path: string
-  step12_mdrun_nvt_output_log_path: string
-  step12_mdrun_nvt_output_cpt_path: string
-  step13_grompp_npt_config: string
-  step13_grompp_npt_output_tpr_path: string
-  step14_mdrun_npt_output_trr_path: string
-  step14_mdrun_npt_output_gro_path: string
-  step14_mdrun_npt_output_edr_path: string
-  step14_mdrun_npt_output_log_path: string
-  step14_mdrun_npt_output_cpt_path: string
-  step15_grompp_md_config: string
-  step15_grompp_md_output_tpr_path: string
-  step16_mdrun_md_output_trr_path: string
-  step16_mdrun_md_output_gro_path: string
-  step16_mdrun_md_output_edr_path: string
-  step16_mdrun_md_output_log_path: string
-  step16_mdrun_md_output_cpt_path: string
-  step17_gmx_image1_config: string
-  step17_gmx_image1_output_traj_path: string
-  step18_gmx_image2_config: string
-  step18_gmx_image2_output_traj_path: string
-  step19_gmx_trjconv_str_config: string
-  step19_gmx_trjconv_str_output_str_path: string
-  step20_gmx_energy_config: string
-  step20_gmx_energy_output_xvg_path: string
-  step21_gmx_rgyr_config: string
-  step21_gmx_rgyr_output_xvg_path: string
-  step22_rmsd_first_config: string
-  step22_rmsd_first_output_xvg_path: string
-  step23_rmsd_exp_config: string
-  step23_rmsd_exp_output_xvg_path: string
-  step24_grompp_md_config: string
-  step24_grompp_md_output_tpr_path: string
+  step0_reduce_remove_hydrogens_input_path:
+    label: Input file
+    doc: Path to the input file.
+    type: File
+  step0_reduce_remove_hydrogens_output_path:
+    label: Output file
+    doc: Path to the output file.
+    type: string
+  step1_extract_molecule_output_molecule_path: 
+    label: Output file
+    doc: Output molecule file path.
+    type: string
+  step00_cat_pdb_input_structure2: 
+    label: Input file
+    doc: Input structure 2 file path.
+    type: File
+  step00_cat_pdb_output_structure_path: 
+    label: Output file
+    doc: Output protein file path.
+    type: string
+  step2_fix_side_chain_output_pdb_path: 
+    label: Output file
+    doc: Output PDB file path.
+    type: string
+  step3_mutate_output_pdb_path: 
+    label: Output file
+    doc: Output PDB file path.
+    type: string
+  step4_pdb2gmx_config: 
+    label: Config file
+    doc: Configuration file for biobb_gromacs.pdb2gmx tool.
+    type: string
+  step4_pdb2gmx_output_gro_path: 
+    label: Output file
+    doc: Path to the output GRO file.
+    type: string
+  step4_pdb2gmx_output_top_zip_path: 
+    label: Output file
+    doc: Path the output TOP topology in zip format.
+    type: string
+  step5_editconf_config: 
+    label: Config file
+    doc: Configuration file for biobb_gromacs.editconf tool.
+    type: string
+  step5_editconf_output_gro_path: 
+    label: Output file
+    doc: Path to the output GRO file.
+    type: string
+  step6_solvate_output_gro_path: 
+    label: Output file
+    doc: Path to the output GRO file.
+    type: string
+  step6_solvate_output_top_zip_path: 
+    label: Output file
+    doc: Path the output topology in zip format.
+    type: string
+  step7_grompp_genion_config: 
+    label: Config file
+    doc: Configuration file for biobb_gromacs.grompp tool.
+    type: string
+  step7_grompp_genion_output_tpr_path: 
+    label: Output file
+    doc: Path to the output portable binary run file TPR.
+    type: string
+  step8_genion_config: 
+    label: Config file
+    doc: Configuration file for biobb_gromacs.grompp tool.
+    type: string
+  step8_genion_output_gro_path: 
+    label: Output file
+    doc: Path to the input structure GRO file.
+    type: string
+  step8_genion_output_top_zip_path: 
+    label: Output file
+    doc: Path the output topology TOP and ITP files zipball.
+    type: string
+  step9_grompp_min_config: 
+    label: Config file
+    doc: Configuration file for biobb_gromacs.grompp tool.
+    type: string
+  step9_grompp_min_output_tpr_path: 
+    label: Output file
+    doc: Path to the output portable binary run file TPR.
+    type: string
+  step10_mdrun_min_output_trr_path: 
+    label: Output file
+    doc: Path to the GROMACS uncompressed raw trajectory file TRR.
+    type: string
+  step10_mdrun_min_output_gro_path: 
+    label: Output file
+    doc: Path to the output GROMACS structure GRO file.
+    type: string
+  step10_mdrun_min_output_edr_path: 
+    label: Output file
+    doc: Path to the output GROMACS portable energy file EDR.
+    type: string
+  step10_mdrun_min_output_log_path: 
+    label: Output file
+    doc: Path to the output GROMACS trajectory log file LOG.
+    type: string
+  step100_make_ndx_config: 
+    label: Config file
+    doc: Configuration file for biobb_gromacs.make_ndx tool.
+    type: string
+  step100_make_ndx_output_ndx_path: 
+    label: Output file
+    doc: Path to the output index NDX file.
+    type: string
+  step11_grompp_nvt_config: 
+    label: Config file
+    doc: Configuration file for biobb_gromacs.grompp tool.
+    type: string
+  step11_grompp_nvt_output_tpr_path: 
+    label: Output file
+    doc: Path to the output portable binary run file TPR.
+    type: string
+  step12_mdrun_nvt_output_trr_path: 
+    label: Output file
+    doc: Path to the GROMACS uncompressed raw trajectory file TRR.
+    type: string
+  step12_mdrun_nvt_output_gro_path: 
+    label: Output file
+    doc: Path to the output GROMACS structure GRO file.
+    type: string
+  step12_mdrun_nvt_output_edr_path: 
+    label: Output file
+    doc: Path to the output GROMACS portable energy file EDR.
+    type: string
+  step12_mdrun_nvt_output_log_path: 
+    label: Output file
+    doc: Path to the output GROMACS trajectory log file LOG.
+    type: string
+  step12_mdrun_nvt_output_cpt_path: 
+    label: Output file
+    doc: Path to the output GROMACS checkpoint file CPT.
+    type: string
+  step13_grompp_npt_config: 
+    label: Config file
+    doc: Configuration file for biobb_gromacs.grompp tool.
+    type: string
+  step13_grompp_npt_output_tpr_path: 
+    label: Output file
+    doc: Path to the output portable binary run file TPR.
+    type: string
+  step14_mdrun_npt_output_trr_path: 
+    label: Output file
+    doc: Path to the GROMACS uncompressed raw trajectory file TRR.
+    type: string
+  step14_mdrun_npt_output_gro_path: 
+    label: Output file
+    doc: Path to the output GROMACS structure GRO file.
+    type: string
+  step14_mdrun_npt_output_edr_path: 
+    label: Output file
+    doc: Path to the output GROMACS portable energy file EDR.
+    type: string
+  step14_mdrun_npt_output_log_path: 
+    label: Output file
+    doc: Path to the output GROMACS trajectory log file LOG.
+    type: string
+  step14_mdrun_npt_output_cpt_path: 
+    label: Output file
+    doc: Path to the output GROMACS checkpoint file CPT.
+    type: string
+  step15_grompp_md_config: 
+    label: Config file
+    doc: Configuration file for biobb_gromacs.grompp tool.
+    type: string
+  step15_grompp_md_output_tpr_path: 
+    label: Output file
+    doc: Path to the output portable binary run file TPR.
+    type: string
+  step16_mdrun_md_output_trr_path: 
+    label: Output file
+    doc: Path to the GROMACS uncompressed raw trajectory file TRR.
+    type: string
+  step16_mdrun_md_output_gro_path: 
+    label: Output file
+    doc: Path to the output GROMACS structure GRO file.
+    type: string
+  step16_mdrun_md_output_edr_path: 
+    label: Output file
+    doc: Path to the output GROMACS portable energy file EDR.
+    type: string
+  step16_mdrun_md_output_log_path: 
+    label: Output file
+    doc: Path to the output GROMACS trajectory log file LOG.
+    type: string
+  step16_mdrun_md_output_cpt_path: 
+    label: Output file
+    doc: Path to the output GROMACS checkpoint file CPT.
+    type: string
+  step17_gmx_image1_config: 
+    label: Config file
+    doc: Configuration file for biobb_analysis.gmx_image tool.
+    type: string
+  step17_gmx_image1_output_traj_path: 
+    label: Output file
+    doc: Path to the output file.
+    type: string
+  step18_gmx_image2_config: 
+    label: Config file
+    doc: Configuration file for biobb_analysis.gmx_image tool.
+    type: string
+  step18_gmx_image2_output_traj_path: 
+    label: Output file
+    doc: Path to the output file.
+    type: string
+  step19_gmx_trjconv_str_config: 
+    label: Config file
+    doc: Configuration file for biobb_analysis.gmx_trjconv_str tool.
+    type: string
+  step19_gmx_trjconv_str_output_str_path: 
+    label: Output file
+    doc: Path to the output file.
+    type: string
+  step20_gmx_energy_config: 
+    label: Config file
+    doc: Configuration file for biobb_analysis.gmx_energy tool.
+    type: string
+  step20_gmx_energy_output_xvg_path: 
+    label: Output file
+    doc: Path to the XVG output file.
+    type: string
+  step21_gmx_rgyr_config: 
+    label: Config file
+    doc: Configuration file for biobb_analysis.gmx_rgyr tool.
+    type: string
+  step21_gmx_rgyr_output_xvg_path: 
+    label: Output file
+    doc: Path to the XVG output file.
+    type: string
+  step22_rmsd_first_config: 
+    label: Config file
+    doc: Configuration file for biobb_analysis.gmx_rms tool.
+    type: string
+  step22_rmsd_first_output_xvg_path: 
+    label: Output file
+    doc: Path to the XVG output file.
+    type: string
+  step23_rmsd_exp_config: 
+    label: Config file
+    doc: Configuration file for biobb_analysis.gmx_rms tool.
+    type: string
+  step23_rmsd_exp_output_xvg_path: 
+    label: Output file
+    doc: Path to the XVG output file.
+    type: string
+  step24_grompp_md_config: 
+    label: Config file
+    doc: Configuration file for biobb_gromacs.grompp tool.
+    type: string
+  step24_grompp_md_output_tpr_path: 
+    label: Output file
+    doc: Path to the output portable binary run file TPR.
+    type: string
   
 outputs:
   top_dir:
@@ -96,7 +290,7 @@ steps:
     label: ReduceRemoveHydrogens
     doc: |-
       Removes hydrogen atoms to small molecules.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_chemistry/reduce_remove_hydrogens.cwl
+    run:  biobb_adapters/reduce_remove_hydrogens.cwl
     in:
       input_path: step0_reduce_remove_hydrogens_input_path
       output_path: step0_reduce_remove_hydrogens_output_path
@@ -107,7 +301,7 @@ steps:
     label: ExtractMolecule
     doc: |-
       This class is a wrapper of the Structure Checking tool to extract a molecule from a 3D structure.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_structure_utils/extract_molecule.cwl
+    run:  biobb_adapters/extract_molecule.cwl
     in:
       input_structure_path: step0_reduce_remove_hydrogens/output_path
       output_molecule_path: step1_extract_molecule_output_molecule_path
@@ -118,7 +312,7 @@ steps:
     label: CatPDB
     doc: |-
       Class to concat two PDB structures in a single PDB file.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_structure_utils/cat_pdb.cwl
+    run:  biobb_adapters/cat_pdb.cwl
     in:
       input_structure1: step1_extract_molecule/output_molecule_path
       input_structure2: step00_cat_pdb_input_structure2
@@ -130,7 +324,7 @@ steps:
     label: FixSideChain
     doc: |-
       Reconstructs the missing side chains and heavy atoms of the given PDB file.
-    run:  /path/to/biobb_adapters/biobb_adapters/cwl/biobb_model/fix_side_chain.cwl
+    run:  biobb_adapters/fix_side_chain.cwl
     in:
       input_pdb_path: step00_cat_pdb/output_structure_path
       output_pdb_path: step2_fix_side_chain_output_pdb_path
@@ -138,6 +332,9 @@ steps:
       - output_pdb_path
 
   subworkflow_mutate:
+    label: Subworkflow
+    doc: |-
+      Subworkflow executed for each mutation.
     in:
       step2_output_pdb_path: step2_fix_side_chain/output_pdb_path
       mutation: mutations_list
@@ -279,7 +476,7 @@ steps:
           label: Mutate
           doc: |-
             Creates a compressed (ZIP) GROMACS topology (TOP and ITP files) from a given PDB file.
-          run:   /path/to/biobb_adapters/biobb_adapters/cwl/biobb_model/mutate.cwl
+          run: biobb_adapters/mutate.cwl
           in:
             config: mutation
             input_pdb_path: step2_output_pdb_path
