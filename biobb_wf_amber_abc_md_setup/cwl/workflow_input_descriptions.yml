@@ -83,7 +83,7 @@ step16_sander_mdrun_eq6_output_log_path: sander.eq6.log
 step16_sander_mdrun_eq6_output_mdinfo_path: sander.eq6.mdinfo
 step16_sander_mdrun_eq6_config: '{"mdin": {"nstlim": 5000, "restraintmask": ":DA,DC,DG,DT,D=3,D=5&!@H="}}'
 step17_process_mdout_eq6_output_dat_path: sander.eq6.pressure_and_density.dat
-step17_process_mdout_eq6_config: '{"terms": ["PRES", "DENSITY"]}'
+step17_process_mdout_eq6_config: '{"terms": ["PRES"]}'
 step18_sander_mdrun_eq7_input_mdin_path:
   class: File
   path: ABCix_config_files/step7.in
