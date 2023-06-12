@@ -50,7 +50,7 @@
             ],
             "position": {
                 "left": 0,
-                "top": 67
+                "top": 67.140625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_crd_path": {
@@ -82,19 +82,19 @@
             "uuid": "b121f510-e05b-4ffd-9ac9-74e5d5a14ae0",
             "workflow_outputs": [
                 {
+                    "label": "myleap_gen_top.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "38c61aba-1097-44dd-95dd-ec80b635b11d"
+                },
+                {
                     "label": "myleap_gen_top.crd",
                     "output_name": "output_crd_path",
-                    "uuid": "8e57ac75-57bf-44ca-b82c-09978e5e46e9"
+                    "uuid": "dd9007c2-d262-4f5a-873a-f95dd02bd7b1"
                 },
                 {
                     "label": "myleap_gen_top.top",
                     "output_name": "output_top_path",
-                    "uuid": "969a5396-d228-476e-9eae-2f8f80c61f1e"
-                },
-                {
-                    "label": "myleap_gen_top.pdb",
-                    "output_name": "output_pdb_path",
-                    "uuid": "2548b5ba-d359-439c-8330-c414f73945d5"
+                    "uuid": "963fd313-55a4-4251-a040-b04fc9c83db1"
                 }
             ]
         },
@@ -144,8 +144,8 @@
                 }
             ],
             "position": {
-                "left": 405,
-                "top": 63
+                "left": 405.078125,
+                "top": 63.140625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_crd_path": {
@@ -179,17 +179,17 @@
                 {
                     "label": "myleap_solvate.crd",
                     "output_name": "output_crd_path",
-                    "uuid": "997e58e0-4253-4061-9347-2962e88b471d"
+                    "uuid": "113625c0-d67f-4fae-baae-5abda8bf35ea"
                 },
                 {
                     "label": "myleap_solvate.parmtop",
                     "output_name": "output_top_path",
-                    "uuid": "f7639b22-c357-4778-8cf8-ba99294bc461"
+                    "uuid": "a871320f-12a4-436c-a87b-b4868834dcad"
                 },
                 {
                     "label": "myleap_solvate.pdb",
                     "output_name": "output_pdb_path",
-                    "uuid": "2f8f04ee-4c26-4a46-9db6-49956bbd7d58"
+                    "uuid": "58c236ab-89c7-4234-991e-7ead46b6dda8"
                 }
             ]
         },
@@ -239,8 +239,8 @@
                 }
             ],
             "position": {
-                "left": 756,
-                "top": 57
+                "left": 755.96875,
+                "top": 57.1328125
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_crd_path": {
@@ -272,19 +272,19 @@
             "uuid": "b8484ba0-10ff-46ff-9996-ca76fb818c2e",
             "workflow_outputs": [
                 {
+                    "label": "myleap_add_ions.crd",
+                    "output_name": "output_crd_path",
+                    "uuid": "0d049a1d-0e09-4d5f-b98a-5ff05b146e34"
+                },
+                {
                     "label": "myleap_add_ions.parmtop",
                     "output_name": "output_top_path",
-                    "uuid": "658ccdc6-7c01-4904-975a-756bebb6e5ed"
+                    "uuid": "98579510-c395-4c8c-a3c9-ead0c147a89a"
                 },
                 {
                     "label": "myleap_add_ions.pdb",
                     "output_name": "output_pdb_path",
-                    "uuid": "6bf04c2b-f18e-4e15-877c-b94125f8f34f"
-                },
-                {
-                    "label": "myleap_add_ions.crd",
-                    "output_name": "output_crd_path",
-                    "uuid": "87698d23-ed06-4524-9d94-2a8b0a91e2e8"
+                    "uuid": "7bfdd2f5-2203-4fb2-af56-0c33bf5d5321"
                 }
             ]
         },
@@ -309,8 +309,8 @@
                 }
             ],
             "position": {
-                "left": 1235,
-                "top": 24
+                "left": 1235.1484375,
+                "top": 23.921875
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_top_path": {
@@ -330,7 +330,7 @@
                 {
                     "label": "myparmed_hmassrepartition.top",
                     "output_name": "output_top_path",
-                    "uuid": "50167f1f-9cdf-4f34-82a7-ff8781c733e8"
+                    "uuid": "53b135a8-ca1c-465a-bb57-d03b6e9caaca"
                 }
             ]
         },
@@ -363,8 +363,8 @@
                 }
             ],
             "position": {
-                "left": 1233,
-                "top": 309
+                "left": 1233.1875,
+                "top": 309.0703125
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_crd_path": {
@@ -389,14 +389,14 @@
             "uuid": "2ceb9a26-5fc7-4ffa-a2e7-4adf2763211a",
             "workflow_outputs": [
                 {
-                    "label": "mycpptraj_randomize_ions.crd",
-                    "output_name": "output_crd_path",
-                    "uuid": "c1a55ccf-f88e-4224-bf0c-15fc953d9bac"
-                },
-                {
                     "label": "mycpptraj_randomize_ions.pdb",
                     "output_name": "output_pdb_path",
-                    "uuid": "10bd1f79-dce9-4cfd-bef9-773433a5cf43"
+                    "uuid": "0daebfb6-d5ec-4c4e-86ba-31acbb2019a6"
+                },
+                {
+                    "label": "mycpptraj_randomize_ions.crd",
+                    "output_name": "output_crd_path",
+                    "uuid": "9ace22f4-6a28-49c1-a994-5eb62fd62cfe"
                 }
             ]
         },
@@ -458,8 +458,8 @@
                 }
             ],
             "position": {
-                "left": 1662,
-                "top": 0
+                "left": 1662.140625,
+                "top": 0.0
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_cpout_path": {
@@ -514,32 +514,32 @@
                 {
                     "label": "mysander_mdrun.log",
                     "output_name": "output_log_path",
-                    "uuid": "2b42ab9c-3abb-4264-9150-e3dbd8c984c6"
+                    "uuid": "622150b0-ea6a-4898-9325-800ea688556d"
                 },
                 {
                     "label": "mysander_mdrun.cpout",
                     "output_name": "output_cpout_path",
-                    "uuid": "5bd5a1a3-23ee-480b-93d0-6e5228f0a8a6"
-                },
-                {
-                    "label": "mysander_mdrun.cprst",
-                    "output_name": "output_cprst_path",
-                    "uuid": "00d0b90f-c76b-4df5-b09a-47b8116c88bc"
-                },
-                {
-                    "label": "mysander_mdrun.nc",
-                    "output_name": "output_traj_path",
-                    "uuid": "b81311fa-ac96-4585-9e5f-9270ca4094e3"
-                },
-                {
-                    "label": "mysander_mdrun.ncrst",
-                    "output_name": "output_rst_path",
-                    "uuid": "4686273e-a212-4a1b-a35c-c31a77fbc5f9"
+                    "uuid": "9b55241c-e431-4ccf-b3fc-9a748e3f2d34"
                 },
                 {
                     "label": "mysander_mdrun.mdinfo",
                     "output_name": "output_mdinfo_path",
-                    "uuid": "19d35131-59a5-4f7f-b44a-d9a34fc2920a"
+                    "uuid": "43794f50-def6-460e-bdce-6d41c0de136c"
+                },
+                {
+                    "label": "mysander_mdrun.ncrst",
+                    "output_name": "output_rst_path",
+                    "uuid": "3e1bb697-0f5b-4a1a-ad1a-e2ad960c6824"
+                },
+                {
+                    "label": "mysander_mdrun.nc",
+                    "output_name": "output_traj_path",
+                    "uuid": "1da62261-aed2-49e3-9a79-0ad040a0a7b1"
+                },
+                {
+                    "label": "mysander_mdrun.cprst",
+                    "output_name": "output_cprst_path",
+                    "uuid": "7ec2a7ba-1729-405a-808d-29e35c314d81"
                 }
             ]
         },
@@ -564,8 +564,8 @@
                 }
             ],
             "position": {
-                "left": 1917,
-                "top": 754.5
+                "left": 1917.265625,
+                "top": 754.609375
             },
             "post_job_actions": {},
             "tool_id": "biobb_amber_process_minout_ext",
@@ -577,7 +577,7 @@
                 {
                     "label": "myprocess_minout.dat",
                     "output_name": "output_dat_path",
-                    "uuid": "6e2e49b3-5533-45e8-be14-eec1ce018818"
+                    "uuid": "ebaf09f9-8264-4f6d-b753-9fb72c518fd5"
                 }
             ]
         },
@@ -639,8 +639,8 @@
                 }
             ],
             "position": {
-                "left": 2068.5,
-                "top": 19
+                "left": 2068.8203125,
+                "top": 18.9375
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_cpout_path": {
@@ -694,33 +694,33 @@
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "output_cprst_path",
-                    "uuid": "30f79776-b43e-45de-864a-2226ad87c281"
-                },
-                {
-                    "label": null,
                     "output_name": "output_cpout_path",
-                    "uuid": "2040ea61-6df7-40e0-b98a-5c86805b7929"
+                    "uuid": "4d450d17-d7ca-4998-9d56-cb52ca7fd076"
                 },
                 {
                     "label": null,
                     "output_name": "output_log_path",
-                    "uuid": "bfb21b63-fb45-4b19-8526-ce7443a030c8"
+                    "uuid": "8325c893-110e-4877-b36b-dc62ebe951a8"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_cprst_path",
+                    "uuid": "05fa7415-3ac2-455b-bc62-0f1de6ac7cc8"
                 },
                 {
                     "label": null,
                     "output_name": "output_traj_path",
-                    "uuid": "527714fb-25d2-425e-b4d3-9107d501e3c1"
+                    "uuid": "445abc72-5c1e-41fc-a23f-f393d8efee84"
                 },
                 {
                     "label": null,
                     "output_name": "output_rst_path",
-                    "uuid": "89fb9bd1-e551-4d4a-a8fa-22c5d31d1ce9"
+                    "uuid": "c6dff2f5-2a6b-499c-8871-8fab41c31fd9"
                 },
                 {
                     "label": null,
                     "output_name": "output_mdinfo_path",
-                    "uuid": "b924406e-dd31-4162-9eb3-94e7f85b6475"
+                    "uuid": "776694dc-479a-4d57-ad70-2256f3a80911"
                 }
             ]
         },
@@ -745,8 +745,8 @@
                 }
             ],
             "position": {
-                "left": 2304,
-                "top": 756.5
+                "left": 2304.3125,
+                "top": 756.59375
             },
             "post_job_actions": {},
             "tool_id": "biobb_amber_process_mdout_ext",
@@ -758,7 +758,7 @@
                 {
                     "label": "myprocess_mdout.dat",
                     "output_name": "output_dat_path",
-                    "uuid": "f6f4de4f-502d-4e45-b556-3b7a4bea0fe8"
+                    "uuid": "7269d505-7f90-4877-8a75-badf4ab044ad"
                 }
             ]
         },
@@ -820,8 +820,8 @@
                 }
             ],
             "position": {
-                "left": 2452.5,
-                "top": 17
+                "left": 2452.8203125,
+                "top": 16.9296875
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_cpout_path": {
@@ -875,33 +875,33 @@
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "output_traj_path",
-                    "uuid": "5ad54da7-a84b-42d9-b62b-2a628da1e2f0"
+                    "output_name": "output_mdinfo_path",
+                    "uuid": "cd557e70-3071-4bba-8e84-3de25801902b"
                 },
                 {
                     "label": null,
-                    "output_name": "output_mdinfo_path",
-                    "uuid": "fa894cb5-fc91-4d3e-985f-24876e3821e7"
+                    "output_name": "output_traj_path",
+                    "uuid": "9dd443cb-2a58-4cf9-862f-bb6674af06da"
                 },
                 {
                     "label": null,
                     "output_name": "output_cprst_path",
-                    "uuid": "6d8e5c2e-a9df-46cc-940e-50e66cefd41c"
+                    "uuid": "ddd7283e-eb99-4123-ab6f-7408bf2ae029"
                 },
                 {
                     "label": null,
                     "output_name": "output_cpout_path",
-                    "uuid": "2f1ff05f-3de8-4aa3-93b9-e467e79cf08b"
+                    "uuid": "e3f5b0d3-6a14-48a0-a2ed-96c118e2d96e"
                 },
                 {
                     "label": null,
                     "output_name": "output_rst_path",
-                    "uuid": "6c16815a-4628-475c-89db-3332ec68ce57"
+                    "uuid": "40345834-b004-4a6e-a2c1-86ca610199fb"
                 },
                 {
                     "label": null,
                     "output_name": "output_log_path",
-                    "uuid": "c7e9c320-93db-4764-8bb3-3feb8fa1bf5e"
+                    "uuid": "1cdab1cd-dab8-4a26-a4d8-0aaf009db824"
                 }
             ]
         },
@@ -926,8 +926,8 @@
                 }
             ],
             "position": {
-                "left": 2714,
-                "top": 753.5
+                "left": 2714.328125,
+                "top": 753.5625
             },
             "post_job_actions": {},
             "tool_id": "biobb_amber_process_minout_ext",
@@ -939,7 +939,7 @@
                 {
                     "label": null,
                     "output_name": "output_dat_path",
-                    "uuid": "f8a711d5-5fc9-4603-b3ca-e537ce03884d"
+                    "uuid": "540a5f92-0c74-4b64-8c3f-794d15c9ff2f"
                 }
             ]
         },
@@ -1001,8 +1001,8 @@
                 }
             ],
             "position": {
-                "left": 2840.5,
-                "top": 25
+                "left": 2840.8359375,
+                "top": 24.9453125
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_cpout_path": {
@@ -1056,33 +1056,33 @@
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "output_traj_path",
-                    "uuid": "3df6fa17-6367-4316-a330-e12b3e4b1b93"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_log_path",
-                    "uuid": "784ad6b3-7aff-496f-80ff-ae3b2bbc9e6d"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_mdinfo_path",
-                    "uuid": "245006dc-d4cc-4f21-864d-c3f31a73623b"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_rst_path",
-                    "uuid": "d99eab73-6e97-4d10-9a40-0a5b840b8146"
-                },
-                {
-                    "label": null,
                     "output_name": "output_cpout_path",
-                    "uuid": "c8617336-997c-4afc-bac1-c2af1f581445"
+                    "uuid": "bb50f9e3-5584-4c05-82bc-3e16b3a3848f"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_traj_path",
+                    "uuid": "129f1e51-3b32-435f-854f-ec35fcc92f96"
                 },
                 {
                     "label": null,
                     "output_name": "output_cprst_path",
-                    "uuid": "cb5aab4c-cd7d-4d78-af30-b4feceb7acd9"
+                    "uuid": "74cb686f-4798-4624-875e-091a05ffd9c7"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_log_path",
+                    "uuid": "24405f37-0d1d-4eed-90a8-592503b58367"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_mdinfo_path",
+                    "uuid": "f5f4ca56-d6c1-465c-a406-d1eecf842837"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_rst_path",
+                    "uuid": "23ba26d6-8dbc-4d09-9333-94b0b61e7d84"
                 }
             ]
         },
@@ -1107,8 +1107,8 @@
                 }
             ],
             "position": {
-                "left": 3104,
-                "top": 759.5
+                "left": 3104.296875,
+                "top": 759.5234375
             },
             "post_job_actions": {},
             "tool_id": "biobb_amber_process_minout_ext",
@@ -1120,7 +1120,7 @@
                 {
                     "label": null,
                     "output_name": "output_dat_path",
-                    "uuid": "65e9e3a4-6a62-4c4c-b1ad-0e3e9b583b44"
+                    "uuid": "64c8a06d-6e09-43ff-a66d-209376d1e588"
                 }
             ]
         },
@@ -1182,8 +1182,8 @@
                 }
             ],
             "position": {
-                "left": 3220.5,
-                "top": 28
+                "left": 3220.828125,
+                "top": 27.9140625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_cpout_path": {
@@ -1237,33 +1237,33 @@
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "output_cprst_path",
-                    "uuid": "cee8d5d3-c9cc-445b-8a64-7833240e5ece"
-                },
-                {
-                    "label": null,
                     "output_name": "output_mdinfo_path",
-                    "uuid": "9b957616-3ed5-4c00-b037-079ef7dd237f"
+                    "uuid": "18be34f2-8e56-4e28-8dd6-cde60db5189d"
                 },
                 {
                     "label": null,
                     "output_name": "output_cpout_path",
-                    "uuid": "1d83d2e5-ab3a-4fc0-b39c-45c7f507b7f5"
+                    "uuid": "c51008ac-4923-4297-83c1-63f8eca67057"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_cprst_path",
+                    "uuid": "2130fd0e-31e8-43af-a65c-7330e034d29e"
                 },
                 {
                     "label": null,
                     "output_name": "output_log_path",
-                    "uuid": "0578a05c-58b8-4a55-ba67-938d7b27572f"
+                    "uuid": "cb4c754a-3348-4b3b-9f9d-eb9ff2562d83"
                 },
                 {
                     "label": null,
                     "output_name": "output_rst_path",
-                    "uuid": "c792896b-740b-44b7-81aa-7bcbc46c2b41"
+                    "uuid": "028b59a2-a230-4f92-8cc8-f484cf533e64"
                 },
                 {
                     "label": null,
                     "output_name": "output_traj_path",
-                    "uuid": "ab24f2bc-8b09-4c54-ad54-cecef5f595bb"
+                    "uuid": "5eb052c6-2f91-43c5-9ba6-20ae41291f3d"
                 }
             ]
         },
@@ -1325,8 +1325,8 @@
                 }
             ],
             "position": {
-                "left": 3572.5,
-                "top": 32
+                "left": 3572.796875,
+                "top": 31.9765625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_cpout_path": {
@@ -1380,33 +1380,33 @@
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "output_cprst_path",
-                    "uuid": "de69c8d3-59e3-4338-a462-c8e15ca0101d"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_mdinfo_path",
-                    "uuid": "bd8efcfb-6409-4512-8266-b481757aa2cb"
+                    "output_name": "output_cpout_path",
+                    "uuid": "6b3176e8-69e3-4ed2-a796-28aa344a9e59"
                 },
                 {
                     "label": null,
                     "output_name": "output_log_path",
-                    "uuid": "3970eff4-173f-4124-ba3e-c3b26bc9247a"
+                    "uuid": "fb3a2ef4-2f12-45a5-bda8-13a90b3b8e1f"
                 },
                 {
                     "label": null,
-                    "output_name": "output_cpout_path",
-                    "uuid": "e0b1d0e8-9417-4312-8e10-e29b96d839a4"
+                    "output_name": "output_mdinfo_path",
+                    "uuid": "2f765d62-9bc2-4cdd-af17-5370da6478b9"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_cprst_path",
+                    "uuid": "7d15dc25-7ae1-4093-abe7-1c138203495c"
                 },
                 {
                     "label": null,
                     "output_name": "output_rst_path",
-                    "uuid": "d026d711-45ff-417c-b34c-d75cd290c8be"
+                    "uuid": "9fd3d6a7-a197-4c84-b990-9c51ebc4ad57"
                 },
                 {
                     "label": null,
                     "output_name": "output_traj_path",
-                    "uuid": "cc4c3f21-6751-4d85-9ead-89347f31c40d"
+                    "uuid": "49db7af4-a675-4dc4-a9de-f9e7db8812c7"
                 }
             ]
         },
@@ -1431,8 +1431,8 @@
                 }
             ],
             "position": {
-                "left": 3508,
-                "top": 763.5
+                "left": 3508.3125,
+                "top": 763.5859375
             },
             "post_job_actions": {},
             "tool_id": "biobb_amber_process_minout_ext",
@@ -1444,7 +1444,7 @@
                 {
                     "label": null,
                     "output_name": "output_dat_path",
-                    "uuid": "a6ddd599-990a-4d70-ae6b-1400c8de2201"
+                    "uuid": "69247d8b-366e-4de7-a20b-3c3dbfabee96"
                 }
             ]
         },
@@ -1459,7 +1459,12 @@
                     "output_name": "output_log_path"
                 }
             },
-            "inputs": [],
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool ProcessMdout",
+                    "name": "input_log_path"
+                }
+            ],
             "label": null,
             "name": "ProcessMdout",
             "outputs": [
@@ -1469,12 +1474,12 @@
                 }
             ],
             "position": {
-                "left": 3873,
-                "top": 759.5
+                "left": 3873.328125,
+                "top": 759.5234375
             },
             "post_job_actions": {},
             "tool_id": "biobb_amber_process_mdout_ext",
-            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_log_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_dat_path\": \"myprocess_mdout.dat\", \"properties\": {\"terms\": [\"PRES\", \"DENSITY\"], \"binary_path\": \"process_mdout.perl\", \"output_format\": \"dat\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_log_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_dat_path\": \"myprocess_mdout.dat\", \"properties\": {\"terms\": [\"PRES\"], \"binary_path\": \"process_mdout.perl\", \"output_format\": \"dat\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
             "tool_version": "4.0.0",
             "type": "tool",
             "uuid": "b6402a95-85f8-4634-836d-3d0de7a7fb47",
@@ -1482,7 +1487,7 @@
                 {
                     "label": null,
                     "output_name": "output_dat_path",
-                    "uuid": "474f34a3-8575-4235-ab8d-9360847f9512"
+                    "uuid": "c9ba3395-ad4e-422d-a05e-2526a988ae54"
                 }
             ]
         },
@@ -1544,8 +1549,8 @@
                 }
             ],
             "position": {
-                "left": 3948.5,
-                "top": 37
+                "left": 3948.828125,
+                "top": 37.03125
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_cpout_path": {
@@ -1600,32 +1605,32 @@
                 {
                     "label": null,
                     "output_name": "output_rst_path",
-                    "uuid": "b2475aec-5525-44c3-b2b7-7597e256a5c6"
+                    "uuid": "fd3ac354-7042-4d72-a3d6-04d4ce51ce90"
                 },
                 {
                     "label": null,
                     "output_name": "output_traj_path",
-                    "uuid": "bb9707e6-5ab7-440b-9e5b-8e6e8d2feea4"
+                    "uuid": "39f5866c-e49b-4a6f-8d32-20f1fed7e3c9"
                 },
                 {
                     "label": null,
                     "output_name": "output_cprst_path",
-                    "uuid": "79a4313c-43e7-4e42-8a05-e2e8c03071be"
+                    "uuid": "450bcad6-79fa-4cf8-8dc1-b75a5d892369"
                 },
                 {
                     "label": null,
                     "output_name": "output_cpout_path",
-                    "uuid": "6d2e17e6-ac43-4cac-a9fa-abc0f5c06184"
+                    "uuid": "5b290ccb-c957-4780-a978-6eac7610b8da"
                 },
                 {
                     "label": null,
                     "output_name": "output_log_path",
-                    "uuid": "15239704-a140-41a7-9c73-d083e46c7d2f"
+                    "uuid": "39a8fd0d-4f1c-478b-a6a6-85ed46a295da"
                 },
                 {
                     "label": null,
                     "output_name": "output_mdinfo_path",
-                    "uuid": "4218de1a-aca9-4811-a5b0-6ab304c75a98"
+                    "uuid": "399c4a1b-5191-4796-8c36-692f2b3812af"
                 }
             ]
         },
@@ -1650,8 +1655,8 @@
                 }
             ],
             "position": {
-                "left": 4214,
-                "top": 756.5
+                "left": 4214.34375,
+                "top": 756.59375
             },
             "post_job_actions": {},
             "tool_id": "biobb_amber_process_mdout_ext",
@@ -1663,7 +1668,7 @@
                 {
                     "label": null,
                     "output_name": "output_dat_path",
-                    "uuid": "b28bbbe9-c35a-4bb4-a254-d8b65020534b"
+                    "uuid": "f39ea540-9bb7-43cb-b95c-25facabf9b60"
                 }
             ]
         },
@@ -1725,8 +1730,8 @@
                 }
             ],
             "position": {
-                "left": 4337.5,
-                "top": 41
+                "left": 4337.84375,
+                "top": 41.015625
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_cpout_path": {
@@ -1781,32 +1786,32 @@
                 {
                     "label": null,
                     "output_name": "output_traj_path",
-                    "uuid": "3dd954c3-fb95-4b72-a920-470a58cf8f7a"
+                    "uuid": "6f233f73-bb33-47b4-8146-48df69291aae"
                 },
                 {
                     "label": null,
                     "output_name": "output_rst_path",
-                    "uuid": "8afd261a-392c-4cda-9a68-e27a28f1b9a4"
+                    "uuid": "cbac9b7d-ab53-43dd-991a-178d2086f2fd"
                 },
                 {
                     "label": null,
                     "output_name": "output_mdinfo_path",
-                    "uuid": "1c0871a4-085a-4017-8ad1-b94b1b1071ad"
+                    "uuid": "2a967345-5cfc-4dab-b2b6-ff276d845aa9"
                 },
                 {
                     "label": null,
                     "output_name": "output_log_path",
-                    "uuid": "94b43f95-3c2e-4103-aecf-e165e5685474"
+                    "uuid": "2a715e1a-124f-4ce4-8cf6-95d8fb76f787"
                 },
                 {
                     "label": null,
                     "output_name": "output_cpout_path",
-                    "uuid": "77c63275-77a4-4910-ab33-9dbe88b0f144"
+                    "uuid": "570c110a-c028-4cfe-b032-1d60dc1fe912"
                 },
                 {
                     "label": null,
                     "output_name": "output_cprst_path",
-                    "uuid": "529f2b49-0378-4970-915e-d23ac1a6407a"
+                    "uuid": "856942a5-74e5-4903-905a-4e062fe21451"
                 }
             ]
         },
@@ -1831,8 +1836,8 @@
                 }
             ],
             "position": {
-                "left": 4576,
-                "top": 756.5
+                "left": 4576.34375,
+                "top": 756.59375
             },
             "post_job_actions": {},
             "tool_id": "biobb_amber_process_mdout_ext",
@@ -1844,7 +1849,7 @@
                 {
                     "label": null,
                     "output_name": "output_dat_path",
-                    "uuid": "68a453a6-69e2-43aa-bf01-be4192862f97"
+                    "uuid": "8c221f89-4dd6-43f5-b9e7-a2dae7519a0a"
                 }
             ]
         },
@@ -1906,8 +1911,8 @@
                 }
             ],
             "position": {
-                "left": 4696.5,
-                "top": 46
+                "left": 4696.84375,
+                "top": 46.03125
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_cpout_path": {
@@ -1962,32 +1967,32 @@
                 {
                     "label": null,
                     "output_name": "output_cprst_path",
-                    "uuid": "59adcc7d-bb49-4df2-b781-dedc4ba59c05"
+                    "uuid": "2f842cbc-a7be-461f-a223-073a17bc666a"
                 },
                 {
                     "label": null,
                     "output_name": "output_log_path",
-                    "uuid": "caf17b1d-2a03-4be0-b6eb-5ce0e95dcf34"
+                    "uuid": "b0ef484a-abe2-4d07-9c8b-3f3752447475"
                 },
                 {
                     "label": null,
                     "output_name": "output_cpout_path",
-                    "uuid": "42962421-1683-43bb-8087-752f80f4faf8"
+                    "uuid": "d87afbc5-750b-49d7-b39e-dc3157ef37a8"
                 },
                 {
                     "label": null,
                     "output_name": "output_traj_path",
-                    "uuid": "2ef8284d-b621-496f-8e2e-6c97cc5da339"
+                    "uuid": "6adc7a85-3a8c-41bd-a8e4-65af22d1e208"
                 },
                 {
                     "label": null,
                     "output_name": "output_rst_path",
-                    "uuid": "2eb24b06-e945-4bea-849a-2a6d9e4b743e"
+                    "uuid": "b53336b8-0a14-4e49-922b-098a67740b48"
                 },
                 {
                     "label": null,
                     "output_name": "output_mdinfo_path",
-                    "uuid": "244ae614-2a95-493f-b5c3-bc88140f2d98"
+                    "uuid": "ce993711-a9c9-402d-95f9-17e704f8ea46"
                 }
             ]
         },
@@ -2012,8 +2017,8 @@
                 }
             ],
             "position": {
-                "left": 4977,
-                "top": 759.5
+                "left": 4977.3125,
+                "top": 759.5234375
             },
             "post_job_actions": {},
             "tool_id": "biobb_amber_process_mdout_ext",
@@ -2025,7 +2030,7 @@
                 {
                     "label": null,
                     "output_name": "output_dat_path",
-                    "uuid": "aa90460d-e80e-4fe0-8f30-9c7bda6e87c6"
+                    "uuid": "bbea8d35-faf2-4bfa-bd71-de174a1dc91c"
                 }
             ]
         },
@@ -2087,8 +2092,8 @@
                 }
             ],
             "position": {
-                "left": 5097.5,
-                "top": 65
+                "left": 5097.84375,
+                "top": 65.125
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_cpout_path": {
@@ -2142,33 +2147,33 @@
             "workflow_outputs": [
                 {
                     "label": null,
+                    "output_name": "output_mdinfo_path",
+                    "uuid": "1d6ae612-a15b-44ae-a66b-c019a44f280d"
+                },
+                {
+                    "label": null,
                     "output_name": "output_log_path",
-                    "uuid": "7c61b001-33cf-4a03-ba0d-22068142597a"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_rst_path",
-                    "uuid": "35930199-8085-4c3b-8f8b-a9aad1387666"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_traj_path",
-                    "uuid": "c1c73cd6-4a07-4bac-8efb-c8a59f7bb32f"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_cprst_path",
-                    "uuid": "d60bba2f-745f-4876-8d73-959447448c25"
+                    "uuid": "2cd82e19-9249-47a0-92d0-64579c47b4da"
                 },
                 {
                     "label": null,
                     "output_name": "output_cpout_path",
-                    "uuid": "54634c61-4148-4267-a1b7-ba8aef5b2bd3"
+                    "uuid": "4bef3985-f251-444c-ab31-7ed434371597"
                 },
                 {
                     "label": null,
-                    "output_name": "output_mdinfo_path",
-                    "uuid": "7347537c-17a9-4dc4-b9e9-9118072bc010"
+                    "output_name": "output_cprst_path",
+                    "uuid": "791042ef-bbcb-4007-bd90-1ab5973592d3"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_traj_path",
+                    "uuid": "ac84ccea-5bda-4670-8cca-6cc8f28916a1"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_rst_path",
+                    "uuid": "4e3760df-5c18-4d83-b7ee-7ee1cbccc578"
                 }
             ]
         },
@@ -2193,8 +2198,8 @@
                 }
             ],
             "position": {
-                "left": 5342,
-                "top": 754.5
+                "left": 5342.3359375,
+                "top": 754.609375
             },
             "post_job_actions": {},
             "tool_id": "biobb_amber_process_mdout_ext",
@@ -2206,7 +2211,7 @@
                 {
                     "label": null,
                     "output_name": "output_dat_path",
-                    "uuid": "9afc4b7c-05ad-4a2f-a4a5-40379516caeb"
+                    "uuid": "a1d84a38-aaf4-4cde-a43c-98c820871fa0"
                 }
             ]
         },
@@ -2268,8 +2273,8 @@
                 }
             ],
             "position": {
-                "left": 5474.5,
-                "top": 46
+                "left": 5474.8359375,
+                "top": 46.03125
             },
             "post_job_actions": {
                 "ChangeDatatypeActionoutput_cpout_path": {
@@ -2323,38 +2328,38 @@
             "workflow_outputs": [
                 {
                     "label": null,
-                    "output_name": "output_traj_path",
-                    "uuid": "8359e5ee-a3ed-4198-b03a-4a6710ac656c"
+                    "output_name": "output_mdinfo_path",
+                    "uuid": "0623def6-7d9c-4612-b66f-96a4bfcf272a"
                 },
                 {
                     "label": null,
                     "output_name": "output_cpout_path",
-                    "uuid": "29f3697b-618a-41ca-b291-1a9ce3d45349"
+                    "uuid": "dc20f39c-f151-4079-805a-a725614ac0b7"
                 },
                 {
                     "label": null,
                     "output_name": "output_log_path",
-                    "uuid": "fccaedb7-2e5d-45fc-b5dd-0d0387646063"
+                    "uuid": "49e83d89-2574-40bf-89b8-8383648bf282"
                 },
                 {
                     "label": null,
                     "output_name": "output_cprst_path",
-                    "uuid": "10d93a7f-65ff-4579-80f1-6d43f447ffa2"
+                    "uuid": "30f97398-aeac-4f52-a5c4-3e56c78a5fce"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_traj_path",
+                    "uuid": "93edab8d-6b2a-4915-b61a-b2b587515c4e"
                 },
                 {
                     "label": null,
                     "output_name": "output_rst_path",
-                    "uuid": "a46f1be7-e498-4265-98a1-404304bdb146"
-                },
-                {
-                    "label": null,
-                    "output_name": "output_mdinfo_path",
-                    "uuid": "442d34cc-61f7-4cc7-9dfb-b79bdd649b75"
+                    "uuid": "b0520fe0-b589-4847-b670-24fe7a1d581e"
                 }
             ]
         }
     },
     "tags": [],
-    "uuid": "c46dc2a9-95e1-4610-907f-ea9456d5d7a1",
-    "version": 5
+    "uuid": "cdfc75d4-d6c3-4552-b88d-3586bc64de7c",
+    "version": 15
 }

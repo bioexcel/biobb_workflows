@@ -203,7 +203,7 @@ step17_process_mdout_eq6:
     input_log_path:  dependency/step16_sander_mdrun_eq6/output_log_path
     output_dat_path: sander.eq6.pressure_and_density.dat
   properties:
-    terms: [PRES, DENSITY]
+    terms: [PRES]
 
 step18_sander_mdrun_eq7:
   tool: sander_mdrun
