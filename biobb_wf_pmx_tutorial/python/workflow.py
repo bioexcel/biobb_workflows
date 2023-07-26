@@ -2,7 +2,7 @@
 
 import time
 import argparse
-import os, sys
+import os
 import zipfile
 
 # biobb common modules
@@ -10,9 +10,9 @@ from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 
 # biobb pmx modules
-from biobb_pmx.pmx.pmxmutate import pmxmutate
-from biobb_pmx.pmx.pmxgentop import pmxgentop
-from biobb_pmx.pmx.pmxanalyse import pmxanalyse
+from biobb_pmx.pmxbiobb.pmxmutate import pmxmutate
+from biobb_pmx.pmxbiobb.pmxgentop import pmxgentop
+from biobb_pmx.pmxbiobb.pmxanalyse import pmxanalyse
 
 # biobb md modules
 from biobb_gromacs.gromacs.pdb2gmx import pdb2gmx
@@ -22,6 +22,7 @@ from biobb_gromacs.gromacs.mdrun import mdrun
 
 # biobb analysis module
 from biobb_analysis.gromacs.gmx_trjconv_str_ens import gmx_trjconv_str_ens
+
 
 def main(config, system=None):
     start_time = time.time()
@@ -36,7 +37,7 @@ def main(config, system=None):
         ensemble_prop = conf.get_prop_dic(prefix=ensemble, global_log=global_log)
         ensemble_paths = conf.get_paths_dic(prefix=ensemble)
 
-        #Create and launch bb
+        # Create and launch bb
         global_log.info(ensemble+" Step 0: gmx trjconv: Extract snapshots from equilibrium trajectories")
         ensemble_paths['step0_trjconv']['input_traj_path'] = conf.properties['input_trajs'][ensemble]['input_traj_path']
         ensemble_paths['step0_trjconv']['input_top_path'] = conf.properties['input_trajs'][ensemble]['input_tpr_path']
@@ -51,7 +52,7 @@ def main(config, system=None):
             prop = conf.get_prop_dic(prefix=os.path.join(ensemble, pdb_name), global_log=global_log)
             paths = conf.get_paths_dic(prefix=os.path.join(ensemble, pdb_name))
 
-            #Create and launch bb
+            # Create and launch bb
             global_log.info("Step 1: pmx mutate: Generate Hybrid Structure")
             paths['step1_pmx_mutate']['input_structure_path'] = pdb_path
             prop['step1_pmx_mutate']['mutation_list'] = mutation
@@ -123,8 +124,7 @@ def main(config, system=None):
             elif ensemble == "stateB":
                 dhdl_paths_listB.append(paths["step10_gmx_mdrun"]["output_dhdl_path"])
 
-
-    #Creating zip file containing all the dhdl files
+    # Creating zip file containing all the dhdl files
     dhdlA_path = 'dhdlA.zip'
     dhdlB_path = 'dhdlB.zip'
     fu.zip_list(dhdlA_path, dhdl_paths_listA, global_log)
@@ -134,8 +134,8 @@ def main(config, system=None):
     # From pmx tutorial:
     # python analyze_dhdl.py -fA ../stateA/frame*/dhdl*.xvg -fB ../stateB/frame*/dhdl*.xvg --nbins 25 -t 293 --reverseB
     global_log.info(ensemble+" Step 11: pmx analyse: Calculate free energies from fast growth thermodynamic integration simulations")
-    global_paths["step11_pmx_analyse"]["input_a_xvg_zip_path"]=dhdlA_path
-    global_paths["step11_pmx_analyse"]["input_b_xvg_zip_path"]=dhdlB_path
+    global_paths["step11_pmx_analyse"]["input_a_xvg_zip_path"] = dhdlA_path
+    global_paths["step11_pmx_analyse"]["input_b_xvg_zip_path"] = dhdlB_path
     pmxanalyse(**global_paths["step11_pmx_analyse"], properties=global_prop["step11_pmx_analyse"])
 
     elapsed_time = time.time() - start_time
@@ -149,7 +149,7 @@ def main(config, system=None):
     global_log.info('')
     global_log.info('Elapsed time: %.1f minutes' % (elapsed_time/60))
     global_log.info('')
-    
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Automatic Ligand parameterization tutorial using BioExcel Building Blocks")
@@ -157,4 +157,3 @@ if __name__ == '__main__':
     parser.add_argument('--system', required=False)
     args = parser.parse_args()
     main(args.config, args.system)
-
