@@ -43,6 +43,10 @@ So execute the following script (changing name_of_environment by the name shown 
 
 To run this workflow properly in your computer, you should open in a text/code editor the **workflow.yml** file and replace all the occurrences of **/path/to/inputs/** with the absolute path to the folder where you have decompressed the zip file downloaded in the first step.
 
+## <a name="libraries-folder"></a>Libraries folder
+
+**Important:** Depending on the operating system used, the **step1** can return an error about a missing **.curvesplus** folder. In this case, please copy the **.curvesplus** folder provided in the **repository** and copy it into the **/path/to/anaconda3/envs/biobb_dna_helparms_tutorial** folder in your computer.
+
 ## <a name="run-wf"></a>Run workflow
 
 After that, the only thing left is to run the workflow:
