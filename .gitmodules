@@ -28,3 +28,6 @@
 [submodule "biobb_wf_flexdyn/jupyter"]
 	path = biobb_wf_flexdyn/jupyter
 	url = https://github.com/bioexcel/biobb_wf_flexdyn
+[submodule "biobb_wf_godmd/jupyter"]
+	path = biobb_wf_godmd/jupyter
+	url = https://github.com/bioexcel/biobb_wf_godmd
