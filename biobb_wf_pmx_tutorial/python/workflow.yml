@@ -54,7 +54,7 @@ step4_gmx_makendx:
     input_structure_path: dependency/step2_gmx_pdb2gmx/output_gro_path
     output_ndx_path: index_pmx.ndx
   properties:
-    selection : 'a D*\n0 & ! 19\nname 20 FREEZE'
+    selection : "a D*\n0 & ! 19\nname 20 FREEZE"
 
 step5_gmx_grompp:
   paths:
