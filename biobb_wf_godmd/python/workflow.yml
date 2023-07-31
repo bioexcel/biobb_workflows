@@ -4,7 +4,7 @@ can_write_console_log: False
 step0_extract_chain:
   tool: extract_chain
   paths:
-    input_structure_path: /Users/gbayarri/python_godmd/origin.pdb
+    input_structure_path: /path/to/inputs/origin.pdb
     output_structure_path: origin.chains.pdb
   properties:
     chains: ['A']
@@ -12,7 +12,7 @@ step0_extract_chain:
 step1_extract_chain:
   tool: extract_chain
   paths:
-    input_structure_path: /Users/gbayarri/python_godmd/target.pdb
+    input_structure_path: /path/to/inputs/target.pdb
     output_structure_path: target.chains.pdb
   properties:
     chains: ['A']
