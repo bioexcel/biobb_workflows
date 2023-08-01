@@ -2,8 +2,6 @@
 
 import time
 import argparse
-from pathlib import Path, PurePath
-import shutil
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_structure_utils.utils.extract_chain import extract_chain
@@ -47,11 +45,6 @@ def main(config, system=None):
 
     global_log.info("step5_godmd_run: Running GOdMD")
     godmd_run(**global_paths["step5_godmd_run"], properties=global_prop["step5_godmd_run"])
-
-    # curently, godmd_run generates output_pdb_path out of wf folder, move into it
-    step5_pdb = PurePath(Path.cwd()).joinpath(PurePath(global_paths["step5_godmd_run"]["output_pdb_path"]).name)
-    if Path(step5_pdb).exists():
-        shutil.copy(step5_pdb, PurePath(Path.cwd()).joinpath(global_paths["step5_godmd_run"]["output_pdb_path"]))
 
     global_log.info("step6_cpptraj_convert: Converting trajectory to DCD ")
     cpptraj_convert(**global_paths["step6_cpptraj_convert"], properties=global_prop["step6_cpptraj_convert"])
