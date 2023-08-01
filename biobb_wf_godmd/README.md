@@ -34,7 +34,7 @@ The code wrapped is the ***GOdMD*** method, developed in the **[Molecular Modeli
 
 ## Workflow Managers
 
-* [Common Workflow Language (CWL)](#)
+* [Common Workflow Language (CWL)](cwl)
 * [Galaxy](#)
 * [Jupyter Notebooks](https://github.com/bioexcel/biobb_wf_godmd) (this link switches to a different repository) 
 * [Pure Python](python)
