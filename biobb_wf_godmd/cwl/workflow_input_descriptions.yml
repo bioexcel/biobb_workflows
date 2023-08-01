@@ -1,0 +1,27 @@
+step0_extract_chain_input_structure_path:
+  class: File
+  path: origin.pdb
+  format: https://edamontology.org/format_1476
+step0_extract_chain_output_structure_path: origin.chains.pdb
+step0_extract_chain_config: '{"chains": ["A"]}'
+step1_extract_chain_input_structure_path:
+  class: File
+  path: target.pdb
+  format:https://edamontology.org/format_1476
+step1_extract_chain_output_structure_path: target.chains.pdb
+step1_extract_chain_config: '{"chains": ["A"]}'
+step2_remove_molecules_output_molecules_path: origin.chains.nolig.pdb
+step2_remove_molecules_config: '{"molecules": [{"name": "AP5"}]}'
+# uncomment if the target structure has a ligand
+# step3_remove_molecules_output_molecules_path: target.chains.nolig.pdb
+# step3_remove_molecules_config: '{"molecules": []}'
+step4_godmd_prep_output_aln_orig_path: origin.aln
+step4_godmd_prep_output_aln_target_path: target.aln
+step4_godmd_prep_config: '{"gapopen": 12.0, "gapextend": 2}'
+step5_godmd_run_output_log_path: origin-target.godmd.log
+step5_godmd_run_output_ene_path: origin-target.godmd.ene.out
+step5_godmd_run_output_trj_path: origin-target.godmd.mdcrd
+step5_godmd_run_output_pdb_path: origin-target.godmd.pdb
+step5_godmd_run_config: '{"godmdin": {"temp": 400}}'
+step6_cpptraj_convert_output_cpptraj_path: origin-target.godmd.dcd
+step6_cpptraj_convert_config: '{"format": "dcd"}'
