@@ -1,0 +1,76 @@
+step0_extract_atoms_input_structure_path:
+  class: File
+  path: structure.pdb
+  format: https://edamontology.org/format_1476
+step0_extract_atoms_output_structure_path: structure_ca.pdb
+step0_extract_atoms_config: '{"regular_expression_pattern": "^CA"}'
+step1_bd_run_output_crd_path: bd_ensemble.mdcrd
+step1_bd_run_output_log_path: bd_ensemble.log
+step1_bd_run_config: '{"binary_path": "bd", "time": 10000, "wfreq": 100}'
+step2_cpptraj_rms_output_cpptraj_path: bd_ensemble_rmsd.dat
+step2_cpptraj_rms_output_traj_path: bd_ensemble.dcd
+step2_cpptraj_rms_config: '{"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}'
+step3_dmd_run_output_crd_path: dmd_ensemble.mdcrd
+step3_dmd_run_output_log_path: dmd_ensemble.log
+step4_cpptraj_rms_output_cpptraj_path: dmd_ensemble_rmsd.dat
+step4_cpptraj_rms_output_traj_path: dmd_ensemble.dcd
+step4_cpptraj_rms_config: '{"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}'
+step5_nma_run_output_crd_path: nma_ensemble.mdcrd
+step5_nma_run_output_log_path: nma_ensemble.log
+step5_nma_run_config: '{"frames": 50}'
+step6_cpptraj_rms_output_cpptraj_path: nma_ensemble_rmsd.dat
+step6_cpptraj_rms_output_traj_path: nma_ensemble.dcd
+step6_cpptraj_rms_config: '{"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}'
+step7_pcz_zip_output_pcz_path: bd_ensemble.pcz
+step7_pcz_zip_config: '{"variance": 90, "neigenv": 10, "gauss_rmsd": true}'
+step8_pcz_zip_output_pcz_path: dmd_ensemble.pcz
+step8_pcz_zip_config: '{"variance": 90, "neigenv": 10, "gauss_rmsd": true}'
+step9_pcz_zip_output_pcz_path: nma_ensemble.pcz
+step9_pcz_zip_config: '{"variance": 90, "neigenv": 10, "gauss_rmsd": true}'
+step10_pcz_unzip_output_crd_path: bd_ensemble_uncompressed.crd
+step11_pcz_unzip_output_crd_path: dmd_ensemble_uncompressed.crd
+step12_pcz_unzip_output_crd_path: nma_ensemble_uncompressed.crd
+step13_cpptraj_rms_output_cpptraj_path: bd_ensemble_uncompressed.rmsd.dat
+step13_cpptraj_rms_output_traj_path: bd_ensemble_uncompressed.dcd
+step13_cpptraj_rms_config: '{"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}'
+step14_cpptraj_rms_output_cpptraj_path: dmd_ensemble_uncompressed.rmsd.dat
+step14_cpptraj_rms_output_traj_path: dmd_ensemble_uncompressed.dcd
+step14_cpptraj_rms_config: '{"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}'
+step15_cpptraj_rms_output_cpptraj_path: nma_ensemble_uncompressed.rmsd.dat
+step15_cpptraj_rms_output_traj_path: nma_ensemble_uncompressed.dcd
+step15_cpptraj_rms_config: '{"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}'
+step16_pcz_info_output_json_path: pcz_report.json
+step17_pcz_evecs_output_json_path: pcz_evecs.json
+step17_pcz_evecs_config: '{"eigenvector": 1}'
+step18_pcz_animate_output_crd_path: pcz_proj1.crd
+step18_pcz_animate_config: '{"eigenvector": 1}'
+step19_cpptraj_convert_output_cpptraj_path: pcz_proj1.dcd
+step19_cpptraj_convert_config: '{"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "format": "dcd"}'
+step20_pcz_bfactor_output_dat_path: bfactor_all.dat
+step20_pcz_bfactor_output_pdb_path: bfactor_all.pdb
+step20_pcz_bfactor_config: '{"eigenvector": 0, "pdb": true}'
+step21_pcz_hinges_output_json_path: hinges_bfactor_report.json
+step21_pcz_hinges_config: '{"eigenvector": 0, "method": "Bfactor_slope"}'
+step22_pcz_hinges_output_json_path: hinges_dyndom_report.json
+step22_pcz_hinges_config: '{"eigenvector": 0, "method": "Dynamic_domain"}'
+step23_pcz_hinges_output_json_path: hinges_fcte_report.json
+step23_pcz_hinges_config: '{"eigenvector": 0, "method": "Force_constant"}'
+step24_pcz_stiffness_output_json_path: pcz_stiffness.json
+step24_pcz_stiffness_config: '{"eigenvector": 0}'
+step25_pcz_collectivity_output_json_path: pcz_collectivity.json
+step25_pcz_collectivity_config: '{"eigenvector": 0}'
+step26_pcz_similarity_input_pcz_path2:
+  class: File
+  path: 1a32.MoDEL.pcz
+  format: https://edamontology.org/format_3874
+step26_pcz_similarity_output_json_path: simIndex_bd_report_bd_vs_md.json
+step27_pcz_similarity_input_pcz_path2:
+  class: File
+  path: 1a32.MoDEL.pcz
+  format: https://edamontology.org/format_3874
+step27_pcz_similarity_output_json_path: simIndex_bd_report_dmd_vs_md.json
+step28_pcz_similarity_input_pcz_path2:
+  class: File
+  path: 1a32.MoDEL.pcz
+  format: https://edamontology.org/format_3874
+step28_pcz_similarity_output_json_path: simIndex_bd_report_nma_vs_md.json
