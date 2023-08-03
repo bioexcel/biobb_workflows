@@ -34,3 +34,9 @@
 [submodule "biobb_wf_flexserv/jupyter"]
 	path = biobb_wf_flexserv/jupyter
 	url = https://github.com/bioexcel/biobb_wf_flexserv
+[submodule "biobb_wf_cmip/jupyter"]
+	path = biobb_wf_cmip/jupyter
+	url = https://github.com/bioexcel/biobb_wf_cmip
+[submodule "biobb_wf_structure_checking/jupyter"]
+	path = biobb_wf_structure_checking/jupyter
+	url = https://github.com/bioexcel/biobb_wf_structure_checking
