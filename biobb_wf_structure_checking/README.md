@@ -38,10 +38,10 @@ An implementation of this workflow in a **web-based Graphical User Interface (GU
 
 ## Workflow Managers
 
-* [Common Workflow Language (CWL)](cwl)
+* [Common Workflow Language (CWL)](#)
 * [Galaxy](#)
 * [Jupyter Notebooks](https://github.com/bioexcel/biobb_wf_structure_checking) (this link switches to a different repository) 
-* [Pure Python](python)
+* [Pure Python](#)
 
 ## Copyright & Licensing
 This software has been developed in the [MMB group](http://mmb.irbbarcelona.org) at the [BSC](http://www.bsc.es/) & [IRB](https://www.irbbarcelona.org/) for the [European BioExcel](http://bioexcel.eu/), funded by the European Commission (EU H2020 [823830](http://cordis.europa.eu/projects/823830), EU H2020 [675728](http://cordis.europa.eu/projects/675728)).
