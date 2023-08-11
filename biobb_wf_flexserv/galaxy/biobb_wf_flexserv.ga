@@ -1,0 +1,1360 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "",
+    "format-version": "0.1",
+    "name": "Protein structure flexibility",
+    "steps": {
+        "0": {
+            "annotation": "",
+            "content_id": "biobb_io_pdb_ext",
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [],
+            "label": "Fetch structure",
+            "name": "Pdb",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 0.0,
+                "top": 884.7187226285437
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_io_pdb_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"outname_output_pdb_path\": \"mypdb.pdb\", \"properties\": {\"pdb_code\": \"1a32\", \"filter\": \"\", \"api_id\": \"pdbe\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "34313764-b46f-4358-aea2-d49f0a0ff461",
+            "workflow_outputs": [
+                {
+                    "label": "mypdb.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "42c16409-6e8f-41f5-b91b-55fe9a6b2c9b"
+                }
+            ]
+        },
+        "1": {
+            "annotation": "",
+            "content_id": "biobb_structure_utils_extract_atoms_ext",
+            "errors": null,
+            "id": 1,
+            "input_connections": {
+                "input_structure_path": {
+                    "id": 0,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "ExtractAtoms",
+            "outputs": [
+                {
+                    "name": "output_structure_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 260.6874933040882,
+                "top": 882.687499846659
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_structure_utils_extract_atoms_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_structure_path\": \"structure_ca.pdb\", \"properties\": {\"regular_expression_pattern\": \"^CA\", \"output_format\": \"pdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "3240d4f0-caea-4f3b-a94c-e03fe3e0fdad",
+            "workflow_outputs": [
+                {
+                    "label": "structure_ca.pdb",
+                    "output_name": "output_structure_path",
+                    "uuid": "d21302b1-5089-4496-8822-15b0defc8f46"
+                }
+            ]
+        },
+        "2": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_nma_run_ext",
+            "errors": null,
+            "id": 2,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "NmaRun",
+            "outputs": [
+                {
+                    "name": "output_log_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_crd_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 687.5625326617388,
+                "top": 544.6718532894002
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_nma_run_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_crd_path\": \"nma_ensemble.mdcrd\", \"outname_output_log_path\": \"nma_ensemble.log\", \"properties\": {\"binary_path\": \"diaghess\", \"frames\": \"50\", \"nvecs\": \"50\", \"output_log_path_format\": \"log\", \"output_crd_path_format\": \"crd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "4eb3ff50-9ec8-4037-99b4-4a37d6edf657",
+            "workflow_outputs": [
+                {
+                    "label": "nma_ensemble.log",
+                    "output_name": "output_log_path",
+                    "uuid": "3f100773-1720-4f86-8197-300dc3a42ff6"
+                },
+                {
+                    "label": "nma_ensemble.mdcrd",
+                    "output_name": "output_crd_path",
+                    "uuid": "2dfe8faf-bc4e-42af-bfd8-55328a98ced2"
+                }
+            ]
+        },
+        "3": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_dmd_run_ext",
+            "errors": null,
+            "id": 3,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "DmdRun",
+            "outputs": [
+                {
+                    "name": "output_log_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_crd_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 672.0156269295476,
+                "top": 944.6249512374051
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_dmd_run_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_crd_path\": \"dmd_ensemble.mdcrd\", \"outname_output_log_path\": \"dmd_ensemble.log\", \"properties\": {\"binary_path\": \"dmdgoopt\", \"dt\": \"1e-12\", \"temperature\": \"300\", \"frames\": \"1000\", \"output_log_path_format\": \"log\", \"output_crd_path_format\": \"crd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "ca4f7fd4-3c7d-44cf-8f94-e2661f609c68",
+            "workflow_outputs": [
+                {
+                    "label": "dmd_ensemble.log",
+                    "output_name": "output_log_path",
+                    "uuid": "797786c7-327f-4624-9e9f-54b30f93679e"
+                },
+                {
+                    "label": "dmd_ensemble.mdcrd",
+                    "output_name": "output_crd_path",
+                    "uuid": "7f334ee0-013d-4d22-875c-e78cd42b18e3"
+                }
+            ]
+        },
+        "4": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_bd_run_ext",
+            "errors": null,
+            "id": 4,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "BdRun",
+            "outputs": [
+                {
+                    "name": "output_log_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_crd_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 563.7656500329995,
+                "top": 1385.718754523575
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_bd_run_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_crd_path\": \"bd_ensemble.mdcrd\", \"outname_output_log_path\": \"bd_ensemble.log\", \"properties\": {\"binary_path\": \"bd\", \"time\": \"10000\", \"dt\": \"1e-15\", \"wfreq\": \"100\", \"output_log_path_format\": \"log\", \"output_crd_path_format\": \"crd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "3e29f1bf-20fd-4ea4-9e83-1e1c48a5f982",
+            "workflow_outputs": [
+                {
+                    "label": "bd_ensemble.log",
+                    "output_name": "output_log_path",
+                    "uuid": "433089ae-436f-4976-873b-8d7c1d4ad4f2"
+                },
+                {
+                    "label": "bd_ensemble.mdcrd",
+                    "output_name": "output_crd_path",
+                    "uuid": "39d398a2-0d6a-4a94-ac79-499d13e533f1"
+                }
+            ]
+        },
+        "5": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_rms_ext",
+            "errors": null,
+            "id": 5,
+            "input_connections": {
+                "input_exp_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                },
+                "input_top_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                },
+                "input_traj_path": {
+                    "id": 2,
+                    "output_name": "output_crd_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_exp_path"
+                },
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_top_path"
+                },
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_traj_path"
+                }
+            ],
+            "label": "CpptrajRms NMA",
+            "name": "CpptrajRms",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_traj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1026.8906188535623,
+                "top": 181.26561527559363
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_analysis_cpptraj_rms_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_exp_path\": {\"__class__\": \"RuntimeValue\"}, \"input_top_path\": {\"__class__\": \"RuntimeValue\"}, \"input_traj_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_cpptraj_path\": \"nma_ensemble_rmsd.dat\", \"outname_output_traj_path\": \"nma_ensemble.dcd\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"reference\": \"experimental\", \"nofit\": \"false\", \"norotate\": \"false\", \"nomod\": \"false\", \"binary_path\": \"cpptraj\", \"output_cpptraj_path_format\": \"dat\", \"output_traj_path_format\": \"dcd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "5b6522eb-efef-45c1-91cd-f629e4a9ebc6",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "dcf3d5e0-5dfc-42db-bdf3-abe961d60210"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_traj_path",
+                    "uuid": "4c85b575-ab47-44bf-8669-850d994c3bca"
+                }
+            ]
+        },
+        "6": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_zip_ext",
+            "errors": null,
+            "id": 6,
+            "input_connections": {
+                "input_crd_path": {
+                    "id": 2,
+                    "output_name": "output_crd_path"
+                },
+                "input_pdb_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool PczZip",
+                    "name": "input_crd_path"
+                },
+                {
+                    "description": "runtime parameter for tool PczZip",
+                    "name": "input_pdb_path"
+                }
+            ],
+            "label": "PczZip NMA",
+            "name": "PczZip",
+            "outputs": [
+                {
+                    "name": "output_pcz_path",
+                    "type": "pcz"
+                }
+            ],
+            "position": {
+                "left": 1379.2031312742238,
+                "top": 504.0781068418115
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_zip_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_crd_path\": {\"__class__\": \"RuntimeValue\"}, \"input_pdb_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_pcz_path\": \"nma_ensemble.pcz\", \"properties\": {\"binary_path\": \"pcazip\", \"neigenv\": \"10\", \"variance\": \"90\", \"verbose\": \"false\", \"gauss_rmsd\": \"true\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "8b422502-0a44-4b08-af4e-ef0bea9c0a99",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_pcz_path",
+                    "uuid": "cf4f954f-8800-41e7-988e-b8dcbe7ddad6"
+                }
+            ]
+        },
+        "7": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_rms_ext",
+            "errors": null,
+            "id": 7,
+            "input_connections": {
+                "input_exp_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                },
+                "input_top_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                },
+                "input_traj_path": {
+                    "id": 3,
+                    "output_name": "output_crd_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_exp_path"
+                },
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_top_path"
+                },
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_traj_path"
+                }
+            ],
+            "label": "CpptrajRms DMD",
+            "name": "CpptrajRms",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_traj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1020.8593911647499,
+                "top": 733.6718704636479
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_analysis_cpptraj_rms_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_exp_path\": {\"__class__\": \"RuntimeValue\"}, \"input_top_path\": {\"__class__\": \"RuntimeValue\"}, \"input_traj_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_cpptraj_path\": \"dmd_ensemble_rmsd.dat\", \"outname_output_traj_path\": \"dmd_ensemble.dcd\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"reference\": \"experimental\", \"nofit\": \"false\", \"norotate\": \"false\", \"nomod\": \"false\", \"binary_path\": \"cpptraj\", \"output_cpptraj_path_format\": \"dat\", \"output_traj_path_format\": \"dcd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "14aba407-4735-4620-814c-fec00aabb407",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "52ba291c-d72e-49ad-9e48-600542ef7956"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_traj_path",
+                    "uuid": "bfd8de30-d246-4a0f-8795-4d7813a8a593"
+                }
+            ]
+        },
+        "8": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_zip_ext",
+            "errors": null,
+            "id": 8,
+            "input_connections": {
+                "input_crd_path": {
+                    "id": 3,
+                    "output_name": "output_crd_path"
+                },
+                "input_pdb_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool PczZip",
+                    "name": "input_crd_path"
+                },
+                {
+                    "description": "runtime parameter for tool PczZip",
+                    "name": "input_pdb_path"
+                }
+            ],
+            "label": "PczZip DMD",
+            "name": "PczZip",
+            "outputs": [
+                {
+                    "name": "output_pcz_path",
+                    "type": "pcz"
+                }
+            ],
+            "position": {
+                "left": 1333.0781321942727,
+                "top": 955.9062237019341
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_zip_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_crd_path\": {\"__class__\": \"RuntimeValue\"}, \"input_pdb_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_pcz_path\": \"dmd_ensemble.pcz\", \"properties\": {\"binary_path\": \"pcazip\", \"neigenv\": \"10\", \"variance\": \"90\", \"verbose\": \"false\", \"gauss_rmsd\": \"true\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "65844fe7-19f7-4efa-b63c-5a9e3132670d",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_pcz_path",
+                    "uuid": "7818b5dc-1b7d-4c25-9062-dd81c501a5af"
+                }
+            ]
+        },
+        "9": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_rms_ext",
+            "errors": null,
+            "id": 9,
+            "input_connections": {
+                "input_exp_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                },
+                "input_top_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                },
+                "input_traj_path": {
+                    "id": 4,
+                    "output_name": "output_crd_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_exp_path"
+                },
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_top_path"
+                },
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_traj_path"
+                }
+            ],
+            "label": "CpptrajRms BD",
+            "name": "CpptrajRms",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_traj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 928.4218870245295,
+                "top": 1345.640603519413
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_analysis_cpptraj_rms_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_exp_path\": {\"__class__\": \"RuntimeValue\"}, \"input_top_path\": {\"__class__\": \"RuntimeValue\"}, \"input_traj_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_cpptraj_path\": \"bd_ensemble_rmsd.dat\", \"outname_output_traj_path\": \"bd_ensemble.dcd\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"reference\": \"experimental\", \"nofit\": \"false\", \"norotate\": \"false\", \"nomod\": \"false\", \"binary_path\": \"cpptraj\", \"output_cpptraj_path_format\": \"dat\", \"output_traj_path_format\": \"dcd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "526d390a-68a9-4bfc-a3c7-eb06b6602b71",
+            "workflow_outputs": [
+                {
+                    "label": "bd_ensemble_rmsd.dcd",
+                    "output_name": "output_traj_path",
+                    "uuid": "134c579d-2108-47e1-96f1-3ec1c72f10f6"
+                },
+                {
+                    "label": "bd_ensemble_rmsd.dat",
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "90df4af1-54cd-46df-83ae-76f6db71d230"
+                }
+            ]
+        },
+        "10": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_zip_ext",
+            "errors": null,
+            "id": 10,
+            "input_connections": {
+                "input_crd_path": {
+                    "id": 4,
+                    "output_name": "output_crd_path"
+                },
+                "input_pdb_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool PczZip",
+                    "name": "input_crd_path"
+                },
+                {
+                    "description": "runtime parameter for tool PczZip",
+                    "name": "input_pdb_path"
+                }
+            ],
+            "label": "PczZip BD",
+            "name": "PczZip",
+            "outputs": [
+                {
+                    "name": "output_pcz_path",
+                    "type": "pcz"
+                }
+            ],
+            "position": {
+                "left": 1247.5469040965495,
+                "top": 1402.0312636729507
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_zip_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_crd_path\": {\"__class__\": \"RuntimeValue\"}, \"input_pdb_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_pcz_path\": \"bd_ensemble.pcz\", \"properties\": {\"binary_path\": \"pcazip\", \"neigenv\": \"10\", \"variance\": \"90\", \"verbose\": \"false\", \"gauss_rmsd\": \"true\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "e8261def-42de-4fd6-bd5b-309cea05a336",
+            "workflow_outputs": [
+                {
+                    "label": "bd_ensemble.pcz",
+                    "output_name": "output_pcz_path",
+                    "uuid": "70a47f02-05fe-44b7-94fc-51a3db4af4d1"
+                }
+            ]
+        },
+        "11": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_unzip_ext",
+            "errors": null,
+            "id": 11,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 6,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool PczUnzip",
+                    "name": "input_pcz_path"
+                }
+            ],
+            "label": "PczUnzip NMA",
+            "name": "PczUnzip",
+            "outputs": [
+                {
+                    "name": "output_crd_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1699.4999840524854,
+                "top": 528.1249974443087
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_unzip_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_crd_path\": \"nma_ensemble_uncompressed.crd\", \"properties\": {\"binary_path\": \"pcaunzip\", \"verbose\": \"false\", \"pdb\": \"false\", \"output_format\": \"crd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "17549325-538c-466a-858a-9ece754fef03",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_crd_path",
+                    "uuid": "031f576d-d8d4-4b6b-8c5b-dfb734df1dcb"
+                }
+            ]
+        },
+        "12": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_bfactor_ext",
+            "errors": null,
+            "id": 12,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 6,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool PczBfactor",
+                    "name": "input_pcz_path"
+                }
+            ],
+            "label": "PczBfactor NMA",
+            "name": "PczBfactor",
+            "outputs": [
+                {
+                    "name": "output_dat_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 2323.3280256730477,
+                "top": 0.0
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_bfactor_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_dat_path\": \"bfactor_all.dat\", \"outname_output_pdb_path\": \"bfactor_all.pdb\", \"properties\": {\"binary_path\": \"pczdump\", \"eigenvector\": \"0\", \"pdb\": \"true\", \"output_format\": \"dat\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "483fcfd9-a353-4dd3-9bfc-d15754646f39",
+            "workflow_outputs": [
+                {
+                    "label": "bfactor_all.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "6ef23181-7039-4326-ac85-1fa1c47b1bda"
+                },
+                {
+                    "label": "bfactor_all.dat",
+                    "output_name": "output_dat_path",
+                    "uuid": "d6f2b0bd-305a-4cea-9650-4f8eebdd73b3"
+                }
+            ]
+        },
+        "13": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_animate_ext",
+            "errors": null,
+            "id": 13,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 6,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool PczAnimate",
+                    "name": "input_pcz_path"
+                }
+            ],
+            "label": "PczAnimate NMA",
+            "name": "PczAnimate",
+            "outputs": [
+                {
+                    "name": "output_crd_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 2330.2968446000496,
+                "top": 223.65623780935124
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_animate_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_crd_path\": \"pcz_proj1.crd\", \"properties\": {\"binary_path\": \"pczdump\", \"eigenvector\": \"1\", \"pdb\": \"false\", \"output_format\": \"crd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "13a986ba-f487-4431-be52-04426f041ce1",
+            "workflow_outputs": [
+                {
+                    "label": "pcz_proj1.crd",
+                    "output_name": "output_crd_path",
+                    "uuid": "98aadf31-39e6-4b90-b8ae-8622bc720d04"
+                }
+            ]
+        },
+        "14": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_info_ext",
+            "errors": null,
+            "id": 14,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 6,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool PczInfo",
+                    "name": "input_pcz_path"
+                }
+            ],
+            "label": "PczInfo NMA",
+            "name": "PczInfo",
+            "outputs": [
+                {
+                    "name": "output_json_path",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 2308.7812745090837,
+                "top": 424.6093472068542
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_info_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_json_path\": \"pcz_report.json\", \"properties\": {\"binary_path\": \"pczdump\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "e3a03a91-9e33-4e43-8dd1-f4f7c6a8edab",
+            "workflow_outputs": [
+                {
+                    "label": "pcz_report.json",
+                    "output_name": "output_json_path",
+                    "uuid": "310a9924-b166-47f6-90a9-0e7329f46e51"
+                }
+            ]
+        },
+        "15": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_evecs_ext",
+            "errors": null,
+            "id": 15,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 6,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool PczEvecs",
+                    "name": "input_pcz_path"
+                }
+            ],
+            "label": "PczEvecs NMA",
+            "name": "PczEvecs",
+            "outputs": [
+                {
+                    "name": "output_json_path",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 2315.0624692805886,
+                "top": 574.3124780721665
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_evecs_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_json_path\": \"pcz_evecs.json\", \"properties\": {\"binary_path\": \"pczdump\", \"eigenvector\": \"1\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "9a483f4f-6f2d-44df-a3db-09d8612a75c3",
+            "workflow_outputs": [
+                {
+                    "label": "pcz_evecs.json",
+                    "output_name": "output_json_path",
+                    "uuid": "4b908db7-2832-4677-b7a4-7ff262ab273e"
+                }
+            ]
+        },
+        "16": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_stiffness_ext",
+            "errors": null,
+            "id": 16,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 6,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool PczStiffness",
+                    "name": "input_pcz_path"
+                }
+            ],
+            "label": "PczStiffness NMA",
+            "name": "PczStiffness",
+            "outputs": [
+                {
+                    "name": "output_json_path",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 2333.406201211849,
+                "top": 728.3593850310899
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_stiffness_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_json_path\": \"pcz_stiffness.json\", \"properties\": {\"binary_path\": \"pczdump\", \"eigenvector\": \"0\", \"temperature\": \"300\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "bfad4f74-d3ef-4955-9ab0-62de887b67a3",
+            "workflow_outputs": [
+                {
+                    "label": "pcz_stiffness.json",
+                    "output_name": "output_json_path",
+                    "uuid": "2e8eefb0-f925-41a4-a330-810e0da9820c"
+                }
+            ]
+        },
+        "17": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_collectivity_ext",
+            "errors": null,
+            "id": 17,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 6,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool PczCollectivity",
+                    "name": "input_pcz_path"
+                }
+            ],
+            "label": "PczCollectivity NMA",
+            "name": "PczCollectivity",
+            "outputs": [
+                {
+                    "name": "output_json_path",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 2338.4843808397563,
+                "top": 882.7187406206124
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_collectivity_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_json_path\": \"pcz_collectivity.json\", \"properties\": {\"eigenvector\": \"0\", \"binary_path\": \"pczdump\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "54c0f774-bd51-41c1-a170-ebdb2c302bbe",
+            "workflow_outputs": [
+                {
+                    "label": "pcz_collectivity.json",
+                    "output_name": "output_json_path",
+                    "uuid": "98125985-135a-4b96-9251-34e6bf88f77a"
+                }
+            ]
+        },
+        "18": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_unzip_ext",
+            "errors": null,
+            "id": 18,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 8,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool PczUnzip",
+                    "name": "input_pcz_path"
+                }
+            ],
+            "label": "PczUnzip DMD",
+            "name": "PczUnzip",
+            "outputs": [
+                {
+                    "name": "output_crd_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1675.7187218107229,
+                "top": 965.1875141585319
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_unzip_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_crd_path\": \"dmd_ensemble_uncompressed.crd\", \"properties\": {\"binary_path\": \"pcaunzip\", \"verbose\": \"false\", \"pdb\": \"false\", \"output_format\": \"crd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "f23e9b3a-d340-4ff9-98b1-0189fd7f8941",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_crd_path",
+                    "uuid": "849e48d9-bf6d-48c1-969b-006721c6e722"
+                }
+            ]
+        },
+        "19": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_unzip_ext",
+            "errors": null,
+            "id": 19,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 10,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool PczUnzip",
+                    "name": "input_pcz_path"
+                }
+            ],
+            "label": "PczUnzip BD",
+            "name": "PczUnzip",
+            "outputs": [
+                {
+                    "name": "output_crd_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1619.7031962910178,
+                "top": 1442.3124797078096
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_unzip_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_crd_path\": \"bd_ensemble_uncompressed.crd\", \"properties\": {\"binary_path\": \"pcaunzip\", \"verbose\": \"false\", \"pdb\": \"false\", \"output_format\": \"crd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "950810c8-d94e-4116-89cc-69c8cc2a2f7e",
+            "workflow_outputs": [
+                {
+                    "label": "bd_ensemble_uncompressed.crd",
+                    "output_name": "output_crd_path",
+                    "uuid": "1f134465-6275-4498-8924-0543d7c28519"
+                }
+            ]
+        },
+        "20": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_hinges_ext",
+            "errors": null,
+            "id": 20,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 10,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool PczHinges",
+                    "name": "input_pcz_path"
+                }
+            ],
+            "label": "PczHinges DynDon",
+            "name": "PczHinges",
+            "outputs": [
+                {
+                    "name": "output_json_path",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 2288.421776618654,
+                "top": 1287.9375037313105
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_hinges_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_json_path\": \"hinges_dyndom_report.json\", \"properties\": {\"binary_path\": \"pczdump\", \"eigenvector\": \"0\", \"method\": \"Dynamic_domain\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "17aaef9a-8c86-4634-9a8e-3e39555b2b68",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_json_path",
+                    "uuid": "17a65aa2-9f3b-4e39-8f5f-77fa9c1668ca"
+                }
+            ]
+        },
+        "21": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_hinges_ext",
+            "errors": null,
+            "id": 21,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 10,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool PczHinges",
+                    "name": "input_pcz_path"
+                }
+            ],
+            "label": "PczHinges Bfactor",
+            "name": "PczHinges",
+            "outputs": [
+                {
+                    "name": "output_json_path",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 2283.9687395983365,
+                "top": 1441.8906474773082
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_hinges_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_json_path\": \"hinges_bfactor_report.json\", \"properties\": {\"binary_path\": \"pczdump\", \"eigenvector\": \"0\", \"method\": \"Bfactor_slope\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "3b38fec3-1492-4877-96ab-b33b11d711b4",
+            "workflow_outputs": [
+                {
+                    "label": "hinges_bfactor_report.json",
+                    "output_name": "output_json_path",
+                    "uuid": "e6e3306e-cd61-431f-ae3e-f8f8e577d7bd"
+                }
+            ]
+        },
+        "22": {
+            "annotation": "",
+            "content_id": "biobb_flexserv_pcz_hinges_ext",
+            "errors": null,
+            "id": 22,
+            "input_connections": {
+                "input_pcz_path": {
+                    "id": 10,
+                    "output_name": "output_pcz_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool PczHinges",
+                    "name": "input_pcz_path"
+                }
+            ],
+            "label": "PczHinges FCTE",
+            "name": "PczHinges",
+            "outputs": [
+                {
+                    "name": "output_json_path",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 2293.531197020515,
+                "top": 1608.8905763268547
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_flexserv_pcz_hinges_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pcz_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_json_path\": \"hinges_fcte_report.json\", \"properties\": {\"binary_path\": \"pczdump\", \"eigenvector\": \"0\", \"method\": \"Force_constant\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.3",
+            "type": "tool",
+            "uuid": "8d876979-c007-4af8-9881-f093bc4c67f8",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_json_path",
+                    "uuid": "58b248ad-700b-4a45-a445-f36879ce6214"
+                }
+            ]
+        },
+        "23": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_rms_ext",
+            "errors": null,
+            "id": 23,
+            "input_connections": {
+                "input_exp_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                },
+                "input_top_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                },
+                "input_traj_path": {
+                    "id": 11,
+                    "output_name": "output_crd_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_exp_path"
+                },
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_top_path"
+                },
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_traj_path"
+                }
+            ],
+            "label": "CpptrajRms NMA 2",
+            "name": "CpptrajRms",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_traj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1999.9375184520943,
+                "top": 139.4374902372582
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_analysis_cpptraj_rms_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_exp_path\": {\"__class__\": \"RuntimeValue\"}, \"input_top_path\": {\"__class__\": \"RuntimeValue\"}, \"input_traj_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_cpptraj_path\": \"nma_ensemble_uncompressed.rmsd.dat\", \"outname_output_traj_path\": \"nma_ensemble_uncompressed.dcd\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"reference\": \"experimental\", \"nofit\": \"false\", \"norotate\": \"false\", \"nomod\": \"false\", \"binary_path\": \"cpptraj\", \"output_cpptraj_path_format\": \"dat\", \"output_traj_path_format\": \"dcd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "345b02a3-6cb7-422a-ac51-32edb17fd198",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_traj_path",
+                    "uuid": "0371ddc5-1a4d-4705-961c-fbe21c296696"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "15c1c813-fc14-41f7-bd26-d22f97ae12e0"
+                }
+            ]
+        },
+        "24": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_convert_ext",
+            "errors": null,
+            "id": 24,
+            "input_connections": {
+                "input_top_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                },
+                "input_traj_path": {
+                    "id": 13,
+                    "output_name": "output_crd_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool CpptrajConvert",
+                    "name": "input_top_path"
+                },
+                {
+                    "description": "runtime parameter for tool CpptrajConvert",
+                    "name": "input_traj_path"
+                }
+            ],
+            "label": "CpptrajConvert NMA",
+            "name": "CpptrajConvert",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 2623.7656418547876,
+                "top": 208.1406137421787
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_analysis_cpptraj_convert_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_top_path\": {\"__class__\": \"RuntimeValue\"}, \"input_traj_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_cpptraj_path\": \"pcz_proj1.dcd\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"format\": \"dcd\", \"binary_path\": \"cpptraj\", \"output_format\": \"dcd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "055dc46e-c8b0-4d5c-922f-a4fbbe3b2663",
+            "workflow_outputs": [
+                {
+                    "label": "pcz_proj1.dcd",
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "986267ea-a3b7-4e66-b8ab-491c89c82c7d"
+                }
+            ]
+        },
+        "25": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_rms_ext",
+            "errors": null,
+            "id": 25,
+            "input_connections": {
+                "input_exp_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                },
+                "input_top_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                },
+                "input_traj_path": {
+                    "id": 18,
+                    "output_name": "output_crd_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_exp_path"
+                },
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_top_path"
+                },
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_traj_path"
+                }
+            ],
+            "label": "CpptrajRms DMD 2",
+            "name": "CpptrajRms",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_traj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1974.8437347936363,
+                "top": 698.4218502225705
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_analysis_cpptraj_rms_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_exp_path\": {\"__class__\": \"RuntimeValue\"}, \"input_top_path\": {\"__class__\": \"RuntimeValue\"}, \"input_traj_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_cpptraj_path\": \"dmd_ensemble_uncompressed.rmsd.dat\", \"outname_output_traj_path\": \"dmd_ensemble_uncompressed.dcd\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"reference\": \"experimental\", \"nofit\": \"false\", \"norotate\": \"false\", \"nomod\": \"false\", \"binary_path\": \"cpptraj\", \"output_cpptraj_path_format\": \"dat\", \"output_traj_path_format\": \"dcd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "5569a509-c0ac-4ed9-85c7-2107ae53b988",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "9a32cf9e-8ed3-462a-970c-aa3808ae3b63"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_traj_path",
+                    "uuid": "d7b3c66c-af4c-48bf-9c24-dc583c634685"
+                }
+            ]
+        },
+        "26": {
+            "annotation": "",
+            "content_id": "biobb_analysis_cpptraj_rms_ext",
+            "errors": null,
+            "id": 26,
+            "input_connections": {
+                "input_exp_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                },
+                "input_top_path": {
+                    "id": 1,
+                    "output_name": "output_structure_path"
+                },
+                "input_traj_path": {
+                    "id": 19,
+                    "output_name": "output_crd_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_exp_path"
+                },
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_top_path"
+                },
+                {
+                    "description": "runtime parameter for tool CpptrajRms",
+                    "name": "input_traj_path"
+                }
+            ],
+            "label": "CpptrajRms BD 2",
+            "name": "CpptrajRms",
+            "outputs": [
+                {
+                    "name": "output_cpptraj_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_traj_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1976.8750393576515,
+                "top": 1270.656203460857
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_analysis_cpptraj_rms_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_exp_path\": {\"__class__\": \"RuntimeValue\"}, \"input_top_path\": {\"__class__\": \"RuntimeValue\"}, \"input_traj_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_cpptraj_path\": \"bd_ensemble_uncompressed.rmsd.dat\", \"outname_output_traj_path\": \"bd_ensemble_uncompressed.dcd\", \"properties\": {\"start\": \"1\", \"end\": \"-1\", \"steps\": \"1\", \"mask\": \"c-alpha\", \"reference\": \"experimental\", \"nofit\": \"false\", \"norotate\": \"false\", \"nomod\": \"false\", \"binary_path\": \"cpptraj\", \"output_cpptraj_path_format\": \"dat\", \"output_traj_path_format\": \"dcd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.2",
+            "type": "tool",
+            "uuid": "2eb896f9-ffdc-42e0-bbfc-7e1684477d29",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_cpptraj_path",
+                    "uuid": "074898b1-4e22-4005-a96c-7d3546853667"
+                },
+                {
+                    "label": null,
+                    "output_name": "output_traj_path",
+                    "uuid": "ae634390-8d28-43d3-a3b6-1f4351dd3496"
+                }
+            ]
+        }
+    },
+    "tags": [],
+    "uuid": "15d698d9-c9e5-4122-9422-d6fe75815117",
+    "version": 22
+}
