@@ -1,6 +1,6 @@
 Read the Docs documentation:
 
-[![](https://readthedocs.org/projects/biobb-wf-structure-checking/badge/?version=latest)](https://biobb-wf-structure-checking.readthedocs.io/en/latest/?badge=latest)
+[![](https://readthedocs.org/projects/biobb-wf-structure-checking/badge/?version=latest)](https://biobb-wf-structure-checking.readthedocs.io/en/latest/tutorial.html)
 
 Launch workflow:
 

@@ -1,6 +1,6 @@
 Read the Docs documentation:
 
-[![](https://readthedocs.org/projects/biobb-wf-flexdyn/badge/?version=latest)](https://biobb-wf-flexdyn.readthedocs.io/en/latest/?badge=latest)
+[![](https://readthedocs.org/projects/biobb-wf-flexdyn/badge/?version=latest)](https://biobb-wf-flexdyn.readthedocs.io/en/latest/tutorial.html)
 
 Launch workflow:
 

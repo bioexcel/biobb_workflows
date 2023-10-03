@@ -1,6 +1,6 @@
 Read the Docs documentation:
 
-[![](https://readthedocs.org/projects/biobb-wf-godmd/badge/?version=latest)](https://biobb-wf-godmd.readthedocs.io/en/latest/?badge=latest)
+[![](https://readthedocs.org/projects/biobb-wf-godmd/badge/?version=latest)](https://biobb-wf-godmd.readthedocs.io/en/latest/tutorial.html)
 
 Launch workflow:
 
