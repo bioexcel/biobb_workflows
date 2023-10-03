@@ -47,7 +47,7 @@ The codes wrapped are the ***FlexServ*** and ***PCAsuite*** tools:
 
 * [Common Workflow Language (CWL)](cwl)
 * [Galaxy](galaxy)
-* [Jupyter Notebooks](https://github.com/bioexcel/biobb_wf_flexdyn) (this link switches to a different repository) 
+* [Jupyter Notebooks](https://github.com/bioexcel/biobb_wf_flexserv) (this link switches to a different repository) 
 * [Pure Python](python)
 
 ## Copyright & Licensing
