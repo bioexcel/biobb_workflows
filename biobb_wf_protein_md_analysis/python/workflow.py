@@ -103,10 +103,7 @@ def main(config, system=None):
     gmx_cluster(**global_paths["step7_gmx_cluster"], properties=global_prop["step7_gmx_cluster"])
 
     global_log.info("step7_gmx_cluster: Generating clusters JSON file")
-    saveClusters("step7_gmx_cluster_cluster.log", conf.get_working_dir_path() + "/step7_gmx_cluster/clusters.json")
-
-    # copy gmx_cluster log into step7_gmx_cluster folder
-    shutil.copyfile("step7_gmx_cluster_cluster.log", conf.get_working_dir_path() + "/step7_gmx_cluster/output.cluster.log")
+    saveClusters(conf.get_working_dir_path() + "/step7_gmx_cluster/output.cluster.log", conf.get_working_dir_path() + "/step7_gmx_cluster/clusters.json")
 
     elapsed_time = time.time() - start_time
     global_log.info('')

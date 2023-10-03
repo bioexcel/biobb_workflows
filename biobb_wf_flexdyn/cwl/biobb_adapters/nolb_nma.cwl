@@ -12,7 +12,7 @@ baseCommand: nolb_nma
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_flexdyn:4.0.3--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_flexdyn:4.1.0--pyhdfd78af_0
 
 inputs:
   input_pdb_path:

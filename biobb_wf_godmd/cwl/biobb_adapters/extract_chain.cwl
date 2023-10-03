@@ -13,7 +13,7 @@ baseCommand: extract_chain
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_structure_utils:4.0.0--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_structure_utils:4.1.0--pyhdfd78af_0
 
 inputs:
   input_structure_path:

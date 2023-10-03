@@ -60,5 +60,6 @@ step7_gmx_cluster:
     input_structure_path: /path/to/inputs/topology.pdb
     input_traj_path: dependency/step6_cpptraj_convert/output_cpptraj_path
     output_pdb_path: output.cluster.pdb
+    output_cluster_log_path: output.cluster.log
   properties:
     cutoff: 0.2

@@ -12,7 +12,7 @@ baseCommand: bd_run
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_flexserv:4.0.3--pypl5321hdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_flexserv:4.1.0--pypl5321hdfd78af_0
 
 inputs:
   input_pdb_path:

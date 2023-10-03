@@ -13,7 +13,7 @@ baseCommand: cpptraj_rms
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_analysis:4.0.2--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_analysis:4.1.0--pyhdfd78af_0
 
 inputs:
   input_top_path:

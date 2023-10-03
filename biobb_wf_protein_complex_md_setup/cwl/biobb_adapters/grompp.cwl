@@ -12,7 +12,7 @@ baseCommand: grompp
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_gromacs:4.0.0--pyhdfd78af_1
+    dockerPull: quay.io/biocontainers/biobb_gromacs:4.1.1--pyhdfd78af_0
 
 inputs:
   input_gro_path:

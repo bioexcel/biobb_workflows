@@ -13,7 +13,7 @@ baseCommand: reduce_remove_hydrogens
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_chemistry:4.0.0--pyhdfd78af_1
+    dockerPull: quay.io/biocontainers/biobb_chemistry:4.1.0--pyhdfd78af_0
 
 inputs:
   input_path:
