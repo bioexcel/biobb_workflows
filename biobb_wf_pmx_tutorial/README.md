@@ -33,8 +33,6 @@ The tutorial calculates the **free energy difference** in the folded state of a 
 
 ## Workflow Managers
 
-* [Common Workflow Language (CWL)]() (soon)
-* [Galaxy]() (soon)
 * [Jupyter Notebooks](https://github.com/bioexcel/biobb_wf_pmx_tutorial) (this link switches to a different repository) 
 * [Pure Python](python)
 

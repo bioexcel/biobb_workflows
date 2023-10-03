@@ -24,8 +24,6 @@ This tutorial aims to illustrate the process of **extracting structural and dyna
 
 ## Workflow Managers
 
-* [Common Workflow Language (CWL)]() (soon)
-* [Galaxy]() (soon)
 * [Jupyter Notebooks](https://github.com/bioexcel/biobb_wf_dna_helparms) (this link switches to a different repository)
 * [Pure Python](python)
 

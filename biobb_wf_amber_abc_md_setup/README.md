@@ -28,7 +28,7 @@ This tutorial aims to illustrate the process of **setting up a simulation** syst
 ## Workflow Managers
 
 * [Common Workflow Language (CWL)](cwl)
-* [Galaxy]() (soon)
+* [Galaxy](galaxy)
 * [Jupyter Notebooks](https://github.com/bioexcel/biobb_wf_amber_md_setup) (this link switches to a different repository)
 * [Pure Python](python)
 
