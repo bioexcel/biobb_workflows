@@ -15,11 +15,11 @@ step3_cpptraj_mask_config: '{"mask": "c-alpha", "format": "pdb"}'
 step4_concoord_dist_output_pdb_path: structure_dist.pdb
 step4_concoord_dist_output_gro_path: structure_dist.gro
 step4_concoord_dist_output_dat_path: structure_dist.dat
-step4_concoord_dist_config: '{"retain_hydrogens": false, "cutoff": 4.0, "env_vars_dict": {"CONCOORD_OVERWRITE": "1", "CONCOORDLIB": "/path/to/anaconda/envs/flexdyn_env/share/concoord/lib"}}'
+step4_concoord_dist_config: '{"retain_hydrogens": false, "cutoff": 4.0, "env_vars_dict": {"CONCOORD_OVERWRITE": "1"}}'
 step5_concoord_disco_output_traj_path: structure_disco_traj.pdb
 step5_concoord_disco_output_rmsd_path: structure_disco_rmsd.dat
 step5_concoord_disco_output_bfactor_path: structure_disco_bfactor.pdb
-step5_concoord_disco_config: '{"vdw": 4, "num_structs": 300, "env_vars_dict": {"CONCOORD_OVERWRITE": "1", "CONCOORDLIB": "/path/to/anaconda/envs/flexdyn_env/share/concoord/lib"}}'
+step5_concoord_disco_config: '{"vdw": 4, "num_structs": 300, "env_vars_dict": {"CONCOORD_OVERWRITE": "1"}}'
 step6_cpptraj_rms_output_cpptraj_path: structure_concoord_rmsd.dat
 step6_cpptraj_rms_config: '{"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}'
 step7_cpptraj_convert_output_cpptraj_path: structure_concoord_disco_traj.trr

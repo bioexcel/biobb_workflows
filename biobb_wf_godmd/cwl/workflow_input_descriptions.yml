@@ -7,7 +7,7 @@ step0_extract_chain_config: '{"chains": ["A"]}'
 step1_extract_chain_input_structure_path:
   class: File
   path: target.pdb
-  format:https://edamontology.org/format_1476
+  format: https://edamontology.org/format_1476
 step1_extract_chain_output_structure_path: target.chains.pdb
 step1_extract_chain_config: '{"chains": ["A"]}'
 step2_remove_molecules_output_molecules_path: origin.chains.nolig.pdb
