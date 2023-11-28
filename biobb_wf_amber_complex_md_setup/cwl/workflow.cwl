@@ -658,7 +658,7 @@ steps:
     run: biobb_adapters/amber_to_pdb.cwl
     in:
       input_top_path: step2_leap_gen_top/output_top_path
-      input_crd_path: step3_sander_mdrun_minH/output_rst_path
+      input_crd_path: step5_sander_mdrun_minH/output_rst_path
       output_pdb_path: step7_amber_to_pdb_output_pdb_path
     out:
     - output_pdb_path

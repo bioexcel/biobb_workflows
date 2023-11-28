@@ -95,7 +95,7 @@ step7_amber_to_pdb:
   tool: amber_to_pdb
   paths:
     input_top_path: dependency/step2_leap_gen_top/output_top_path
-    input_crd_path: dependency/step3_sander_mdrun_minH/output_rst_path
+    input_crd_path: dependency/step5_sander_mdrun_min/output_rst_path
     output_pdb_path: structure.ambpdb.pdb
 
 step8_leap_solvate:
