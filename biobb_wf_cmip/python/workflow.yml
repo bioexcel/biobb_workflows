@@ -1,0 +1,256 @@
+working_dir_path: wf_setup
+can_write_console_log: False
+run_md: true
+
+step0_cmip_prepare_pdb:
+  tool: cmip_prepare_pdb
+  paths:
+    input_pdb_path: /path/to/inputs/structure.pdb
+    output_cmip_pdb_path: structure.cmip.pdb
+
+step1_cmip_titration:
+  tool: cmip_titration
+  paths:
+    input_pdb_path: dependency/step0_cmip_prepare_pdb/output_cmip_pdb_path
+    output_pdb_path: structure.wat_ions.pdb
+  properties:
+    num_positive_ions: 5
+    num_negative_ions: 5
+    num_wats: 20
+
+step2_cat_pdb:
+  tool: cat_pdb
+  paths:
+    input_structure1: dependency/step0_cmip_prepare_pdb/output_cmip_pdb_path
+    input_structure2: dependency/step1_cmip_titration/output_pdb_path
+    output_structure_path: structure.tit.pdb
+
+step3_cmip_run_pos:
+  tool: cmip_run
+  paths:
+    input_pdb_path: dependency/step0_cmip_prepare_pdb/output_cmip_pdb_path
+    output_log_path: structure.mip_pos.log
+    output_cube_path: structure.mip_pos.cube
+  properties:
+    execution_type: mip_pos
+
+step4_cmip_run_neg:
+  tool: cmip_run
+  paths:
+    input_pdb_path: dependency/step0_cmip_prepare_pdb/output_cmip_pdb_path
+    output_log_path: structure.mip_neg.log
+    output_cube_path: structure.mip_neg.cube
+  properties:
+    execution_type: mip_neg
+
+step5_cmip_run_neu:
+  tool: cmip_run
+  paths:
+    input_pdb_path: dependency/step0_cmip_prepare_pdb/output_cmip_pdb_path
+    output_log_path: structure.mip_neutral.log
+    output_cube_path: structure.mip_neutral.cube
+  properties:
+    execution_type: mip_neu
+
+step6_remove_pdb_water:
+  tool: remove_pdb_water
+  paths:
+    input_pdb_path: /path/to/inputs/complex.pdb
+    output_pdb_path: structure.noHOH.pdb
+
+step7_extract_heteroatoms:
+  tool: extract_heteroatoms
+  paths:
+    input_structure_path: dependency/step6_remove_pdb_water/output_pdb_path
+    output_heteroatom_path: ligand.pdb
+  properties:
+    heteroatoms: [ name: AQ4 ]
+
+step8_reduce_add_hydrogens:
+  tool: reduce_add_hydrogens
+  paths:
+    input_path: dependency/step7_extract_heteroatoms/output_heteroatom_path
+    output_path: ligand.reduce.H.pdb
+
+step9_acpype_params_ac:
+  tool: acpype_params_ac
+  paths:
+    input_path: dependency/step8_reduce_add_hydrogens/output_path
+    output_path_inpcrd: ligand.params.inpcrd
+    output_path_frcmod: ligand.params.frcmod
+    output_path_lib: ligand.params.lib
+    output_path_prmtop: ligand.params.prmtop
+  properties:
+    basename: ligand.params
+    charge: 0
+
+step10_leap_gen_top:
+  tool: leap_gen_top
+  paths:
+    input_pdb_path: dependency/step6_remove_pdb_water/output_pdb_path
+    input_lib_path: dependency/step9_acpype_params_ac/output_path_lib
+    input_frcmod_path: dependency/step9_acpype_params_ac/output_path_frcmod
+    output_pdb_path: structure.leap.pdb
+    output_top_path: structure.leap.prmtop
+    output_crd_path: structure.leap.crd
+  properties:
+    forcefield: [ protein.ff14SB, gaff2 ]
+
+step11_sander_mdrun:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step10_leap_gen_top/output_top_path
+    input_crd_path: dependency/step10_leap_gen_top/output_crd_path
+    output_traj_path: structure.amber.crd
+    output_rst_path: structure.amber.rst
+    output_log_path: structure.amber.log
+  properties:
+    simulation_type: minimization
+    mdin:
+      ntb: 0
+      cut: 12
+      maxcyc: 500
+      ncyc: 50
+      ntwx: 50
+
+step12_amber_to_pdb:
+  tool: amber_to_pdb
+  paths:
+    input_top_path: dependency/step10_leap_gen_top/output_top_path
+    input_crd_path: dependency/step11_sander_mdrun/output_rst_path
+    output_pdb_path: structure.amber-min.pdb
+
+step13_cmip_prepare_structure:
+  tool: cmip_prepare_structure
+  paths:
+    input_pdb_path: dependency/step12_amber_to_pdb/output_pdb_path
+    input_topology_path: dependency/step10_leap_gen_top/output_top_path
+    output_cmip_pdb_path: complex.cmip.pdb
+
+step14_remove_ligand:
+  tool: remove_ligand
+  paths:
+    input_structure_path: dependency/step13_cmip_prepare_structure/output_cmip_pdb_path
+    output_structure_path: complex.noLIG.pdb
+  properties:
+    ligand: AQ4
+
+step15_cmip_ignore_residues:
+  tool: cmip_ignore_residues
+  paths:
+    input_cmip_pdb_path: dependency/step13_cmip_prepare_structure/output_cmip_pdb_path
+    output_cmip_pdb_path: complex.Prot_ignored.cmip.pdb
+  properties:
+    residue_list: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278 ]
+
+step16_cmip_run_int_en:
+  tool: cmip_run
+  paths:
+    input_pdb_path: dependency/step15_cmip_ignore_residues/output_cmip_pdb_path
+    input_probe_pdb_path: dependency/step14_remove_ligand/output_structure_path
+    output_log_path: complex.EGFR.energies.log
+    output_byat_path: complex.EGFR.energies.byat.out
+  properties:
+    execution_type: pb_interaction_energy
+
+step17_cmip_prepare_structure:
+  tool: cmip_prepare_structure
+  paths:
+    input_pdb_path: /path/to/inputs/Files/RBD-hACE2-ZN.pdb
+    input_topology_path: /path/to/inputs/Files/RBD-hACE2-ZN.top
+    output_cmip_pdb_path: RBD-hACE2-ZN.cmip.pdb
+
+step18_extract_chain_a:
+  tool: extract_chain
+  paths:
+    input_structure_path: dependency/step17_cmip_prepare_structure/output_cmip_pdb_path
+    output_structure_path: RBD-hACE2-ZN.hACE2.cmip.pdb
+  properties:
+    chains: [ A ]
+    permissive: true
+
+step19_extract_chain_b:
+  tool: extract_chain
+  paths:
+    input_structure_path: dependency/step17_cmip_prepare_structure/output_cmip_pdb_path
+    output_structure_path: RBD-hACE2-ZN.RBD.cmip.pdb
+  properties:
+    chains: [ B ]
+    permissive: true
+
+step20_cmip_run_rbd:
+  tool: cmip_run
+  paths:
+    input_pdb_path: dependency/step19_extract_chain_b/output_structure_path
+    output_log_path: RBD.box.log
+    output_json_box_path: RBD.box.json
+  properties:
+    execution_type: check_only
+    params: 
+      perfill: 0.8
+
+step21_cmip_run_hace2:
+  tool: cmip_run
+  paths:
+    input_pdb_path: dependency/step18_extract_chain_a/output_structure_path
+    output_log_path: hACE2.box.log
+    output_json_box_path: hACE2.box.json
+  properties:
+    execution_type: check_only
+    params: 
+      perfill: 0.8
+
+step22_cmip_run_rbd_hace2:
+  tool: cmip_run
+  paths:
+    input_pdb_path: dependency/step17_cmip_prepare_structure/output_cmip_pdb_path
+    output_log_path: complex.box.log
+    output_json_box_path: complex.box.json
+  properties:
+    execution_type: check_only
+    params: 
+      perfill: 0.8
+
+step23_cmip_ignore_residues_rbd:
+  tool: cmip_ignore_residues
+  paths:
+    input_cmip_pdb_path: dependency/step17_cmip_prepare_structure/output_cmip_pdb_path
+    output_cmip_pdb_path: RBD-hACE2-ZN.RBD_ignored.cmip.pdb
+  properties:
+    residue_list: 'B:'
+
+step24_cmip_run_prot_prot:
+  tool: cmip_run
+  paths:
+    input_pdb_path: dependency/step23_cmip_ignore_residues_rbd/output_cmip_pdb_path
+    input_probe_pdb_path: dependency/step19_extract_chain_b/output_structure_path
+    input_json_box_path: dependency/step20_cmip_run_rbd/output_json_box_path
+    input_json_external_box_path: dependency/step22_cmip_run_rbd_hace2/output_json_box_path
+    output_json_box_path: RBD.energies.box.output.json
+    output_json_external_box_path: complex.energies.box.output.json
+    output_log_path: RBD.energies.log
+    output_byat_path: RBD.energies.byat.out
+  properties:
+    execution_type: pb_interaction_energy
+
+step25_cmip_ignore_residues_hace2:
+  tool: cmip_ignore_residues
+  paths:
+    input_cmip_pdb_path: dependency/step17_cmip_prepare_structure/output_cmip_pdb_path
+    output_cmip_pdb_path: RBD-hACE2-ZN.hACE2_ign.cmip.pdb
+  properties:
+    residue_list: 'A:'
+
+step26_cmip_run_complex:
+  tool: cmip_run
+  paths:
+    input_pdb_path: dependency/step25_cmip_ignore_residues_hace2/output_cmip_pdb_path
+    input_probe_pdb_path: dependency/step18_extract_chain_a/output_structure_path
+    input_json_box_path: dependency/step21_cmip_run_hace2/output_json_box_path
+    input_json_external_box_path: dependency/step22_cmip_run_rbd_hace2/output_json_box_path
+    output_json_box_path: hACE2.energies.box.output.json
+    output_json_external_box_path: complex_2.energies.box.output.json
+    output_log_path: hACE2.energies.log
+    output_byat_path: hACE2.energies.byat.out
+  properties:
+    execution_type: pb_interaction_energy
