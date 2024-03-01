@@ -1,0 +1,137 @@
+working_dir_path: wf_structure_checking
+can_write_console_log: False
+run_md: true
+
+step0_structure_check_init:
+  tool: structure_check
+  paths:
+    input_structure_path: /path/to/inputs/structure.pdb
+    output_summary_path: structure.report.json
+
+step1_extract_model:
+  tool: extract_model
+  paths:
+    input_structure_path: /path/to/inputs/structure.pdb
+    output_structure_path: structure.models.pdb
+  properties:
+    models: [ 1 ]
+
+step2_extract_chain:
+  tool: extract_chain
+  paths:
+    input_structure_path: dependency/step1_extract_model/output_structure_path
+    output_structure_path: structure.chains.pdb
+  properties:
+    chains: [ A ]
+
+step3_fix_altlocs:
+  tool: fix_altlocs
+  paths:
+    input_pdb_path: dependency/step2_extract_chain/output_structure_path
+    output_pdb_path: structure.altloc.pdb
+  properties:
+    altlocs: [ 'A45:A', 'A67:A', 'A85:A' ]
+
+step4_fix_ssbonds:
+  tool: fix_ssbonds
+  paths:
+    input_pdb_path: dependency/step3_fix_altlocs/output_pdb_path
+    output_pdb_path: structure.ssbonds.pdb
+
+step5_remove_molecules_ions:
+  tool: remove_molecules
+  paths:
+    input_structure_path: dependency/step4_fix_ssbonds/output_pdb_path
+    output_molecules_path: structure.metals.pdb
+  properties:
+    molecules: [ name: ZN ]
+
+step6_remove_molecules_ligands:
+  tool: remove_molecules
+  paths:
+    input_structure_path: dependency/step5_remove_molecules_ions/output_molecules_path
+    output_molecules_path: structure.ligands.pdb
+  properties:
+    molecules: [ name: SO4, name: AP5 ]
+
+step7_reduce_remove_hydrogens:
+  tool: reduce_remove_hydrogens
+  paths:
+    input_path: dependency/step6_remove_molecules_ligands/output_molecules_path
+    output_path: structure.hydrogens.pdb
+
+step8_remove_pdb_water:
+  tool: remove_pdb_water
+  paths:
+    input_pdb_path: dependency/step7_reduce_remove_hydrogens/output_path
+    output_pdb_path: structure.water.pdb
+
+step9_fix_amides:
+  tool: fix_amides
+  paths:
+    input_pdb_path: dependency/step8_remove_pdb_water/output_pdb_path
+    output_pdb_path: structure.amides.pdb
+
+step10_fix_chirality:
+  tool: fix_chirality
+  paths:
+    input_pdb_path: dependency/step9_fix_amides/output_pdb_path
+    output_pdb_path: structure.chiral.pdb
+
+step11_fix_side_chain:
+  tool: fix_side_chain
+  paths:
+    input_pdb_path: dependency/step10_fix_chirality/output_pdb_path
+    output_pdb_path: structure.sidechains.pdb
+
+step12_fix_backbone:
+  tool: fix_backbone
+  paths:
+    input_pdb_path: dependency/step11_fix_side_chain/output_pdb_path
+    input_fasta_canonical_sequence_path: /path/to/inputs/sequence.fasta
+    output_pdb_path: structure.backbone.pdb
+
+step13_leap_gen_top:
+  tool: leap_gen_top
+  paths:
+    input_pdb_path: dependency/step12_fix_backbone/output_pdb_path
+    output_pdb_path: structure.amber.pdb
+    output_top_path: structure.amber.top
+    output_crd_path: structure.amber.crd
+  properties:
+    forcefield: [ protein.ff14SB ]
+
+step14_sander_mdrun:
+  tool: sander_mdrun
+  paths:
+    input_top_path: dependency/step13_leap_gen_top/output_top_path
+    input_crd_path: dependency/step13_leap_gen_top/output_crd_path
+    output_traj_path: structure.trj.crd
+    output_rst_path: structure.trj.rst
+    output_log_path: structure.trj.log
+  properties:
+    simulation_type: minimization
+    mdin:
+      ntb : 0
+      cut : 12
+      maxcyc : 500
+      ncyc : 50 
+
+step15_amber_to_pdb:
+  tool: amber_to_pdb
+  paths:
+    input_top_path: dependency/step13_leap_gen_top/output_top_path
+    input_crd_path: dependency/step14_sander_mdrun/output_rst_path
+    output_pdb_path: structure.amber-min.pdb
+
+step16_fix_pdb:
+  tool: fix_pdb
+  paths:
+    input_pdb_path: dependency/step15_amber_to_pdb/output_pdb_path
+    output_pdb_path: structure.final.pdb
+
+step17_structure_check:
+  tool: structure_check
+  paths:
+    input_structure_path: dependency/step16_fix_pdb/output_pdb_path
+    output_summary_path: structure.report_final.json

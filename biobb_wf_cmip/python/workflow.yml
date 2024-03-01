@@ -1,4 +1,4 @@
-working_dir_path: wf_setup
+working_dir_path: wf_cmip
 can_write_console_log: False
 run_md: true
 
