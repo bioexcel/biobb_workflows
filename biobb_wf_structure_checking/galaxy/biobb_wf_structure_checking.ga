@@ -1,0 +1,844 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "",
+    "format-version": "0.1",
+    "name": "Molecular Structure Checking",
+    "steps": {
+        "0": {
+            "annotation": "",
+            "content_id": "biobb_io_pdb_ext",
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [],
+            "label": null,
+            "name": "Pdb",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 0,
+                "top": 135.0234375
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_io_pdb_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"outname_output_pdb_path\": \"mypdb.pdb\", \"properties\": {\"pdb_code\": \"1z83\", \"filter\": \"[ATOM, HETATM]\", \"api_id\": \"pdbe\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "a04876ba-fd5b-4425-9ceb-157567874a28",
+            "workflow_outputs": [
+                {
+                    "label": "mypdb.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "25341823-c710-498a-8d3e-9da2968656de"
+                }
+            ]
+        },
+        "1": {
+            "annotation": "",
+            "content_id": "biobb_io_canonical_fasta_ext",
+            "errors": null,
+            "id": 1,
+            "input_connections": {},
+            "inputs": [],
+            "label": null,
+            "name": "CanonicalFasta",
+            "outputs": [
+                {
+                    "name": "output_fasta_path",
+                    "type": "fasta"
+                }
+            ],
+            "position": {
+                "left": 3358.921875,
+                "top": 373.015625
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_io_canonical_fasta_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"outname_output_fasta_path\": \"mycanonical_fasta.fasta\", \"properties\": {\"pdb_code\": \"1z83\", \"api_id\": \"pdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "ca872804-c789-4d4a-a27e-d9bdb477d123",
+            "workflow_outputs": [
+                {
+                    "label": "mycanonical_fasta.fasta",
+                    "output_name": "output_fasta_path",
+                    "uuid": "3612ee97-a9d1-4a52-96fa-03940a14ddf7"
+                }
+            ]
+        },
+        "2": {
+            "annotation": "",
+            "content_id": "biobb_structure_utils_structure_check_ext",
+            "errors": null,
+            "id": 2,
+            "input_connections": {
+                "input_structure_path": {
+                    "id": 0,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "StructureCheck",
+            "outputs": [
+                {
+                    "name": "output_summary_path",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 319.78125,
+                "top": 0.0
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_structure_utils_structure_check_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_summary_path\": \"mystructure_check.json\", \"properties\": {\"features\": null, \"binary_path\": \"check_structure\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "0d281dee-ddfe-49b3-97a9-8e225cd16f29",
+            "workflow_outputs": [
+                {
+                    "label": "mystructure_check.json",
+                    "output_name": "output_summary_path",
+                    "uuid": "1ffc200d-3a57-4c14-8970-4d26459bbe2d"
+                }
+            ]
+        },
+        "3": {
+            "annotation": "",
+            "content_id": "biobb_structure_utils_extract_model_ext",
+            "errors": null,
+            "id": 3,
+            "input_connections": {
+                "input_structure_path": {
+                    "id": 0,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "ExtractModel",
+            "outputs": [
+                {
+                    "name": "output_structure_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 319.78125,
+                "top": 197.9921875
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_structure_utils_extract_model_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_structure_path\": \"myextract_model.pdb\", \"properties\": {\"models\": \"[1]\", \"binary_path\": \"check_structure\", \"output_format\": \"pdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "5005b3bf-11f2-4f00-a21c-9ca4cff364ea",
+            "workflow_outputs": [
+                {
+                    "label": "myextract_model.pdb",
+                    "output_name": "output_structure_path",
+                    "uuid": "d9a6353b-1b21-4546-af9c-706af063465a"
+                }
+            ]
+        },
+        "4": {
+            "annotation": "",
+            "content_id": "biobb_structure_utils_extract_chain_ext",
+            "errors": null,
+            "id": 4,
+            "input_connections": {
+                "input_structure_path": {
+                    "id": 3,
+                    "output_name": "output_structure_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "ExtractChain",
+            "outputs": [
+                {
+                    "name": "output_structure_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 666.734375,
+                "top": 195.9140625
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_structure_utils_extract_chain_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_structure_path\": \"myextract_chain.pdb\", \"properties\": {\"chains\": \"[\\\"A\\\"]\", \"permissive\": \"false\", \"binary_path\": \"check_structure\", \"output_format\": \"pdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "bf1fa671-339c-4f3b-b739-08b081bdf447",
+            "workflow_outputs": [
+                {
+                    "label": "myextract_chain.pdb",
+                    "output_name": "output_structure_path",
+                    "uuid": "3c7376d2-db54-411d-98a4-9379c448fd32"
+                }
+            ]
+        },
+        "5": {
+            "annotation": "",
+            "content_id": "biobb_model_fix_altlocs_ext",
+            "errors": null,
+            "id": 5,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 4,
+                    "output_name": "output_structure_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "FixAltlocs",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 961.859375,
+                "top": 220.9375
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_model_fix_altlocs_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_pdb_path\": \"myfix_altlocs.pdb\", \"properties\": {\"altlocs\": \"[\\\"A45:A\\\", \\\"A67:A\\\", \\\"A85:A\\\"]\", \"modeller_key\": \"\", \"binary_path\": \"check_structure\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "339fd270-d80e-46e4-8dd2-63c251d9bf2b",
+            "workflow_outputs": [
+                {
+                    "label": "myfix_altlocs.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "66c22a14-eb74-4afa-8a8e-163198b9899c"
+                }
+            ]
+        },
+        "6": {
+            "annotation": "",
+            "content_id": "biobb_model_fix_ssbonds_ext",
+            "errors": null,
+            "id": 6,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 5,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "FixSsbonds",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 1256.8515625,
+                "top": 186.9375
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_model_fix_ssbonds_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_pdb_path\": \"myfix_ssbonds.pdb\", \"properties\": {\"modeller_key\": \"\", \"binary_path\": \"check_structure\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "2560e194-2c7f-49c0-81da-04bbdb63ee8c",
+            "workflow_outputs": [
+                {
+                    "label": "myfix_ssbonds.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "c1360952-960f-421c-8fb3-f1824ca574b2"
+                }
+            ]
+        },
+        "7": {
+            "annotation": "",
+            "content_id": "biobb_structure_utils_remove_molecules_ext",
+            "errors": null,
+            "id": 7,
+            "input_connections": {
+                "input_structure_path": {
+                    "id": 6,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "RemoveMolecules",
+            "outputs": [
+                {
+                    "name": "output_molecules_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1544.8515625,
+                "top": 177.9765625
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_structure_utils_remove_molecules_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_molecules_path\": \"myremove_molecules.pdb\", \"properties\": {\"molecules\": \"[{\\\"name\\\": \\\"ZN\\\"}]\", \"output_format\": \"pdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "6fff0548-102c-4101-961e-c73f98d139f5",
+            "workflow_outputs": [
+                {
+                    "label": "myremove_molecules.pdb",
+                    "output_name": "output_molecules_path",
+                    "uuid": "2aa6b4d8-e221-4f1f-ab6b-33560dcb641d"
+                }
+            ]
+        },
+        "8": {
+            "annotation": "",
+            "content_id": "biobb_structure_utils_remove_molecules_ext",
+            "errors": null,
+            "id": 8,
+            "input_connections": {
+                "input_structure_path": {
+                    "id": 7,
+                    "output_name": "output_molecules_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "RemoveMolecules",
+            "outputs": [
+                {
+                    "name": "output_molecules_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 1838.8828125,
+                "top": 184.984375
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_structure_utils_remove_molecules_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_molecules_path\": \"myremove_molecules.pdb\", \"properties\": {\"molecules\": \"[{\\\"name\\\": \\\"SO4\\\"}, {\\\"name\\\": \\\"AP5\\\"}]\", \"output_format\": \"pdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "fbc83af5-b190-4c3e-8787-0e4437535c4b",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_molecules_path",
+                    "uuid": "1a51fad8-f924-4827-96cb-e0cbdadde3c5"
+                }
+            ]
+        },
+        "9": {
+            "annotation": "",
+            "content_id": "biobb_chemistry_reduce_remove_hydrogens_ext",
+            "errors": null,
+            "id": 9,
+            "input_connections": {
+                "input_path": {
+                    "id": 8,
+                    "output_name": "output_molecules_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "ReduceRemoveHydrogens",
+            "outputs": [
+                {
+                    "name": "output_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 2118.984375,
+                "top": 184.0078125
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_chemistry_reduce_remove_hydrogens_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_path\": \"myreduce_remove_hydrogens.pdb\", \"properties\": {\"binary_path\": \"reduce\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "62a39bd0-b4af-4a99-999c-cb0349ec84a4",
+            "workflow_outputs": [
+                {
+                    "label": "myreduce_remove_hydrogens.pdb",
+                    "output_name": "output_path",
+                    "uuid": "eafe4372-d1c9-4984-9261-15edf94a8d58"
+                }
+            ]
+        },
+        "10": {
+            "annotation": "",
+            "content_id": "biobb_structure_utils_remove_pdb_water_ext",
+            "errors": null,
+            "id": 10,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 9,
+                    "output_name": "output_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "RemovePdbWater",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 2417.984375,
+                "top": 188.015625
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_structure_utils_remove_pdb_water_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_pdb_path\": \"myremove_pdb_water.pdb\", \"properties\": {\"binary_path\": \"check_structure\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "5f3a7a6c-4559-4fdd-ad8d-263578f4ed76",
+            "workflow_outputs": [
+                {
+                    "label": "myremove_pdb_water.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "226de133-d91a-46b2-9d79-46d11382083d"
+                }
+            ]
+        },
+        "11": {
+            "annotation": "",
+            "content_id": "biobb_model_fix_amides_ext",
+            "errors": null,
+            "id": 11,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 10,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "FixAmides",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 2716.953125,
+                "top": 215.9765625
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_model_fix_amides_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_pdb_path\": \"myfix_amides.pdb\", \"properties\": {\"modeller_key\": \"\", \"binary_path\": \"check_structure\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "2ce04786-e7ee-421c-98ab-9ff261cb94f9",
+            "workflow_outputs": [
+                {
+                    "label": "myfix_amides.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "3c9eeddb-c476-46a2-a3f6-dd1a60fbe08d"
+                }
+            ]
+        },
+        "12": {
+            "annotation": "",
+            "content_id": "biobb_model_fix_chirality_ext",
+            "errors": null,
+            "id": 12,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 11,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "FixChirality",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 3024.96875,
+                "top": 177.9765625
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_model_fix_chirality_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_pdb_path\": \"myfix_chirality.pdb\", \"properties\": {\"modeller_key\": \"\", \"binary_path\": \"check_structure\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "135633dc-d822-4a00-9fb9-3245b54ccf7e",
+            "workflow_outputs": [
+                {
+                    "label": "myfix_chirality.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "e5cce662-71c4-49c0-97e6-3c9ff82e1a4f"
+                }
+            ]
+        },
+        "13": {
+            "annotation": "",
+            "content_id": "biobb_model_fix_side_chain_ext",
+            "errors": null,
+            "id": 13,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 12,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "FixSideChain",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 3299.9375,
+                "top": 179.9609375
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_model_fix_side_chain_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_pdb_path\": \"myfix_side_chain.pdb\", \"properties\": {\"use_modeller\": \"false\", \"modeller_key\": \"\", \"binary_path\": \"check_structure\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "485b8883-0e5b-40a4-a249-79dd33d92082",
+            "workflow_outputs": [
+                {
+                    "label": "myfix_side_chain.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "b4e229ba-59b0-4339-a52a-25250329a9ff"
+                }
+            ]
+        },
+        "14": {
+            "annotation": "",
+            "content_id": "biobb_model_fix_backbone_ext",
+            "errors": null,
+            "id": 14,
+            "input_connections": {
+                "input_fasta_canonical_sequence_path": {
+                    "id": 1,
+                    "output_name": "output_fasta_path"
+                },
+                "input_pdb_path": {
+                    "id": 13,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "FixBackbone",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 3679.8984375,
+                "top": 166.0078125
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_model_fix_backbone_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_fasta_canonical_sequence_path\": {\"__class__\": \"ConnectedValue\"}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_pdb_path\": \"myfix_backbone.pdb\", \"properties\": {\"add_caps\": \"false\", \"modeller_key\": \"\", \"binary_path\": \"check_structure\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "179bce06-f693-4fca-80ef-9e033e45da18",
+            "workflow_outputs": [
+                {
+                    "label": "myfix_backbone.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "231e3359-0bc3-4e8b-9d99-c786a720866d"
+                }
+            ]
+        },
+        "15": {
+            "annotation": "",
+            "content_id": "biobb_amber_leap_gen_top_ext",
+            "errors": null,
+            "id": 15,
+            "input_connections": {
+                "input_pdb_path": {
+                    "id": 14,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool LeapGenTop",
+                    "name": "input_frcmod_path"
+                },
+                {
+                    "description": "runtime parameter for tool LeapGenTop",
+                    "name": "input_lib_path"
+                },
+                {
+                    "description": "runtime parameter for tool LeapGenTop",
+                    "name": "input_params_path"
+                },
+                {
+                    "description": "runtime parameter for tool LeapGenTop",
+                    "name": "input_source_path"
+                }
+            ],
+            "label": null,
+            "name": "LeapGenTop",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                },
+                {
+                    "name": "output_top_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_crd_path",
+                    "type": "text"
+                }
+            ],
+            "position": {
+                "left": 4086.9921875,
+                "top": 142.0
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_amber_leap_gen_top_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_frcmod_path\": {\"__class__\": \"RuntimeValue\"}, \"input_lib_path\": {\"__class__\": \"RuntimeValue\"}, \"input_params_path\": {\"__class__\": \"RuntimeValue\"}, \"input_pdb_path\": {\"__class__\": \"ConnectedValue\"}, \"input_source_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_crd_path\": \"myleap_gen_top.crd\", \"outname_output_pdb_path\": \"myleap_gen_top.pdb\", \"outname_output_top_path\": \"myleap_gen_top.top\", \"properties\": {\"forcefield\": [\"protein.ff14SB\"], \"binary_path\": \"tleap\", \"output_top_path_format\": \"top\", \"output_crd_path_format\": \"crd\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "605fdae9-54b5-41a5-a5a0-8bb26679f956",
+            "workflow_outputs": [
+                {
+                    "label": "myleap_gen_top.top",
+                    "output_name": "output_top_path",
+                    "uuid": "48df715c-1717-4f70-a1ef-d68f0c864d7d"
+                },
+                {
+                    "label": "myleap_gen_top.crd",
+                    "output_name": "output_crd_path",
+                    "uuid": "ec285385-251d-4711-923c-656b87932048"
+                },
+                {
+                    "label": "myleap_gen_top.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "3c28a3b4-83d6-4d89-aa37-f1a2363c24ba"
+                }
+            ]
+        },
+        "16": {
+            "annotation": "",
+            "content_id": "biobb_amber_sander_mdrun_ext",
+            "errors": null,
+            "id": 16,
+            "input_connections": {
+                "input_crd_path": {
+                    "id": 15,
+                    "output_name": "output_crd_path"
+                },
+                "input_top_path": {
+                    "id": 15,
+                    "output_name": "output_top_path"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool SanderMdrun",
+                    "name": "input_cpin_path"
+                },
+                {
+                    "description": "runtime parameter for tool SanderMdrun",
+                    "name": "input_crd_path"
+                },
+                {
+                    "description": "runtime parameter for tool SanderMdrun",
+                    "name": "input_mdin_path"
+                },
+                {
+                    "description": "runtime parameter for tool SanderMdrun",
+                    "name": "input_ref_path"
+                },
+                {
+                    "description": "runtime parameter for tool SanderMdrun",
+                    "name": "input_top_path"
+                }
+            ],
+            "label": null,
+            "name": "SanderMdrun",
+            "outputs": [
+                {
+                    "name": "output_log_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_traj_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_rst_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_cpout_path",
+                    "type": "cpout"
+                },
+                {
+                    "name": "output_cprst_path",
+                    "type": "text"
+                },
+                {
+                    "name": "output_mdinfo_path",
+                    "type": "mdinfo"
+                }
+            ],
+            "position": {
+                "left": 4559.015625,
+                "top": 47.9765625
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionoutput_traj_path": {
+                    "action_arguments": {
+                        "newtype": "crd"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "output_traj_path"
+                }
+            },
+            "tool_id": "biobb_amber_sander_mdrun_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_cpin_path\": {\"__class__\": \"RuntimeValue\"}, \"input_crd_path\": {\"__class__\": \"RuntimeValue\"}, \"input_mdin_path\": {\"__class__\": \"RuntimeValue\"}, \"input_ref_path\": {\"__class__\": \"RuntimeValue\"}, \"input_top_path\": {\"__class__\": \"RuntimeValue\"}, \"outname_output_cpout_path\": \"mysander_mdrun.cpout\", \"outname_output_cprst_path\": \"mysander_mdrun.cprst\", \"outname_output_log_path\": \"mysander_mdrun.log\", \"outname_output_mdinfo_path\": \"mysander_mdrun.mdinfo\", \"outname_output_rst_path\": \"mysander_mdrun.rst\", \"outname_output_traj_path\": \"mysander_mdrun.crd\", \"properties\": {\"mdin\": \"{\\\"ntb\\\":0,\\\"cut\\\":12,\\\"maxcyc\\\":500,\\\"ncyc\\\":50,\\\"ntwx\\\":50}\", \"simulation_type\": \"minimization\", \"binary_path\": \"sander\", \"mpi_bin\": \"\", \"mpi_np\": \"0\", \"mpi_flags\": \"\", \"output_log_path_format\": \"log\", \"output_traj_path_format\": \"trj\", \"output_rst_path_format\": \"rst\", \"output_cprst_path_format\": \"cprst\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "f3e0511b-3c6d-4aaf-be18-70b8dce2e884",
+            "workflow_outputs": [
+                {
+                    "label": "mysander_mdrun.crd",
+                    "output_name": "output_traj_path",
+                    "uuid": "814c04ea-e5f2-4e25-9e00-f4959e7f859c"
+                },
+                {
+                    "label": "mysander_mdrun.rst",
+                    "output_name": "output_rst_path",
+                    "uuid": "61d6b8c9-6753-43e7-b975-4baf6b82fda1"
+                },
+                {
+                    "label": "mysander_mdrun.cpout",
+                    "output_name": "output_cpout_path",
+                    "uuid": "b14653a5-1bd7-4361-b61b-05de803fd5b4"
+                },
+                {
+                    "label": "mysander_mdrun.cprst",
+                    "output_name": "output_cprst_path",
+                    "uuid": "d88b77cd-7613-4bf3-b0f0-ef9ccf23c31e"
+                },
+                {
+                    "label": "mysander_mdrun.log",
+                    "output_name": "output_log_path",
+                    "uuid": "e69fc0e5-4293-4718-b3a7-ba8b06a92c5f"
+                },
+                {
+                    "label": "mysander_mdrun.mdinfo",
+                    "output_name": "output_mdinfo_path",
+                    "uuid": "e193b5fa-cfdd-41da-9f4f-ece6f42c7388"
+                }
+            ]
+        },
+        "17": {
+            "annotation": "",
+            "content_id": "biobb_amber_amber_to_pdb_ext",
+            "errors": null,
+            "id": 17,
+            "input_connections": {
+                "input_crd_path": {
+                    "id": 16,
+                    "output_name": "output_rst_path"
+                },
+                "input_top_path": {
+                    "id": 15,
+                    "output_name": "output_top_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "AmberToPdb",
+            "outputs": [
+                {
+                    "name": "output_pdb_path",
+                    "type": "pdb"
+                }
+            ],
+            "position": {
+                "left": 5020.9921875,
+                "top": 148.0234375
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_amber_amber_to_pdb_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_crd_path\": {\"__class__\": \"ConnectedValue\"}, \"input_top_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_pdb_path\": \"myamber_to_pdb.pdb\", \"properties\": {\"binary_path\": \"ambpdb\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.1",
+            "type": "tool",
+            "uuid": "9eb67d76-ac99-41ea-a8db-03cf85b35ace",
+            "workflow_outputs": [
+                {
+                    "label": "myamber_to_pdb.pdb",
+                    "output_name": "output_pdb_path",
+                    "uuid": "2e5faa7e-d31d-4dca-b93f-7bb61a030375"
+                }
+            ]
+        },
+        "18": {
+            "annotation": "",
+            "content_id": "biobb_structure_utils_structure_check_ext",
+            "errors": null,
+            "id": 18,
+            "input_connections": {
+                "input_structure_path": {
+                    "id": 17,
+                    "output_name": "output_pdb_path"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "StructureCheck",
+            "outputs": [
+                {
+                    "name": "output_summary_path",
+                    "type": "json"
+                }
+            ],
+            "position": {
+                "left": 5327.4765625,
+                "top": 207.0
+            },
+            "post_job_actions": {},
+            "tool_id": "biobb_structure_utils_structure_check_ext",
+            "tool_state": "{\"config\": {\"sele\": \"option3\", \"__current_case__\": 2}, \"input_structure_path\": {\"__class__\": \"ConnectedValue\"}, \"outname_output_summary_path\": \"mystructure_check.json\", \"properties\": {\"features\": null, \"binary_path\": \"check_structure\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "4.0.0",
+            "type": "tool",
+            "uuid": "69cb28f3-b65d-4447-8cb8-b08ee1588998",
+            "workflow_outputs": [
+                {
+                    "label": null,
+                    "output_name": "output_summary_path",
+                    "uuid": "1959e132-5465-4006-82c3-a30553bf2383"
+                }
+            ]
+        }
+    },
+    "tags": [],
+    "uuid": "215de97b-043b-4907-9565-c764d39d65a7",
+    "version": 22
+}

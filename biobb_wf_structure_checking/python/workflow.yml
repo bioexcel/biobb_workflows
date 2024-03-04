@@ -116,6 +116,7 @@ step14_sander_mdrun:
       cut : 12
       maxcyc : 500
       ncyc : 50 
+      ntwx : 50
 
 step15_amber_to_pdb:
   tool: amber_to_pdb

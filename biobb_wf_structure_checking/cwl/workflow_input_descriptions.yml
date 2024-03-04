@@ -1,0 +1,41 @@
+step0_structure_check_init_input_structure_path:
+  class: File
+  path: structure.pdb
+  format: https://edamontology.org/format_1476
+step0_structure_check_init_output_summary_path: structure.report.json
+step1_extract_model_input_structure_path:
+  class: File
+  path: structure.pdb
+  format: https://edamontology.org/format_1476
+step1_extract_model_output_structure_path: structure.models.pdb
+step1_extract_model_config: '{"models": [1]}'
+step2_extract_chain_output_structure_path: structure.chains.pdb
+step2_extract_chain_config: '{"chains": ["A"]}'
+step3_fix_altlocs_output_pdb_path: structure.altloc.pdb
+step3_fix_altlocs_config: '{"altlocs": ["A45:A", "A67:A", "A85:A"]}'
+step4_fix_ssbonds_output_pdb_path: structure.ssbonds.pdb
+step5_remove_molecules_ions_output_molecules_path: structure.metals.pdb
+step5_remove_molecules_ions_config: '{"molecules": [{"name": "ZN"}]}'
+step6_remove_molecules_ligands_output_molecules_path: structure.ligands.pdb
+step6_remove_molecules_ligands_config: '{"molecules": [{"name": "SO4"}, {"name": "AP5"}]}'
+step7_reduce_remove_hydrogens_output_path: structure.hydrogens.pdb
+step8_remove_pdb_water_output_pdb_path: structure.water.pdb
+step9_fix_amides_output_pdb_path: structure.amides.pdb
+step10_fix_chirality_output_pdb_path: structure.chiral.pdb
+step11_fix_side_chain_output_pdb_path: structure.sidechains.pdb
+step12_fix_backbone_input_fasta_canonical_sequence_path:
+  class: File
+  path: sequence.fasta
+  format: https://edamontology.org/format_1476
+step12_fix_backbone_output_pdb_path: structure.backbone.pdb
+step13_leap_gen_top_output_pdb_path: structure.amber.pdb
+step13_leap_gen_top_output_top_path: structure.amber.top
+step13_leap_gen_top_output_crd_path: structure.amber.crd
+step13_leap_gen_top_config: '{"forcefield": ["protein.ff14SB"]}'
+step14_sander_mdrun_output_traj_path: structure.trj.crd
+step14_sander_mdrun_output_rst_path: structure.trj.rst
+step14_sander_mdrun_output_log_path: structure.trj.log
+step14_sander_mdrun_config: '{"simulation_type": "minimization", "mdin": {"ntb": 0, "cut": 12, "maxcyc": 500, "ntwx": 50, "ncyc": 50}}'
+step15_amber_to_pdb_output_pdb_path: structure.amber-min.pdb
+step16_fix_pdb_output_pdb_path: structure.final.pdb
+step17_structure_check_output_summary_path: structure.report_final.json
