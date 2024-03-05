@@ -9,10 +9,10 @@ Launch workflow:
 
 WorkflowHub flavours:
 
-[![CWL - WorkflowHub](https://img.shields.io/badge/CWL-WorkflowHub-1f8787?logo=Common+Workflow+Language&logoColor=ffffff)](#)
-[![Galaxy - WorkflowHub](https://img.shields.io/badge/Galaxy-WorkflowHub-1f8787?logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABmJLR0QA%2FwD%2FAP%2BgvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH5gMQDgQGnOEySwAAAKVJREFUKM%2BNkrsNAjEQRN%2FcJ4NGrg6aISFHQqIaSiAmoAEiWkCE5NwNyYHWBiyPZMnr%2Fcx4bNluqcMkye%2BgA9YVTQLOwOVz4nps46SGejgGHbApFDfAYt6f8sahcK%2B7pL3tHhhTfvv5Z422r1ltwqgCY5KTlDQeQq4Nhgm4zUz9r6lRygCsgCmYs8wd%2Ffbb3tU%2BalNSUEKXxUfgEaQW%2F2CUqtrf9AKgwZfhDysMRQAAAABJRU5ErkJggg%3D%3D&logoColor=ffffff)](#)
-[![Jupyter - WorkflowHub](https://img.shields.io/badge/Jupyter-WorkflowHub-1f8787?logo=Jupyter&logoColor=ffffff)](#)
-[![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](#)
+[![CWL - WorkflowHub](https://img.shields.io/badge/CWL-WorkflowHub-1f8787?logo=Common+Workflow+Language&logoColor=ffffff)](https://workflowhub.eu/workflows/776)
+[![Galaxy - WorkflowHub](https://img.shields.io/badge/Galaxy-WorkflowHub-1f8787?logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABmJLR0QA%2FwD%2FAP%2BgvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH5gMQDgQGnOEySwAAAKVJREFUKM%2BNkrsNAjEQRN%2FcJ4NGrg6aISFHQqIaSiAmoAEiWkCE5NwNyYHWBiyPZMnr%2Fcx4bNluqcMkye%2BgA9YVTQLOwOVz4nps46SGejgGHbApFDfAYt6f8sahcK%2B7pL3tHhhTfvv5Z422r1ltwqgCY5KTlDQeQq4Nhgm4zUz9r6lRygCsgCmYs8wd%2Ffbb3tU%2BalNSUEKXxUfgEaQW%2F2CUqtrf9AKgwZfhDysMRQAAAABJRU5ErkJggg%3D%3D&logoColor=ffffff)](https://workflowhub.eu/workflows/778)
+[![Jupyter - WorkflowHub](https://img.shields.io/badge/Jupyter-WorkflowHub-1f8787?logo=Jupyter&logoColor=ffffff)](https://workflowhub.eu/workflows/775)
+[![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/777)
 
 # Molecular Structure Checking using BioExcel Building Blocks (biobb)
 
@@ -38,10 +38,10 @@ An implementation of this workflow in a **web-based Graphical User Interface (GU
 
 ## Workflow Managers
 
-* [Common Workflow Language (CWL)]() (Soon)
-* [Galaxy]() (Soon)
+* [Common Workflow Language (CWL)](cwl) 
+* [Galaxy](galaxy) 
 * [Jupyter Notebooks](https://github.com/bioexcel/biobb_wf_structure_checking) (this link switches to a different repository) 
-* [Pure Python]() (Soon)
+* [Pure Python](python)
 
 ## Copyright & Licensing
 This software has been developed in the [MMB group](http://mmb.irbbarcelona.org) at the [BSC](http://www.bsc.es/) & [IRB](https://www.irbbarcelona.org/) for the [European BioExcel](http://bioexcel.eu/), funded by the European Commission (EU H2020 [823830](http://cordis.europa.eu/projects/823830), EU H2020 [675728](http://cordis.europa.eu/projects/675728)).
