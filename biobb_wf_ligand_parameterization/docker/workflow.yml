@@ -1,0 +1,26 @@
+working_dir_path: wf_gmx_ligand_parameterization
+can_write_console_log: False
+run_md: False
+
+
+step2_babel_minimize:
+  tool: babel_minimize
+  paths:
+    input_path: /data/ligand.pdb
+    output_path: ligand.H.min.mol2
+  properties:
+    criteria: 1e-10
+    method: sd
+    force_field: GAFF
+    hydrogens: false
+
+step3_acpype_params_gmx:
+  tool: acpype_params_gmx
+  paths:
+    input_path: dependency/step2_babel_minimize/output_path
+    output_path_gro: output.params.gro
+    output_path_itp: output.params.itp
+    output_path_top: output.params.top
+  properties:
+    basename: biobb_GMX_LP
+    charge: -1
