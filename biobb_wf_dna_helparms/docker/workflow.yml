@@ -1,0 +1,233 @@
+working_dir_path: wf_dna_helparms
+can_write_console_log: False
+run_md: False
+
+step1_biobb_curves:
+  tool: biobb_curves
+  paths:
+    input_struc_path: /data/trajectory.nc
+    input_top_path: /data/topology.top
+    output_lis_path: curves.out.lis
+    output_cda_path: curves.out.cda
+  properties:
+    s1range: '1:12'
+
+step2_biobb_canal:
+  tool: biobb_canal
+  paths:
+    input_cda_file: dependency/step1_biobb_curves/output_cda_path
+    input_lis_file: dependency/step1_biobb_curves/output_lis_path
+    output_zip_path: canal.out.zip
+  properties:
+    series: true
+    histo: true
+
+step4_dna_averages_base_pair_step:
+  tool: dna_averages
+  paths:
+    input_ser_path: input.ser
+    output_csv_path: output.averages.csv
+    output_jpg_path: output.averages.jpg
+  properties:
+    helpar_name: helpar 
+    sequence: CGCGAATTCGCG
+
+step5_dna_averages_base_pair:
+  tool: dna_averages
+  paths:
+    input_ser_path: input.ser
+    output_csv_path: output.averages.csv
+    output_jpg_path: output.averages.jpg
+  properties:
+    helpar_name: helpar 
+    sequence: CGCGAATTCGCG
+
+step6_dna_averages_axis_base_pairs:
+  tool: dna_averages
+  paths:
+    input_ser_path: input.ser
+    output_csv_path: output.averages.csv
+    output_jpg_path: output.averages.jpg
+  properties:
+    helpar_name: helpar 
+    sequence: CGCGAATTCGCG
+
+step7_dna_averages_grooves:
+  tool: dna_averages
+  paths:
+    input_ser_path: input.ser
+    output_csv_path: output.averages.csv
+    output_jpg_path: output.averages.jpg
+  properties:
+    helpar_name: helpar 
+    sequence: CGCGAATTCGCG
+
+step8_puckering:
+  tool: puckering
+  paths:
+    input_phaseC_path: input.ser 
+    input_phaseW_path: input.ser 
+    output_csv_path: puckering.averages.csv
+    output_jpg_path: puckering.averages.jpg
+  properties:
+    sequence: CGCGAATTCGCG
+
+step9_canonicalag:
+  tool: canonicalag
+  paths:
+    input_alphaC_path: input.ser
+    input_alphaW_path: input.ser
+    input_gammaC_path: input.ser
+    input_gammaW_path: input.ser
+    output_csv_path: alphagamma.averages.csv
+    output_jpg_path: alphagamma.averages.jpg
+  properties:
+    sequence: CGCGAATTCGCG
+
+step10_bipopulations:
+  tool: bipopulations
+  paths:
+    input_epsilC_path: input.ser
+    input_epsilW_path: input.ser
+    input_zetaC_path: input.ser
+    input_zetaW_path: input.ser
+    output_csv_path: bIbII.averages.csv
+    output_jpg_path: bIbII.averages.jpg
+  properties:
+    sequence: CGCGAATTCGCG
+
+step12_dna_timeseries_base_pair_step:
+  tool: dna_timeseries
+  paths:
+    input_ser_path: input.ser
+    output_zip_path: timeseries.zip
+  properties:
+    helpar_name: helpar
+    sequence: CGCGAATTCGCG
+
+step13_dna_timeseries_base_pair:
+  tool: dna_timeseries
+  paths:
+    input_ser_path: input.ser
+    output_zip_path: timeseries.zip
+  properties:
+    helpar_name: helpar
+    sequence: CGCGAATTCGCG
+
+step14_dna_timeseries_axis_base_pairs:
+  tool: dna_timeseries
+  paths:
+    input_ser_path: input.ser
+    output_zip_path: timeseries.zip
+  properties:
+    helpar_name: helpar
+    sequence: CGCGAATTCGCG
+
+step15_dna_timeseries_grooves:
+  tool: dna_timeseries
+  paths:
+    input_ser_path: input.ser
+    output_zip_path: timeseries.zip
+  properties:
+    helpar_name: helpar
+    sequence: CGCGAATTCGCG
+
+step16_dna_timeseries_backbone_torsions:
+  tool: dna_timeseries
+  paths:
+    input_ser_path: input.ser
+    output_zip_path: timeseries.zip
+  properties:
+    helpar_name: helpar
+    sequence: CGCGAATTCGCG
+
+step18_basepair_stiffness:
+  tool: basepair_stiffness
+  paths:
+    input_filename_shift: series_shift.csv
+    input_filename_slide: series_slide.csv
+    input_filename_rise: series_rise.csv
+    input_filename_tilt: series_tilt.csv
+    input_filename_roll: series_roll.csv
+    input_filename_twist: series_twist.csv
+    output_csv_path: stiffness_bps.csv
+    output_jpg_path: stiffness_bps.jpg
+
+step19_dna_bimodality:
+  tool: dna_bimodality
+  paths:
+    input_csv_file: series.csv
+    output_csv_path: bimodality.csv
+    output_jpg_path: bimodality.jpg
+  properties:
+    max_iter: 500
+
+step20_intraseqcorr:
+  tool: intraseqcorr
+  paths:
+    input_ser_path: input.ser
+    output_csv_path: intrabp_correlation.csv
+    output_jpg_path: intrabp_correlation.jpg
+  properties:
+    sequence: CGCGAATTCGCG
+
+step21_interseqcorr:
+  tool: interseqcorr
+  paths:
+    input_ser_path: input.ser
+    output_csv_path: interbp_correlation.csv
+    output_jpg_path: interbp_correlation.jpg
+  properties:
+    sequence: CGCGAATTCGCG
+
+step22_intrahpcorr:
+  tool: intrahpcorr
+  paths:
+    input_filename_shear: series_shear.csv
+    input_filename_stretch: series_stretch.csv
+    input_filename_stagger: series_stagger.csv
+    input_filename_buckle: series_buckle.csv
+    input_filename_propel: series_propel.csv
+    input_filename_opening: series_opening.csv
+    output_csv_path: helpar_bp_correlation.csv 
+    output_jpg_path: helpar_bp_correlation.jpg 
+
+step23_interhpcorr:
+  tool: interhpcorr
+  paths:
+    input_filename_shift: series_shift.csv
+    input_filename_slide: series_slide.csv
+    input_filename_rise: series_rise.csv
+    input_filename_tilt: series_tilt.csv
+    input_filename_roll: series_roll.csv
+    input_filename_twist: series_twist.csv
+    output_csv_path: helpar_bps_correlation.csv 
+    output_jpg_path: helpar_bps_correlation.jpg 
+
+step24_intrabpcorr:
+  tool: intrabpcorr
+  paths:
+    input_filename_shear: series_shear.csv
+    input_filename_stretch: series_stretch.csv
+    input_filename_stagger: series_stagger.csv
+    input_filename_buckle: series_buckle.csv
+    input_filename_propel: series_propel.csv
+    input_filename_opening: series_opening.csv
+    output_csv_path: bp_correlation.csv 
+    output_jpg_path: bp_correlation.jpg 
+  properties:
+    sequence: CGCGAATTCGCG
+
+step25_interbpcorr:
+  tool: interbpcorr
+  paths:
+    input_filename_shift: series_shift.csv
+    input_filename_slide: series_slide.csv
+    input_filename_rise: series_rise.csv
+    input_filename_tilt: series_tilt.csv
+    input_filename_roll: series_roll.csv
+    input_filename_twist: series_twist.csv
+    output_csv_path: bps_correlation.csv 
+    output_jpg_path: bps_correlation.jpg 
+  properties:
+    sequence: CGCGAATTCGCG

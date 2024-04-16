@@ -1,0 +1,289 @@
+working_dir_path: wf_flexserv
+can_write_console_log: False
+
+step0_extract_atoms:
+  tool: extract_atoms
+  paths:
+    input_structure_path: /data/structure.pdb
+    output_structure_path: structure_ca.pdb
+  properties:
+    regular_expression_pattern: "^CA"
+
+step1_bd_run:
+  tool: bd_run
+  paths:
+    input_pdb_path: dependency/step0_extract_atoms/output_structure_path
+    output_crd_path: bd_ensemble.mdcrd
+    output_log_path: bd_ensemble.log
+  properties:
+    binary_path: bd
+    time: 10000
+    wfreq: 100
+
+step2_cpptraj_rms:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step0_extract_atoms/output_structure_path
+    input_traj_path: dependency/step1_bd_run/output_crd_path
+    output_cpptraj_path: bd_ensemble_rmsd.dat
+    output_traj_path: bd_ensemble.dcd
+    input_exp_path: dependency/step0_extract_atoms/output_structure_path
+  properties:
+    start: 1
+    end: -1
+    steps: 1
+    mask: c-alpha
+    reference: experimental
+
+step3_dmd_run:
+  tool: dmd_run
+  paths:
+    input_pdb_path: dependency/step0_extract_atoms/output_structure_path
+    output_crd_path: dmd_ensemble.mdcrd
+    output_log_path: dmd_ensemble.log
+
+step4_cpptraj_rms:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step0_extract_atoms/output_structure_path
+    input_traj_path: dependency/step3_dmd_run/output_crd_path
+    output_cpptraj_path: dmd_ensemble_rmsd.dat
+    output_traj_path: dmd_ensemble.dcd
+    input_exp_path: dependency/step0_extract_atoms/output_structure_path
+  properties:
+    start: 1
+    end: -1
+    steps: 1
+    mask: c-alpha
+    reference: experimental
+
+step5_nma_run:
+  tool: nma_run
+  paths:
+    input_pdb_path: dependency/step0_extract_atoms/output_structure_path
+    output_crd_path: nma_ensemble.mdcrd
+    output_log_path: nma_ensemble.log
+  properties:
+    frames: 50
+
+step6_cpptraj_rms:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step0_extract_atoms/output_structure_path
+    input_traj_path: dependency/step5_nma_run/output_crd_path
+    output_cpptraj_path: nma_ensemble_rmsd.dat
+    output_traj_path: nma_ensemble.dcd
+    input_exp_path: dependency/step0_extract_atoms/output_structure_path
+  properties:
+    start: 1
+    end: -1
+    steps: 1
+    mask: c-alpha
+    reference: experimental
+
+step7_pcz_zip:
+  tool: pcz_zip
+  paths:
+    input_pdb_path: dependency/step0_extract_atoms/output_structure_path
+    input_crd_path: dependency/step1_bd_run/output_crd_path
+    output_pcz_path: bd_ensemble.pcz
+  properties:
+    variance: 90
+    neigenv: 10
+    gauss_rmsd: True
+
+step8_pcz_zip:
+  tool: pcz_zip
+  paths:
+    input_pdb_path: dependency/step0_extract_atoms/output_structure_path
+    input_crd_path: dependency/step3_dmd_run/output_crd_path
+    output_pcz_path: dmd_ensemble.pcz
+  properties:
+    variance: 90
+    neigenv: 10
+    gauss_rmsd: True
+
+step9_pcz_zip:
+  tool: pcz_zip
+  paths:
+    input_pdb_path: dependency/step0_extract_atoms/output_structure_path
+    input_crd_path: dependency/step5_nma_run/output_crd_path
+    output_pcz_path: nma_ensemble.pcz
+  properties:
+    variance: 90
+    neigenv: 10
+    gauss_rmsd: True
+
+step10_pcz_unzip:
+  tool: pcz_unzip
+  paths:
+    input_pcz_path: dependency/step7_pcz_zip/output_pcz_path
+    output_crd_path: bd_ensemble_uncompressed.crd
+
+step11_pcz_unzip:
+  tool: pcz_unzip
+  paths:
+    input_pcz_path: dependency/step8_pcz_zip/output_pcz_path
+    output_crd_path: dmd_ensemble_uncompressed.crd
+
+step12_pcz_unzip:
+  tool: pcz_unzip
+  paths:
+    input_pcz_path: dependency/step9_pcz_zip/output_pcz_path
+    output_crd_path: nma_ensemble_uncompressed.crd
+
+step13_cpptraj_rms:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step0_extract_atoms/output_structure_path
+    input_traj_path: dependency/step10_pcz_unzip/output_crd_path
+    output_cpptraj_path: bd_ensemble_uncompressed.rmsd.dat
+    output_traj_path: bd_ensemble_uncompressed.dcd
+    input_exp_path: dependency/step0_extract_atoms/output_structure_path
+  properties:
+    start: 1
+    end: -1
+    steps: 1
+    mask: c-alpha
+    reference: experimental
+
+step14_cpptraj_rms:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step0_extract_atoms/output_structure_path
+    input_traj_path: dependency/step11_pcz_unzip/output_crd_path
+    output_cpptraj_path: dmd_ensemble_uncompressed.rmsd.dat
+    output_traj_path: dmd_ensemble_uncompressed.dcd
+    input_exp_path: dependency/step0_extract_atoms/output_structure_path
+  properties:
+    start: 1
+    end: -1
+    steps: 1
+    mask: c-alpha
+    reference: experimental
+
+step15_cpptraj_rms:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: dependency/step0_extract_atoms/output_structure_path
+    input_traj_path: dependency/step12_pcz_unzip/output_crd_path
+    output_cpptraj_path: nma_ensemble_uncompressed.rmsd.dat
+    output_traj_path: nma_ensemble_uncompressed.dcd
+    input_exp_path: dependency/step0_extract_atoms/output_structure_path
+  properties:
+    start: 1
+    end: -1
+    steps: 1
+    mask: c-alpha
+    reference: experimental
+
+step16_pcz_info:
+  tool: pcz_info
+  paths:
+    input_pcz_path: dependency/step9_pcz_zip/output_pcz_path
+    output_json_path: pcz_report.json
+
+step17_pcz_evecs:
+  tool: pcz_evecs
+  paths:
+    input_pcz_path: dependency/step9_pcz_zip/output_pcz_path
+    output_json_path: pcz_evecs.json
+  properties:
+    eigenvector: 1
+
+step18_pcz_animate:
+  tool: pcz_animate
+  paths:
+    input_pcz_path: dependency/step9_pcz_zip/output_pcz_path
+    output_crd_path: pcz_proj1.crd
+  properties:
+    eigenvector: 1
+
+step19_cpptraj_convert:
+  tool: cpptraj_convert
+  paths:
+    input_top_path: dependency/step0_extract_atoms/output_structure_path
+    input_traj_path: dependency/step18_pcz_animate/output_crd_path
+    output_cpptraj_path: pcz_proj1.dcd
+  properties:
+    start: 1
+    end: -1
+    steps: 1
+    mask: c-alpha
+    format: dcd
+
+step20_pcz_bfactor:
+  tool: pcz_bfactor
+  paths:
+    input_pcz_path: dependency/step9_pcz_zip/output_pcz_path
+    output_dat_path: bfactor_all.dat
+    output_pdb_path: bfactor_all.pdb
+  properties:
+    eigenvector: 0
+    pdb: True
+
+step21_pcz_hinges:
+  tool: pcz_hinges
+  paths:
+    input_pcz_path: dependency/step7_pcz_zip/output_pcz_path
+    output_json_path: hinges_bfactor_report.json
+  properties:
+    eigenvector: 0
+    method: Bfactor_slope
+
+step22_pcz_hinges:
+  tool: pcz_hinges
+  paths:
+    input_pcz_path: dependency/step7_pcz_zip/output_pcz_path
+    output_json_path: hinges_dyndom_report.json
+  properties:
+    eigenvector: 0
+    method: Dynamic_domain
+
+step23_pcz_hinges:
+  tool: pcz_hinges
+  paths:
+    input_pcz_path: dependency/step7_pcz_zip/output_pcz_path
+    output_json_path: hinges_fcte_report.json
+  properties:
+    eigenvector: 0
+    method: Force_constant
+
+step24_pcz_stiffness:
+  tool: pcz_stiffness
+  paths:
+    input_pcz_path: dependency/step9_pcz_zip/output_pcz_path
+    output_json_path: pcz_stiffness.json
+  properties:
+    eigenvector: 0
+
+step25_pcz_collectivity:
+  tool: pcz_collectivity
+  paths:
+    input_pcz_path: dependency/step9_pcz_zip/output_pcz_path
+    output_json_path: pcz_collectivity.json
+  properties:
+    eigenvector: 0
+
+step26_pcz_similarity:
+  tool: pcz_similarity
+  paths:
+    input_pcz_path1: dependency/step7_pcz_zip/output_pcz_path
+    input_pcz_path2: /data/1a32.MoDEL.pcz
+    output_json_path: simIndex_bd_report_bd_vs_md.json
+
+step27_pcz_similarity:
+  tool: pcz_similarity
+  paths:
+    input_pcz_path1: dependency/step8_pcz_zip/output_pcz_path
+    input_pcz_path2: /data/1a32.MoDEL.pcz
+    output_json_path: simIndex_bd_report_dmd_vs_md.json
+
+step28_pcz_similarity:
+  tool: pcz_similarity
+  paths:
+    input_pcz_path1: dependency/step9_pcz_zip/output_pcz_path
+    input_pcz_path2: /data/1a32.MoDEL.pcz
+    output_json_path: simIndex_bd_report_nma_vs_md.json
+
+    

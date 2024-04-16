@@ -1,0 +1,71 @@
+working_dir_path: wf_godmd
+can_write_console_log: False
+
+step0_extract_chain:
+  tool: extract_chain
+  paths:
+    input_structure_path: /data/origin.pdb
+    output_structure_path: origin.chains.pdb
+  properties:
+    chains: ['A']
+
+step1_extract_chain:
+  tool: extract_chain
+  paths:
+    input_structure_path: /data/target.pdb
+    output_structure_path: target.chains.pdb
+  properties:
+    chains: ['A']
+
+step2_remove_molecules:
+  tool: remove_molecules
+  paths:
+    input_structure_path: dependency/step0_extract_chain/output_structure_path
+    output_molecules_path: origin.chains.nolig.pdb
+  properties:
+    molecules: [
+      { name: AP5 }
+    ]
+
+step3_remove_molecules:
+  tool: remove_molecules
+  paths:
+    input_structure_path: dependency/step1_extract_chain/output_structure_path
+    output_molecules_path: target.chains.nolig.pdb
+  properties:
+    molecules: []
+
+step4_godmd_prep:
+  tool: godmd_prep
+  paths:
+    input_pdb_orig_path: dependency/step2_remove_molecules/output_molecules_path
+    input_pdb_target_path: dependency/step3_remove_molecules/output_molecules_path
+    output_aln_orig_path: origin.aln
+    output_aln_target_path: target.aln
+  properties:
+    gapopen: '12.0'
+    gapextend: '2'
+
+step5_godmd_run:
+  tool: godmd_run
+  paths:
+    input_pdb_orig_path: dependency/step2_remove_molecules/output_molecules_path
+    input_pdb_target_path: dependency/step3_remove_molecules/output_molecules_path
+    input_aln_orig_path: dependency/step4_godmd_prep/output_aln_orig_path
+    input_aln_target_path: dependency/step4_godmd_prep/output_aln_target_path
+    output_log_path: origin-target.godmd.log
+    output_ene_path: origin-target.godmd.ene.out
+    output_trj_path: origin-target.godmd.mdcrd
+    output_pdb_path: origin-target.godmd.pdb
+  properties:
+    godmdin:
+      temp: 400
+
+step6_cpptraj_convert:
+  tool: cpptraj_convert
+  paths:
+    input_top_path: dependency/step5_godmd_run/output_pdb_path
+    input_traj_path: dependency/step5_godmd_run/output_pdb_path
+    output_cpptraj_path: origin-target.godmd.dcd
+  properties:
+    format: dcd

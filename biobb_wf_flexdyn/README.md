@@ -86,6 +86,7 @@ The particular structure used is the **complex between ADENYLATE KINASE from Esc
 * [Galaxy](galaxy)
 * [Jupyter Notebooks](https://github.com/bioexcel/biobb_wf_flexdyn) (this link switches to a different repository) 
 * [Pure Python](python)
+* [Docker](docker)
 
 ## Copyright & Licensing
 This software has been developed in the [MMB group](http://mmb.irbbarcelona.org) at the [BSC](http://www.bsc.es/) & [IRB](https://www.irbbarcelona.org/) for the [European BioExcel](http://bioexcel.eu/), funded by the European Commission (EU H2020 [823830](http://cordis.europa.eu/projects/823830), EU H2020 [675728](http://cordis.europa.eu/projects/675728)).
