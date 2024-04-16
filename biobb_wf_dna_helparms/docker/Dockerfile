@@ -14,10 +14,11 @@ RUN wget https://raw.githubusercontent.com/bioexcel/biobb_workflows/main/biobb_w
 # Create new environment
 RUN conda env create -f /app/workflow.env.yml
 
-# TODO COPY .curvesplus FOLDER????
+# Copy the .curvesplus folder into the Docker image
+COPY .curvesplus /opt/conda/envs/dna_helparms_env
 
 # Make RUN commands use the new environment:
-SHELL ["conda", "run", "-n", "wf_dna_helparms", "/bin/bash", "-c"]
+SHELL ["conda", "run", "-n", "dna_helparms_env", "/bin/bash", "-c"]
 
 # Code to run when container is started
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "wf_dna_helparms", "python", "/app/workflow.py", "--config", "/data/workflow.yml"]
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "dna_helparms_env", "python", "/app/workflow.py", "--config", "/data/workflow.yml"]

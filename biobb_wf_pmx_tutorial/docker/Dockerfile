@@ -14,10 +14,8 @@ RUN wget https://raw.githubusercontent.com/bioexcel/biobb_workflows/main/biobb_w
 # Create new environment
 RUN conda env create -f /app/workflow.env.yml
 
-# TO CHECK PATH TO ENVIRONMENT AND CHANGE IT IN workflow.yml
-
 # Make RUN commands use the new environment:
-SHELL ["conda", "run", "-n", "wf_pmx", "/bin/bash", "-c"]
+SHELL ["conda", "run", "-n", "biobb_wf_pmx_tutorial", "/bin/bash", "-c"]
 
 # Code to run when container is started
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "wf_pmx", "python", "/app/workflow.py", "--config", "/data/workflow.yml"]
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "biobb_wf_pmx_tutorial", "python", "/app/workflow.py", "--config", "/data/workflow.yml"]

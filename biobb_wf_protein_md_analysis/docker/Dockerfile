@@ -15,7 +15,7 @@ RUN wget https://raw.githubusercontent.com/bioexcel/biobb_workflows/main/biobb_w
 RUN conda env create -f /app/workflow.env.yml
 
 # Make RUN commands use the new environment:
-SHELL ["conda", "run", "-n", "wf_mdprot_analysis", "/bin/bash", "-c"]
+SHELL ["conda", "run", "-n", "mdprot_analysis.env", "/bin/bash", "-c"]
 
 # Code to run when container is started
-ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "wf_mdprot_analysis", "python", "/app/workflow.py", "--config", "/data/workflow.yml"]
+ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "mdprot_analysis.env", "python", "/app/workflow.py", "--config", "/data/workflow.yml"]
