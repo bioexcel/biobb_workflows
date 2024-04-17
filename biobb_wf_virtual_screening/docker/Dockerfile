@@ -17,5 +17,8 @@ RUN conda env create -f /app/workflow.env.yml
 # Make RUN commands use the new environment:
 SHELL ["conda", "run", "-n", "docking_vina_env", "/bin/bash", "-c"]
 
+# Downgrade biopython to 1.81
+RUN conda install biopython==1.81 --force-reinstall
+
 # Code to run when container is started
 ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "docking_vina_env", "python", "/app/workflow.py", "--config", "/data/workflow.yml"]
