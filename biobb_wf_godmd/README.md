@@ -13,6 +13,7 @@ WorkflowHub flavours:
 [![Galaxy - WorkflowHub](https://img.shields.io/badge/Galaxy-WorkflowHub-1f8787?logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAA4AAAAOCAYAAAAfSC3RAAAABmJLR0QA%2FwD%2FAP%2BgvaeTAAAACXBIWXMAAA3XAAAN1wFCKJt4AAAAB3RJTUUH5gMQDgQGnOEySwAAAKVJREFUKM%2BNkrsNAjEQRN%2FcJ4NGrg6aISFHQqIaSiAmoAEiWkCE5NwNyYHWBiyPZMnr%2Fcx4bNluqcMkye%2BgA9YVTQLOwOVz4nps46SGejgGHbApFDfAYt6f8sahcK%2B7pL3tHhhTfvv5Z422r1ltwqgCY5KTlDQeQq4Nhgm4zUz9r6lRygCsgCmYs8wd%2Ffbb3tU%2BalNSUEKXxUfgEaQW%2F2CUqtrf9AKgwZfhDysMRQAAAABJRU5ErkJggg%3D%3D&logoColor=ffffff)](https://workflowhub.eu/workflows/558)
 [![Jupyter - WorkflowHub](https://img.shields.io/badge/Jupyter-WorkflowHub-1f8787?logo=Jupyter&logoColor=ffffff)](https://workflowhub.eu/workflows/548)
 [![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/550)
+[![Docker - WorkflowHub](https://img.shields.io/badge/Docker-WorkflowHub-1f8787?logo=docker&logoColor=ffffff)](https://workflowhub.eu/workflows/824)
 
 # Protein conformational transitions calculations tutorial using BioExcel Building Blocks (biobb) and GOdMD
 
