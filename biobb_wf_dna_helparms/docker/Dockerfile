@@ -11,14 +11,14 @@ VOLUME /data
 RUN wget https://raw.githubusercontent.com/bioexcel/biobb_workflows/main/biobb_wf_dna_helparms/python/workflow.env.yml -O /app/workflow.env.yml && \
     wget https://raw.githubusercontent.com/bioexcel/biobb_workflows/main/biobb_wf_dna_helparms/python/workflow.py -O /app/workflow.py
 
+# Enable libmamba as solver
+RUN conda config --set solver libmamba
+
 # Create new environment
 RUN conda env create -f /app/workflow.env.yml
 
 # Copy the .curvesplus folder into the Docker image
 COPY .curvesplus /opt/conda/envs/dna_helparms_env
-
-# Make RUN commands use the new environment:
-SHELL ["conda", "run", "-n", "dna_helparms_env", "/bin/bash", "-c"]
 
 # Code to run when container is started
 ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "dna_helparms_env", "python", "/app/workflow.py", "--config", "/data/workflow.yml"]

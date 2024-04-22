@@ -11,11 +11,11 @@ VOLUME /data
 RUN wget https://raw.githubusercontent.com/bioexcel/biobb_workflows/main/biobb_wf_protein_complex_md_setup/python/workflow.env.yml -O /app/workflow.env.yml && \
     wget https://raw.githubusercontent.com/bioexcel/biobb_workflows/main/biobb_wf_protein_complex_md_setup/python/workflow.py -O /app/workflow.py
 
+# Enable libmamba as solver
+RUN conda config --set solver libmamba
+
 # Create new environment
 RUN conda env create -f /app/workflow.env.yml
-
-# Make RUN commands use the new environment:
-SHELL ["conda", "run", "-n", "complex_setup_env", "/bin/bash", "-c"]
 
 # Code to run when container is started
 ENTRYPOINT ["conda", "run", "--no-capture-output", "-n", "complex_setup_env", "python", "/app/workflow.py", "--config", "/data/workflow.yml"]
