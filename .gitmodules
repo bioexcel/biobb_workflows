@@ -1,42 +1,56 @@
 [submodule "biobb_wf_md_setup/jupyter"]
 	path = biobb_wf_md_setup/jupyter
 	url = https://github.com/bioexcel/biobb_wf_md_setup
+	branch = main
 [submodule "biobb_wf_ligand_parameterization/jupyter"]
 	path = biobb_wf_ligand_parameterization/jupyter
 	url = https://github.com/bioexcel/biobb_wf_ligand_parameterization
+	branch = main
 [submodule "biobb_wf_protein_complex_md_setup/jupyter"]
 	path = biobb_wf_protein_complex_md_setup/jupyter
 	url = https://github.com/bioexcel/biobb_wf_protein-complex_md_setup
+	branch = main
 [submodule "biobb_wf_virtual_screening/jupyter"]
 	path = biobb_wf_virtual_screening/jupyter
 	url = https://github.com/bioexcel/biobb_wf_virtual-screening
+	branch = main
 [submodule "biobb_wf_amber_md_setup/jupyter"]
 	path = biobb_wf_amber_md_setup/jupyter
 	url = https://github.com/bioexcel/biobb_wf_amber_md_setup
+	branch = main
 [submodule "biobb_wf_amber_abc_md_setup/jupyter"]
 	path = biobb_wf_amber_abc_md_setup/jupyter
 	url = https://github.com/bioexcel/biobb_wf_amber_md_setup
+	branch = main
 [submodule "biobb_wf_dna_helparms/jupyter"]
 	path = biobb_wf_dna_helparms/jupyter
 	url = https://github.com/bioexcel/biobb_wf_dna_helparms
+	branch = main
 [submodule "biobb_wf_amber_complex_md_setup/jupyter"]
 	path = biobb_wf_amber_complex_md_setup/jupyter
 	url = https://github.com/bioexcel/biobb_wf_amber_md_setup
+	branch = main
 [submodule "biobb_wf_pmx_tutorial/jupyter"]
 	path = biobb_wf_pmx_tutorial/jupyter
 	url = https://github.com/bioexcel/biobb_wf_pmx_tutorial
+	branch = main
 [submodule "biobb_wf_flexdyn/jupyter"]
 	path = biobb_wf_flexdyn/jupyter
 	url = https://github.com/bioexcel/biobb_wf_flexdyn
+	branch = main
 [submodule "biobb_wf_godmd/jupyter"]
 	path = biobb_wf_godmd/jupyter
 	url = https://github.com/bioexcel/biobb_wf_godmd
+	branch = main
 [submodule "biobb_wf_flexserv/jupyter"]
 	path = biobb_wf_flexserv/jupyter
 	url = https://github.com/bioexcel/biobb_wf_flexserv
+	branch = main
 [submodule "biobb_wf_cmip/jupyter"]
 	path = biobb_wf_cmip/jupyter
 	url = https://github.com/bioexcel/biobb_wf_cmip
+	branch = main
 [submodule "biobb_wf_structure_checking/jupyter"]
 	path = biobb_wf_structure_checking/jupyter
 	url = https://github.com/bioexcel/biobb_wf_structure_checking
+	branch = main
