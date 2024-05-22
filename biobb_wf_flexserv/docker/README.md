@@ -25,6 +25,13 @@ Note: if using an **ARM** architecture such as the **Apple Silicon chips**, plea
 
     docker build --platform linux/amd64 -t <container_image> .
 
+For adding image tags:
+
+    docker build --platform linux/amd64 -t <container_image>:<tag> .
+    docker tag <container_image>:<tag> <container_image>:latest
+    docker push <container_image>:<tag>
+    docker push <container_image>:latest
+
 ## <a name="run-wf"></a>Run workflow
 
 After that, the only thing left is to run the workflow:
