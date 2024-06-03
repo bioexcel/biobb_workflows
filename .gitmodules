@@ -16,11 +16,11 @@
 	branch = main
 [submodule "biobb_wf_amber_md_setup/jupyter"]
 	path = biobb_wf_amber_md_setup/jupyter
-	url = https://github.com/bioexcel/biobb_wf_amber_md_setup
+	url = https://github.com/bioexcel/biobb_wf_amber
 	branch = main
 [submodule "biobb_wf_amber_abc_md_setup/jupyter"]
 	path = biobb_wf_amber_abc_md_setup/jupyter
-	url = https://github.com/bioexcel/biobb_wf_amber_md_setup
+	url = https://github.com/bioexcel/biobb_wf_amber
 	branch = main
 [submodule "biobb_wf_dna_helparms/jupyter"]
 	path = biobb_wf_dna_helparms/jupyter
@@ -28,7 +28,7 @@
 	branch = main
 [submodule "biobb_wf_amber_complex_md_setup/jupyter"]
 	path = biobb_wf_amber_complex_md_setup/jupyter
-	url = https://github.com/bioexcel/biobb_wf_amber_md_setup
+	url = https://github.com/bioexcel/biobb_wf_amber
 	branch = main
 [submodule "biobb_wf_pmx_tutorial/jupyter"]
 	path = biobb_wf_pmx_tutorial/jupyter
