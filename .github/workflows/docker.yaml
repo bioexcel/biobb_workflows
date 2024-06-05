@@ -1,0 +1,29 @@
+on:
+  push:
+    paths:
+      - common/docker/Dockerfile
+  workflow_dispatch:
+
+name: Dockerfile
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Copy Dockerfile
+        run: |
+          cp common/docker/Dockerfile biobb_wf_amber_abc_setup/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_amber_md_setup/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_amber_md_setup_lig/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_cmip/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_dna_helparms/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_flexdyn/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_flexserv/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_godmd/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_ligand_parameterization/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_md_setup/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_md_setup_mutations/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_pmx_tutorial/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_protein_md_analysis/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_protein-complex_md_setup/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_structure_checking/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_virtual-screening_fpocket/docker/Dockerfile
