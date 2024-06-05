@@ -8,8 +8,8 @@ WORKDIR /app
 VOLUME /data
 
 # Clone repo
-RUN wget https://raw.githubusercontent.com/bioexcel/biobb_workflows/main/biobb_wf_amber_complex_md_setup/python/workflow.env.yml -O /app/workflow.env.yml && \
-    wget https://raw.githubusercontent.com/bioexcel/biobb_workflows/main/biobb_wf_amber_complex_md_setup/python/workflow.py -O /app/workflow.py
+RUN wget https://raw.githubusercontent.com/bioexcel/biobb_workflows/main/biobb_wf_amber_md_setup_lig/python/workflow.env.yml -O /app/workflow.env.yml && \
+    wget https://raw.githubusercontent.com/bioexcel/biobb_workflows/main/biobb_wf_amber_md_setup_lig/python/workflow.py -O /app/workflow.py
 
 # Enable libmamba as solver
 RUN conda config --set solver libmamba

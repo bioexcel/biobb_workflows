@@ -6,6 +6,7 @@ Welcome to the global repository for all the **BioExcel Building Blocks Workflow
 * Galaxy
 * Jupyter Notebooks
 * Pure Python
+* Docker
 
 ## Installation
 

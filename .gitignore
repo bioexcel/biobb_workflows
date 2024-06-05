@@ -2,3 +2,10 @@
 .DS_Store
 *_test
 *_old
+
+######
+
+biobb_wf_cmip/cwl/
+biobb_wf_cmip/galaxy/
+
+######
