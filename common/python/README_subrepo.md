@@ -9,6 +9,7 @@ Below you can find the list of all the needed **files** for executing this workf
 * **workflow.py:** the python file with all the steps to execute this workflow.
 * **workflow.yml:** the configuration file with the I/O dependencies and settings for each step of the workflow.
 * **workflow.env.yml:** the environment file needed for create a conda environment where this workflow will be run.
+* **inputs:** the inputs vary depending on the workflow, all the needed files are available in this same repository, just be sure to have them in the same folder where **workflow.yml** is.
 
 ## <a name="requirements"></a>Requirements
 
@@ -28,16 +29,16 @@ This process can take a while, and once it is finished you will have an environm
 #
 # To activate this environment, use
 #
-#     $ conda activate name_of_environment
+#     $ conda activate <repository>
 #
 # To deactivate an active environment, use
 #
 #     $ conda deactivate
 ```
 
-So execute the following script (changing name_of_environment by the name shown in your terminal):
+So execute the following script:
 
-    conda activate name_of_environment
+    conda activate <repository>
 
 ## <a name="custom-paths"></a>Custom paths
 
@@ -53,4 +54,4 @@ Take into account that depending on the number of steps, the tools executed and 
 
 ## <a name="get-output"></a>Get output results
 
-Once the workflow is finished, you just should enter the new **wf_name_of_workflow** folder and, inside it, you will find a folder for each step of the workflow with all the files generated in every step.
+Once the workflow is finished, you just should enter the new **<repository>_<subrepository>** folder and, inside it, you will find a folder for each step of the workflow with all the files generated in every step.
