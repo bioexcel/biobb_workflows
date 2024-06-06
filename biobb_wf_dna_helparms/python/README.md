@@ -9,6 +9,7 @@ Below you can find the list of all the needed **files** for executing this workf
 * **workflow.py:** the python file with all the steps to execute this workflow.
 * **workflow.yml:** the configuration file with the I/O dependencies and settings for each step of the workflow.
 * **workflow.env.yml:** the environment file needed for create a conda environment where this workflow will be run.
+* **inputs:** the inputs vary depending on the workflow, all the needed files are available in this same repository, just be sure to have them in the same folder where **workflow.yml** is
 
 ## <a name="requirements"></a>Requirements
 
@@ -28,24 +29,20 @@ This process can take a while, and once it is finished you will have an environm
 #
 # To activate this environment, use
 #
-#     $ conda activate name_of_environment
+#     $ conda activate biobb_wf_dna_helparms
 #
 # To deactivate an active environment, use
 #
 #     $ conda deactivate
 ```
 
-So execute the following script (changing name_of_environment by the name shown in your terminal):
+So execute the following script:
 
-    conda activate name_of_environment
+    conda activate biobb_wf_dna_helparms
 
 ## <a name="custom-paths"></a>Custom paths
 
 To run this workflow properly in your computer, you should open in a text/code editor the **workflow.yml** file and replace all the occurrences of **/path/to/inputs/** with the absolute path to the folder where you have decompressed the zip file downloaded in the first step.
-
-## <a name="libraries-folder"></a>Libraries folder
-
-**Important:** Depending on the operating system used, the **step1** can return an error about a missing **.curvesplus** folder. In this case, please copy the **.curvesplus** folder provided in the **repository** and copy it into the **/path/to/anaconda3/envs/biobb_dna_helparms_tutorial** folder in your computer.
 
 ## <a name="run-wf"></a>Run workflow
 
@@ -57,4 +54,4 @@ Take into account that depending on the number of steps, the tools executed and 
 
 ## <a name="get-output"></a>Get output results
 
-Once the workflow is finished, you just should enter the new **wf_name_of_workflow** folder and, inside it, you will find a folder for each step of the workflow with all the files generated in every step.
+Once the workflow is finished, you just should enter the new **biobb_wf_dna_helparms** folder and, inside it, you will find a folder for each step of the workflow with all the files generated in every step.
