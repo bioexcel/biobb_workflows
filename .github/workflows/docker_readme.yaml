@@ -3,6 +3,7 @@ on:
     paths:
       - common/docker/README_common.md
       - common/docker/README_subrepo.md
+      - common/docker/README_python.md
   workflow_dispatch:
 
 name: Docker README
@@ -27,7 +28,9 @@ jobs:
           cp common/docker/README_common.md biobb_wf_godmd/docker/README.md
           cp common/docker/README_common.md biobb_wf_ligand_parameterization/docker/README.md
           cp common/docker/README_common.md biobb_wf_md_setup/docker/README.md
+          cp common/docker/README_python.md biobb_wf_md_setup_mutations/docker/README.md
           cp common/docker/README_common.md biobb_wf_pmx_tutorial/docker/README.md
+          cp common/docker/README_python.md biobb_wf_protein_md_analysis/docker/README.md
           cp common/docker/README_common.md biobb_wf_protein-complex_md_setup/docker/README.md
           cp common/docker/README_common.md biobb_wf_structure_checking/docker/README.md
           cp common/docker/README_subrepo.md biobb_wf_virtual-screening_fpocket/docker/README.md
@@ -46,7 +49,9 @@ jobs:
           sed -i "s/<repository>/biobb_wf_godmd/g" biobb_wf_godmd/docker/README.md
           sed -i "s/<repository>/biobb_wf_ligand_parameterization/g" biobb_wf_ligand_parameterization/docker/README.md
           sed -i "s/<repository>/biobb_wf_md_setup/g" biobb_wf_md_setup/docker/README.md
+          sed -i "s/<repository>/biobb_wf_md_setup_mutations/g" biobb_wf_md_setup_mutations/docker/README.md
           sed -i "s/<repository>/biobb_wf_pmx_tutorial/g" biobb_wf_pmx_tutorial/docker/README.md
+          sed -i "s/<repository>/biobb_wf_protein_md_analysis/g" biobb_wf_protein_md_analysis/docker/README.md
           sed -i "s/<repository>/biobb_wf_protein-complex_md_setup/g" biobb_wf_protein-complex_md_setup/docker/README.md
           sed -i "s/<repository>/biobb_wf_structure_checking/g" biobb_wf_structure_checking/docker/README.md
           sed -i "s/<repository>/biobb_wf_virtual-screening/g" biobb_wf_virtual-screening_fpocket/docker/README.md
