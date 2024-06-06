@@ -1,4 +1,4 @@
-working_dir_path: wf_mdprot_analysis
+working_dir_path: biobb_wf_protein_md_analysis
 can_write_console_log: False
 run_md: False
 

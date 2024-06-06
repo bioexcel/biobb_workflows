@@ -1,4 +1,4 @@
-working_dir_path: wf_gmx_ligand_parameterization
+working_dir_path: biobb_wf_ligand_parameterization
 can_write_console_log: False
 run_md: False
 

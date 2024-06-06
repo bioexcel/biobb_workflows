@@ -26,9 +26,7 @@ jobs:
           cp common/docker/Dockerfile biobb_wf_godmd/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_ligand_parameterization/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_md_setup/docker/Dockerfile
-          cp common/docker/Dockerfile biobb_wf_md_setup_mutations/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_pmx_tutorial/docker/Dockerfile
-          cp common/docker/Dockerfile biobb_wf_protein_md_analysis/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_protein-complex_md_setup/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_structure_checking/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_virtual-screening_fpocket/docker/Dockerfile

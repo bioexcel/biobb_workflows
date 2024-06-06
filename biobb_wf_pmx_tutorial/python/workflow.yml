@@ -1,4 +1,4 @@
-working_dir_path: wf_pmx
+working_dir_path: biobb_wf_pmx_tutorial
 can_write_console_log: False
 
 mutations:

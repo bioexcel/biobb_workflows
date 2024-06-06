@@ -1,0 +1,58 @@
+on:
+  push:
+    paths:
+      - common/docker/README_common.md
+      - common/docker/README_subrepo.md
+  workflow_dispatch:
+
+name: Docker README
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          repository: bioexcel/biobb_workflows
+          path: ./
+      - name: Copy README files
+        run: |
+          cp common/docker/README_subrepo.md biobb_wf_amber_abc_setup/docker/README.md
+          cp common/docker/README_subrepo.md biobb_wf_amber_md_setup/docker/README.md
+          cp common/docker/README_subrepo.md biobb_wf_amber_md_setup_lig/docker/README.md
+          cp common/docker/README_common.md biobb_wf_cmip/docker/README.md
+          cp common/docker/README_common.md biobb_wf_dna_helparms/docker/README.md
+          cp common/docker/README_common.md biobb_wf_flexdyn/docker/README.md
+          cp common/docker/README_common.md biobb_wf_flexserv/docker/README.md
+          cp common/docker/README_common.md biobb_wf_godmd/docker/README.md
+          cp common/docker/README_common.md biobb_wf_ligand_parameterization/docker/README.md
+          cp common/docker/README_common.md biobb_wf_md_setup/docker/README.md
+          cp common/docker/README_common.md biobb_wf_pmx_tutorial/docker/README.md
+          cp common/docker/README_common.md biobb_wf_protein-complex_md_setup/docker/README.md
+          cp common/docker/README_common.md biobb_wf_structure_checking/docker/README.md
+          cp common/docker/README_subrepo.md biobb_wf_virtual-screening_fpocket/docker/README.md
+      - name: Replace placeholders in README
+        run: |
+          sed -i "s/<repository>/biobb_wf_amber/g" biobb_wf_amber_abc_setup/docker/README.md
+          sed -i "s/<subrepository>/abc_setup/g" biobb_wf_amber_abc_setup/docker/README.md
+          sed -i "s/<repository>/biobb_wf_amber/g" biobb_wf_amber_md_setup/docker/README.md
+          sed -i "s/<subrepository>/md_setup/g" biobb_wf_amber_md_setup/docker/README.md
+          sed -i "s/<repository>/biobb_wf_amber/g" biobb_wf_amber_md_setup_lig/docker/README.md
+          sed -i "s/<subrepository>/md_setup_lig/g" biobb_wf_amber_md_setup_lig/docker/README.md
+          sed -i "s/<repository>/biobb_wf_cmip/g" biobb_wf_cmip/docker/README.md
+          sed -i "s/<repository>/biobb_wf_dna_helparms/g" biobb_wf_dna_helparms/docker/README.md
+          sed -i "s/<repository>/biobb_wf_flexdyn/g" biobb_wf_flexdyn/docker/README.md
+          sed -i "s/<repository>/biobb_wf_flexserv/g" biobb_wf_flexserv/docker/README.md
+          sed -i "s/<repository>/biobb_wf_godmd/g" biobb_wf_godmd/docker/README.md
+          sed -i "s/<repository>/biobb_wf_ligand_parameterization/g" biobb_wf_ligand_parameterization/docker/README.md
+          sed -i "s/<repository>/biobb_wf_md_setup/g" biobb_wf_md_setup/docker/README.md
+          sed -i "s/<repository>/biobb_wf_pmx_tutorial/g" biobb_wf_pmx_tutorial/docker/README.md
+          sed -i "s/<repository>/biobb_wf_protein-complex_md_setup/g" biobb_wf_protein-complex_md_setup/docker/README.md
+          sed -i "s/<repository>/biobb_wf_structure_checking/g" biobb_wf_structure_checking/docker/README.md
+          sed -i "s/<repository>/biobb_wf_virtual-screening/g" biobb_wf_virtual-screening_fpocket/docker/README.md
+          sed -i "s/<subrepository>/fpocket/g" biobb_wf_virtual-screening_fpocket/docker/README.md
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add */docker/README.md && git commit -m "Updated docker README" && git push

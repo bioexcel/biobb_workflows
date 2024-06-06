@@ -1,4 +1,4 @@
-working_dir_path: wf_godmd
+working_dir_path: biobb_wf_godmd
 can_write_console_log: False
 
 step0_extract_chain:

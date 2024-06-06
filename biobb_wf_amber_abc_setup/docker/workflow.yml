@@ -1,4 +1,4 @@
-working_dir_path: wf_abc_md_setup
+working_dir_path: biobb_wf_amber_abc_setup
 can_write_console_log: False
 run_md: False
 

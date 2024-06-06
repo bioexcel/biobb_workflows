@@ -1,4 +1,4 @@
-working_dir_path: wf_docking_vina
+working_dir_path: biobb_wf_virtual-screening_fpocket
 can_write_console_log: False
 run_md: False
 
