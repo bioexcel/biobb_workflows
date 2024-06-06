@@ -8,7 +8,7 @@ For executing this **BioBB workflow**, there is a single requirement: to have [*
 
 ## <a name="download"></a>Download and execute container from docker hub
 
-Below there are the steps to follow for downloading and running the container from [**docker hub**](https://hub.docker.com/r/biobb/<repository>).
+Below there are the steps to follow for downloading and running the container from [**docker hub**](https://hub.docker.com/r/biobb/<repository>_<subrepository>).
 
 In the following link you can find all the BioBB workflows available in docker hub:
 
