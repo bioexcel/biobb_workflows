@@ -9,7 +9,7 @@ Below you can find the list of all the needed **files** for executing this workf
 * **workflow.py:** the python file with all the steps to execute this workflow.
 * **workflow.yml:** the configuration file with the I/O dependencies and settings for each step of the workflow.
 * **workflow.env.yml:** the environment file needed for create a conda environment where this workflow will be run.
-* **inputs:** the inputs vary depending on the workflow, all the needed files are available in this same repository, just be sure to have them in the same folder where **workflow.yml** is
+* **inputs:** the inputs vary depending on the workflow, all the needed files are available in this same repository, just be sure to have them in the same folder where **workflow.yml** is.
 
 ## <a name="requirements"></a>Requirements
 
@@ -29,7 +29,7 @@ This process can take a while, and once it is finished you will have an environm
 #
 # To activate this environment, use
 #
-#     $ conda activate <repository>
+#     $ conda activate biobb_wf_md_setup_mutations
 #
 # To deactivate an active environment, use
 #
@@ -38,7 +38,7 @@ This process can take a while, and once it is finished you will have an environm
 
 So execute the following script:
 
-    conda activate <repository>
+    conda activate biobb_wf_md_setup_mutations
 
 ## <a name="custom-paths"></a>Custom paths
 
@@ -54,4 +54,4 @@ Take into account that depending on the number of steps, the tools executed and 
 
 ## <a name="get-output"></a>Get output results
 
-Once the workflow is finished, you just should enter the new **<repository>** folder and, inside it, you will find a folder for each step of the workflow with all the files generated in every step.
+Once the workflow is finished, you just should enter the new **biobb_wf_md_setup_mutations** folder and, inside it, you will find a folder for each step of the workflow with all the files generated in every step.

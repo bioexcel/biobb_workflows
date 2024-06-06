@@ -9,7 +9,7 @@ Below you can find the list of all the needed **files** for executing this workf
 * **workflow.py:** the python file with all the steps to execute this workflow.
 * **workflow.yml:** the configuration file with the I/O dependencies and settings for each step of the workflow.
 * **workflow.env.yml:** the environment file needed for create a conda environment where this workflow will be run.
-* **inputs:** the inputs vary depending on the workflow, all the needed files are available in this same repository, just be sure to have them in the same folder where **workflow.yml** is
+* **inputs:** the inputs vary depending on the workflow, all the needed files are available in this same repository, just be sure to have them in the same folder where **workflow.yml** is.
 
 ## <a name="requirements"></a>Requirements
 
