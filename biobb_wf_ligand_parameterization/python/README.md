@@ -54,4 +54,4 @@ Take into account that depending on the number of steps, the tools executed and 
 
 ## <a name="get-output"></a>Get output results
 
-Once the workflow is finished, you just should enter the new **biobb_wf_ligand_parameterization** folder and, inside it, you will find a folder for each step of the workflow with all the files generated in every step.
+Once the workflow is finished, you just should enter the new **wf_python/biobb_wf_ligand_parameterization** folder and, inside it, you will find a folder for each step of the workflow with all the files generated in every step.
