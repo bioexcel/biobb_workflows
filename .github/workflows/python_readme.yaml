@@ -1,7 +1,8 @@
 on:
   push:
     paths:
-      - common/python/README.md
+      - common/python/README_common.md
+      - common/python/README_subrepo.md
   workflow_dispatch:
 
 name: Python README
