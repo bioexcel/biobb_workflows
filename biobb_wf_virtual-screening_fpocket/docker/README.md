@@ -50,9 +50,11 @@ Below you can find the list of all the needed **files** for executing this workf
 
 For **running** the container in python, please type the following instruction in your **terminal**:
 
-    docker run -v /path/to/inputs:/data biobb/biobb_wf_virtual-screening_fpocket
+    docker run --name <container_name> -v /path/to/inputs:/data biobb/biobb_wf_virtual-screening_fpocket
 
-Where **/path/to/inputs** is the path to the folder where the **input(s)** and **workflow.yml** files are located (all of them must be in the same folder).
+Where:
+* **container_name** is the name of the container (optional).
+* **/path/to/inputs** is the path to the folder where the **input(s)** and **workflow.yml** files are located (all of them must be in the same folder).
 
 ## <a name="build"></a>Build container in house
 
@@ -103,9 +105,12 @@ Below you can find the list of all the needed **files** for executing this workf
 
 For **running** the container in python, please type the following instruction in your **terminal**:
 
-    docker run -v /path/to/inputs:/data <container_image>
+    docker run --name <container_name> -v /path/to/inputs:/data <container_image>
 
-Where **/path/to/inputs** is the path to the folder where the **input(s)** and **workflow.yml** files are located (all of them must be in the same folder); and **container_image** is the name of the docker container image.
+Where:
+* **container_name** is the name of the container (optional).
+* **/path/to/inputs** is the path to the folder where the **input(s)** and **workflow.yml** files are located (all of them must be in the same folder).
+* **container_image** is the name of the docker container image.
 
 ## <a name="time"></a>Time of execution
 
