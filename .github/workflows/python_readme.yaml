@@ -34,7 +34,6 @@ jobs:
           cp common/python/README_subrepo.md biobb_wf_virtual-screening_fpocket/python/README.md
       - name: Replace placeholders in README
         run: |
-        TODOOOOOO
           sed -i "s/<repository>/biobb_wf_amber/g" biobb_wf_amber_abc_setup/python/README.md
           sed -i "s/<subrepository>/abc_setup/g" biobb_wf_amber_abc_setup/python/README.md
           sed -i "s/<repository>/biobb_wf_amber/g" biobb_wf_amber_md_setup/python/README.md
