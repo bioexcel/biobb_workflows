@@ -65,6 +65,7 @@ CMD ["\
         else \
             cp /app/notebook.ipynb /data/wf_notebook/notebook.ipynb; \
         fi; \
+        cp -r /data/pmx_tutorial /data/wf_notebook/pmx_tutorial; \
         cd /data/wf_notebook; \
         source activate $REPOSITORY; \
         jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''; \
