@@ -21,7 +21,9 @@ jobs:
           cp common/docker/Dockerfile biobb_wf_amber_md_setup_lig/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_cmip/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_dna_helparms/docker/Dockerfile
-          sed -i '38aCOPY .curvesplus /opt/conda/envs/$REPOSITORY' biobb_wf_dna_helparms/docker/Dockerfile
+          sed -i '38a# Copy the .curvesplus folder into the Docker image' biobb_wf_dna_helparms/docker/Dockerfile
+          sed -i '39aCOPY .curvesplus /opt/conda/envs/$REPOSITORY' biobb_wf_dna_helparms/docker/Dockerfile
+          sed -i '40a\\' biobb_wf_dna_helparms/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_flexdyn/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_flexserv/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_godmd/docker/Dockerfile
