@@ -68,6 +68,7 @@ CMD ["\
         else \
             cp /app/notebook.ipynb /data/wf_notebook/notebook.ipynb; \
         fi; \
+cp -r /data/TRAJ /data/wf_notebook/TRAJ; 
         cd /data/wf_notebook; \
         source activate $REPOSITORY; \
         jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''; \
