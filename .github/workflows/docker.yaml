@@ -29,6 +29,7 @@ jobs:
           sed -i '70a\        cp -r /data/TRAJ /data/wf_notebook/TRAJ; \\' biobb_wf_dna_helparms/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_flexdyn/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_flexserv/docker/Dockerfile
+          sed -i '67a\        cp -r /data/Files /data/wf_notebook/Files; \\' biobb_wf_flexserv/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_godmd/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_ligand_parameterization/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_md_setup/docker/Dockerfile
