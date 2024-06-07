@@ -17,7 +17,7 @@ jobs:
       - name: Copy Dockerfile
         run: |
           cp common/docker/Dockerfile biobb_wf_amber_abc_setup/docker/Dockerfile
-          sed -i '67a        cp -r /data/ABCix_config_files /data/wf_notebook/ABCix_config_files; \' biobb_wf_amber_abc_setup/docker/Dockerfile
+          sed -i '67a\        cp -r /data/ABCix_config_files /data/wf_notebook/ABCix_config_files; \' biobb_wf_amber_abc_setup/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_amber_md_setup/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_amber_md_setup_lig/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_cmip/docker/Dockerfile
@@ -25,7 +25,7 @@ jobs:
           sed -i '38a# Copy the .curvesplus folder into the Docker image' biobb_wf_dna_helparms/docker/Dockerfile
           sed -i '39aCOPY .curvesplus /opt/conda/envs/$REPOSITORY' biobb_wf_dna_helparms/docker/Dockerfile
           sed -i '40a\\' biobb_wf_dna_helparms/docker/Dockerfile
-          sed -i '70a        cp -r /data/TRAJ /data/wf_notebook/TRAJ; \' biobb_wf_dna_helparms/docker/Dockerfile
+          sed -i '70a\        cp -r /data/TRAJ /data/wf_notebook/TRAJ; \' biobb_wf_dna_helparms/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_flexdyn/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_flexserv/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_godmd/docker/Dockerfile
