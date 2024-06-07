@@ -7,11 +7,11 @@ mutations:
 
 input_trajs:
   stateA:
-    input_tpr_path: stateA.tpr
-    input_traj_path: stateA_1ns.xtc
+    input_tpr_path: /path/to/inputs/pmx_tutorial/stateA.tpr
+    input_traj_path: /path/to/inputs/pmx_tutorial/stateA_1ns.xtc
   stateB:
-    input_tpr_path: stateB.tpr
-    input_traj_path: stateB_1ns.xtc
+    input_tpr_path: /path/to/inputs/pmx_tutorial/stateB.tpr
+    input_traj_path: /path/to/inputs/pmx_tutorial/stateB_1ns.xtc
 
 step0_trjconv:
   paths:
