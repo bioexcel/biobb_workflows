@@ -36,6 +36,7 @@ RUN conda config --set solver libmamba
 # Create new environment
 RUN conda env create -f /app/workflow.env.yml
 
+COPY .curvesplus /opt/conda/envs/$REPOSITORY
 # Define an environment variable with default value
 ENV MODE=python
 
