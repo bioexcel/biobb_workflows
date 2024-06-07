@@ -49,7 +49,7 @@ step4_concoord_dist:
     cutoff: 4.0
     env_vars_dict: 
       CONCOORD_OVERWRITE: '1'
-      CONCOORDLIB: /path/to/anaconda/envs/flexdyn_env/share/concoord/lib
+      CONCOORDLIB: /path/to/anaconda/envs/biobb_wf_flexdyn/share/concoord/lib
 
 step5_concoord_disco:
   tool: concoord_disco
@@ -64,7 +64,7 @@ step5_concoord_disco:
     num_structs: 300
     env_vars_dict: 
       CONCOORD_OVERWRITE: '1'
-      CONCOORDLIB: /path/to/anaconda/envs/flexdyn_env/share/concoord/lib
+      CONCOORDLIB: /path/to/anaconda/envs/biobb_wf_flexdyn/share/concoord/lib
 
 step6_cpptraj_rms:
   tool: cpptraj_rms
