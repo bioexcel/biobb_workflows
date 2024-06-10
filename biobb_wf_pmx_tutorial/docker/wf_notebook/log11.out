@@ -1,0 +1,15 @@
+2024-06-10 10:13:39,562 [MainThread  ] [INFO ]  Executing biobb_analysis.gromacs.gmx_energy Version: 4.2.0
+2024-06-10 10:13:39,583 [MainThread  ] [INFO ]  Copy: /data/wf_notebook/emout.edr to /data/wf_notebook/2127bb66-39af-4390-bafc-aa8d48ab96bf
+2024-06-10 10:13:39,597 [MainThread  ] [INFO ]  gmx energy -f /data/wf_notebook/2127bb66-39af-4390-bafc-aa8d48ab96bf/emout.edr -o /data/wf_notebook/2127bb66-39af-4390-bafc-aa8d48ab96bf/min_ene.xvg -xvg none < 3fa84acd-db3c-4f0b-ae6d-4c4982e4757f/instructions.in
+
+2024-06-10 10:13:39,749 [MainThread  ] [INFO ]  Exit code 0
+
+2024-06-10 10:13:39,756 [MainThread  ] [INFO ]  
+Statistics over 7 steps [ 0.0000 through 6.0000 ps ], 1 data sets
+All statistics are over 3 points (frames)
+
+Energy                      Average   Err.Est.       RMSD  Tot-Drift
+-------------------------------------------------------------------------------
+Potential                   -525735         --    5.52575   -10.2455  (kJ/mol)
+
+2024-06-10 10:13:39,793 [MainThread  ] [INFO ]  Removed: ['/data/wf_notebook/2127bb66-39af-4390-bafc-aa8d48ab96bf', '3fa84acd-db3c-4f0b-ae6d-4c4982e4757f']

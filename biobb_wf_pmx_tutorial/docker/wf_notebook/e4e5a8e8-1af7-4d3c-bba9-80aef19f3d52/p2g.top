@@ -1,0 +1,54 @@
+;
+;	File 'p2g.top' was generated
+;	By user: unknown (0)
+;	On host: 4da419359a20
+;	At date: Mon Jun 10 10:10:42 2024
+;
+;	This is a standalone topology file
+;
+;	Created by:
+;	              :-) GROMACS - gmx pdb2gmx, 2022.2-conda_forge (-:
+;	
+;	Executable:   /opt/conda/envs/biobb_wf_pmx_tutorial/bin.SSE2/gmx
+;	Data prefix:  /opt/conda/envs/biobb_wf_pmx_tutorial
+;	Working dir:  /data/wf_notebook
+;	Command line:
+;	  gmx -nobackup -nocopyright pdb2gmx -f /data/wf_notebook/3252b5cc-070b-464f-b6b3-26cf9fd276cb/mutA.pdb -o /data/wf_notebook/3252b5cc-070b-464f-b6b3-26cf9fd276cb/pdb2gmxA.gro -p p2g.top -water spce -ff amber99sb-star-ildn-mut -i posre.itp
+;	Force field data was read from:
+;	/opt/conda/envs/biobb_wf_pmx_tutorial/lib/python3.10/site-packages/pmx/data/mutff/
+;
+;	Note:
+;	This might be a non-standard force field location. When you use this topology, the
+;	force field must either be present in the current directory, or the location
+;	specified in the GMXLIB path variable or with the 'include' mdp file option.
+;
+
+; Include forcefield parameters
+#include "amber99sb-star-ildn-mut.ff/forcefield.itp"
+
+; Include chain topologies
+#include "p2g_Protein_chain_A.itp"
+#include "p2g_Ion.itp"
+
+; Include water topology
+#include "amber99sb-star-ildn-mut.ff/spce.itp"
+
+#ifdef POSRES_WATER
+; Position restraint for each water oxygen
+[ position_restraints ]
+;  i funct       fcx        fcy        fcz
+   1    1       1000       1000       1000
+#endif
+
+; Include topology for ions
+#include "amber99sb-star-ildn-mut.ff/ions.itp"
+
+[ system ]
+; Name
+PMX MODEL
+
+[ molecules ]
+; Compound        #mols
+Protein_chain_A     1
+Ion                 1
+SOL             10948

@@ -1,0 +1,70 @@
+2024-06-10 10:11:33,589 [MainThread  ] [INFO ]  Executing biobb_pmx.pmxbiobb.pmxgentop Version: 4.2.1
+2024-06-10 10:11:33,656 [MainThread  ] [INFO ]  Extracting: /data/wf_notebook/pdb2gmxA_top.zip
+2024-06-10 10:11:33,660 [MainThread  ] [INFO ]  to:
+2024-06-10 10:11:33,664 [MainThread  ] [INFO ]  ['e4e5a8e8-1af7-4d3c-bba9-80aef19f3d52/p2g.top', 'e4e5a8e8-1af7-4d3c-bba9-80aef19f3d52/p2g_Ion.itp', 'e4e5a8e8-1af7-4d3c-bba9-80aef19f3d52/p2g_Protein_chain_A.itp', 'e4e5a8e8-1af7-4d3c-bba9-80aef19f3d52/posre_Ion.itp', 'e4e5a8e8-1af7-4d3c-bba9-80aef19f3d52/posre_Protein_chain_A.itp']
+2024-06-10 10:11:33,668 [MainThread  ] [INFO ]  Unzipping: 
+2024-06-10 10:11:33,673 [MainThread  ] [INFO ]  pdb2gmxA_top.zip
+2024-06-10 10:11:33,676 [MainThread  ] [INFO ]  To: 
+2024-06-10 10:11:33,680 [MainThread  ] [INFO ]  e4e5a8e8-1af7-4d3c-bba9-80aef19f3d52/p2g.top
+2024-06-10 10:11:33,686 [MainThread  ] [INFO ]  e4e5a8e8-1af7-4d3c-bba9-80aef19f3d52/p2g_Ion.itp
+2024-06-10 10:11:33,691 [MainThread  ] [INFO ]  e4e5a8e8-1af7-4d3c-bba9-80aef19f3d52/p2g_Protein_chain_A.itp
+2024-06-10 10:11:33,695 [MainThread  ] [INFO ]  e4e5a8e8-1af7-4d3c-bba9-80aef19f3d52/posre_Ion.itp
+2024-06-10 10:11:33,699 [MainThread  ] [INFO ]  e4e5a8e8-1af7-4d3c-bba9-80aef19f3d52/posre_Protein_chain_A.itp
+2024-06-10 10:11:33,708 [MainThread  ] [INFO ]  unique_dir_output_file: 79e8bac6-5f09-41d0-ada8-05e8aba970dc/p2g.top
+2024-06-10 10:11:33,713 [MainThread  ] [INFO ]  pmx gentop -o 79e8bac6-5f09-41d0-ada8-05e8aba970dc/p2g.top -ff amber99sb-star-ildn-mut -p e4e5a8e8-1af7-4d3c-bba9-80aef19f3d52/p2g.top
+
+2024-06-10 10:11:55,955 [MainThread  ] [INFO ]  Exit code 0
+
+2024-06-10 10:11:55,961 [MainThread  ] [INFO ]  
+log_> Reading input top file "e4e5a8e8-1af7-4d3c-bba9-80aef19f3d52/p2g.top"
+log_> Making bonds for state B -> 0 bonds with perturbed atoms
+log_> Making angles for state B -> 0 angles with perturbed atoms
+log_> Making dihedrals for state B -> 0 dihedrals with perturbed atoms
+log_> Removed 0 fake dihedrals
+log_> Total charge of state A = 0
+log_> Total charge of state B = 0
+
+log_> Reading input itp file "p2g_Protein_chain_A.itp""
+log_> Scanning database for I2A 
+log_> Hybrid Residue -> 10 | I2A 
+log_> Making bonds for state B -> 22 bonds with perturbed atoms
+log_> Making angles for state B -> 49 angles with perturbed atoms
+log_> Making dihedrals for state B -> 57 dihedrals with perturbed atoms
+log_> Removed 12 fake dihedrals
+log_> Total charge of state A = 10
+log_> Total charge of state B = 10
+
+log_> Reading input itp file "p2g_Ion.itp""
+log_> Making bonds for state B -> 0 bonds with perturbed atoms
+log_> Making angles for state B -> 0 angles with perturbed atoms
+log_> Making dihedrals for state B -> 0 dihedrals with perturbed atoms
+log_> Removed 0 fake dihedrals
+log_> Total charge of state A = -10
+log_> Total charge of state B = -10
+
+log_> Writing itp file "/data/wf_notebook/79e8bac6-5f09-41d0-ada8-05e8aba970dc/pmx_p2g_Protein_chain_A.itp""
+
+log_> Writing itp file "/data/wf_notebook/79e8bac6-5f09-41d0-ada8-05e8aba970dc/pmx_p2g_Ion.itp""
+
+log_> Writing topology file "79e8bac6-5f09-41d0-ada8-05e8aba970dc/p2g.top""
+
+b-states filled...........
+
+
+2024-06-10 10:11:55,980 [MainThread  ] [INFO ]  Check if 79e8bac6-5f09-41d0-ada8-05e8aba970dc/p2g.top exists
+2024-06-10 10:11:55,986 [MainThread  ] [INFO ]  Check if 79e8bac6-5f09-41d0-ada8-05e8aba970dc/p2g_Ion.itp exists
+2024-06-10 10:11:56,002 [MainThread  ] [INFO ]  Copying e4e5a8e8-1af7-4d3c-bba9-80aef19f3d52/p2g_Ion.itp to: 79e8bac6-5f09-41d0-ada8-05e8aba970dc
+2024-06-10 10:11:56,008 [MainThread  ] [INFO ]  Check if 79e8bac6-5f09-41d0-ada8-05e8aba970dc/p2g_Protein_chain_A.itp exists
+2024-06-10 10:11:56,029 [MainThread  ] [INFO ]  Copying e4e5a8e8-1af7-4d3c-bba9-80aef19f3d52/p2g_Protein_chain_A.itp to: 79e8bac6-5f09-41d0-ada8-05e8aba970dc
+2024-06-10 10:11:56,033 [MainThread  ] [INFO ]  Check if 79e8bac6-5f09-41d0-ada8-05e8aba970dc/posre_Ion.itp exists
+2024-06-10 10:11:56,049 [MainThread  ] [INFO ]  Copying e4e5a8e8-1af7-4d3c-bba9-80aef19f3d52/posre_Ion.itp to: 79e8bac6-5f09-41d0-ada8-05e8aba970dc
+2024-06-10 10:11:56,054 [MainThread  ] [INFO ]  Check if 79e8bac6-5f09-41d0-ada8-05e8aba970dc/posre_Protein_chain_A.itp exists
+2024-06-10 10:11:56,071 [MainThread  ] [INFO ]  Copying e4e5a8e8-1af7-4d3c-bba9-80aef19f3d52/posre_Protein_chain_A.itp to: 79e8bac6-5f09-41d0-ada8-05e8aba970dc
+2024-06-10 10:11:56,075 [MainThread  ] [INFO ]  Compressing topology to: pmxA_top.zip
+2024-06-10 10:11:56,083 [MainThread  ] [INFO ]  Ignored file 79e8bac6-5f09-41d0-ada8-05e8aba970dc/amber99sb-star-ildn-mut.ff/forcefield.itp
+2024-06-10 10:11:56,147 [MainThread  ] [INFO ]  Ignored file 79e8bac6-5f09-41d0-ada8-05e8aba970dc/amber99sb-star-ildn-mut.ff/spce.itp
+2024-06-10 10:11:56,152 [MainThread  ] [INFO ]  Ignored file 79e8bac6-5f09-41d0-ada8-05e8aba970dc/amber99sb-star-ildn-mut.ff/ions.itp
+2024-06-10 10:11:56,270 [MainThread  ] [INFO ]  Adding:
+2024-06-10 10:11:56,273 [MainThread  ] [INFO ]  ['79e8bac6-5f09-41d0-ada8-05e8aba970dc/p2g.top', '79e8bac6-5f09-41d0-ada8-05e8aba970dc/pmx_p2g_Ion.itp', '79e8bac6-5f09-41d0-ada8-05e8aba970dc/pmx_p2g_Protein_chain_A.itp', '79e8bac6-5f09-41d0-ada8-05e8aba970dc/posre_Ion.itp', '79e8bac6-5f09-41d0-ada8-05e8aba970dc/posre_Protein_chain_A.itp']
+2024-06-10 10:11:56,279 [MainThread  ] [INFO ]  to: /data/wf_notebook/pmxA_top.zip
+2024-06-10 10:11:56,290 [MainThread  ] [INFO ]  Removed: ['79e8bac6-5f09-41d0-ada8-05e8aba970dc/posre_Protein_chain_A.itp', '79e8bac6-5f09-41d0-ada8-05e8aba970dc/pmx_p2g_Protein_chain_A.itp', '79e8bac6-5f09-41d0-ada8-05e8aba970dc/posre_Ion.itp', '79e8bac6-5f09-41d0-ada8-05e8aba970dc/pmx_p2g_Ion.itp', '79e8bac6-5f09-41d0-ada8-05e8aba970dc/p2g.top']

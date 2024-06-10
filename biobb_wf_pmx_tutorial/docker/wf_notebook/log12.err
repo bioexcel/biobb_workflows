@@ -1,0 +1,27 @@
+2024-06-10 10:13:49,600 [MainThread  ] [INFO ]                  :-) GROMACS - gmx grompp, 2022.2-conda_forge (-:
+
+Executable:   /opt/conda/envs/biobb_wf_pmx_tutorial/bin.SSE2/gmx
+Data prefix:  /opt/conda/envs/biobb_wf_pmx_tutorial
+Working dir:  /data/wf_notebook
+Command line:
+  gmx -nobackup -nocopyright grompp -f /data/wf_notebook/9375bb19-9d14-4607-b57d-a19424d7c011/grompp.mdp -c /data/wf_notebook/9375bb19-9d14-4607-b57d-a19424d7c011/pdb2gmxA.gro -r /data/wf_notebook/9375bb19-9d14-4607-b57d-a19424d7c011/pdb2gmxA.gro -p /data/wf_notebook/9375bb19-9d14-4607-b57d-a19424d7c011/p2g.top -o /data/wf_notebook/9375bb19-9d14-4607-b57d-a19424d7c011/eqA_20ps.tpr -po mdout.mdp -maxwarn 10
+
+Ignoring obsolete mdp entry 'ns-type'
+Generating 1-4 interactions: fudge = 0.5
+
+NOTE 1 [file p2g.top, line 23]:
+  In moleculetype 'Ion' 74 atoms are not bound by a potential or constraint
+  to any other atom in the same moleculetype. Although technically this
+  might not cause issues in a simulation, this often means that the user
+  forgot to add a bond/potential/constraint or put multiple molecules in
+  the same moleculetype definition by mistake. Run with -v to get
+  information for each atom.
+
+Number of degrees of freedom in T-Coupling group Protein is 5547.77
+Number of degrees of freedom in T-Coupling group non-Protein is 65907.23
+
+There was 1 note
+
+GROMACS reminds you: "Your Bones Got a Little Machine" (Pixies)
+
+

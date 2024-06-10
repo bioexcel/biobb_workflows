@@ -1,0 +1,15 @@
+2024-06-10 10:10:09,353 [MainThread  ] [INFO ]  Executing biobb_pmx.pmxbiobb.pmxmutate Version: 4.2.1
+2024-06-10 10:10:09,429 [MainThread  ] [INFO ]  Copy: frameA0.pdb to /data/wf_notebook/c05a81a8-13fa-40d4-b4d0-7780dc7d6bf4
+2024-06-10 10:10:09,444 [MainThread  ] [INFO ]  pmx mutate -f /data/wf_notebook/c05a81a8-13fa-40d4-b4d0-7780dc7d6bf4/frameA0.pdb -o /data/wf_notebook/c05a81a8-13fa-40d4-b4d0-7780dc7d6bf4/mutA.pdb -ff amber99sb-star-ildn-mut --script a56543d2-da8e-4a04-adee-62547506b0a7/mutations.txt
+
+2024-06-10 10:10:21,399 [MainThread  ] [INFO ]  Exit code 0
+
+2024-06-10 10:10:21,405 [MainThread  ] [INFO ]  log_> Residue to mutate: 10 | ILE | A 
+log_> Mutation to apply: I->A
+log_> Hybrid residue name: I2A
+log_> Inserted hybrid residue I2A at position 10 (chain A)
+
+mutations done...........
+
+
+2024-06-10 10:10:21,469 [MainThread  ] [INFO ]  Removed: ['/data/wf_notebook/c05a81a8-13fa-40d4-b4d0-7780dc7d6bf4']

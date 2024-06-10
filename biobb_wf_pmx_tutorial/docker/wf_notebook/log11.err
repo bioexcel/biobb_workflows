@@ -1,0 +1,29 @@
+2024-06-10 10:13:39,760 [MainThread  ] [INFO ]                  :-) GROMACS - gmx energy, 2022.2-conda_forge (-:
+
+Executable:   /opt/conda/envs/biobb_wf_pmx_tutorial/bin.SSE2/gmx
+Data prefix:  /opt/conda/envs/biobb_wf_pmx_tutorial
+Working dir:  /data/wf_notebook
+Command line:
+  gmx energy -f /data/wf_notebook/2127bb66-39af-4390-bafc-aa8d48ab96bf/emout.edr -o /data/wf_notebook/2127bb66-39af-4390-bafc-aa8d48ab96bf/min_ene.xvg -xvg none
+
+Opened /data/wf_notebook/2127bb66-39af-4390-bafc-aa8d48ab96bf/emout.edr as single precision energy file
+
+Select the terms you want from the following list by
+selecting either (part of) the name or the number or a combination.
+End your selection with an empty line or a zero.
+-------------------------------------------------------------------
+  1  Bond                                 2  Angle                             
+  3  Proper-Dih.                          4  Periodic-Improper-Dih.            
+  5  LJ-14            6  Coulomb-14       7  LJ-(SR)          8  Coulomb-(SR)  
+  9  Coul.-recip.    10  Position-Rest.  11  Potential       12  Pressure      
+ 13  Vir-XX          14  Vir-XY          15  Vir-XZ          16  Vir-YX        
+ 17  Vir-YY          18  Vir-YZ          19  Vir-ZX          20  Vir-ZY        
+ 21  Vir-ZZ          22  Pres-XX         23  Pres-XY         24  Pres-XZ       
+ 25  Pres-YX         26  Pres-YY         27  Pres-YZ         28  Pres-ZX       
+ 29  Pres-ZY         30  Pres-ZZ         31  #Surf*SurfTen   32  T-rest        
+
+Reading energy frame      0 time    0.000         Reading energy frame      1 time    2.000         Reading energy frame      2 time    6.000         Last energy frame read 2 time    6.000         
+
+GROMACS reminds you: "Just Give Me a Blip" (F. Black)
+
+
