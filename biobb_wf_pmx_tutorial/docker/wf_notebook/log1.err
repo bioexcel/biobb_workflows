@@ -1,39 +1,0 @@
-2024-06-10 10:09:55,189 [MainThread  ] [INFO ]                 :-) GROMACS - gmx trjconv, 2022.2-conda_forge (-:
-
-Executable:   /opt/conda/envs/biobb_wf_pmx_tutorial/bin.SSE2/gmx
-Data prefix:  /opt/conda/envs/biobb_wf_pmx_tutorial
-Working dir:  /data/wf_notebook
-Command line:
-  gmx trjconv -f /data/wf_notebook/48bf7e56-fafe-4b69-b914-a26d6857b668/stateB_1ns.xtc -s /data/wf_notebook/48bf7e56-fafe-4b69-b914-a26d6857b668/stateB.tpr -skip 1 -b 1 -dt 200 -sep -o /data/wf_notebook/48bf7e56-fafe-4b69-b914-a26d6857b668/frameB.pdb -e 1000
-
-Will write pdb: Protein data bank file
-Reading file /data/wf_notebook/48bf7e56-fafe-4b69-b914-a26d6857b668/stateB.tpr, VERSION 4.6.4-dev-20131114-c1cb6d2 (single precision)
-Reading file /data/wf_notebook/48bf7e56-fafe-4b69-b914-a26d6857b668/stateB.tpr, VERSION 4.6.4-dev-20131114-c1cb6d2 (single precision)
-Group     0 (         System) has 35138 elements
-Group     1 (        Protein) has  2217 elements
-Group     2 (      Protein-H) has  1089 elements
-Group     3 (        C-alpha) has   136 elements
-Group     4 (       Backbone) has   408 elements
-Group     5 (      MainChain) has   545 elements
-Group     6 (   MainChain+Cb) has   672 elements
-Group     7 (    MainChain+H) has   677 elements
-Group     8 (      SideChain) has  1540 elements
-Group     9 (    SideChain-H) has   544 elements
-Group    10 (    Prot-Masses) has  2217 elements
-Group    11 (    non-Protein) has 32921 elements
-Group    12 (          Water) has 32847 elements
-Group    13 (            SOL) has 32847 elements
-Group    14 (      non-Water) has  2291 elements
-Group    15 (          Other) has    74 elements
-Group    16 (            NaJ) has    32 elements
-Group    17 (            ClJ) has    42 elements
-Select a group: Reading frame       0 time    0.000   Reading frame       0 time   20.000   
-Precision of /data/wf_notebook/48bf7e56-fafe-4b69-b914-a26d6857b668/stateB_1ns.xtc is 0.001 (nm)
-Reading frame       1 time   40.000    ->  frame      0 time   20.000      Reading frame       2 time   60.000   Reading frame       3 time   80.000   Reading frame       4 time  100.000   Reading frame       5 time  120.000   Reading frame       6 time  140.000   Reading frame       7 time  160.000   Reading frame       8 time  180.000   Reading frame       9 time  200.000   Reading frame      10 time  220.000   Reading frame      11 time  240.000    ->  frame      1 time  220.000      Reading frame      12 time  260.000   Reading frame      13 time  280.000   Reading frame      14 time  300.000   Reading frame      15 time  320.000   Reading frame      16 time  340.000   Reading frame      17 time  360.000   Reading frame      18 time  380.000   Reading frame      19 time  400.000   Reading frame      20 time  420.000    ->  frame      2 time  420.000      Reading frame      30 time  620.000    ->  frame      3 time  620.000      Reading frame      40 time  820.000    ->  frame      4 time  820.000      
-
-Last written: frame      4 time  820.000
-
-
-GROMACS reminds you: "There is no reason for any individual to have a computer in his home." (Ken Olsen, head of Digital Equipment Corp.)
-
-

@@ -1,4 +1,0 @@
-2024-06-10 10:14:00,159 [MainThread  ] [INFO ]  Executing biobb_gromacs.gromacs.mdrun Version: 4.2.0
-2024-06-10 10:14:00,204 [MainThread  ] [INFO ]  Copy: eqA_20ps.tpr to /data/wf_notebook/03aff1ab-cc8a-4089-9b4b-9d747cf01a7e
-2024-06-10 10:14:00,208 [MainThread  ] [INFO ]  gmx -nobackup -nocopyright mdrun -o /data/wf_notebook/03aff1ab-cc8a-4089-9b4b-9d747cf01a7e/eqoutA.trr -s /data/wf_notebook/03aff1ab-cc8a-4089-9b4b-9d747cf01a7e/eqA_20ps.tpr -c /data/wf_notebook/03aff1ab-cc8a-4089-9b4b-9d747cf01a7e/eqoutA.gro -e /data/wf_notebook/03aff1ab-cc8a-4089-9b4b-9d747cf01a7e/eqoutA.edr -g /data/wf_notebook/03aff1ab-cc8a-4089-9b4b-9d747cf01a7e/eqoutA.log
-

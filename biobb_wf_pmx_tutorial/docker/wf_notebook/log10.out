@@ -1,7 +1,0 @@
-2024-06-10 10:13:23,459 [MainThread  ] [INFO ]  Executing biobb_gromacs.gromacs.mdrun Version: 4.2.0
-2024-06-10 10:13:23,498 [MainThread  ] [INFO ]  Copy: em.tpr to /data/wf_notebook/2a2c9499-4b04-41f4-8290-a4b86dafbf88
-2024-06-10 10:13:23,502 [MainThread  ] [INFO ]  gmx -nobackup -nocopyright mdrun -o /data/wf_notebook/2a2c9499-4b04-41f4-8290-a4b86dafbf88/emout.trr -s /data/wf_notebook/2a2c9499-4b04-41f4-8290-a4b86dafbf88/em.tpr -c /data/wf_notebook/2a2c9499-4b04-41f4-8290-a4b86dafbf88/emout.gro -e /data/wf_notebook/2a2c9499-4b04-41f4-8290-a4b86dafbf88/emout.edr -g /data/wf_notebook/2a2c9499-4b04-41f4-8290-a4b86dafbf88/emout.log
-
-2024-06-10 10:13:35,512 [MainThread  ] [INFO ]  Exit code 0
-
-2024-06-10 10:13:35,621 [MainThread  ] [INFO ]  Removed: ['/data/wf_notebook/2a2c9499-4b04-41f4-8290-a4b86dafbf88']
