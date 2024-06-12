@@ -11,7 +11,7 @@ Launch workflow:
 
 Download and install workflow:
 
-[![Install - Docker](https://img.shields.io/badge/install_&_run-Docker_Hub-006fb6?logo=Docker&logoColor=ffffff)](https://hub.docker.com/r/biobb/biobb_wf_protein_complex_md_setup)
+[![Install - Docker](https://img.shields.io/badge/install_&_run-Docker_Hub-006fb6?logo=Docker&logoColor=ffffff)](https://hub.docker.com/r/biobb/biobb_wf_protein-complex_md_setup)
 
 WorkflowHub flavours:
 
