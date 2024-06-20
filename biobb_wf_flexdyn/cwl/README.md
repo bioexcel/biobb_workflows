@@ -11,6 +11,8 @@ Below you can find the list of all the needed **files** for executing this workf
 * **inputs:** the inputs vary depending on the workflow, all the needed files are available in this same repository, just be sure to have them in the same folder where **workflow.yml** is.
 * **BioBB adapters:** be sure to have the **biobb_adapters** folder at the same level where the **workflow.cwl** and **workflow_input_descriptions.yml** files are.
 
+> **IMPORTANT!** The Concoord software doesn't work with dockers on Mac ARM, so in case you are using this type of computer, please comment the steps 4 to 7 as indicated in both **workflow.cwl** and **workflow_input_descriptions.yml** files.
+
 ## <a name="run-wf"></a>Run workflow with cwltool
 
 Instructions for executing the **CWL workflow** through **cwltool**.
@@ -65,7 +67,7 @@ Be sure to execute the following instructions in the **same folder** where the f
     docker run --privileged -d --name my_container -v /path/to/files:/workspace biobb/cwl_dind:arm64
     docker exec -w /workspace my_container cwltool --tmpdir-prefix /workspace/tmpd- workflow.cwl workflow_input_descriptions.yml
 
-Where **/path/to/files** is the folder where the files described in the **sWorkflow filesetup** section are.
+Where **/path/to/files** is the folder where the files described in the [**Workflow files**](#files) section are.
 
 ## <a name="time"></a>Time of execution
 

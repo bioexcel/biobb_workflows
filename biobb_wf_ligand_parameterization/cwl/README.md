@@ -65,7 +65,7 @@ Be sure to execute the following instructions in the **same folder** where the f
     docker run --privileged -d --name my_container -v /path/to/files:/workspace biobb/cwl_dind:arm64
     docker exec -w /workspace my_container cwltool --tmpdir-prefix /workspace/tmpd- workflow.cwl workflow_input_descriptions.yml
 
-Where **/path/to/files** is the folder where the files described in the **sWorkflow filesetup** section are.
+Where **/path/to/files** is the folder where the files described in the [**Workflow files**](#files) section are.
 
 ## <a name="time"></a>Time of execution
 
