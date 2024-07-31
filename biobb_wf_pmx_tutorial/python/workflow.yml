@@ -29,7 +29,7 @@ step1_pmx_mutate:
     output_structure_path: mut.pdb
   properties:
     force_field: amber99sb-star-ildn-mut
-    gmx_lib: /path/to/anaconda/envs/biobb_wf_pmx_tutorial/lib/python3.9/site-packages/pmx/data/mutff
+    gmx_lib: /path/to/anaconda/envs/biobb_wf_pmx_tutorial/lib/python3.10/site-packages/pmx/data/mutff
 
 step2_gmx_pdb2gmx:
   paths:
@@ -38,7 +38,7 @@ step2_gmx_pdb2gmx:
     output_top_zip_path: mut_gmx.top.zip
   properties:
     force_field : amber99sb-star-ildn-mut
-    gmx_lib: /path/to/anaconda/envs/biobb_wf_pmx_tutorial/lib/python3.9/site-packages/pmx/data/mutff
+    gmx_lib: /path/to/anaconda/envs/biobb_wf_pmx_tutorial/lib/python3.10/site-packages/pmx/data/mutff
 
 step3_pmx_gentop:
   paths:
@@ -47,7 +47,7 @@ step3_pmx_gentop:
     output_log_path: mut_gmx_hybrid.log
   properties:
     force_field : amber99sb-star-ildn-mut
-    gmx_lib: /path/to/anaconda/envs/biobb_wf_pmx_tutorial/lib/python3.9/site-packages/pmx/data/mutff
+    gmx_lib: /path/to/anaconda/envs/biobb_wf_pmx_tutorial/lib/python3.10/site-packages/pmx/data/mutff
 
 step4_gmx_makendx:
   paths:
@@ -63,7 +63,7 @@ step5_gmx_grompp:
     input_ndx_path: dependency/step4_gmx_makendx/output_ndx_path
     output_tpr_path: em.tpr
   properties:
-    gmx_lib: /path/to/anaconda/envs/biobb_wf_pmx_tutorial/lib/python3.9/site-packages/pmx/data/mutff
+    gmx_lib: /path/to/anaconda/envs/biobb_wf_pmx_tutorial/lib/python3.10/site-packages/pmx/data/mutff
     simulation_type: minimization
     mdp:
       integrator : steep
@@ -90,7 +90,7 @@ step7_gmx_grompp:
     input_ndx_path: dependency/step4_gmx_makendx/output_ndx_path
     output_tpr_path: eq.tpr
   properties:
-    gmx_lib: /path/to/anaconda/envs/biobb_wf_pmx_tutorial/lib/python3.9/site-packages/pmx/data/mutff
+    gmx_lib: /path/to/anaconda/envs/biobb_wf_pmx_tutorial/lib/python3.10/site-packages/pmx/data/mutff
     simulation_type: free
     mdp:
       nsteps: 10000
@@ -113,7 +113,7 @@ step9_gmx_grompp:
     input_ndx_path: dependency/step4_gmx_makendx/output_ndx_path
     output_tpr_path: ti.tpr
   properties:
-    gmx_lib: /path/to/anaconda/envs/biobb_wf_pmx_tutorial/lib/python3.9/site-packages/pmx/data/mutff
+    gmx_lib: /path/to/anaconda/envs/biobb_wf_pmx_tutorial/lib/python3.10/site-packages/pmx/data/mutff
     simulation_type: free
     maxwarn: 1
     mdp:
