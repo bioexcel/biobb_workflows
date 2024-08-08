@@ -17,7 +17,7 @@ jobs:
       - name: Copy Dockerfile
         run: |
           cp common/docker/Dockerfile biobb_wf_amber_abc_setup/docker/Dockerfile
-          sed -i '77a\        cp -r /data/ABCix_config_files /data/wf_notebook/ABCix_config_files; \\' biobb_wf_amber_abc_setup/docker/Dockerfile
+          sed -i '77a\        cp -r /data/ABCix_config_files /data/\"$dir\"/ABCix_config_files; \\' biobb_wf_amber_abc_setup/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_amber_md_setup/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_amber_md_setup_lig/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_cmip/docker/Dockerfile
