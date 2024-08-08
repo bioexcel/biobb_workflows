@@ -75,7 +75,7 @@ CMD ["\
         else \
             cp /app/notebook.ipynb \"$dir/notebook.ipynb\"; \
         fi; \
-        cp -r /data/ABCix_config_files /data/\"$dir\"/ABCix_config_files; \
+        cp -r /data/ABCix_config_files \"$dir/ABCix_config_files\"; \
         cd \"$dir\"; \
         source activate $REPOSITORY; \
         jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.base_url=$BASE_URL --NotebookApp.token='' --NotebookApp.password=''; \
