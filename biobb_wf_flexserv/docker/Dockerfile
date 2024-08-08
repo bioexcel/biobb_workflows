@@ -43,6 +43,9 @@ ENV MODE=python
 ENV USER_PY=
 ENV USER_JN=
 
+# Define the base URL for the Jupyter notebook server as an environment variable
+ENV BASE_URL=/
+
 # Expose the port for the Jupyter notebook server
 EXPOSE 8888
 
@@ -59,15 +62,22 @@ CMD ["\
         cd /data/wf_python; \
         conda run --no-capture-output -n $REPOSITORY python /app/workflow.py --config /data/workflow.yml; \
     else \
-        mkdir -p /data/wf_notebook; \
+        base_dir=/data/wf_notebook; \
+        dir=\"$base_dir\"; \
+        counter=1; \
+        while [ -d \"$dir\" ]; do \
+            dir=\"${base_dir}_$counter\"; \
+            counter=$((counter + 1)); \
+        done; \
+        mkdir -p \"$dir\"; \
         if [ -n \"$USER_JN\" ]; then \
-            cp /data/\"$USER_JN\" /data/wf_notebook/notebook.ipynb; \
+            cp /data/\"$USER_JN\" \"$dir/notebook.ipynb\"; \
         else \
-            cp /app/notebook.ipynb /data/wf_notebook/notebook.ipynb; \
+            cp /app/notebook.ipynb \"$dir/notebook.ipynb\"; \
         fi; \
         cp -r /data/Files /data/wf_notebook/Files; \
-        cd /data/wf_notebook; \
+        cd \"$dir\"; \
         source activate $REPOSITORY; \
-        jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token='' --NotebookApp.password=''; \
+        jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.base_url=$BASE_URL --NotebookApp.token='' --NotebookApp.password=''; \
     fi \
 "]
