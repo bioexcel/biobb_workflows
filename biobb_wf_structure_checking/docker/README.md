@@ -1,6 +1,6 @@
 # <a name="execute-wf"></a>Execute workflow through docker container
 
-All the **BioBB workflows** can be executed via **docker container**. Inside this container there are all the necessary **dependencies** for executing the workflow. These workflows are available via [**docker hub**](https://hub.docker.com/), though in this repository you can find as well all the necessary files for **building** them **in house**.
+All the **BioBB workflows** can be executed via **docker container**. Inside this container there are all the necessary **dependencies** for executing the workflow. These workflows are available via [**docker hub**](https://hub.docker.com/), though in this repository you can find as well all the necessary files for **building** them **in house**
 
 ## <a name="requirements"></a>Requirements
 
@@ -80,7 +80,7 @@ The **BioBB workflows containers** can be executed either **interactively** via 
 
 #### <a name="run-jn-b"></a>Run in Jupyter Notebook
 
-For **running** the container in Jipyter Notebook, please type the following instruction in your **terminal**:
+For **running** the container in Jupyter Notebook, please type the following instruction in your **terminal**:
 
     docker run --name <container_name> -d -e MODE=jupyter -p <port>:8888 -v /path/to/inputs:/data <container_image>
 

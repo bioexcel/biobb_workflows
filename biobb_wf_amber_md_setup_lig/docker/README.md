@@ -80,7 +80,7 @@ The **BioBB workflows containers** can be executed either **interactively** via 
 
 #### <a name="run-jn-b"></a>Run in Jupyter Notebook
 
-For **running** the container in Jipyter Notebook, please type the following instruction in your **terminal**:
+For **running** the container in Jupyter Notebook, please type the following instruction in your **terminal**:
 
     docker run --name <container_name> -d -e MODE=jupyter -p <port>:8888 -v /path/to/inputs:/data <container_image>
 
