@@ -1,13 +1,15 @@
-working_dir_path: biobb_wf_md_setup_mutations
-can_write_console_log: False
-run_md: true
-
-mutations: ["A:Gly4Lys","A:Leu8Met","A:Tyr20Gln"]
+global_properties:
+  working_dir_path: biobb_wf_md_setup_mutations
+  can_write_console_log: False
+  run_md: true
+  disable_sandbox: False
+  timeout: 5
+  mutations: ["A:Gly4Lys","A:Leu8Met","A:Tyr20Gln"]
 
 step0_reduce_remove_hydrogens:
   tool: reduce_remove_hydrogens
   paths:
-    input_path: /path/to/inputs/structure.pdb
+    input_path: /Users/pau/projects/biobb_workflows/biobb_wf_md_setup_mutations/python/structure.pdb
     output_path: structure.noH.pdb
 
 step1_extract_molecule:
@@ -20,7 +22,7 @@ step00_cat_pdb:
   tool: cat_pdb
   paths:
     input_structure1: dependency/step1_extract_molecule/output_molecule_path
-    input_structure2: /path/to/inputs/ions.pdb
+    input_structure2: /Users/pau/projects/biobb_workflows/biobb_wf_md_setup_mutations/python/ions.pdb
     output_structure_path: protein.ions.pdb
 
 step2_fix_side_chain:
@@ -210,7 +212,7 @@ step18_gmx_image2:
     output_traj_path: md.imaged.rot.xtc
   properties:
     fit_selection: "Protein"
-    output_selection: System  
+    output_selection: System
     fit: rot+trans
 
 step19_gmx_trjconv_str:

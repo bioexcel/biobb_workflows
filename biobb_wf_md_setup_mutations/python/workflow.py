@@ -22,6 +22,7 @@ from biobb_analysis.gromacs.gmx_trjconv_str import gmx_trjconv_str
 from biobb_analysis.gromacs.gmx_image import gmx_image
 from biobb_analysis.gromacs.gmx_rms import gmx_rms
 
+
 def main(config, system=None):
     start_time = time.time()
     conf = settings.ConfReader(config, system)
@@ -41,9 +42,9 @@ def main(config, system=None):
     global_log.info("step2_fix_side_chain: Modeling the missing heavy atoms in the structure side chains")
     fix_side_chain(**global_paths["step2_fix_side_chain"], properties=global_prop["step2_fix_side_chain"])
 
-    for mutation_number, mutation in enumerate(conf.properties['mutations']):
+    for mutation_number, mutation in enumerate(conf.properties['global_properties']['mutations']):
         global_log.info('')
-        global_log.info("Mutation: %s  %d/%d" % (mutation, mutation_number+1, len(conf.properties['mutations'])))
+        global_log.info("Mutation: %s  %d/%d" % (mutation, mutation_number+1, len(conf.properties['global_properties']['mutations'])))
         global_log.info('')
         prop = conf.get_prop_dic(prefix=mutation, global_log=global_log)
         paths = conf.get_paths_dic(prefix=mutation)
@@ -131,6 +132,7 @@ def main(config, system=None):
     global_log.info('')
     global_log.info('Elapsed time: %.1f minutes' % (elapsed_time/60))
     global_log.info('')
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Based on the official Gromacs tutorial")
