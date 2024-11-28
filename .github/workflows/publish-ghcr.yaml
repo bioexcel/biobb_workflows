@@ -26,19 +26,3 @@ jobs:
           cd biobb_wf_amber_abc_setup/docker
           docker build --build-arg REPO=biobb_wf_amber --build-arg SUBREPO=abc_setup -t ghcr.io/bioexcel/biobb_wf_amber_abc_setup:latest .
           docker push ghcr.io/bioexcel/biobb_wf_amber_abc_setup:latest
-
-      - name: Get package ID
-        id: get_package_id
-        run: |
-          PACKAGE_ID=$(curl -s -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: Bearer ${{ secrets.GH_PAT }}" \
-            https://api.github.com/orgs/bioexcel/packages/container/biobb_wf_amber_abc_setup | jq -r '.id')
-          echo "PACKAGE_ID=$PACKAGE_ID" >> $GITHUB_ENV
-
-      - name: Make biobb_wf_amber_abc_setup image public
-        run: |
-          curl -X PATCH \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: Bearer ${{ secrets.GH_PAT }}" \
-            https://api.github.com/orgs/bioexcel/packages/container/biobb_wf_amber_abc_setup/$PACKAGE_ID/visibility \
-            -d '{"visibility":"public"}'
