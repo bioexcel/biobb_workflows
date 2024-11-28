@@ -75,10 +75,10 @@ CMD ["\
         mkdir -p \"$dir\"; \
         if [ -n \"$USER_JN\" ]; then \
             cp /data/\"$USER_JN\" \"$dir/notebook.ipynb\"; \
-        cp -r /data/pmx_tutorial \"$dir/pmx_tutorial\"; \
         else \
             cp /app/notebook.ipynb \"$dir/notebook.ipynb\"; \
         fi; \
+        cp -r /data/pmx_tutorial \"$dir/pmx_tutorial\"; \
         cd \"$dir\"; \
         source activate $REPOSITORY; \
         jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.base_url=$BASE_URL --NotebookApp.token='' --NotebookApp.password=''; \
