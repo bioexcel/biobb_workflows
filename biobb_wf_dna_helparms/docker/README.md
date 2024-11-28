@@ -4,7 +4,7 @@ All the **BioBB workflows** can be executed via **docker container**. Inside thi
 
 ## <a name="requirements"></a>Requirements
 
-For executing this **BioBB workflow**, there is a single requirement: to have [**Docker**](https://docs.docker.com/engine/install/) installed in your computer. Once this requirement is fullfilled, you will be able to install the workflow.
+For executing this **BioBB workflow**, there is a single requirement: to have [**Docker**](https://docs.docker.com/engine/install/) installed in your computer. Once this requirement is fulfilled, you will be able to install the workflow.
 
 ## <a name="download"></a>Download and execute container from docker hub
 
@@ -41,6 +41,12 @@ This instruction will run the container in **detached** (or background) mode, so
 
 Note that **the port can change** depending on the value provided in the previous step.
 
+For **running** the container with a **custom Jupyter Notebook**, please locate this file in the **same folder** where the inputs are and then type the following instruction in your **terminal**:
+
+    docker run --name <container_name> -d -e MODE=jupyter -e USER_JN=custom.ipynb -p <port>:8888 -v /path/to/inputs:/data biobb/biobb_wf_dna_helparms
+
+Take into account that the **dependencies are not customisable**, so this new Jupyter Notebook file **must fulfill** the same **specifications** as the original one.
+
 #### <a name="run-py-d"></a>Run in Python
 
 Below you can find the list of all the needed **files** for executing this workflow in **python**:
@@ -55,6 +61,12 @@ For **running** the container in python, please type the following instruction i
 Where:
 * **container_name** is the name of the container (optional).
 * **/path/to/inputs** is the path to the folder where the **input(s)** and **workflow.yml** files are located (all of them must be in the same folder).
+
+For **running** the container with a **custom workflow file**, please locate this file in the **same folder** where the inputs are and then type the following instruction in your **terminal**:
+
+    docker run --name <container_name> -e USER_PY=custom.py -v /path/to/inputs:/data biobb/biobb_wf_dna_helparms
+
+Take into account that the **dependencies are not customisable**, so this new workflow file **must fulfill** the same **specifications** as the original one.
 
 ## <a name="build"></a>Build container in house
 
@@ -96,6 +108,12 @@ This instruction will run the container in **detached** (or background) mode, so
 
 Note that **the port can change** depending on the value provided in the previous step.
 
+For **running** the container with a **custom Jupyter Notebook**, please locate this file in the **same folder** where the inputs are and then type the following instruction in your **terminal**:
+
+    docker run --name <container_name> -d -e MODE=jupyter -e USER_JN=custom.ipynb -p <port>:8888 -v /path/to/inputs:/data <container_image>
+
+Take into account that the **dependencies are not customisable**, so this new Jupyter Notebook file **must fulfill** the same **specifications** as the original one.
+
 #### <a name="run-py-b"></a>Run in Python
 
 Below you can find the list of all the needed **files** for executing this workflow in **python**:
@@ -111,6 +129,12 @@ Where:
 * **container_name** is the name of the container (optional).
 * **/path/to/inputs** is the path to the folder where the **input(s)** and **workflow.yml** files are located (all of them must be in the same folder).
 * **container_image** is the name of the docker container image.
+
+For **running** the container with a **custom workflow file**, please locate this file in the **same folder** where the inputs are and then type the following instruction in your **terminal**:
+
+    docker run --name <container_name> -e USER_PY=custom.py -v /path/to/inputs:/data <container_image>
+
+Take into account that the **dependencies are not customisable**, so this new workflow file **must fulfill** the same **specifications** as the original one.
 
 ## <a name="time"></a>Time of execution
 
