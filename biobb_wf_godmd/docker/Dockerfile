@@ -1,6 +1,9 @@
 # Base docker with miniconda
 FROM continuumio/miniconda3
 
+# Connect this docker image to the biobb_workflows repository
+LABEL org.opencontainers.image.source https://github.com/bioexcel/biobb_workflows
+
 # Define working dir
 WORKDIR /app
 
