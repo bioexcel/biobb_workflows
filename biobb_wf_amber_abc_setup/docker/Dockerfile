@@ -4,7 +4,7 @@ FROM continuumio/miniconda3
 # Define the version of the Docker image
 LABEL version="2024.1"
 
-# Connect this docker image to the biobb_workflows repo
+# Connect this docker image to the biobb_workflows repository
 LABEL org.opencontainers.image.source https://github.com/bioexcel/biobb_workflows
 
 # Define working dir
