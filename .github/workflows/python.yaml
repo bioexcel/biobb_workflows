@@ -48,7 +48,7 @@ jobs:
       #     wf_name: ${{ matrix.wf_name }}  
 
       - name: Check out repository code
-        if: contains(needs.detect-files.outputs.changed_files, matrix.file)
+        if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
         uses: actions/checkout@v4
 
       # - run: echo "Repository -> ${{ github.repository }}"
@@ -61,13 +61,13 @@ jobs:
       #     ls ${{ github.workspace }}
 
       - name: Remove all micromamba installations
-        if: contains(needs.detect-files.outputs.changed_files, matrix.file)
+        if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
         run: |
           rm -rf $HOME/.bash_profile $HOME/.conda $HOME/micromamba $HOME/micromamba-bin 2>/dev/null
           touch $HOME/.bash_profile
 
       - name: setup-micromamba
-        if: contains(needs.detect-files.outputs.changed_files, matrix.file)
+        if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
         uses: mamba-org/setup-micromamba@v2.0.0
         with:
           generate-run-shell: true
@@ -83,7 +83,7 @@ jobs:
       #   run: micromamba list
 
       - name: Run tests
-        if: contains(needs.detect-files.outputs.changed_files, matrix.file)
+        if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
         shell: bash -l {0}
         run: |
           export PYTHONPATH=.:./biobb_common:$PYTHONPATH
@@ -91,6 +91,6 @@ jobs:
           cd biobb_wf_ligand_parameterization/tests/python
 
           # Production one
-          pytest ${{ inputs.wf_name }}.py --config ../../python/workflow.yml --remove
+          pytest biobb_wf_ligand_parameterization.py --config ../../python/workflow.yml --remove
 
 
