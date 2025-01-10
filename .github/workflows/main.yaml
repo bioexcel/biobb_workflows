@@ -14,7 +14,6 @@ jobs:
     outputs:
       biobb_wf_ligand_parameterization_changed: ${{ steps.filter.outputs.biobb_wf_ligand_parameterization }}
       biobb_wf_md_setup_changed: ${{ steps.filter.outputs.biobb_wf_md_setup }}
-      #file2_changed: ${{ steps.filter.outputs.file2 }}
     steps:
       - name: Filter Changed Files
         id: filter
@@ -30,18 +29,19 @@ jobs:
     needs: filter-files
     uses: ./.github/workflows/reusable.yaml
     with:
-      test_name: TEST biobb_wf_ligand_parameterization
-      file: biobb_wf_ligand_parameterization
+      # test_name: TEST biobb_wf_ligand_parameterization
+      # file: biobb_wf_ligand_parameterization
+      wf_name: biobb_wf_ligand_parameterization
     if: needs.filter-files.outputs.biobb_wf_ligand_parameterization_changed == 'true'
-    #if: contains(github.event.commits.*.modified, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
 
   biobb_wf_md_setup:
     name: Run Tests biobb_wf_md_setup
     needs: filter-files
     uses: ./.github/workflows/reusable.yaml
     with:
-      test_name: TEST biobb_wf_md_setup
-      file: biobb_wf_md_setup
+      # test_name: TEST biobb_wf_md_setup
+      # file: biobb_wf_md_setup
+      wf_name: biobb_wf_md_setup
     if: needs.filter-files.outputs.biobb_wf_md_setup_changed == 'true'
 
   # test2:
