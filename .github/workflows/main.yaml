@@ -25,33 +25,18 @@ jobs:
             biobb_wf_md_setup:
               - "biobb_wf_md_setup/python/workflow.env.yml"
 
-  tests:
-    name: Run Tests
-    strategy:
-      matrix:
-        include:
-          - wf_name: biobb_wf_ligand_parameterization/python/workflow.env.yml
-            changed: ${{ needs.filter-files.outputs.biobb_wf_ligand_parameterization_changed }}
-          - wf_name: biobb_wf_md_setup/python/workflow.env.yml
-            changed: ${{ needs.filter-files.outputs.biobb_wf_md_setup_changed }}
+  biobb_wf_ligand_parameterization:
+    name: biobb_wf_ligand_parameterization
     needs: filter-files
-    if: matrix.changed == 'true'
     uses: ./.github/workflows/reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_ligand_parameterization_changed == 'true'
     with:
-      wf_name: ${{ matrix.wf_name }}
+      wf_name: biobb_wf_ligand_parameterization
 
-  # biobb_wf_ligand_parameterization:
-  #   name: biobb_wf_ligand_parameterization
-  #   needs: filter-files
-  #   uses: ./.github/workflows/reusable.yaml
-  #   if: needs.filter-files.outputs.biobb_wf_ligand_parameterization_changed == 'true'
-  #   with:
-  #     wf_name: biobb_wf_ligand_parameterization
-
-  # biobb_wf_md_setup:
-  #   name: biobb_wf_md_setup
-  #   needs: filter-files
-  #   uses: ./.github/workflows/reusable.yaml
-  #   if: needs.filter-files.outputs.biobb_wf_md_setup_changed == 'true'
-  #   with:
-  #     wf_name: biobb_wf_md_setup
+  biobb_wf_md_setup:
+    name: biobb_wf_md_setup
+    needs: filter-files
+    uses: ./.github/workflows/reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_md_setup_changed == 'true'
+    with:
+      wf_name: biobb_wf_md_setup
