@@ -36,7 +36,7 @@ jobs:
             changed: ${{ needs.filter-files.outputs.biobb_wf_md_setup_changed }}
     needs: filter-files
     if: matrix.changed == 'true'
-    uses: ./.github/workflows/reusable-test.yaml
+    uses: ./.github/workflows/reusable.yaml
     with:
       wf_name: ${{ matrix.wf_name }}
 
