@@ -25,12 +25,14 @@ jobs:
 
   detect-files:
     name: Detect Changed Files
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     outputs:
       changed_files: ${{ steps.detect_changes.outputs.changed_files }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Detect changed files
         id: detect_changes
@@ -41,7 +43,7 @@ jobs:
 
   run-jobs:
     needs: detect-files
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       matrix:
         include:
