@@ -23,12 +23,51 @@ jobs:
   #         echo "::set-output name=files::$(cat changed_files.txt)"
   #       shell: bash
 
-  biobb_wf_ligand_parameterization:
-    #if: github.event_name == 'push' && contains(github.event.head_commit.message, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
-    # needs: detect-files
-    # if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
-    if: contains(github.event.commits.*.modified, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
-    uses: ./.github/workflows/common-python.yaml
-    with:
-      wf_name: biobb_wf_ligand_parameterization
+  detect-files:
+    name: Detect Changed Files
+    runs-on: ubuntu-latest
+    outputs:
+      changed_files: ${{ steps.detect_changes.outputs.changed_files }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Detect changed files
+        id: detect_changes
+        run: |
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changed_files.txt
+          echo "::set-output name=changed_files::$(cat changed_files.txt)"
+        shell: bash
+
+  run-jobs:
+    needs: detect-files
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - file: 'biobb_wf_ligand_parameterization/python/workflow.env.yml'
+            job: 'biobb_wf_ligand_parameterization'
+            wf_name: 'biobb_wf_ligand_parameterization'
+          # - file: 'path/to/another/file.yml'
+          #   job: 'another_job'
+          #   wf_name: 'another_workflow'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run conditional job
+        if: contains(needs.detect-files.outputs.changed_files, matrix.file)
+        uses: ./.github/workflows/common-python.yaml
+        with:
+          wf_name: ${{ matrix.wf_name }}  
+
+
+  # biobb_wf_ligand_parameterization:
+  #   #if: github.event_name == 'push' && contains(github.event.head_commit.message, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
+  #   # needs: detect-files
+  #   # if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
+  #   if: contains(github.event.commits.*.modified, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
+  #   uses: ./.github/workflows/common-python.yaml
+  #   with:
+  #     wf_name: biobb_wf_ligand_parameterization
 
