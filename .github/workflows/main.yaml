@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - biobb_wf_ligand_parameterization/python/workflow.env.yml
-      #- file2
+      - biobb_wf_md_setup/python/workflow.env.yml
   workflow_dispatch:
 
 jobs:
@@ -12,8 +12,8 @@ jobs:
     name: Filter Files
     runs-on: self-hosted
     outputs:
-      biobb_wf_ligand_parameterization: ${{ steps.filter.outputs.biobb_wf_ligand_parameterization }}
-      biobb_wf_md_setup: ${{ steps.filter.outputs.biobb_wf_md_setup }}
+      biobb_wf_ligand_parameterization_changed: ${{ steps.filter.outputs.biobb_wf_ligand_parameterization }}
+      biobb_wf_md_setup_changed: ${{ steps.filter.outputs.biobb_wf_md_setup }}
       #file2_changed: ${{ steps.filter.outputs.file2 }}
     steps:
       - name: Filter Changed Files
@@ -32,7 +32,7 @@ jobs:
     with:
       test_name: TEST biobb_wf_ligand_parameterization
       file: biobb_wf_ligand_parameterization
-    if: needs.filter-files.outputs.biobb_wf_ligand_parameterization == 'true'
+    if: needs.filter-files.outputs.biobb_wf_ligand_parameterization_changed == 'true'
     #if: contains(github.event.commits.*.modified, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
 
   biobb_wf_md_setup:
@@ -42,7 +42,7 @@ jobs:
     with:
       test_name: TEST biobb_wf_md_setup
       file: biobb_wf_md_setup
-    if: needs.filter-files.outputs.biobb_wf_md_setup == 'true'
+    if: needs.filter-files.outputs.biobb_wf_md_setup_changed == 'true'
 
   # test2:
   #   name: Run Test2
