@@ -1,4 +1,4 @@
-name: Main Workflow Using Reusable Workflow
+name: Python workflow Tests
 
 on:
   push:
