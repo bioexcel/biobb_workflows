@@ -24,6 +24,7 @@ jobs:
               - "biobb_wf_ligand_parameterization/python/workflow.env.yml"
             biobb_wf_md_setup:
               - "biobb_wf_md_setup/python/workflow.env.yml"
+              
   biobb_wf_ligand_parameterization:
     name: Run Tests biobb_wf_ligand_parameterization
     needs: filter-files
