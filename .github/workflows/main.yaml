@@ -8,12 +8,30 @@ on:
   workflow_dispatch:
 
 jobs:
+  filter-files:
+    name: Filter Files
+    runs-on: self-hosted
+    outputs:
+      file1_changed: ${{ steps.filter.outputs.file1 }}
+      #file2_changed: ${{ steps.filter.outputs.file2 }}
+    steps:
+      - name: Filter Changed Files
+        id: filter
+        uses: dorny/paths-filter@v2
+        with:
+          filters:
+            file1:
+              - "biobb_wf_ligand_parameterization/python/workflow.env.yml"
+            # file2:
+            #   - "file2"
   test1:
     name: Run Test1
+    needs: filter-files
     uses: ./.github/workflows/reusable.yaml
     with:
       test_name: Test1
       file: file1
+    if: needs.filter-files.outputs.file1_changed == 'true'
     #if: contains(github.event.commits.*.modified, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
 
   # test2:
@@ -23,3 +41,51 @@ jobs:
   #     test_name: Test2
   #     file: file2
   #   if: contains(github.event.commits.*.modified, 'file2')
+
+
+# name: Main Workflow Using Reusable Workflow
+
+# on:
+#   push:
+#     paths:
+#       - file1
+#       - file2
+#   workflow_dispatch:
+
+# jobs:
+#   filter-files:
+#     name: Filter Files
+#     runs-on: ubuntu-latest
+#     outputs:
+#       file1_changed: ${{ steps.filter.outputs.file1 }}
+#       file2_changed: ${{ steps.filter.outputs.file2 }}
+#     steps:
+#       - name: Filter Changed Files
+#         id: filter
+#         uses: dorny/paths-filter@v2
+#         with:
+#           filters:
+#             file1:
+#               - "file1"
+#             file2:
+#               - "file2"
+
+#   test1:
+#     name: Run Test1
+#     runs-on: ubuntu-latest
+#     needs: filter-files
+#     if: needs.filter-files.outputs.file1_changed == 'true'
+#     uses: ./.github/workflows/reusable-test.yaml
+#     with:
+#       test_name: Test1
+#       file: file1
+
+#   test2:
+#     name: Run Test2
+#     runs-on: ubuntu-latest
+#     needs: filter-files
+#     if: needs.filter-files.outputs.file2_changed == 'true'
+#     uses: ./.github/workflows/reusable-test.yaml
+#     with:
+#       test_name: Test2
+#       file: file2
