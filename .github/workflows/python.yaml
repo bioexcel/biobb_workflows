@@ -43,7 +43,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run conditional job
-        if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
+        # if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
         uses: ./.github/workflows/common-python.yaml
         with:
           wf_name: ${{ matrix.wf_name }}  
