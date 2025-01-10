@@ -48,23 +48,26 @@ jobs:
       #     wf_name: ${{ matrix.wf_name }}  
 
       - name: Check out repository code
+        if: contains(needs.detect-files.outputs.changed_files, matrix.file)
         uses: actions/checkout@v4
 
-      - run: echo "Repository -> ${{ github.repository }}"
-      - run: echo "Branch -> ${{ github.ref }}"
-      - run: echo "Trigger event -> ${{ github.event_name }}"
-      - run: echo "Runner OS -> ${{ runner.os }}"
+      # - run: echo "Repository -> ${{ github.repository }}"
+      # - run: echo "Branch -> ${{ github.ref }}"
+      # - run: echo "Trigger event -> ${{ github.event_name }}"
+      # - run: echo "Runner OS -> ${{ runner.os }}"
 
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
+      # - name: List files in the repository
+      #   run: |
+      #     ls ${{ github.workspace }}
 
       - name: Remove all micromamba installations
+        if: contains(needs.detect-files.outputs.changed_files, matrix.file)
         run: |
           rm -rf $HOME/.bash_profile $HOME/.conda $HOME/micromamba $HOME/micromamba-bin 2>/dev/null
           touch $HOME/.bash_profile
 
       - name: setup-micromamba
+        if: contains(needs.detect-files.outputs.changed_files, matrix.file)
         uses: mamba-org/setup-micromamba@v2.0.0
         with:
           generate-run-shell: true
@@ -75,11 +78,12 @@ jobs:
           create-args: >-
             pytest
 
-      - name: List installed package versions
-        shell: bash -l {0}
-        run: micromamba list
+      # - name: List installed package versions
+      #   shell: bash -l {0}
+      #   run: micromamba list
 
       - name: Run tests
+        if: contains(needs.detect-files.outputs.changed_files, matrix.file)
         shell: bash -l {0}
         run: |
           export PYTHONPATH=.:./biobb_common:$PYTHONPATH
@@ -87,6 +91,6 @@ jobs:
           cd biobb_wf_ligand_parameterization/tests/python
 
           # Production one
-          pytest biobb_wf_ligand_parameterization.py --config ../../python/workflow.yml --remove
+          pytest ${{ inputs.wf_name }}.py --config ../../python/workflow.yml --remove
 
 
