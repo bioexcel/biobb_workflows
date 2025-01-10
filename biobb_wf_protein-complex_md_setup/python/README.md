@@ -40,10 +40,6 @@ So execute the following script:
 
     conda activate biobb_wf_protein-complex_md_setup
 
-## <a name="custom-paths"></a>Custom paths
-
-To run this workflow properly in your computer, you should open in a text/code editor the **workflow.yml** file and replace all the occurrences of **/path/to/inputs/** with the absolute path to the folder where you have decompressed the zip file downloaded in the first step.
-
 ## <a name="run-wf"></a>Run workflow
 
 After that, the only thing left is to run the workflow:
@@ -55,3 +51,21 @@ Take into account that depending on the number of steps, the tools executed and 
 ## <a name="get-output"></a>Get output results
 
 Once the workflow is finished, you just should enter the new **wf_python/biobb_wf_protein-complex_md_setup** folder and, inside it, you will find a folder for each step of the workflow with all the files generated in every step.
+
+## <a name="tests"></a>Tests
+
+To run the tests for this workflow, the **pytest framework** must be installed into the environment described in the [**Installation**](#installation) section:
+
+    conda install conda-forge::pytest
+
+Once the pytest framework is installed, please go to the [**python tests folder**](tests/python) and execute:
+
+    pytest biobb_wf_protein-complex_md_setup.py --config ../../python/workflow.yml --remove
+
+To disable the output capturing and show all the logs for each step, please add the **-s** flag:
+
+    pytest -s biobb_wf_protein-complex_md_setup.py --config ../../python/workflow.yml --remove
+
+If you want to preserve all the temporary files generated during the tests, just remove the **--remove** flag:
+
+    pytest biobb_wf_protein-complex_md_setup.py --config ../../python/workflow.yml
