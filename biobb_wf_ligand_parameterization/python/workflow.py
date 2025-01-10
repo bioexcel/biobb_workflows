@@ -7,6 +7,7 @@ from biobb_common.tools import file_utils as fu
 from biobb_chemistry.babelm.babel_minimize import babel_minimize
 from biobb_chemistry.acpype.acpype_params_gmx import acpype_params_gmx
 
+
 def main(config, system=None):
     start_time = time.time()
     conf = settings.ConfReader(config, system)
@@ -31,6 +32,7 @@ def main(config, system=None):
     global_log.info('')
     global_log.info('Elapsed time: %.1f minutes' % (elapsed_time/60))
     global_log.info('')
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Automatic Ligand parameterization tutorial using BioExcel Building Blocks")

@@ -6,7 +6,7 @@ on:
 
 name: Dockerfile
 jobs:
-  sync:
+  dockerfile:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo

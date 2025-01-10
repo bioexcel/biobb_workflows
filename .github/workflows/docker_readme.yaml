@@ -8,7 +8,7 @@ on:
 
 name: Docker README
 jobs:
-  sync:
+  docker_readme:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo

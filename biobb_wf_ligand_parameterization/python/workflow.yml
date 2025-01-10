@@ -1,12 +1,12 @@
-working_dir_path: biobb_wf_ligand_parameterization
-can_write_console_log: False
-run_md: False
+global_properties:
+  working_dir_path: biobb_wf_ligand_parameterization
+  can_write_console_log: False
 
 
 step2_babel_minimize:
   tool: babel_minimize
   paths:
-    input_path:  /path/to/inputs/ligand.pdb
+    input_path: file:ligand.pdb
     output_path: ligand.H.min.mol2
   properties:
     criteria: 1e-10
@@ -17,7 +17,7 @@ step2_babel_minimize:
 step3_acpype_params_gmx:
   tool: acpype_params_gmx
   paths:
-    input_path:  dependency/step2_babel_minimize/output_path
+    input_path: dependency/step2_babel_minimize/output_path
     output_path_gro: output.params.gro
     output_path_itp: output.params.itp
     output_path_top: output.params.top

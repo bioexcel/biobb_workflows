@@ -102,7 +102,6 @@ def main(config, system=None):
     global_log.info("step22_cpptraj_image: Imaging the resulting trajectory")
     cpptraj_image(**global_paths["step22_cpptraj_image"], properties=global_prop["step22_cpptraj_image"])
 
-    
     elapsed_time = time.time() - start_time
     global_log.info('')
     global_log.info('')
@@ -114,6 +113,7 @@ def main(config, system=None):
     global_log.info('')
     global_log.info('Elapsed time: %.1f minutes' % (elapsed_time/60))
     global_log.info('')
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="ABC MD Setup pipeline using BioExcel Building Blocks")
