@@ -6,26 +6,11 @@ on:
       - biobb_wf_ligand_parameterization/python/workflow.env.yml
   workflow_dispatch:
 
-files:
-  runs-on: self-hosted
-  outputs:
-    changed_files: ${{ steps.detect_changes.outputs.files }}
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Detect changed files
-      id: detect_changes
-      run: |
-        git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changed_files.txt
-        echo "::set-output name=files::$(cat changed_files.txt)"
-      shell: bash
-
 jobs:
   biobb_wf_ligand_parameterization:
-    #if: github.event_name == 'push' && contains(github.event.head_commit.message, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
-    needs: files
-    if: contains(needs.files.outputs.changed_files, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
+    if: github.event_name == 'push' && contains(github.event.head_commit.message, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
+    #needs: files
+    #if: contains(needs.files.outputs.changed_files, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
     uses: ./.github/workflows/common-python.yaml
     with:
       wf_name: biobb_wf_ligand_parameterization
