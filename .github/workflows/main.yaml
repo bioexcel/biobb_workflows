@@ -10,7 +10,7 @@ on:
 jobs:
   test1:
     name: Run Test1
-    uses: ./.github/workflows/reusable-test.yaml
+    uses: ./.github/workflows/reusable.yaml
     with:
       test_name: Test1
       file: file1
@@ -18,7 +18,7 @@ jobs:
 
   # test2:
   #   name: Run Test2
-  #   uses: ./.github/workflows/reusable-test.yaml
+  #   uses: ./.github/workflows/reusable.yaml
   #   with:
   #     test_name: Test2
   #     file: file2
