@@ -29,28 +29,28 @@ jobs:
   run-jobs:
     needs: detect-files
     runs-on: self-hosted
-    # strategy:
-    #   matrix:
-    #     include:
-    #       - file: 'biobb_wf_ligand_parameterization/python/workflow.env.yml'
-    #         job: 'biobb_wf_ligand_parameterization'
-    #         wf_name: 'biobb_wf_ligand_parameterization'
-    #       # - file: 'path/to/another/file.yml'
-    #       #   job: 'another_job'
-    #       #   wf_name: 'another_workflow'
+    strategy:
+      matrix:
+        include:
+          - file: 'biobb_wf_ligand_parameterization/python/workflow.env.yml'
+            job: 'biobb_wf_ligand_parameterization'
+            wf_name: 'biobb_wf_ligand_parameterization'
+          # - file: 'path/to/another/file.yml'
+          #   job: 'another_job'
+          #   wf_name: 'another_workflow'
     steps:
-      # - name: Checkout code
-      #   uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      # - name: Run conditional job
-      #   if: contains(needs.detect-files.outputs.changed_files, matrix.file)
-      #   uses: ./.github/workflows/common-python.yaml
-      #   with:
-      #     wf_name: ${{ matrix.wf_name }}  
+      - name: Run conditional job
+        if: contains(needs.detect-files.outputs.changed_files, matrix.file)
+        uses: ./.github/workflows/common-python.yaml
+        with:
+          wf_name: ${{ matrix.wf_name }}  
 
-      - name: Check out repository code
-        if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_amber_md_setup/python/workflow.env.yml')
-        uses: actions/checkout@v4
+      # - name: Check out repository code
+      #   if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
+      #   uses: actions/checkout@v4
 
       # - run: echo "Repository -> ${{ github.repository }}"
       # - run: echo "Branch -> ${{ github.ref }}"
@@ -61,37 +61,37 @@ jobs:
       #   run: |
       #     ls ${{ github.workspace }}
 
-      - name: Remove all micromamba installations
-        if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_amber_md_setup/python/workflow.env.yml')
-        run: |
-          rm -rf $HOME/.bash_profile $HOME/.conda $HOME/micromamba $HOME/micromamba-bin 2>/dev/null
-          touch $HOME/.bash_profile
+      # - name: Remove all micromamba installations
+      #   if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
+      #   run: |
+      #     rm -rf $HOME/.bash_profile $HOME/.conda $HOME/micromamba $HOME/micromamba-bin 2>/dev/null
+      #     touch $HOME/.bash_profile
 
-      - name: setup-micromamba
-        if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_amber_md_setup/python/workflow.env.yml')
-        uses: mamba-org/setup-micromamba@v2.0.0
-        with:
-          generate-run-shell: true
-          micromamba-version: '2.0.2-2'
-          post-cleanup: 'all'
-          init-shell: bash
-          environment-file: biobb_wf_ligand_parameterization/python/workflow.env.yml
-          create-args: >-
-            pytest
+      # - name: setup-micromamba
+      #   if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
+      #   uses: mamba-org/setup-micromamba@v2.0.0
+      #   with:
+      #     generate-run-shell: true
+      #     micromamba-version: '2.0.2-2'
+      #     post-cleanup: 'all'
+      #     init-shell: bash
+      #     environment-file: biobb_wf_ligand_parameterization/python/workflow.env.yml
+      #     create-args: >-
+      #       pytest
 
       # - name: List installed package versions
       #   shell: bash -l {0}
       #   run: micromamba list
 
-      - name: Run tests
-        if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_amber_md_setup/python/workflow.env.yml')
-        shell: bash -l {0}
-        run: |
-          export PYTHONPATH=.:./biobb_common:$PYTHONPATH
+      # - name: Run tests
+      #   if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
+      #   shell: bash -l {0}
+      #   run: |
+      #     export PYTHONPATH=.:./biobb_common:$PYTHONPATH
 
-          cd biobb_wf_ligand_parameterization/tests/python
+      #     cd biobb_wf_ligand_parameterization/tests/python
 
-          # Production one
-          pytest biobb_wf_ligand_parameterization.py --config ../../python/workflow.yml --remove
+      #     # Production one
+      #     pytest biobb_wf_ligand_parameterization.py --config ../../python/workflow.yml --remove
 
 
