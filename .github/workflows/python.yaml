@@ -7,22 +7,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  # detect-files:
-  #   name: Detect Changed Files
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     changed_files: ${{ steps.detect_changes.outputs.files }}
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
-
-  #     - name: Detect changed files
-  #       id: detect_changes
-  #       run: |
-  #         git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changed_files.txt
-  #         echo "::set-output name=files::$(cat changed_files.txt)"
-  #       shell: bash
-
   detect-files:
     name: Detect Changed Files
     runs-on: self-hosted
@@ -44,32 +28,65 @@ jobs:
   run-jobs:
     needs: detect-files
     runs-on: self-hosted
-    strategy:
-      matrix:
-        include:
-          - file: 'biobb_wf_ligand_parameterization/python/workflow.env.yml'
-            job: 'biobb_wf_ligand_parameterization'
-            wf_name: 'biobb_wf_ligand_parameterization'
-          # - file: 'path/to/another/file.yml'
-          #   job: 'another_job'
-          #   wf_name: 'another_workflow'
+    # strategy:
+    #   matrix:
+    #     include:
+    #       - file: 'biobb_wf_ligand_parameterization/python/workflow.env.yml'
+    #         job: 'biobb_wf_ligand_parameterization'
+    #         wf_name: 'biobb_wf_ligand_parameterization'
+    #       # - file: 'path/to/another/file.yml'
+    #       #   job: 'another_job'
+    #       #   wf_name: 'another_workflow'
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      # - name: Checkout code
+      #   uses: actions/checkout@v3
 
-      - name: Run conditional job
-        if: contains(needs.detect-files.outputs.changed_files, matrix.file)
-        uses: ./.github/workflows/common-python.yaml
+      # - name: Run conditional job
+      #   if: contains(needs.detect-files.outputs.changed_files, matrix.file)
+      #   uses: ./.github/workflows/common-python.yaml
+      #   with:
+      #     wf_name: ${{ matrix.wf_name }}  
+
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - run: echo "Repository -> ${{ github.repository }}"
+      - run: echo "Branch -> ${{ github.ref }}"
+      - run: echo "Trigger event -> ${{ github.event_name }}"
+      - run: echo "Runner OS -> ${{ runner.os }}"
+
+      - name: List files in the repository
+        run: |
+          ls ${{ github.workspace }}
+
+      - name: Remove all micromamba installations
+        run: |
+          rm -rf $HOME/.bash_profile $HOME/.conda $HOME/micromamba $HOME/micromamba-bin 2>/dev/null
+          touch $HOME/.bash_profile
+
+      - name: setup-micromamba
+        uses: mamba-org/setup-micromamba@v2.0.0
         with:
-          wf_name: ${{ matrix.wf_name }}  
+          generate-run-shell: true
+          micromamba-version: '2.0.2-2'
+          post-cleanup: 'all'
+          init-shell: bash
+          environment-file: biobb_wf_ligand_parameterization/python/workflow.env.yml
+          create-args: >-
+            pytest
 
+      - name: List installed package versions
+        shell: bash -l {0}
+        run: micromamba list
 
-  # biobb_wf_ligand_parameterization:
-  #   #if: github.event_name == 'push' && contains(github.event.head_commit.message, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
-  #   # needs: detect-files
-  #   # if: contains(needs.detect-files.outputs.changed_files, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
-  #   if: contains(github.event.commits.*.modified, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
-  #   uses: ./.github/workflows/common-python.yaml
-  #   with:
-  #     wf_name: biobb_wf_ligand_parameterization
+      - name: Run tests
+        shell: bash -l {0}
+        run: |
+          export PYTHONPATH=.:./biobb_common:$PYTHONPATH
+
+          cd biobb_wf_ligand_parameterization/tests/python
+
+          # Production one
+          pytest biobb_wf_ligand_parameterization.py --config ../../python/workflow.yml --remove
+
 

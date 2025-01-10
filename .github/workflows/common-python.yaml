@@ -9,10 +9,7 @@ on:
 
 jobs:
   run_python:
-    strategy:
-      matrix:
-        os: [self-hosted]
-    runs-on: ${{ matrix.os }}
+    runs-on: self-hosted
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
