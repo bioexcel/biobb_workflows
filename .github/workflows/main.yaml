@@ -24,79 +24,34 @@ jobs:
               - "biobb_wf_ligand_parameterization/python/workflow.env.yml"
             biobb_wf_md_setup:
               - "biobb_wf_md_setup/python/workflow.env.yml"
-              
-  biobb_wf_ligand_parameterization:
-    name: Run Tests biobb_wf_ligand_parameterization
-    needs: filter-files
-    uses: ./.github/workflows/reusable.yaml
-    with:
-      # test_name: TEST biobb_wf_ligand_parameterization
-      # file: biobb_wf_ligand_parameterization
-      wf_name: biobb_wf_ligand_parameterization
-    if: needs.filter-files.outputs.biobb_wf_ligand_parameterization_changed == 'true'
 
-  biobb_wf_md_setup:
-    name: Run Tests biobb_wf_md_setup
+  tests:
+    name: Run Tests
+    strategy:
+      matrix:
+        include:
+          - wf_name: biobb_wf_ligand_parameterization/python/workflow.env.yml
+            changed: ${{ needs.filter-files.outputs.biobb_wf_ligand_parameterization_changed }}
+          - wf_name: biobb_wf_md_setup/python/workflow.env.yml
+            changed: ${{ needs.filter-files.outputs.biobb_wf_md_setup_changed }}
     needs: filter-files
-    uses: ./.github/workflows/reusable.yaml
+    if: matrix.changed == 'true'
+    uses: ./.github/workflows/reusable-test.yaml
     with:
-      # test_name: TEST biobb_wf_md_setup
-      # file: biobb_wf_md_setup
-      wf_name: biobb_wf_md_setup
-    if: needs.filter-files.outputs.biobb_wf_md_setup_changed == 'true'
+      wf_name: ${{ matrix.wf_name }}
 
-  # test2:
-  #   name: Run Test2
+  # biobb_wf_ligand_parameterization:
+  #   name: biobb_wf_ligand_parameterization
+  #   needs: filter-files
   #   uses: ./.github/workflows/reusable.yaml
+  #   if: needs.filter-files.outputs.biobb_wf_ligand_parameterization_changed == 'true'
   #   with:
-  #     test_name: Test2
-  #     file: file2
-  #   if: contains(github.event.commits.*.modified, 'file2')
+  #     wf_name: biobb_wf_ligand_parameterization
 
-
-# name: Main Workflow Using Reusable Workflow
-
-# on:
-#   push:
-#     paths:
-#       - file1
-#       - file2
-#   workflow_dispatch:
-
-# jobs:
-#   filter-files:
-#     name: Filter Files
-#     runs-on: ubuntu-latest
-#     outputs:
-#       file1_changed: ${{ steps.filter.outputs.file1 }}
-#       file2_changed: ${{ steps.filter.outputs.file2 }}
-#     steps:
-#       - name: Filter Changed Files
-#         id: filter
-#         uses: dorny/paths-filter@v2
-#         with:
-#           filters:
-#             file1:
-#               - "file1"
-#             file2:
-#               - "file2"
-
-#   test1:
-#     name: Run Test1
-#     runs-on: ubuntu-latest
-#     needs: filter-files
-#     if: needs.filter-files.outputs.file1_changed == 'true'
-#     uses: ./.github/workflows/reusable-test.yaml
-#     with:
-#       test_name: Test1
-#       file: file1
-
-#   test2:
-#     name: Run Test2
-#     runs-on: ubuntu-latest
-#     needs: filter-files
-#     if: needs.filter-files.outputs.file2_changed == 'true'
-#     uses: ./.github/workflows/reusable-test.yaml
-#     with:
-#       test_name: Test2
-#       file: file2
+  # biobb_wf_md_setup:
+  #   name: biobb_wf_md_setup
+  #   needs: filter-files
+  #   uses: ./.github/workflows/reusable.yaml
+  #   if: needs.filter-files.outputs.biobb_wf_md_setup_changed == 'true'
+  #   with:
+  #     wf_name: biobb_wf_md_setup

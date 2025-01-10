@@ -8,7 +8,7 @@ on:
         type: string
 
 jobs:
-  run_python:
+  python:
     runs-on: self-hosted
     steps:
       - name: Check out repository code
@@ -52,32 +52,3 @@ jobs:
 
           # Production one
           pytest ${{ inputs.wf_name }}.py --config ../../python/workflow.yml --remove
-
-
-# name: Reusable Test Workflow
-
-# on:
-#   workflow_call:
-#     inputs:
-#       test_name:
-#         required: true
-#         type: string
-#       file:
-#         required: true
-#         type: string
-
-# jobs:
-#   test:
-#     runs-on: self-hosted
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v3
-
-#       - name: Log Test Details
-#         run: |
-#           echo "Running test: ${{ inputs.test_name }}"
-#           echo "For file: ${{ inputs.file }}"
-
-#       - name: Simulate Test Execution
-#         run: |
-#           echo "Executing test logic for ${{ inputs.file }}"
