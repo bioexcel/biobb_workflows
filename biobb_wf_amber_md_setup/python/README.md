@@ -58,7 +58,7 @@ To run the tests for this workflow, the **pytest framework** must be installed i
 
     conda install conda-forge::pytest
 
-Once the pytest framework is installed, please go to the [**python tests folder**](tests/python) and execute:
+Once the pytest framework is installed, please go to the [**python tests folder**](../tests/python) and execute:
 
     pytest biobb_wf_amber.py --config ../../python/workflow.yml --remove
 
