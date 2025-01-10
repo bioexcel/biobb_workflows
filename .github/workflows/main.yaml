@@ -19,7 +19,7 @@ jobs:
         id: filter
         uses: dorny/paths-filter@v2
         with:
-          filters:
+          filters: |
             file1:
               - "biobb_wf_ligand_parameterization/python/workflow.env.yml"
             # file2:
