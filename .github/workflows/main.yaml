@@ -14,7 +14,7 @@ jobs:
     with:
       test_name: Test1
       file: file1
-    if: contains(github.event.commits.*.modified, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
+    #if: contains(github.event.commits.*.modified, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
 
   # test2:
   #   name: Run Test2
