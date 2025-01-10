@@ -1,0 +1,25 @@
+name: Main Workflow Using Reusable Workflow
+
+on:
+  push:
+    paths:
+      - biobb_wf_ligand_parameterization/python/workflow.env.yml
+      #- file2
+  workflow_dispatch:
+
+jobs:
+  test1:
+    name: Run Test1
+    uses: ./.github/workflows/reusable-test.yaml
+    with:
+      test_name: Test1
+      file: file1
+    if: contains(github.event.commits.*.modified, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
+
+  # test2:
+  #   name: Run Test2
+  #   uses: ./.github/workflows/reusable-test.yaml
+  #   with:
+  #     test_name: Test2
+  #     file: file2
+  #   if: contains(github.event.commits.*.modified, 'file2')
