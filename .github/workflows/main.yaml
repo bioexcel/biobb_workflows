@@ -12,7 +12,8 @@ jobs:
     name: Filter Files
     runs-on: self-hosted
     outputs:
-      file1_changed: ${{ steps.filter.outputs.file1 }}
+      biobb_wf_ligand_parameterization: ${{ steps.filter.outputs.biobb_wf_ligand_parameterization }}
+      biobb_wf_md_setup: ${{ steps.filter.outputs.biobb_wf_md_setup }}
       #file2_changed: ${{ steps.filter.outputs.file2 }}
     steps:
       - name: Filter Changed Files
@@ -20,19 +21,28 @@ jobs:
         uses: dorny/paths-filter@v2
         with:
           filters: |
-            file1:
+            biobb_wf_ligand_parameterization:
               - "biobb_wf_ligand_parameterization/python/workflow.env.yml"
-            # file2:
-            #   - "file2"
-  test1:
-    name: Run Test1
+            biobb_wf_md_setup:
+              - "biobb_wf_md_setup/python/workflow.env.yml"
+  biobb_wf_ligand_parameterization:
+    name: Run Tests biobb_wf_ligand_parameterization
     needs: filter-files
     uses: ./.github/workflows/reusable.yaml
     with:
-      test_name: Test1
-      file: file1
-    if: needs.filter-files.outputs.file1_changed == 'true'
+      test_name: TEST biobb_wf_ligand_parameterization
+      file: biobb_wf_ligand_parameterization
+    if: needs.filter-files.outputs.biobb_wf_ligand_parameterization == 'true'
     #if: contains(github.event.commits.*.modified, 'biobb_wf_ligand_parameterization/python/workflow.env.yml')
+
+  biobb_wf_md_setup:
+    name: Run Tests biobb_wf_md_setup
+    needs: filter-files
+    uses: ./.github/workflows/reusable.yaml
+    with:
+      test_name: TEST biobb_wf_md_setup
+      file: biobb_wf_md_setup
+    if: needs.filter-files.outputs.biobb_wf_md_setup == 'true'
 
   # test2:
   #   name: Run Test2
