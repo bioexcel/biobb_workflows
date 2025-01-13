@@ -1,6 +1,7 @@
-working_dir_path: biobb_wf_amber_md_setup
-can_write_console_log: False
-run_md: true
+global_properties:
+  working_dir_path: biobb_wf_amber_md_setup
+  can_write_console_log: False
+  run_md: true
 
 step00_reduce_remove_hydrogens:
   tool: reduce_remove_hydrogens
