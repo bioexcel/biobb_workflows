@@ -1,4 +1,4 @@
-; biobb_GMX_LP_GMX.top created by acpype (v: 2023.10.27) on Thu Jan  9 16:32:15 2025
+; biobb_GMX_LP_GMX.top created by acpype (v: 2023.10.27) on Mon Jan 13 10:47:18 2025
 
 [ defaults ]
 ; nbfunc        comb-rule       gen-pairs       fudgeLJ fudgeQQ
