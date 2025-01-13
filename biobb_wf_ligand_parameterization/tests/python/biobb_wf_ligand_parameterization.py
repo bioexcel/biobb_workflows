@@ -19,6 +19,7 @@ def step2_babel_minimize(config, system=None):
     babel_minimize(**global_paths["step2_babel_minimize"], properties=global_prop["step2_babel_minimize"])
 
     assert fx.not_empty(global_paths["step2_babel_minimize"]["output_path"])
+    # TODO: GENERATE REFERENCE FILES WITH ADAM'S COMPUTER
     # assert fx.equal(global_paths["step2_babel_minimize"]["output_path"], f'reference/step2_babel_minimize/{Path(global_paths["step2_babel_minimize"]["output_path"]).name}')
 
     global global_work_dir

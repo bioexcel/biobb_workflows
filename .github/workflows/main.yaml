@@ -4,7 +4,9 @@ on:
   push:
     paths:
       - biobb_wf_ligand_parameterization/python/workflow.env.yml
+      - biobb_wf_ligand_parameterization/python/workflow.py
       - biobb_wf_md_setup/python/workflow.env.yml
+      - biobb_wf_md_setup/python/workflow.py
   workflow_dispatch:
 
 jobs:
