@@ -5,8 +5,8 @@ on:
     paths:
       - biobb_wf_ligand_parameterization/python/workflow.env.yml
       - biobb_wf_ligand_parameterization/python/workflow.py
-      - biobb_wf_md_setup/python/workflow.env.yml
-      - biobb_wf_md_setup/python/workflow.py
+      #- biobb_wf_md_setup/python/workflow.env.yml
+      #- biobb_wf_md_setup/python/workflow.py
   workflow_dispatch:
 
 jobs:
@@ -24,8 +24,10 @@ jobs:
           filters: |
             biobb_wf_ligand_parameterization:
               - "biobb_wf_ligand_parameterization/python/workflow.env.yml"
+              - "biobb_wf_ligand_parameterization/python/workflow.py"
             biobb_wf_md_setup:
               - "biobb_wf_md_setup/python/workflow.env.yml"
+              - "biobb_wf_md_setup/python/workflow.py"
 
   biobb_wf_ligand_parameterization:
     name: biobb_wf_ligand_parameterization
@@ -35,10 +37,10 @@ jobs:
     with:
       wf_name: biobb_wf_ligand_parameterization
 
-  biobb_wf_md_setup:
-    name: biobb_wf_md_setup
-    needs: filter-files
-    uses: ./.github/workflows/python-reusable.yaml
-    if: needs.filter-files.outputs.biobb_wf_md_setup_changed == 'true'
-    with:
-      wf_name: biobb_wf_md_setup
+  # biobb_wf_md_setup:
+  #   name: biobb_wf_md_setup
+  #   needs: filter-files
+  #   uses: ./.github/workflows/python-reusable.yaml
+  #   if: needs.filter-files.outputs.biobb_wf_md_setup_changed == 'true'
+  #   with:
+  #     wf_name: biobb_wf_md_setup
