@@ -41,6 +41,7 @@ def step0_reduce_remove_hydrogens(config, system=None):
 
 def step1_extract_molecule(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -53,6 +54,7 @@ def step1_extract_molecule(config, system=None):
 
 def step00_cat_pdb(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -65,6 +67,7 @@ def step00_cat_pdb(config, system=None):
 
 def step2_fix_side_chain(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -77,6 +80,7 @@ def step2_fix_side_chain(config, system=None):
 
 def step4_pdb2gmx(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -91,6 +95,7 @@ def step4_pdb2gmx(config, system=None):
 
 def step5_editconf(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -103,6 +108,7 @@ def step5_editconf(config, system=None):
 
 def step6_solvate(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -117,6 +123,7 @@ def step6_solvate(config, system=None):
 
 def step7_grompp_genion(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -129,6 +136,7 @@ def step7_grompp_genion(config, system=None):
 
 def step8_genion(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -143,6 +151,7 @@ def step8_genion(config, system=None):
 
 def step9_grompp_min(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -155,6 +164,7 @@ def step9_grompp_min(config, system=None):
 
 def step10_mdrun_min(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -173,6 +183,7 @@ def step10_mdrun_min(config, system=None):
 
 def step100_make_ndx(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -197,6 +208,7 @@ def step11_grompp_nvt(config, system=None):
 
 def step12_mdrun_nvt(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -215,6 +227,7 @@ def step12_mdrun_nvt(config, system=None):
 
 def step13_grompp_npt(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -227,6 +240,7 @@ def step13_grompp_npt(config, system=None):
 
 def step14_mdrun_npt(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -245,6 +259,7 @@ def step14_mdrun_npt(config, system=None):
 
 def step15_grompp_md(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -257,6 +272,7 @@ def step15_grompp_md(config, system=None):
 
 def step16_mdrun_md(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -275,6 +291,7 @@ def step16_mdrun_md(config, system=None):
 
 def step17_gmx_image1(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -287,6 +304,7 @@ def step17_gmx_image1(config, system=None):
 
 def step18_gmx_image2(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -299,6 +317,7 @@ def step18_gmx_image2(config, system=None):
 
 def step19_gmx_trjconv_str(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -311,6 +330,7 @@ def step19_gmx_trjconv_str(config, system=None):
 
 def step20_gmx_energy(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -323,6 +343,7 @@ def step20_gmx_energy(config, system=None):
 
 def step21_gmx_rgyr(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -335,6 +356,7 @@ def step21_gmx_rgyr(config, system=None):
 
 def step22_rmsd_first(config, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -347,6 +369,7 @@ def step22_rmsd_first(config, system=None):
 
 def step23_rmsd_exp(config, remove=False, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
