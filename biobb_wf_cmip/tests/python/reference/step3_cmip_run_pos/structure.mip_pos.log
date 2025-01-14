@@ -1,0 +1,100 @@
+ =================================================
+ =                                               =
+ =                C M I P  (2.7.0)               =
+ =          J. Ll. Gelpi, A. Morreale,           =
+ =            F. J. Luque, M.Orozco              =
+ =      Dept. Biochemistry. Univ. Barcelona      =
+ =                  1999-2021                    =
+ =================================================
+
+  Code for ASA calculation by Juan F. Recio       
+
+#T Run started at   13:39: 3 h on 14- 1-2025
+ SIZES
+ -----
+ MAXTIP:           100
+ MAXATH:            80000
+ MAXATP x MAXCONF: 100000
+
+ INPUT FILES
+ -----------
+    Calc. settings: /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_cmip/python/sandbox_ffed7af2-ebc4-41e6-9ef9-3b64215d86c3/params                               
+ VdW Parameters:      /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_cmip/python/sandbox_ffed7af2-ebc4-41e6-9ef9-3b64215d86c3/vdwprm                               
+ PDB Host:            /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_cmip/python/sandbox_ffed7af2-ebc4-41e6-9ef9-3b64215d86c3/structure.cmip.pdb                   
+
+ OUTPUT FILES
+ ------------
+ LOG file:            /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_cmip/python/sandbox_ffed7af2-ebc4-41e6-9ef9-3b64215d86c3/structure.mip_pos.log                
+ Grid Out:            gridout                                                                                                                                               
+ Cube Output File:    /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_cmip/python/sandbox_ffed7af2-ebc4-41e6-9ef9-3b64215d86c3/structure.mip_pos.cube               
+
+ Parameters
+ ----------
+MIP positive probe                                                              
+&cntrl                                                                          
+ tipcalc = 0                                                                    
+ calcgrid = 1                                                                   
+ irest = 0                                                                      
+ orest = 0                                                                      
+ coorfmt = 2                                                                    
+ dields = 2                                                                     
+ cubeoutput = 1                                                                 
+ fvdw = 0.8                                                                     
+ carmip = 1                                                                     
+ tipatmip = 'OW'                                                                
+ readgrid = 2                                                                   
+ CENX=0.0,CENY=0.0,CENZ=0.0                                                     
+ DIMX=64,DIMY=64,DIMZ=64                                                        
+ INTX=0.5,INTY=0.5,INTZ=0.5                                                     
+ IREST = 0                                                                      
+&end                                                                            
+
+ 18 VdW parameters loaded successfully
+
+ Host:      1968 atoms loaded, charge     8.000
+
+ TYPE OF CALCULATION: MIP
+ Guest is a OW   with charge   1.000
+
+ AUTOMATIC GRID
+ --------------
+ Fill:    0.800
+Automatic Grid                                                                                                                      
+ Grid Size:      48.000  53.000  43.000  90.000  90.000  90.000
+ Grid density:    96  106   86
+ Grid units:      0.500   0.500   0.500
+ Grid origin:     4.489  -1.691 -21.069
+ Grid center:    28.489  24.809   0.431
+     902973 Grid points
+
+ All input data read succesfully
+
+ CLHOST=           0
+ EXTERNAL CUTOFF=   999999.000    
+ Checking potentials to calculate...
+ - Vdw: OW  
+ - Electrostatic 
+     Dielectric type    :            2
+     Dielectric constant:    2.00000000    
+ Vdw energies:
+  -OW   -2.65     0.434E+21
+ Electrostatic Potentials:  -2817.888  1880.753
+ E. Min. at         -14.7884 kcal/mol
+   - Offset   :       0.0000 kcal/mol
+   - Electr.  :     -13.4866 kcal/mol
+   - Vdw      :      -1.3018 kcal/mol
+   - Int      :       0.0000 kcal/mol
+ Energy grid (BINARY) written successfully
+ CUBE file written successfully
+
+#T Run finished at  13:39:43 h on 14- 1-2025
+
+#T       T I M I N G S 
+#T       ---------------
+#T         Input:     0.000 s,   0.00%
+#T         Setup:     0.000 s,   0.00%
+#T         Grids:    39.750 s,  99.07%
+#T        Energy:     0.000 s,   0.00%
+#T        Output:     0.375 s,   0.93%
+ ----------------------------------
+#T         TOTAL:    40.125 s ( 0.01 h)

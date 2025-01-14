@@ -1,0 +1,172 @@
+ =================================================
+ =                                               =
+ =                C M I P  (2.7.0)               =
+ =          J. Ll. Gelpi, A. Morreale,           =
+ =            F. J. Luque, M.Orozco              =
+ =      Dept. Biochemistry. Univ. Barcelona      =
+ =                  1999-2021                    =
+ =================================================
+
+  Code for ASA calculation by Juan F. Recio       
+
+#T Run started at   13:43:17 h on 14- 1-2025
+ SIZES
+ -----
+ MAXTIP:           100
+ MAXATH:            80000
+ MAXATP x MAXCONF: 100000
+
+ INPUT FILES
+ -----------
+    Calc. settings: /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_cmip/python/sandbox_ab7cf2fe-049c-4303-8460-dae9a84c573b/params                               
+ VdW Parameters:      /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_cmip/python/sandbox_ab7cf2fe-049c-4303-8460-dae9a84c573b/vdwprm                               
+ PDB Host:            /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_cmip/python/sandbox_ab7cf2fe-049c-4303-8460-dae9a84c573b/complex.Prot_ignored.cmip.pdb        
+ PDB Guest:           /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_cmip/python/sandbox_ab7cf2fe-049c-4303-8460-dae9a84c573b/complex.noLIG.pdb                    
+ Conf. energies:      energies                                                                                                                                              
+
+ OUTPUT FILES
+ ------------
+ LOG file:            /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_cmip/python/sandbox_ab7cf2fe-049c-4303-8460-dae9a84c573b/complex.EGFR.energies.log            
+ Grid Out:            gridout                                                                                                                                               
+ Output PDB coords:          outpdb                                                                                                                                                
+
+ Parameters
+ ----------
+Docking Interaction energy calculation. PB electrostatics                       
+&cntrl                                                                          
+ tipcalc = 3                                                                    
+ calcgrid = 1                                                                   
+ irest = 0                                                                      
+ orest = 0                                                                      
+ coorfmt = 2                                                                    
+ fvdw = 0.8                                                                     
+ pbelec = 1                                                                     
+ pbinic = 2                                                                     
+ wgp = 0                                                                        
+ ebyatom = 1                                                                    
+ readgrid = 2                                                                   
+ CENX=0.0,CENY=0.0,CENZ=0.0                                                     
+ DIMX=64,DIMY=64,DIMZ=64                                                        
+ INTX0=1.5,INTY0=1.5,INTZ0=1.5                                                  
+ readgrid0 = 2                                                                  
+ perfill0 = 0.6                                                                 
+ pbfocus = 1                                                                    
+ IREST = 0                                                                      
+&end                                                                            
+
+ 18 VdW parameters loaded successfully
+
+ Host:      4584 atoms loaded, charge    -0.001
+  4532 dummy (dielectric only) atoms
+
+ TYPE OF CALCULATION: DOCKING
+ Single point
+
+ Guest: 4532 atom(s), charge   5.000,    1 conformation(s) loaded
+
+ PB Focussing requested
+ AUTOMATIC OUTER GRID
+ --------------------
+ Fill:    0.600
+Automatic Outer Grid                                                                                                                
+ Grid Size:      79.500  76.500 105.000  90.000  90.000  90.000
+ Grid density:    53   51   70
+ Grid units:      1.500   1.500   1.500
+ Grid origin:   -15.150 -17.759 -45.306
+ Grid center:    24.600  20.491   7.194
+     199368 Grid points
+
+ AUTOMATIC GRID
+ --------------
+ Fill:    0.800
+Automatic Grid                                                                                                                      
+ Grid Size:      59.000  57.000  78.500  90.000  90.000  90.000
+ Grid density:   118  114  157
+ Grid units:      0.500   0.500   0.500
+ Grid origin:    -4.900  -8.009 -32.056
+ Grid center:    24.600  20.491   7.194
+    2162230 Grid points
+
+ All input data read succesfully
+
+ Warning: Dielectric grid computed at double density
+ Mapping host molecule to outer grid
+   Total charge            :   -1.10008719E-03
+   Low diel. grid points   :                109766 (   46307.5312     A3)
+   High diel. grid points  :               1444195
+   I Str=0 grid points     :                199368
+   Boundary grid points    :                 32447
+ Mapping host molecule to grid
+   Total charge            :   -1.10011606E-03
+   Low diel. grid points   :               2776468 (   43382.3125      A3)
+   High diel. grid points  :              14319527
+   I Str=0 grid points     :               2162230
+   Boundary grid points    :                301901
+
+ CLHOST=           0
+ EXTERNAL CUTOFF=   999999.000    
+ Checking potentials to calculate...
+ - Vdw: C   
+ - Vdw: N   
+ - Vdw: S   
+ - Vdw: HO  
+ - Vdw: HN  
+ - Vdw: H   
+ - Vdw: O   
+ - Electrostatic 
+     Dielectric type    :            0
+     Dielectric constant:    2.00000000    
+ Vdw energies:
+  -C    -1.09     0.254E+21
+  -N    -1.43     0.266E+21
+  -S    -1.94     0.557E+21
+  -HO    0.00      0.00    
+  -HN  -0.271     0.116E+18
+  -H   -0.436     0.268E+20
+  -O    -1.53     0.169E+21
+     Poisson-Boltzmann calculation requested
+     Focussing          :            1
+     Initial potentials :            2
+     Solute  Dielectric :    2.00000000    
+     Solvent Dielectric :    79.8000031    
+     Solvent radius     :    1.39999998    
+     Convergence crit.  :    9.99999975E-05
+     Ionic strength     :    0.00000000    
+ Outer grid
+          20   6.44489517E-03   3.08532763    
+          40   6.98949501E-04   8.68481323E-02
+          60   7.92004867E-05   7.98555743E-03
+          80   8.00006273E-06   6.51979237E-04
+ Converged at    95 iterations (Mean:       0.137E-05, Max:      0.999E-04)
+ Potentials:    -65.147    88.261
+ Inner Grid limits
+ Potentials:    -49.803    48.743
+          20   3.13322134E-02   11.3319016    
+          40   1.59854535E-02   4.99276352    
+          60   6.25840668E-03   1.45347655    
+          80   2.22318619E-03  0.380052149    
+         100   8.12683895E-04   9.44056064E-02
+         120   2.99873413E-04   4.28050235E-02
+         140   1.07988759E-04   1.02703013E-02
+         160   3.77780016E-05   3.90684512E-03
+         180   1.30643657E-05   1.30726409E-03
+         200   4.48406308E-06   3.80931247E-04
+         220   1.54610643E-06   1.48515028E-04
+ Converged at   226 iterations (Mean:       0.113E-05, Max:      0.950E-04)
+ Potentials:   -624.615   275.692
+ Internal:        6.35068464E-42  kcal/mol
+ Van der Waals:  -20.4480324      kcal/mol
+ Electrostatic:  -10.8207893     kcal/mol
+ Total Energy :  -31.2688217     kcal/mol
+
+#T Run finished at  13:43:20 h on 14- 1-2025
+
+#T       T I M I N G S 
+#T       ---------------
+#T         Input:     0.000 s,   0.00%
+#T         Setup:     0.500 s,  17.39%
+#T         Grids:     2.375 s,  82.61%
+#T        Energy:     0.000 s,   0.00%
+#T        Output:     0.000 s,   0.00%
+ ----------------------------------
+#T         TOTAL:     2.875 s ( 0.00 h)

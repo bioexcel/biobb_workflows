@@ -1,0 +1,68 @@
+ =================================================
+ =                                               =
+ =                C M I P  (2.7.0)               =
+ =          J. Ll. Gelpi, A. Morreale,           =
+ =            F. J. Luque, M.Orozco              =
+ =      Dept. Biochemistry. Univ. Barcelona      =
+ =                  1999-2021                    =
+ =================================================
+
+  Code for ASA calculation by Juan F. Recio       
+
+#T Run started at   13:44: 8 h on 14- 1-2025
+ SIZES
+ -----
+ MAXTIP:           100
+ MAXATH:            80000
+ MAXATP x MAXCONF: 100000
+
+ INPUT FILES
+ -----------
+    Calc. settings: /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_cmip/python/sandbox_fd28de23-e25f-4d2a-934e-55ea96b11a29/params                               
+ VdW Parameters:      /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_cmip/python/sandbox_fd28de23-e25f-4d2a-934e-55ea96b11a29/vdwprm                               
+ PDB Host:            /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_cmip/python/sandbox_fd28de23-e25f-4d2a-934e-55ea96b11a29/RBD-hACE2-ZN.hACE2.cmip.pdb          
+
+ OUTPUT FILES
+ ------------
+ LOG file:            /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_cmip/python/sandbox_fd28de23-e25f-4d2a-934e-55ea96b11a29/hACE2.box.log                        
+ Condensed output:    /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_cmip/python/sandbox_fd28de23-e25f-4d2a-934e-55ea96b11a29/key_value_cmip_log.log               
+ Restart file:        restart                                                                                                                                               
+ Grid Out:            gridout                                                                                                                                               
+
+ Parameters
+ ----------
+Check_only dry run of CMIP                                                      
+&cntrl                                                                          
+ CHECKONLY = 1                                                                  
+ readgrid = 2                                                                   
+ calcgrid = 1                                                                   
+ tipcalc = 0                                                                    
+ irest = 0                                                                      
+ ebyatom = 1                                                                    
+ coorfmt = 2                                                                    
+ fvdw = 0.8                                                                     
+ WRITELOG = 1                                                                   
+ IREST = 0                                                                      
+ perfill = 0.8                                                                  
+&end                                                                            
+
+ 18 VdW parameters loaded successfully
+
+ Host:      9584 atoms loaded, charge   -21.000
+
+ TYPE OF CALCULATION: MIP
+ Guest is a OW   with charge   1.000
+
+ AUTOMATIC GRID
+ --------------
+ Fill:    0.800
+Automatic Grid                                                                                                                      
+ Grid Size:      71.000 105.500  82.500  90.000  90.000  90.000
+ Grid density:   142  211  165
+ Grid units:      0.500   0.500   0.500
+ Grid origin:    35.635  18.650  10.140
+ Grid center:    71.135  71.400  51.390
+    5032456 Grid points
+
+ All input data read succesfully
+
