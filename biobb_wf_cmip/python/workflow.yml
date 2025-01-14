@@ -1,11 +1,11 @@
-working_dir_path: biobb_wf_cmip
-can_write_console_log: False
-run_md: true
+global_properties:
+  working_dir_path: biobb_wf_cmip
+  can_write_console_log: False
 
 step0_cmip_prepare_pdb:
   tool: cmip_prepare_pdb
   paths:
-    input_pdb_path: /path/to/inputs/structure.pdb
+    input_pdb_path: file:structure.pdb
     output_cmip_pdb_path: structure.cmip.pdb
 
 step1_cmip_titration:
@@ -55,7 +55,7 @@ step5_cmip_run_neu:
 step6_remove_pdb_water:
   tool: remove_pdb_water
   paths:
-    input_pdb_path: /path/to/inputs/complex.pdb
+    input_pdb_path: file:complex.pdb
     output_pdb_path: structure.noHOH.pdb
 
 step7_extract_heteroatoms:
@@ -156,8 +156,8 @@ step16_cmip_run_int_en:
 step17_cmip_prepare_structure:
   tool: cmip_prepare_structure
   paths:
-    input_pdb_path: /path/to/inputs/Files/RBD-hACE2-ZN.pdb
-    input_topology_path: /path/to/inputs/Files/RBD-hACE2-ZN.top
+    input_pdb_path: file:Files/RBD-hACE2-ZN.pdb
+    input_topology_path: file:Files/RBD-hACE2-ZN.top
     output_cmip_pdb_path: RBD-hACE2-ZN.cmip.pdb
 
 step18_extract_chain_a:

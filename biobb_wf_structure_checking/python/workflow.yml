@@ -1,17 +1,17 @@
-working_dir_path: biobb_wf_structure_checking
-can_write_console_log: False
-run_md: true
+global_properties:
+  working_dir_path: biobb_wf_structure_checking
+  can_write_console_log: False
 
 step0_structure_check_init:
   tool: structure_check
   paths:
-    input_structure_path: /path/to/inputs/structure.pdb
+    input_structure_path: file:structure.pdb
     output_summary_path: structure.report.json
 
 step1_extract_model:
   tool: extract_model
   paths:
-    input_structure_path: /path/to/inputs/structure.pdb
+    input_structure_path: file:structure.pdb
     output_structure_path: structure.models.pdb
   properties:
     models: [ 1 ]
@@ -88,7 +88,7 @@ step12_fix_backbone:
   tool: fix_backbone
   paths:
     input_pdb_path: dependency/step11_fix_side_chain/output_pdb_path
-    input_fasta_canonical_sequence_path: /path/to/inputs/sequence.fasta
+    input_fasta_canonical_sequence_path: file:sequence.fasta
     output_pdb_path: structure.backbone.pdb
 
 step13_leap_gen_top:

@@ -1,12 +1,12 @@
-working_dir_path: biobb_wf_dna_helparms
-can_write_console_log: False
-run_md: False
+global_properties:
+  working_dir_path: biobb_wf_dna_helparms
+  can_write_console_log: False
 
 step1_biobb_curves:
   tool: biobb_curves
   paths:
-    input_struc_path: /path/to/inputs/trajectory.nc
-    input_top_path: /path/to/inputs/topology.top
+    input_struc_path: file:trajectory.nc
+    input_top_path: file:topology.top
     output_lis_path: curves.out.lis
     output_cda_path: curves.out.cda
   properties:

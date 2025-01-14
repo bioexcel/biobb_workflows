@@ -1,11 +1,12 @@
-working_dir_path: biobb_wf_protein-complex_md_setup
-can_write_console_log: False
-run_md: false
+global_properties:
+  working_dir_path: biobb_wf_protein-complex_md_setup
+  can_write_console_log: False
+  run_md: false
 
 step0_reduce_remove_hydrogens:
   tool: reduce_remove_hydrogens
   paths:
-    input_path: /path/to/inputs/structure.pdb
+    input_path: file:structure.pdb
     output_path: structure.noH.pdb
 
 step2_extract_molecule:
@@ -18,7 +19,7 @@ step00_cat_pdb:
   tool: cat_pdb
   paths:
     input_structure1: dependency/step2_extract_molecule/output_molecule_path
-    input_structure2: /path/to/inputs/ions.pdb
+    input_structure2: file:ions.pdb
     output_structure_path: protein.ions.pdb
 
 step4_fix_side_chain:
@@ -40,7 +41,7 @@ step5_pdb2gmx:
 step9_make_ndx:
   tool: make_ndx
   paths:
-    input_structure_path: /path/to/inputs/ligand.gro
+    input_structure_path: file:ligand.gro
     output_ndx_path: ligand.index.ndx
   properties:
     selection: 0 & ! a H*
@@ -48,7 +49,7 @@ step9_make_ndx:
 step10_genrestr:
   tool: genrestr
   paths:
-    input_structure_path: /path/to/inputs/ligand.gro
+    input_structure_path: file:ligand.gro
     input_ndx_path: dependency/step9_make_ndx/output_ndx_path
     output_itp_path: ligand.posres.itp
   properties:
@@ -67,8 +68,8 @@ step11_gmx_trjconv_str_protein:
 step12_gmx_trjconv_str_ligand:
   tool: gmx_trjconv_str
   paths:
-    input_structure_path: /path/to/inputs/ligand.gro
-    input_top_path: /path/to/inputs/ligand.gro
+    input_structure_path: file:ligand.gro
+    input_top_path: file:ligand.gro
     output_str_path: ligand_H.pdb
   properties:
     selection: System
@@ -85,7 +86,7 @@ step14_append_ligand:
   paths:
     input_top_zip_path: dependency/step5_pdb2gmx/output_top_zip_path
     input_posres_itp_path: dependency/step10_genrestr/output_itp_path
-    input_itp_path: /path/to/inputs/ligand.itp
+    input_itp_path: file:ligand.itp
     output_top_zip_path: complex.top.zip
   properties:
     posres_name: POSRES_LIGAND

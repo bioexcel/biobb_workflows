@@ -1,11 +1,11 @@
-working_dir_path: biobb_wf_virtual-screening_fpocket
-can_write_console_log: False
-run_md: False
+global_properties:
+  working_dir_path: biobb_wf_virtual-screening_fpocket
+  can_write_console_log: False
 
 step1_fpocket_select:
   tool: fpocket_select
   paths:
-    input_pockets_zip:  /path/to/inputs/all_pockets.zip
+    input_pockets_zip:  file:all_pockets.zip
     output_pocket_pdb: fpocket_cavity.pdb
     output_pocket_pqr: fpocket_pocket.pqr
   properties:
@@ -23,7 +23,7 @@ step2_box:
 step3_babel_convert_prep_lig:
   tool: babel_convert
   paths:
-    input_path: /path/to/inputs/ligand.pdb
+    input_path: file:ligand.pdb
     output_path: prep_ligand.pdbqt
   properties:
     input_format: pdb
@@ -34,7 +34,7 @@ step3_babel_convert_prep_lig:
 step4_str_check_add_hydrogens:
   tool: str_check_add_hydrogens
   paths:
-    input_structure_path: /path/to/inputs/protein.pdb
+    input_structure_path: file:protein.pdb
     output_structure_path: prep_receptor.pdbqt
   properties:
     charges: True

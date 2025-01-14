@@ -25,13 +25,15 @@ from biobb_dna.interbp_correlations.interhpcorr import interhpcorr
 from biobb_dna.intrabp_correlations.intrabpcorr import intrabpcorr
 from biobb_dna.interbp_correlations.interbpcorr import interbpcorr
 
+
 def compress_outputs(log, step, wd, glob, zname):
     log.info(f"  Compressing {step} outputs")
     files_list = Path(f"{wd}/{step}").glob(glob)
     zfilename = f"{wd}/{step}/{zname}"
-    with zipfile.ZipFile(zfilename, 'w') as zout:        
+    with zipfile.ZipFile(zfilename, 'w') as zout:
         for file in files_list:
             zout.write(file, PurePath(file).name, compress_type=zipfile.ZIP_DEFLATED)
+
 
 def main(config, system=None):
     start_time = time.time()
@@ -41,10 +43,10 @@ def main(config, system=None):
     global_paths = conf.get_paths_dic()
 
     # Auxiliar lists
-    grooves = ('majd','majw','mind','minw')
-    axis_base_pairs = ('inclin','tip','xdisp','ydisp')
-    base_pair = ('shear','stretch','stagger','buckle','propel','opening')
-    base_pair_step = ('rise','roll','twist','shift','slide','tilt')
+    grooves = ('majd', 'majw', 'mind', 'minw')
+    axis_base_pairs = ('inclin', 'tip', 'xdisp', 'ydisp')
+    base_pair = ('shear', 'stretch', 'stagger', 'buckle', 'propel', 'opening')
+    base_pair_step = ('rise', 'roll', 'twist', 'shift', 'slide', 'tilt')
     backbone_torsions = ('alphaC', 'alphaW', 'betaC', 'betaW', 'gammaC', 'gammaW', 'deltaC', 'deltaW', 'epsilC', 'epsilW', 'zetaC', 'zetaW', 'chiC', 'chiW', 'phaseC', 'phaseW')
 
     global_log.info("step1_biobb_curves: Running Curves+")
@@ -56,7 +58,8 @@ def main(config, system=None):
     global_log.info("\tExtracting Canal results in a temporary folder")
     canal_dir = f"{conf.get_working_dir_path()}/canal_out"
 
-    if Path(canal_dir).exists(): shutil.rmtree(canal_dir) 
+    if Path(canal_dir).exists():
+        shutil.rmtree(canal_dir)
     os.mkdir(canal_dir)
 
     with zipfile.ZipFile(global_paths["step2_biobb_canal"]["output_zip_path"], 'r') as zip_ref:
@@ -153,7 +156,8 @@ def main(config, system=None):
         dna_timeseries(**paths, properties=props)
         global_log.info(f"\t{helpar} parameters computed")
 
-        if not Path(timeseries_dir).exists(): os.mkdir(timeseries_dir)
+        if not Path(timeseries_dir).exists():
+            os.mkdir(timeseries_dir)
         with zipfile.ZipFile(paths["output_zip_path"], 'r') as zip_ref:
             zip_ref.extractall(timeseries_dir)
         global_log.info(f"\t{helpar} parameters extracted")
@@ -171,7 +175,8 @@ def main(config, system=None):
         dna_timeseries(**paths, properties=props)
         global_log.info(f"\t{helpar} parameters computed")
 
-        if not Path(timeseries_dir).exists(): os.mkdir(timeseries_dir)
+        if not Path(timeseries_dir).exists():
+            os.mkdir(timeseries_dir)
         with zipfile.ZipFile(paths["output_zip_path"], 'r') as zip_ref:
             zip_ref.extractall(timeseries_dir)
         global_log.info(f"\t{helpar} parameters extracted")
@@ -189,7 +194,8 @@ def main(config, system=None):
         dna_timeseries(**paths, properties=props)
         global_log.info(f"\t{helpar} parameters computed")
 
-        if not Path(timeseries_dir).exists(): os.mkdir(timeseries_dir)
+        if not Path(timeseries_dir).exists():
+            os.mkdir(timeseries_dir)
         with zipfile.ZipFile(paths["output_zip_path"], 'r') as zip_ref:
             zip_ref.extractall(timeseries_dir)
         global_log.info(f"\t{helpar} parameters extracted")
@@ -207,7 +213,8 @@ def main(config, system=None):
         dna_timeseries(**paths, properties=props)
         global_log.info(f"\t{helpar} parameters computed")
 
-        if not Path(timeseries_dir).exists(): os.mkdir(timeseries_dir)
+        if not Path(timeseries_dir).exists():
+            os.mkdir(timeseries_dir)
         with zipfile.ZipFile(paths["output_zip_path"], 'r') as zip_ref:
             zip_ref.extractall(timeseries_dir)
         global_log.info(f"\t{helpar} parameters extracted")
@@ -225,7 +232,8 @@ def main(config, system=None):
         dna_timeseries(**paths, properties=props)
         global_log.info(f"\t{helpar} parameters computed")
 
-        if not Path(timeseries_dir).exists(): os.mkdir(timeseries_dir)
+        if not Path(timeseries_dir).exists():
+            os.mkdir(timeseries_dir)
         with zipfile.ZipFile(paths["output_zip_path"], 'r') as zip_ref:
             zip_ref.extractall(timeseries_dir)
         global_log.info(f"\t{helpar} parameters extracted")
@@ -305,7 +313,7 @@ def main(config, system=None):
         paths["output_jpg_path"] = f"{conf.get_working_dir_path()}/step22_intrahpcorr/helpar_bp_correlation.{pair}.jpg"
         intrahpcorr(**paths, properties=global_prop["step22_intrahpcorr"])
         global_log.info(f"\t{pair} parameters computed")
-    
+
     compress_outputs(global_log, 'step22_intrahpcorr', conf.get_working_dir_path(), 'helpar_bp_correlation.*', 'intrahpcorr.zip')
 
     timeseries_dir = f"{conf.get_working_dir_path()}/step12_dna_timeseries_base_pair_step/timeseries"
@@ -336,7 +344,7 @@ def main(config, system=None):
     paths["input_filename_propel"] = f"{canal_dir}/canal_output_propel.ser"
     paths["input_filename_opening"] = f"{canal_dir}/canal_output_opening.ser"
     intrabpcorr(**paths, properties=global_prop["step24_intrabpcorr"])
-    
+
     compress_outputs(global_log, 'step24_intrabpcorr', conf.get_working_dir_path(), 'bp_correlation.*', 'intrabpcorr.zip')
 
     global_log.info("step25_interbpcorr: Neighboring steps Correlations: Inter-base pair steps")
@@ -362,6 +370,7 @@ def main(config, system=None):
     global_log.info('')
     global_log.info('Elapsed time: %.1f minutes' % (elapsed_time/60))
     global_log.info('')
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="ABC MD Setup pipeline using BioExcel Building Blocks")

@@ -1,10 +1,11 @@
-working_dir_path: biobb_wf_flexdyn
-can_write_console_log: False
+global_properties:
+  working_dir_path: biobb_wf_flexdyn
+  can_write_console_log: False
 
 step0_extract_model:
   tool: extract_model
   paths:
-    input_structure_path: /path/to/inputs/structure.pdb
+    input_structure_path: file:structure.pdb
     output_structure_path: structure_model.pdb
   properties:
     models: [1]

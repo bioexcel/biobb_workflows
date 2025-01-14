@@ -1,10 +1,11 @@
-working_dir_path: biobb_wf_flexserv
-can_write_console_log: False
+global_properties:
+  working_dir_path: biobb_wf_flexserv
+  can_write_console_log: False
 
 step0_extract_atoms:
   tool: extract_atoms
   paths:
-    input_structure_path: /path/to/inputs/structure.pdb
+    input_structure_path: file:structure.pdb
     output_structure_path: structure_ca.pdb
   properties:
     regular_expression_pattern: "^CA"
@@ -269,21 +270,21 @@ step26_pcz_similarity:
   tool: pcz_similarity
   paths:
     input_pcz_path1: dependency/step7_pcz_zip/output_pcz_path
-    input_pcz_path2: /path/to/inputs/Files/1a32.MoDEL.pcz
+    input_pcz_path2: file:Files/1a32.MoDEL.pcz
     output_json_path: simIndex_bd_report_bd_vs_md.json
 
 step27_pcz_similarity:
   tool: pcz_similarity
   paths:
     input_pcz_path1: dependency/step8_pcz_zip/output_pcz_path
-    input_pcz_path2: /path/to/inputs/Files/1a32.MoDEL.pcz
+    input_pcz_path2: file:Files/1a32.MoDEL.pcz
     output_json_path: simIndex_bd_report_dmd_vs_md.json
 
 step28_pcz_similarity:
   tool: pcz_similarity
   paths:
     input_pcz_path1: dependency/step9_pcz_zip/output_pcz_path
-    input_pcz_path2: /path/to/inputs/Files/1a32.MoDEL.pcz
+    input_pcz_path2: file:Files/1a32.MoDEL.pcz
     output_json_path: simIndex_bd_report_nma_vs_md.json
 
     

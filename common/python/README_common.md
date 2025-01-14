@@ -54,9 +54,10 @@ Once the workflow is finished, you just should enter the new **wf_python/<reposi
 
 ## <a name="tests"></a>Tests
 
-To run the tests for this workflow, the **pytest framework** must be installed into the environment described in the [**Installation**](#installation) section:
+To run the tests for this workflow, the **pytest framework** and the **imagehash library** must be installed into the environment described in the [**Installation**](#installation) section:
 
     conda install conda-forge::pytest
+    conda install conda-forge::imagehash
 
 Once the pytest framework is installed, please go to the [**python tests folder**](../tests/python) and execute:
 

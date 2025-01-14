@@ -1,11 +1,12 @@
-working_dir_path: biobb_wf_md_setup
-can_write_console_log: False
-run_md: true
+global_properties:
+  working_dir_path: biobb_wf_md_setup
+  can_write_console_log: False
+  run_md: true
 
 step0_reduce_remove_hydrogens:
   tool: reduce_remove_hydrogens
   paths:
-    input_path: /path/to/inputs/structure.pdb
+    input_path: file:structure.pdb
     output_path: structure.noH.pdb
 
 step1_extract_molecule:
@@ -18,7 +19,7 @@ step00_cat_pdb:
   tool: cat_pdb
   paths:
     input_structure1: dependency/step1_extract_molecule/output_molecule_path
-    input_structure2: /path/to/inputs/ions.pdb
+    input_structure2: file:ions.pdb
     output_structure_path: protein.ions.pdb
 
 step2_fix_side_chain:

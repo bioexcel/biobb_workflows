@@ -16,6 +16,7 @@ from biobb_analysis.ambertools.cpptraj_rms import cpptraj_rms
 from biobb_analysis.ambertools.cpptraj_rgyr import cpptraj_rgyr
 from biobb_analysis.ambertools.cpptraj_image import cpptraj_image
 
+
 def main(config, system=None):
     start_time = time.time()
     conf = settings.ConfReader(config, system)
@@ -124,6 +125,7 @@ def main(config, system=None):
     global_log.info('')
     global_log.info('Elapsed time: %.1f minutes' % (elapsed_time/60))
     global_log.info('')
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="ABC MD Setup pipeline using BioExcel Building Blocks")

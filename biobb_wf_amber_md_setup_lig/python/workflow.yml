@@ -1,11 +1,11 @@
-working_dir_path: biobb_wf_amber_md_setup_lig
-can_write_console_log: False
-run_md: false
+global_properties:
+  working_dir_path: biobb_wf_amber_md_setup_lig
+  can_write_console_log: False
 
 step000_reduce_remove_hydrogens:
   tool: reduce_remove_hydrogens
   paths:
-    input_path: /path/to/inputs/structure.pdb
+    input_path: file:structure.pdb
     output_path: structure.noH.pdb
 
 step00_extract_molecule:
@@ -18,14 +18,14 @@ step0000_cat_pdb:
   tool: cat_pdb
   paths:
     input_structure1: dependency/step00_extract_molecule/output_molecule_path
-    input_structure2: /path/to/inputs/ions.pdb
+    input_structure2: file:ions.pdb
     output_structure_path: protein.ions.pdb
 
 step0_cat_pdb:
   tool: cat_pdb
   paths:
     input_structure1: dependency/step0000_cat_pdb/output_structure_path
-    input_structure2: /path/to/inputs/heteroatoms.pdb
+    input_structure2: file:heteroatoms.pdb
     output_structure_path: protein.hets.pdb
 
 step1_pdb4amber_run:
@@ -38,8 +38,8 @@ step2_leap_gen_top:
   tool: leap_gen_top
   paths:
     input_pdb_path: dependency/step1_pdb4amber_run/output_pdb_path
-    input_lib_path: /path/to/inputs/input_lib.zip
-    input_frcmod_path: /path/to/inputs/input_frcmod.zip
+    input_lib_path: file:input_lib.zip
+    input_frcmod_path: file:input_frcmod.zip
     output_pdb_path: structure.leap.pdb
     output_top_path: structure.leap.top
     output_crd_path: structure.leap.crd
@@ -111,8 +111,8 @@ step8_leap_solvate:
   tool: leap_solvate
   paths:
     input_pdb_path: dependency/step7_amber_to_pdb/output_pdb_path
-    input_lib_path: /path/to/inputs/input_lib.zip
-    input_frcmod_path: /path/to/inputs/input_frcmod.zip
+    input_lib_path: file:input_lib.zip
+    input_frcmod_path: file:input_frcmod.zip
     output_pdb_path: structure.solv.pdb
     output_top_path: structure.solv.parmtop
     output_crd_path: structure.solv.crd
@@ -126,8 +126,8 @@ step9_leap_add_ions:
   tool: leap_add_ions
   paths:
     input_pdb_path: dependency/step8_leap_solvate/output_pdb_path
-    input_lib_path: /path/to/inputs/input_lib.zip
-    input_frcmod_path: /path/to/inputs/input_frcmod.zip
+    input_lib_path: file:input_lib.zip
+    input_frcmod_path: file:input_frcmod.zip
     output_pdb_path: structure.ions.pdb
     output_top_path: structure.ions.parmtop
     output_crd_path: structure.ions.crd
