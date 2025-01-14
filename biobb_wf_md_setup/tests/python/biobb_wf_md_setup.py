@@ -33,7 +33,7 @@ def step0_reduce_remove_hydrogens(config, system=None):
     reduce_remove_hydrogens(**global_paths["step0_reduce_remove_hydrogens"], properties=global_prop["step0_reduce_remove_hydrogens"])
 
     assert fx.not_empty(global_paths["step0_reduce_remove_hydrogens"]["output_path"])
-    assert fx.equal(global_paths["step0_reduce_remove_hydrogens"]["output_path"], f'reference/step0_reduce_remove_hydrogens/{Path(global_paths["step0_cmip_prepare_pdb"]["output_path"]).name}')
+    assert fx.equal(global_paths["step0_reduce_remove_hydrogens"]["output_path"], f'reference/step0_reduce_remove_hydrogens/{Path(global_paths["step0_reduce_remove_hydrogens"]["output_path"]).name}')
 
     global global_work_dir
     global_work_dir = conf.get_working_dir_path()
