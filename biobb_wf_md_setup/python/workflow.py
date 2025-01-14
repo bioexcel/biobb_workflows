@@ -25,7 +25,7 @@ from biobb_analysis.gromacs.gmx_rms import gmx_rms
 def main(config, system=None):
     start_time = time.time()
     conf = settings.ConfReader(config, system)
-    print(conf)
+    print(conf.properties)
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
