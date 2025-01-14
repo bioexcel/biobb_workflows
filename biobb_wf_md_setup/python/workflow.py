@@ -25,7 +25,6 @@ from biobb_analysis.gromacs.gmx_rms import gmx_rms
 def main(config, system=None):
     start_time = time.time()
     conf = settings.ConfReader(config, system)
-    print(conf.properties)
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
@@ -105,7 +104,7 @@ def main(config, system=None):
     global_log.info("step23_rmsd_exp: Generate RMSd (against exp.) plot for the resulting setup trajectory from the free md step")
     gmx_rms(**global_paths["step23_rmsd_exp"], properties=global_prop["step23_rmsd_exp"])
 
-    if conf.properties['run_md']:
+    if conf.properties['global_properties']['run_md']:
         global_log.info("step24_grompp_md: Preprocess long MD simulation after setup")
         grompp(**global_paths["step24_grompp_md"], properties=global_prop["step24_grompp_md"])
 
