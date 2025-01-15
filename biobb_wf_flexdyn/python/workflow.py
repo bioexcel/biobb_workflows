@@ -3,6 +3,7 @@
 import time
 import argparse
 import zipfile
+import os
 from pathlib import Path, PurePath
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
@@ -52,11 +53,17 @@ def main(config, system=None):
     global_log.info("step3_cpptraj_mask: Generating the reduced (coarse-grained) structure (alpha carbons)")
     cpptraj_mask(**global_paths["step3_cpptraj_mask"], properties=global_prop["step3_cpptraj_mask"])
 
+    props = global_prop["step4_concoord_dist"]
+    props["env_vars_dict"]["CONCOORDLIB"] = os.getenv('CONDA_PREFIX') + '/share/concoord/lib'
+
     global_log.info("step4_concoord_dist: CONCOORD dist")
-    concoord_dist(**global_paths["step4_concoord_dist"], properties=global_prop["step4_concoord_dist"])
+    concoord_dist(**global_paths["step4_concoord_dist"], properties=props)
+
+    props = global_prop["step5_concoord_disco"]
+    props["env_vars_dict"]["CONCOORDLIB"] = os.getenv('CONDA_PREFIX') + '/share/concoord/lib'
 
     global_log.info("step5_concoord_disco: CONCOORD disco")
-    concoord_disco(**global_paths["step5_concoord_disco"], properties=global_prop["step5_concoord_disco"])
+    concoord_disco(**global_paths["step5_concoord_disco"], properties=props)
 
     global_log.info("step6_cpptraj_rms: RMSd distribution of the generated ensemble (CONCOORD)")
     cpptraj_rms(**global_paths["step6_cpptraj_rms"], properties=global_prop["step6_cpptraj_rms"])
