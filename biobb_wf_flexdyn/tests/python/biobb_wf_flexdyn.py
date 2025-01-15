@@ -4,36 +4,45 @@ from pathlib import Path
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools import test_fixtures as fx
-from biobb_cmip.cmip.cmip_prepare_pdb import cmip_prepare_pdb
-from biobb_cmip.cmip.cmip_titration import cmip_titration
-from biobb_structure_utils.utils.cat_pdb import cat_pdb
-from biobb_cmip.cmip.cmip_run import cmip_run
-from biobb_structure_utils.utils.remove_pdb_water import remove_pdb_water
-from biobb_structure_utils.utils.extract_heteroatoms import extract_heteroatoms
-from biobb_chemistry.ambertools.reduce_add_hydrogens import reduce_add_hydrogens
-from biobb_chemistry.acpype.acpype_params_ac import acpype_params_ac
-from biobb_amber.leap.leap_gen_top import leap_gen_top
-from biobb_amber.sander.sander_mdrun import sander_mdrun
-from biobb_amber.ambpdb.amber_to_pdb import amber_to_pdb
-from biobb_cmip.cmip.cmip_prepare_structure import cmip_prepare_structure
-from biobb_structure_utils.utils.remove_ligand import remove_ligand
-from biobb_cmip.cmip.cmip_ignore_residues import cmip_ignore_residues
+from biobb_structure_utils.utils.extract_model import extract_model
 from biobb_structure_utils.utils.extract_chain import extract_chain
+from biobb_analysis.ambertools.cpptraj_mask import cpptraj_mask
+from biobb_flexdyn.flexdyn.concoord_dist import concoord_dist
+from biobb_flexdyn.flexdyn.concoord_disco import concoord_disco
+from biobb_analysis.ambertools.cpptraj_rms import cpptraj_rms
+from biobb_analysis.ambertools.cpptraj_convert import cpptraj_convert
+from biobb_flexdyn.flexdyn.prody_anm import prody_anm
+from biobb_flexserv.flexserv.bd_run import bd_run
+from biobb_flexserv.flexserv.dmd_run import dmd_run
+from biobb_flexserv.flexserv.nma_run import nma_run
+from biobb_flexdyn.flexdyn.nolb_nma import nolb_nma
+from biobb_flexdyn.flexdyn.imod_imode import imod_imode
+from biobb_flexdyn.flexdyn.imod_imc import imod_imc
+from biobb_gromacs.gromacs.make_ndx import make_ndx
+from biobb_gromacs.gromacs.trjcat import trjcat
+from biobb_analysis.gromacs.gmx_cluster import gmx_cluster
+from biobb_flexserv.pcasuite.pcz_zip import pcz_zip
+from biobb_flexserv.pcasuite.pcz_info import pcz_info
+from biobb_flexserv.pcasuite.pcz_evecs import pcz_evecs
+from biobb_flexserv.pcasuite.pcz_animate import pcz_animate
+from biobb_flexserv.pcasuite.pcz_bfactor import pcz_bfactor
+from biobb_flexserv.pcasuite.pcz_hinges import pcz_hinges
+from biobb_flexserv.pcasuite.pcz_stiffness import pcz_stiffness
+from biobb_flexserv.pcasuite.pcz_collectivity import pcz_collectivity
 
 global_work_dir = None
 
-# TODO ALLL!!!!
 
-def step0_cmip_prepare_pdb(config, system=None):
+def step0_extract_model(config, system=None):
     conf = settings.ConfReader(config, system)
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    cmip_prepare_pdb(**global_paths["step0_cmip_prepare_pdb"], properties=global_prop["step0_cmip_prepare_pdb"])
+    extract_model(**global_paths["step0_extract_model"], properties=global_prop["step0_extract_model"])
 
-    assert fx.not_empty(global_paths["step0_cmip_prepare_pdb"]["output_cmip_pdb_path"])
-    assert fx.equal(global_paths["step0_cmip_prepare_pdb"]["output_cmip_pdb_path"], f'reference/step0_cmip_prepare_pdb/{Path(global_paths["step0_cmip_prepare_pdb"]["output_cmip_pdb_path"]).name}')
+    assert fx.not_empty(global_paths["step0_extract_model"]["output_structure_path"])
+    assert fx.equal(global_paths["step0_extract_model"]["output_structure_path"], f'reference/step0_extract_model/{Path(global_paths["step0_extract_model"]["output_structure_path"]).name}')
 
     global global_work_dir
     global_work_dir = conf.get_working_dir_path()

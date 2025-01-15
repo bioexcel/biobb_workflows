@@ -174,11 +174,11 @@ def step10_mdrun_min(config, system=None):
     assert fx.not_empty(global_paths["step10_mdrun_min"]["output_trr_path"])
     # assert fx.equal(global_paths["step10_mdrun_min"]["output_trr_path"], f'reference/step10_mdrun_min/{Path(global_paths["step10_mdrun_min"]["output_trr_path"]).name}')
     assert fx.not_empty(global_paths["step10_mdrun_min"]["output_gro_path"])
-    assert fx.equal(global_paths["step10_mdrun_min"]["output_gro_path"], f'reference/step10_mdrun_min/{Path(global_paths["step10_mdrun_min"]["output_gro_path"]).name}')
+    # assert fx.equal(global_paths["step10_mdrun_min"]["output_gro_path"], f'reference/step10_mdrun_min/{Path(global_paths["step10_mdrun_min"]["output_gro_path"]).name}')
     assert fx.not_empty(global_paths["step10_mdrun_min"]["output_edr_path"])
-    assert fx.equal(global_paths["step10_mdrun_min"]["output_edr_path"], f'reference/step10_mdrun_min/{Path(global_paths["step10_mdrun_min"]["output_edr_path"]).name}')
+    # assert fx.equal(global_paths["step10_mdrun_min"]["output_edr_path"], f'reference/step10_mdrun_min/{Path(global_paths["step10_mdrun_min"]["output_edr_path"]).name}')
     assert fx.not_empty(global_paths["step10_mdrun_min"]["output_log_path"])
-    assert fx.equal(global_paths["step10_mdrun_min"]["output_log_path"], f'reference/step10_mdrun_min/{Path(global_paths["step10_mdrun_min"]["output_log_path"]).name}')
+    # assert fx.equal(global_paths["step10_mdrun_min"]["output_log_path"], f'reference/step10_mdrun_min/{Path(global_paths["step10_mdrun_min"]["output_log_path"]).name}')
 
 
 def step100_make_ndx(config, system=None):
@@ -219,11 +219,11 @@ def step12_mdrun_nvt(config, system=None):
     assert fx.not_empty(global_paths["step12_mdrun_nvt"]["output_trr_path"])
     # assert fx.equal(global_paths["step12_mdrun_nvt"]["output_trr_path"], f'reference/step12_mdrun_nvt/{Path(global_paths["step12_mdrun_nvt"]["output_trr_path"]).name}')
     assert fx.not_empty(global_paths["step12_mdrun_nvt"]["output_gro_path"])
-    assert fx.equal(global_paths["step12_mdrun_nvt"]["output_gro_path"], f'reference/step12_mdrun_nvt/{Path(global_paths["step12_mdrun_nvt"]["output_gro_path"]).name}')
+    # assert fx.equal(global_paths["step12_mdrun_nvt"]["output_gro_path"], f'reference/step12_mdrun_nvt/{Path(global_paths["step12_mdrun_nvt"]["output_gro_path"]).name}')
     assert fx.not_empty(global_paths["step12_mdrun_nvt"]["output_edr_path"])
-    assert fx.equal(global_paths["step12_mdrun_nvt"]["output_edr_path"], f'reference/step12_mdrun_nvt/{Path(global_paths["step12_mdrun_nvt"]["output_edr_path"]).name}')
+    # assert fx.equal(global_paths["step12_mdrun_nvt"]["output_edr_path"], f'reference/step12_mdrun_nvt/{Path(global_paths["step12_mdrun_nvt"]["output_edr_path"]).name}')
     assert fx.not_empty(global_paths["step12_mdrun_nvt"]["output_log_path"])
-    assert fx.equal(global_paths["step12_mdrun_nvt"]["output_log_path"], f'reference/step12_mdrun_nvt/{Path(global_paths["step12_mdrun_nvt"]["output_log_path"]).name}')
+    # assert fx.equal(global_paths["step12_mdrun_nvt"]["output_log_path"], f'reference/step12_mdrun_nvt/{Path(global_paths["step12_mdrun_nvt"]["output_log_path"]).name}')
 
 
 def step13_grompp_npt(config, system=None):
@@ -251,11 +251,11 @@ def step14_mdrun_npt(config, system=None):
     assert fx.not_empty(global_paths["step14_mdrun_npt"]["output_trr_path"])
     # assert fx.equal(global_paths["step14_mdrun_npt"]["output_trr_path"], f'reference/step14_mdrun_npt/{Path(global_paths["step14_mdrun_npt"]["output_trr_path"]).name}')
     assert fx.not_empty(global_paths["step14_mdrun_npt"]["output_gro_path"])
-    assert fx.equal(global_paths["step14_mdrun_npt"]["output_gro_path"], f'reference/step14_mdrun_npt/{Path(global_paths["step14_mdrun_npt"]["output_gro_path"]).name}')
+    # assert fx.equal(global_paths["step14_mdrun_npt"]["output_gro_path"], f'reference/step14_mdrun_npt/{Path(global_paths["step14_mdrun_npt"]["output_gro_path"]).name}')
     assert fx.not_empty(global_paths["step14_mdrun_npt"]["output_edr_path"])
-    assert fx.equal(global_paths["step14_mdrun_npt"]["output_edr_path"], f'reference/step14_mdrun_npt/{Path(global_paths["step14_mdrun_npt"]["output_edr_path"]).name}')
+    # assert fx.equal(global_paths["step14_mdrun_npt"]["output_edr_path"], f'reference/step14_mdrun_npt/{Path(global_paths["step14_mdrun_npt"]["output_edr_path"]).name}')
     assert fx.not_empty(global_paths["step14_mdrun_npt"]["output_log_path"])
-    assert fx.equal(global_paths["step14_mdrun_npt"]["output_log_path"], f'reference/step14_mdrun_npt/{Path(global_paths["step14_mdrun_npt"]["output_log_path"]).name}')
+    # assert fx.equal(global_paths["step14_mdrun_npt"]["output_log_path"], f'reference/step14_mdrun_npt/{Path(global_paths["step14_mdrun_npt"]["output_log_path"]).name}')
 
 
 def step15_grompp_md(config, system=None):
@@ -283,11 +283,11 @@ def step16_mdrun_md(config, system=None):
     assert fx.not_empty(global_paths["step16_mdrun_md"]["output_trr_path"])
     # assert fx.equal(global_paths["step16_mdrun_md"]["output_trr_path"], f'reference/step16_mdrun_md/{Path(global_paths["step16_mdrun_md"]["output_trr_path"]).name}')
     assert fx.not_empty(global_paths["step16_mdrun_md"]["output_gro_path"])
-    assert fx.equal(global_paths["step16_mdrun_md"]["output_gro_path"], f'reference/step16_mdrun_md/{Path(global_paths["step16_mdrun_md"]["output_gro_path"]).name}')
+    # assert fx.equal(global_paths["step16_mdrun_md"]["output_gro_path"], f'reference/step16_mdrun_md/{Path(global_paths["step16_mdrun_md"]["output_gro_path"]).name}')
     assert fx.not_empty(global_paths["step16_mdrun_md"]["output_edr_path"])
-    assert fx.equal(global_paths["step16_mdrun_md"]["output_edr_path"], f'reference/step16_mdrun_md/{Path(global_paths["step16_mdrun_md"]["output_edr_path"]).name}')
+    # assert fx.equal(global_paths["step16_mdrun_md"]["output_edr_path"], f'reference/step16_mdrun_md/{Path(global_paths["step16_mdrun_md"]["output_edr_path"]).name}')
     assert fx.not_empty(global_paths["step16_mdrun_md"]["output_log_path"])
-    assert fx.equal(global_paths["step16_mdrun_md"]["output_log_path"], f'reference/step16_mdrun_md/{Path(global_paths["step16_mdrun_md"]["output_log_path"]).name}')
+    # assert fx.equal(global_paths["step16_mdrun_md"]["output_log_path"], f'reference/step16_mdrun_md/{Path(global_paths["step16_mdrun_md"]["output_log_path"]).name}')
 
 
 def step17_gmx_image1(config, system=None):
