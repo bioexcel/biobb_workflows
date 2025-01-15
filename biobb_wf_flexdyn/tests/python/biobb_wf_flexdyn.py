@@ -1,5 +1,6 @@
 import pytest
 import glob
+import os
 from pathlib import Path
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
@@ -48,351 +49,192 @@ def step0_extract_model(config, system=None):
     global_work_dir = conf.get_working_dir_path()
 
 
-def step1_cmip_titration(config, system=None):
+def step1_extract_chain(config, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    cmip_titration(**global_paths["step1_cmip_titration"], properties=global_prop["step1_cmip_titration"])
+    extract_chain(**global_paths["step1_extract_chain"], properties=global_prop["step1_extract_chain"])
 
-    assert fx.not_empty(global_paths["step1_cmip_titration"]["output_pdb_path"])
-    assert fx.equal(global_paths["step1_cmip_titration"]["output_pdb_path"], f'reference/step1_cmip_titration/{Path(global_paths["step1_cmip_titration"]["output_pdb_path"]).name}')
+    assert fx.not_empty(global_paths["step1_extract_chain"]["output_pdb_path"])
+    assert fx.equal(global_paths["step1_extract_chain"]["output_pdb_path"], f'reference/step1_extract_chain/{Path(global_paths["step1_extract_chain"]["output_structure_path"]).name}')
 
 
-def step2_cat_pdb(config, system=None):
+def step2_cpptraj_mask(config, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    cat_pdb(**global_paths["step2_cat_pdb"], properties=global_prop["step2_cat_pdb"])
+    cpptraj_mask(**global_paths["step2_cpptraj_mask"], properties=global_prop["step2_cpptraj_mask"])
 
-    assert fx.not_empty(global_paths["step2_cat_pdb"]["output_structure_path"])
-    assert fx.equal(global_paths["step2_cat_pdb"]["output_structure_path"], f'reference/step2_cat_pdb/{Path(global_paths["step2_cat_pdb"]["output_structure_path"]).name}')
+    assert fx.not_empty(global_paths["step2_cpptraj_mask"]["output_cpptraj_path"])
+    assert fx.equal(global_paths["step2_cpptraj_mask"]["output_cpptraj_path"], f'reference/step2_cpptraj_mask/{Path(global_paths["step2_cpptraj_mask"]["output_cpptraj_path"]).name}')
 
 
-def step3_cmip_run_pos(config, system=None):
+def step3_cpptraj_mask(config, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    cmip_run(**global_paths["step3_cmip_run_pos"], properties=global_prop["step3_cmip_run_pos"])
+    cpptraj_mask(**global_paths["step3_cpptraj_mask"], properties=global_prop["step3_cpptraj_mask"])
 
-    assert fx.not_empty(global_paths["step3_cmip_run_pos"]["output_cube_path"])
-    assert fx.equal(global_paths["step3_cmip_run_pos"]["output_cube_path"], f'reference/step3_cmip_run_pos/{Path(global_paths["step3_cmip_run_pos"]["output_cube_path"]).name}')
+    assert fx.not_empty(global_paths["step3_cpptraj_mask"]["output_cpptraj_path"])
+    assert fx.equal(global_paths["step3_cpptraj_mask"]["output_cpptraj_path"], f'reference/step3_cpptraj_mask/{Path(global_paths["step3_cpptraj_mask"]["output_cpptraj_path"]).name}')
 
 
-def step4_cmip_run_neg(config, system=None):
+def step4_concoord_dist(config, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    cmip_run(**global_paths["step4_cmip_run_neg"], properties=global_prop["step4_cmip_run_neg"])
+    props = global_prop["step4_concoord_dist"]
+    props["env_vars_dict"]["CONCOORDLIB"] = os.getenv('CONDA_PREFIX') + '/share/concoord/lib'
+    concoord_dist(**global_paths["step4_concoord_dist"], properties=props)
 
-    assert fx.not_empty(global_paths["step4_cmip_run_neg"]["output_cube_path"])
-    assert fx.equal(global_paths["step4_cmip_run_neg"]["output_cube_path"], f'reference/step4_cmip_run_neg/{Path(global_paths["step4_cmip_run_neg"]["output_cube_path"]).name}')
+    assert fx.not_empty(global_paths["step4_concoord_dist"]["output_pdb_path"])
+    assert fx.equal(global_paths["step4_concoord_dist"]["output_pdb_path"], f'reference/step4_concoord_dist/{Path(global_paths["step4_concoord_dist"]["output_pdb_path"]).name}')
+    assert fx.not_empty(global_paths["step4_concoord_dist"]["output_gro_path"])
+    assert fx.equal(global_paths["step4_concoord_dist"]["output_gro_path"], f'reference/step4_concoord_dist/{Path(global_paths["step4_concoord_dist"]["output_gro_path"]).name}')
+    assert fx.not_empty(global_paths["step4_concoord_dist"]["output_dat_path"])
+    assert fx.equal(global_paths["step4_concoord_dist"]["output_dat_path"], f'reference/step4_concoord_dist/{Path(global_paths["step4_concoord_dist"]["output_dat_path"]).name}')
 
 
-def step5_cmip_run_neu(config, system=None):
+def step5_concoord_disco(config, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    cmip_run(**global_paths["step5_cmip_run_neu"], properties=global_prop["step5_cmip_run_neu"])
+    props = global_prop["step5_concoord_disco"]
+    props["env_vars_dict"]["CONCOORDLIB"] = os.getenv('CONDA_PREFIX') + '/share/concoord/lib'
+    concoord_disco(**global_paths["step5_concoord_disco"], properties=props)
 
-    assert fx.not_empty(global_paths["step5_cmip_run_neu"]["output_cube_path"])
-    assert fx.equal(global_paths["step5_cmip_run_neu"]["output_cube_path"], f'reference/step5_cmip_run_neu/{Path(global_paths["step5_cmip_run_neu"]["output_cube_path"]).name}')
+    assert fx.not_empty(global_paths["step5_concoord_disco"]["output_traj_path"])
+    assert fx.equal(global_paths["step5_concoord_disco"]["output_traj_path"], f'reference/step5_concoord_disco/{Path(global_paths["step5_concoord_disco"]["output_traj_path"]).name}')
+    assert fx.not_empty(global_paths["step5_concoord_disco"]["output_rmsd_path"])
+    assert fx.equal(global_paths["step5_concoord_disco"]["output_rmsd_path"], f'reference/step5_concoord_disco/{Path(global_paths["step5_concoord_disco"]["output_rmsd_path"]).name}')
+    assert fx.not_empty(global_paths["step5_concoord_disco"]["output_bfactor_path"])
+    assert fx.equal(global_paths["step5_concoord_disco"]["output_bfactor_path"], f'reference/step5_concoord_disco/{Path(global_paths["step5_concoord_disco"]["output_bfactor_path"]).name}')
 
 
-def step6_remove_pdb_water(config, system=None):
+def step6_cpptraj_rms(config, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    remove_pdb_water(**global_paths["step6_remove_pdb_water"], properties=global_prop["step6_remove_pdb_water"])
+    cpptraj_rms(**global_paths["step6_cpptraj_rms"], properties=global_prop["step6_cpptraj_rms"])
 
-    assert fx.not_empty(global_paths["step6_remove_pdb_water"]["output_pdb_path"])
-    assert fx.equal(global_paths["step6_remove_pdb_water"]["output_pdb_path"], f'reference/step6_remove_pdb_water/{Path(global_paths["step6_remove_pdb_water"]["output_pdb_path"]).name}')
+    assert fx.not_empty(global_paths["step6_cpptraj_rms"]["output_cpptraj_path"])
+    assert fx.equal(global_paths["step6_cpptraj_rms"]["output_cpptraj_path"], f'reference/step6_cpptraj_rms/{Path(global_paths["step6_cpptraj_rms"]["output_cpptraj_path"]).name}')
 
 
-def step7_extract_heteroatoms(config, system=None):
+def step7_cpptraj_convert(config, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    extract_heteroatoms(**global_paths["step7_extract_heteroatoms"], properties=global_prop["step7_extract_heteroatoms"])
+    cpptraj_convert(**global_paths["step7_cpptraj_convert"], properties=global_prop["step7_cpptraj_convert"])
 
-    assert fx.not_empty(global_paths["step7_extract_heteroatoms"]["output_heteroatom_path"])
-    # assert fx.equal(global_paths["step7_extract_heteroatoms"]["output_heteroatom_path"], f'reference/step7_extract_heteroatoms/{Path(global_paths["step7_extract_heteroatoms"]["output_heteroatom_path"]).name}')
+    assert fx.not_empty(global_paths["step7_cpptraj_convert"]["output_cpptraj_path"])
+    assert fx.equal(global_paths["step7_cpptraj_convert"]["output_cpptraj_path"], f'reference/step7_cpptraj_convert/{Path(global_paths["step7_cpptraj_convert"]["output_cpptraj_path"]).name}')
 
 
-def step8_reduce_add_hydrogens(config, system=None):
+def step8_prody_anm(config, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    reduce_add_hydrogens(**global_paths["step8_reduce_add_hydrogens"], properties=global_prop["step8_reduce_add_hydrogens"])
+    prody_anm(**global_paths["step8_prody_anm"], properties=global_prop["step8_prody_anm"])
 
-    assert fx.not_empty(global_paths["step8_reduce_add_hydrogens"]["output_path"])
-    # assert fx.equal(global_paths["step8_reduce_add_hydrogens"]["output_path"], f'reference/step8_reduce_add_hydrogens/{Path(global_paths["step8_reduce_add_hydrogens"]["output_path"]).name}')
+    assert fx.not_empty(global_paths["step8_prody_anm"]["output_pdb_path"])
+    assert fx.equal(global_paths["step8_prody_anm"]["output_pdb_path"], f'reference/step8_prody_anm/{Path(global_paths["step8_prody_anm"]["output_pdb_path"]).name}')
 
 
-def step9_acpype_params_ac(config, system=None):
+def step9_cpptraj_rms(config, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    acpype_params_ac(**global_paths["step9_acpype_params_ac"], properties=global_prop["step9_acpype_params_ac"])
+    cpptraj_rms(**global_paths["step9_cpptraj_rms"], properties=global_prop["step9_cpptraj_rms"])
 
-    assert fx.not_empty(global_paths["step9_acpype_params_ac"]["output_path_inpcrd"])
-    assert fx.equal(global_paths["step9_acpype_params_ac"]["output_path_inpcrd"], f'reference/step9_acpype_params_ac/{Path(global_paths["step9_acpype_params_ac"]["output_path_inpcrd"]).name}')
-    assert fx.not_empty(global_paths["step9_acpype_params_ac"]["output_path_frcmod"])
-    assert fx.equal(global_paths["step9_acpype_params_ac"]["output_path_frcmod"], f'reference/step9_acpype_params_ac/{Path(global_paths["step9_acpype_params_ac"]["output_path_frcmod"]).name}')
-    assert fx.not_empty(global_paths["step9_acpype_params_ac"]["output_path_lib"])
-    assert fx.equal(global_paths["step9_acpype_params_ac"]["output_path_lib"], f'reference/step9_acpype_params_ac/{Path(global_paths["step9_acpype_params_ac"]["output_path_lib"]).name}')
-    assert fx.not_empty(global_paths["step9_acpype_params_ac"]["output_path_prmtop"])
-    assert fx.equal(global_paths["step9_acpype_params_ac"]["output_path_prmtop"], f'reference/step9_acpype_params_ac/{Path(global_paths["step9_acpype_params_ac"]["output_path_prmtop"]).name}')
+    assert fx.not_empty(global_paths["step9_cpptraj_rms"]["output_cpptraj_path"])
+    assert fx.equal(global_paths["step9_cpptraj_rms"]["output_cpptraj_path"], f'reference/step9_cpptraj_rms/{Path(global_paths["step9_cpptraj_rms"]["output_cpptraj_path"]).name}')
 
 
-def step10_leap_gen_top(config, system=None):
+def step10_cpptraj_convert(config, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    leap_gen_top(**global_paths["step10_leap_gen_top"], properties=global_prop["step10_leap_gen_top"])
+    cpptraj_convert(**global_paths["step10_cpptraj_convert"], properties=global_prop["step10_cpptraj_convert"])
 
-    assert fx.not_empty(global_paths["step10_leap_gen_top"]["output_pdb_path"])
-    assert fx.equal(global_paths["step10_leap_gen_top"]["output_pdb_path"], f'reference/step10_leap_gen_top/{Path(global_paths["step10_leap_gen_top"]["output_pdb_path"]).name}')
-    assert fx.not_empty(global_paths["step10_leap_gen_top"]["output_top_path"])
-    assert fx.equal(global_paths["step10_leap_gen_top"]["output_top_path"], f'reference/step10_leap_gen_top/{Path(global_paths["step10_leap_gen_top"]["output_top_path"]).name}')
-    assert fx.not_empty(global_paths["step10_leap_gen_top"]["output_crd_path"])
-    assert fx.equal(global_paths["step10_leap_gen_top"]["output_crd_path"], f'reference/step10_leap_gen_top/{Path(global_paths["step10_leap_gen_top"]["output_crd_path"]).name}')
+    assert fx.not_empty(global_paths["step10_cpptraj_convert"]["output_cpptraj_path"])
+    assert fx.equal(global_paths["step10_cpptraj_convert"]["output_cpptraj_path"], f'reference/step10_cpptraj_convert/{Path(global_paths["step10_cpptraj_convert"]["output_cpptraj_path"]).name}')
 
 
-def step11_sander_mdrun(config, system=None):
+def step11_bd_run(config, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    sander_mdrun(**global_paths["step11_sander_mdrun"], properties=global_prop["step11_sander_mdrun"])
+    bd_run(**global_paths["step11_bd_run"], properties=global_prop["step11_bd_run"])
 
-    assert fx.not_empty(global_paths["step11_sander_mdrun"]["output_traj_path"])
-    assert fx.equal(global_paths["step11_sander_mdrun"]["output_traj_path"], f'reference/step11_sander_mdrun/{Path(global_paths["step11_sander_mdrun"]["output_traj_path"]).name}')
-    assert fx.not_empty(global_paths["step11_sander_mdrun"]["output_rst_path"])
-    assert fx.equal(global_paths["step11_sander_mdrun"]["output_rst_path"], f'reference/step11_sander_mdrun/{Path(global_paths["step11_sander_mdrun"]["output_rst_path"]).name}')
-    assert fx.not_empty(global_paths["step11_sander_mdrun"]["output_log_path"])
-    # assert fx.equal(global_paths["step11_sander_mdrun"]["output_log_path"], f'reference/step11_sander_mdrun/{Path(global_paths["step11_sander_mdrun"]["output_log_path"]).name}')
+    assert fx.not_empty(global_paths["step11_bd_run"]["output_crd_path"])
+    assert fx.equal(global_paths["step11_bd_run"]["output_crd_path"], f'reference/step11_bd_run/{Path(global_paths["step11_bd_run"]["output_crd_path"]).name}')
+    assert fx.not_empty(global_paths["step11_bd_run"]["output_log_path"])
+    assert fx.equal(global_paths["step11_bd_run"]["output_log_path"], f'reference/step11_bd_run/{Path(global_paths["step11_bd_run"]["output_log_path"]).name}')
 
 
-def step12_amber_to_pdb(config, system=None):
+def step12_cpptraj_rms(config, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    amber_to_pdb(**global_paths["step12_amber_to_pdb"], properties=global_prop["step12_amber_to_pdb"])
+    cpptraj_rms(**global_paths["step12_cpptraj_rms"], properties=global_prop["step12_cpptraj_rms"])
 
-    assert fx.not_empty(global_paths["step12_amber_to_pdb"]["output_pdb_path"])
-    assert fx.equal(global_paths["step12_amber_to_pdb"]["output_pdb_path"], f'reference/step12_amber_to_pdb/{Path(global_paths["step12_amber_to_pdb"]["output_pdb_path"]).name}')
+    assert fx.not_empty(global_paths["step12_cpptraj_rms"]["output_cpptraj_path"])
+    assert fx.equal(global_paths["step12_cpptraj_rms"]["output_cpptraj_path"], f'reference/step12_cpptraj_rms/{Path(global_paths["step12_cpptraj_rms"]["output_cpptraj_path"]).name}')
+    assert fx.not_empty(global_paths["step12_cpptraj_rms"]["output_traj_path"])
+    assert fx.equal(global_paths["step12_cpptraj_rms"]["output_traj_path"], f'reference/step12_cpptraj_rms/{Path(global_paths["step12_cpptraj_rms"]["output_traj_path"]).name}')
 
 
-def step13_cmip_prepare_structure(config, system=None):
+def step13_dmd_run(config, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    cmip_prepare_structure(**global_paths["step13_cmip_prepare_structure"], properties=global_prop["step13_cmip_prepare_structure"])
+    dmd_run(**global_paths["step13_dmd_run"], properties=global_prop["step13_dmd_run"])
 
-    assert fx.not_empty(global_paths["step13_cmip_prepare_structure"]["output_cmip_pdb_path"])
-    assert fx.equal(global_paths["step13_cmip_prepare_structure"]["output_cmip_pdb_path"], f'reference/step13_cmip_prepare_structure/{Path(global_paths["step13_cmip_prepare_structure"]["output_cmip_pdb_path"]).name}')
+    assert fx.not_empty(global_paths["step13_dmd_run"]["output_crd_path"])
+    assert fx.equal(global_paths["step13_dmd_run"]["output_crd_path"], f'reference/step13_dmd_run/{Path(global_paths["step13_dmd_run"]["output_crd_path"]).name}')
+    assert fx.not_empty(global_paths["step13_dmd_run"]["output_log_path"])
+    assert fx.equal(global_paths["step13_dmd_run"]["output_log_path"], f'reference/step13_dmd_run/{Path(global_paths["step13_dmd_run"]["output_log_path"]).name}')
 
-
-def step14_remove_ligand(config, system=None):
-    conf = settings.ConfReader(config, system)
-    conf.working_dir_path = global_work_dir
-    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
-    global_prop = conf.get_prop_dic(global_log=global_log)
-    global_paths = conf.get_paths_dic()
-
-    remove_ligand(**global_paths["step14_remove_ligand"], properties=global_prop["step14_remove_ligand"])
-
-    assert fx.not_empty(global_paths["step14_remove_ligand"]["output_structure_path"])
-    assert fx.equal(global_paths["step14_remove_ligand"]["output_structure_path"], f'reference/step14_remove_ligand/{Path(global_paths["step14_remove_ligand"]["output_structure_path"]).name}')
-
-
-def step15_cmip_ignore_residues(config, system=None):
-    conf = settings.ConfReader(config, system)
-    conf.working_dir_path = global_work_dir
-    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
-    global_prop = conf.get_prop_dic(global_log=global_log)
-    global_paths = conf.get_paths_dic()
-
-    cmip_ignore_residues(**global_paths["step15_cmip_ignore_residues"], properties=global_prop["step15_cmip_ignore_residues"])
-
-    assert fx.not_empty(global_paths["step15_cmip_ignore_residues"]["output_cmip_pdb_path"])
-    assert fx.equal(global_paths["step15_cmip_ignore_residues"]["output_cmip_pdb_path"], f'reference/step15_cmip_ignore_residues/{Path(global_paths["step15_cmip_ignore_residues"]["output_cmip_pdb_path"]).name}')
-
-
-def step16_cmip_run_int_en(config, system=None):
-    conf = settings.ConfReader(config, system)
-    conf.working_dir_path = global_work_dir
-    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
-    global_prop = conf.get_prop_dic(global_log=global_log)
-    global_paths = conf.get_paths_dic()
-
-    cmip_run(**global_paths["step16_cmip_run_int_en"], properties=global_prop["step16_cmip_run_int_en"])
-
-    assert fx.not_empty(global_paths["step16_cmip_run_int_en"]["output_log_path"])
-    # assert fx.equal(global_paths["step16_cmip_run_int_en"]["output_log_path"], f'reference/step16_cmip_run_int_en/{Path(global_paths["step16_cmip_run_int_en"]["output_log_path"]).name}')
-    assert fx.not_empty(global_paths["step16_cmip_run_int_en"]["output_byat_path"])
-    # assert fx.equal(global_paths["step16_cmip_run_int_en"]["output_byat_path"], f'reference/step16_cmip_run_int_en/{Path(global_paths["step16_cmip_run_int_en"]["output_byat_path"]).name}')
-
-
-def step17_cmip_prepare_structure(config, system=None):
-    conf = settings.ConfReader(config, system)
-    conf.working_dir_path = global_work_dir
-    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
-    global_prop = conf.get_prop_dic(global_log=global_log)
-    global_paths = conf.get_paths_dic()
-
-    cmip_prepare_structure(**global_paths["step17_cmip_prepare_structure"], properties=global_prop["step17_cmip_prepare_structure"])
-
-    assert fx.not_empty(global_paths["step17_cmip_prepare_structure"]["output_cmip_pdb_path"])
-    assert fx.equal(global_paths["step17_cmip_prepare_structure"]["output_cmip_pdb_path"], f'reference/step17_cmip_prepare_structure/{Path(global_paths["step17_cmip_prepare_structure"]["output_cmip_pdb_path"]).name}')
-
-
-def step18_extract_chain_a(config, system=None):
-    conf = settings.ConfReader(config, system)
-    conf.working_dir_path = global_work_dir
-    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
-    global_prop = conf.get_prop_dic(global_log=global_log)
-    global_paths = conf.get_paths_dic()
-
-    extract_chain(**global_paths["step18_extract_chain_a"], properties=global_prop["step18_extract_chain_a"])
-
-    assert fx.not_empty(global_paths["step18_extract_chain_a"]["output_structure_path"])
-    assert fx.equal(global_paths["step18_extract_chain_a"]["output_structure_path"], f'reference/step18_extract_chain_a/{Path(global_paths["step18_extract_chain_a"]["output_structure_path"]).name}')
-
-
-def step19_extract_chain_b(config, system=None):
-    conf = settings.ConfReader(config, system)
-    conf.working_dir_path = global_work_dir
-    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
-    global_prop = conf.get_prop_dic(global_log=global_log)
-    global_paths = conf.get_paths_dic()
-
-    extract_chain(**global_paths["step19_extract_chain_b"], properties=global_prop["step19_extract_chain_b"])
-
-    assert fx.not_empty(global_paths["step19_extract_chain_b"]["output_structure_path"])
-    assert fx.equal(global_paths["step19_extract_chain_b"]["output_structure_path"], f'reference/step19_extract_chain_b/{Path(global_paths["step19_extract_chain_b"]["output_structure_path"]).name}')
-
-
-def step20_cmip_run_rbd(config, system=None):
-    conf = settings.ConfReader(config, system)
-    conf.working_dir_path = global_work_dir
-    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
-    global_prop = conf.get_prop_dic(global_log=global_log)
-    global_paths = conf.get_paths_dic()
-
-    cmip_run(**global_paths["step20_cmip_run_rbd"], properties=global_prop["step20_cmip_run_rbd"])
-
-    assert fx.not_empty(global_paths["step20_cmip_run_rbd"]["output_json_box_path"])
-    assert fx.equal(global_paths["step20_cmip_run_rbd"]["output_json_box_path"], f'reference/step20_cmip_run_rbd/{Path(global_paths["step20_cmip_run_rbd"]["output_json_box_path"]).name}')
-
-
-def step21_cmip_run_hace2(config, system=None):
-    conf = settings.ConfReader(config, system)
-    conf.working_dir_path = global_work_dir
-    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
-    global_prop = conf.get_prop_dic(global_log=global_log)
-    global_paths = conf.get_paths_dic()
-
-    cmip_run(**global_paths["step21_cmip_run_hace2"], properties=global_prop["step21_cmip_run_hace2"])
-
-    assert fx.not_empty(global_paths["step21_cmip_run_hace2"]["output_json_box_path"])
-    assert fx.equal(global_paths["step21_cmip_run_hace2"]["output_json_box_path"], f'reference/step21_cmip_run_hace2/{Path(global_paths["step21_cmip_run_hace2"]["output_json_box_path"]).name}')
-
-
-def step22_cmip_run_rbd_hace2(config, system=None):
-    conf = settings.ConfReader(config, system)
-    conf.working_dir_path = global_work_dir
-    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
-    global_prop = conf.get_prop_dic(global_log=global_log)
-    global_paths = conf.get_paths_dic()
-
-    cmip_run(**global_paths["step22_cmip_run_rbd_hace2"], properties=global_prop["step22_cmip_run_rbd_hace2"])
-
-    assert fx.not_empty(global_paths["step22_cmip_run_rbd_hace2"]["output_json_box_path"])
-    assert fx.equal(global_paths["step22_cmip_run_rbd_hace2"]["output_json_box_path"], f'reference/step22_cmip_run_rbd_hace2/{Path(global_paths["step22_cmip_run_rbd_hace2"]["output_json_box_path"]).name}')
-
-
-def step23_cmip_ignore_residues_rbd(config, system=None):
-    conf = settings.ConfReader(config, system)
-    conf.working_dir_path = global_work_dir
-    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
-    global_prop = conf.get_prop_dic(global_log=global_log)
-    global_paths = conf.get_paths_dic()
-
-    cmip_ignore_residues(**global_paths["step23_cmip_ignore_residues_rbd"], properties=global_prop["step23_cmip_ignore_residues_rbd"])
-
-    assert fx.not_empty(global_paths["step23_cmip_ignore_residues_rbd"]["output_cmip_pdb_path"])
-    assert fx.equal(global_paths["step23_cmip_ignore_residues_rbd"]["output_cmip_pdb_path"], f'reference/step23_cmip_ignore_residues_rbd/{Path(global_paths["step23_cmip_ignore_residues_rbd"]["output_cmip_pdb_path"]).name}')
-
-
-def step24_cmip_run_prot_prot(config, system=None):
-    conf = settings.ConfReader(config, system)
-    conf.working_dir_path = global_work_dir
-    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
-    global_prop = conf.get_prop_dic(global_log=global_log)
-    global_paths = conf.get_paths_dic()
-
-    cmip_run(**global_paths["step24_cmip_run_prot_prot"], properties=global_prop["step24_cmip_run_prot_prot"])
-
-    assert fx.not_empty(global_paths["step24_cmip_run_prot_prot"]["output_log_path"])
-    assert fx.equal(global_paths["step24_cmip_run_prot_prot"]["output_log_path"], f'reference/step24_cmip_run_prot_prot/{Path(global_paths["step24_cmip_run_prot_prot"]["output_log_path"]).name}')
-    assert fx.not_empty(global_paths["step24_cmip_run_prot_prot"]["output_json_box_path"])
-    assert fx.equal(global_paths["step24_cmip_run_prot_prot"]["output_json_box_path"], f'reference/step24_cmip_run_prot_prot/{Path(global_paths["step24_cmip_run_prot_prot"]["output_json_box_path"]).name}')
-    assert fx.not_empty(global_paths["step24_cmip_run_prot_prot"]["output_json_external_box_path"])
-    assert fx.equal(global_paths["step24_cmip_run_prot_prot"]["output_json_external_box_path"], f'reference/step24_cmip_run_prot_prot/{Path(global_paths["step24_cmip_run_prot_prot"]["output_json_external_box_path"]).name}')
-    assert fx.not_empty(global_paths["step24_cmip_run_prot_prot"]["output_byat_path"])
-    assert fx.equal(global_paths["step24_cmip_run_prot_prot"]["output_byat_path"], f'reference/step24_cmip_run_prot_prot/{Path(global_paths["step24_cmip_run_prot_prot"]["output_byat_path"]).name}')
-
-
-def step25_cmip_ignore_residues_hace2(config, system=None):
-    conf = settings.ConfReader(config, system)
-    conf.working_dir_path = global_work_dir
-    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
-    global_prop = conf.get_prop_dic(global_log=global_log)
-    global_paths = conf.get_paths_dic()
-
-    cmip_ignore_residues(**global_paths["step25_cmip_ignore_residues_hace2"], properties=global_prop["step25_cmip_ignore_residues_hace2"])
-
-    assert fx.not_empty(global_paths["step25_cmip_ignore_residues_hace2"]["output_cmip_pdb_path"])
-    assert fx.equal(global_paths["step25_cmip_ignore_residues_hace2"]["output_cmip_pdb_path"], f'reference/step25_cmip_ignore_residues_hace2/{Path(global_paths["step25_cmip_ignore_residues_hace2"]["output_cmip_pdb_path"]).name}')
 
 
 def step26_cmip_run_complex(config, remove=False, system=None):
