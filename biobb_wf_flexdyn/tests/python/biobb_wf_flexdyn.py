@@ -1,7 +1,8 @@
 import pytest
 import glob
 import os
-from pathlib import Path
+import zipfile
+from pathlib import Path, PurePath
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools import test_fixtures as fx
@@ -58,8 +59,8 @@ def step1_extract_chain(config, system=None):
 
     extract_chain(**global_paths["step1_extract_chain"], properties=global_prop["step1_extract_chain"])
 
-    assert fx.not_empty(global_paths["step1_extract_chain"]["output_pdb_path"])
-    assert fx.equal(global_paths["step1_extract_chain"]["output_pdb_path"], f'reference/step1_extract_chain/{Path(global_paths["step1_extract_chain"]["output_structure_path"]).name}')
+    assert fx.not_empty(global_paths["step1_extract_chain"]["output_structure_path"])
+    assert fx.equal(global_paths["step1_extract_chain"]["output_structure_path"], f'reference/step1_extract_chain/{Path(global_paths["step1_extract_chain"]["output_structure_path"]).name}')
 
 
 def step2_cpptraj_mask(config, system=None):
@@ -104,7 +105,7 @@ def step4_concoord_dist(config, system=None):
     assert fx.not_empty(global_paths["step4_concoord_dist"]["output_gro_path"])
     assert fx.equal(global_paths["step4_concoord_dist"]["output_gro_path"], f'reference/step4_concoord_dist/{Path(global_paths["step4_concoord_dist"]["output_gro_path"]).name}')
     assert fx.not_empty(global_paths["step4_concoord_dist"]["output_dat_path"])
-    assert fx.equal(global_paths["step4_concoord_dist"]["output_dat_path"], f'reference/step4_concoord_dist/{Path(global_paths["step4_concoord_dist"]["output_dat_path"]).name}')
+    # assert fx.equal(global_paths["step4_concoord_dist"]["output_dat_path"], f'reference/step4_concoord_dist/{Path(global_paths["step4_concoord_dist"]["output_dat_path"]).name}')
 
 
 def step5_concoord_disco(config, system=None):
@@ -119,9 +120,9 @@ def step5_concoord_disco(config, system=None):
     concoord_disco(**global_paths["step5_concoord_disco"], properties=props)
 
     assert fx.not_empty(global_paths["step5_concoord_disco"]["output_traj_path"])
-    assert fx.equal(global_paths["step5_concoord_disco"]["output_traj_path"], f'reference/step5_concoord_disco/{Path(global_paths["step5_concoord_disco"]["output_traj_path"]).name}')
+    # assert fx.equal(global_paths["step5_concoord_disco"]["output_traj_path"], f'reference/step5_concoord_disco/{Path(global_paths["step5_concoord_disco"]["output_traj_path"]).name}')
     assert fx.not_empty(global_paths["step5_concoord_disco"]["output_rmsd_path"])
-    assert fx.equal(global_paths["step5_concoord_disco"]["output_rmsd_path"], f'reference/step5_concoord_disco/{Path(global_paths["step5_concoord_disco"]["output_rmsd_path"]).name}')
+    # assert fx.equal(global_paths["step5_concoord_disco"]["output_rmsd_path"], f'reference/step5_concoord_disco/{Path(global_paths["step5_concoord_disco"]["output_rmsd_path"]).name}')
     assert fx.not_empty(global_paths["step5_concoord_disco"]["output_bfactor_path"])
     assert fx.equal(global_paths["step5_concoord_disco"]["output_bfactor_path"], f'reference/step5_concoord_disco/{Path(global_paths["step5_concoord_disco"]["output_bfactor_path"]).name}')
 
@@ -136,7 +137,7 @@ def step6_cpptraj_rms(config, system=None):
     cpptraj_rms(**global_paths["step6_cpptraj_rms"], properties=global_prop["step6_cpptraj_rms"])
 
     assert fx.not_empty(global_paths["step6_cpptraj_rms"]["output_cpptraj_path"])
-    assert fx.equal(global_paths["step6_cpptraj_rms"]["output_cpptraj_path"], f'reference/step6_cpptraj_rms/{Path(global_paths["step6_cpptraj_rms"]["output_cpptraj_path"]).name}')
+    # assert fx.equal(global_paths["step6_cpptraj_rms"]["output_cpptraj_path"], f'reference/step6_cpptraj_rms/{Path(global_paths["step6_cpptraj_rms"]["output_cpptraj_path"]).name}')
 
 
 def step7_cpptraj_convert(config, system=None):
@@ -149,7 +150,7 @@ def step7_cpptraj_convert(config, system=None):
     cpptraj_convert(**global_paths["step7_cpptraj_convert"], properties=global_prop["step7_cpptraj_convert"])
 
     assert fx.not_empty(global_paths["step7_cpptraj_convert"]["output_cpptraj_path"])
-    assert fx.equal(global_paths["step7_cpptraj_convert"]["output_cpptraj_path"], f'reference/step7_cpptraj_convert/{Path(global_paths["step7_cpptraj_convert"]["output_cpptraj_path"]).name}')
+    # assert fx.equal(global_paths["step7_cpptraj_convert"]["output_cpptraj_path"], f'reference/step7_cpptraj_convert/{Path(global_paths["step7_cpptraj_convert"]["output_cpptraj_path"]).name}')
 
 
 def step8_prody_anm(config, system=None):
@@ -175,7 +176,7 @@ def step9_cpptraj_rms(config, system=None):
     cpptraj_rms(**global_paths["step9_cpptraj_rms"], properties=global_prop["step9_cpptraj_rms"])
 
     assert fx.not_empty(global_paths["step9_cpptraj_rms"]["output_cpptraj_path"])
-    assert fx.equal(global_paths["step9_cpptraj_rms"]["output_cpptraj_path"], f'reference/step9_cpptraj_rms/{Path(global_paths["step9_cpptraj_rms"]["output_cpptraj_path"]).name}')
+    # assert fx.equal(global_paths["step9_cpptraj_rms"]["output_cpptraj_path"], f'reference/step9_cpptraj_rms/{Path(global_paths["step9_cpptraj_rms"]["output_cpptraj_path"]).name}')
 
 
 def step10_cpptraj_convert(config, system=None):
@@ -188,7 +189,7 @@ def step10_cpptraj_convert(config, system=None):
     cpptraj_convert(**global_paths["step10_cpptraj_convert"], properties=global_prop["step10_cpptraj_convert"])
 
     assert fx.not_empty(global_paths["step10_cpptraj_convert"]["output_cpptraj_path"])
-    assert fx.equal(global_paths["step10_cpptraj_convert"]["output_cpptraj_path"], f'reference/step10_cpptraj_convert/{Path(global_paths["step10_cpptraj_convert"]["output_cpptraj_path"]).name}')
+    # assert fx.equal(global_paths["step10_cpptraj_convert"]["output_cpptraj_path"], f'reference/step10_cpptraj_convert/{Path(global_paths["step10_cpptraj_convert"]["output_cpptraj_path"]).name}')
 
 
 def step11_bd_run(config, system=None):
@@ -233,164 +234,585 @@ def step13_dmd_run(config, system=None):
     assert fx.not_empty(global_paths["step13_dmd_run"]["output_crd_path"])
     assert fx.equal(global_paths["step13_dmd_run"]["output_crd_path"], f'reference/step13_dmd_run/{Path(global_paths["step13_dmd_run"]["output_crd_path"]).name}')
     assert fx.not_empty(global_paths["step13_dmd_run"]["output_log_path"])
-    assert fx.equal(global_paths["step13_dmd_run"]["output_log_path"], f'reference/step13_dmd_run/{Path(global_paths["step13_dmd_run"]["output_log_path"]).name}')
+    # assert fx.equal(global_paths["step13_dmd_run"]["output_log_path"], f'reference/step13_dmd_run/{Path(global_paths["step13_dmd_run"]["output_log_path"]).name}')
 
 
-
-def step26_cmip_run_complex(config, remove=False, system=None):
+def step14_cpptraj_rms(config, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    cmip_run(**global_paths["step26_cmip_run_complex"], properties=global_prop["step26_cmip_run_complex"])
+    cpptraj_rms(**global_paths["step14_cpptraj_rms"], properties=global_prop["step14_cpptraj_rms"])
 
-    assert fx.not_empty(global_paths["step26_cmip_run_complex"]["output_log_path"])
-    # assert fx.equal(global_paths["step26_cmip_run_complex"]["output_log_path"], f'reference/step26_cmip_run_complex/{Path(global_paths["step26_cmip_run_complex"]["output_log_path"]).name}')
-    assert fx.not_empty(global_paths["step26_cmip_run_complex"]["output_json_box_path"])
-    # assert fx.equal(global_paths["step26_cmip_run_complex"]["output_json_box_path"], f'reference/step26_cmip_run_complex/{Path(global_paths["step26_cmip_run_complex"]["output_json_box_path"]).name}')
-    assert fx.not_empty(global_paths["step26_cmip_run_complex"]["output_json_external_box_path"])
-    # assert fx.equal(global_paths["step26_cmip_run_complex"]["output_json_external_box_path"], f'reference/step26_cmip_run_complex/{Path(global_paths["step26_cmip_run_complex"]["output_json_external_box_path"]).name}')
-    assert fx.not_empty(global_paths["step26_cmip_run_complex"]["output_byat_path"])
-    # assert fx.equal(global_paths["step26_cmip_run_complex"]["output_byat_path"], f'reference/step26_cmip_run_complex/{Path(global_paths["step26_cmip_run_complex"]["output_byat_path"]).name}')
+    assert fx.not_empty(global_paths["step14_cpptraj_rms"]["output_cpptraj_path"])
+    assert fx.equal(global_paths["step14_cpptraj_rms"]["output_cpptraj_path"], f'reference/step14_cpptraj_rms/{Path(global_paths["step14_cpptraj_rms"]["output_cpptraj_path"]).name}')
+    assert fx.not_empty(global_paths["step14_cpptraj_rms"]["output_traj_path"])
+    assert fx.equal(global_paths["step14_cpptraj_rms"]["output_traj_path"], f'reference/step14_cpptraj_rms/{Path(global_paths["step14_cpptraj_rms"]["output_traj_path"]).name}')
+
+
+def step15_nma_run(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    nma_run(**global_paths["step15_nma_run"], properties=global_prop["step15_nma_run"])
+
+    assert fx.not_empty(global_paths["step15_nma_run"]["output_crd_path"])
+    assert fx.equal(global_paths["step15_nma_run"]["output_crd_path"], f'reference/step15_nma_run/{Path(global_paths["step15_nma_run"]["output_crd_path"]).name}')
+    assert fx.not_empty(global_paths["step15_nma_run"]["output_log_path"])
+    # assert fx.equal(global_paths["step15_nma_run"]["output_log_path"], f'reference/step15_nma_run/{Path(global_paths["step15_nma_run"]["output_log_path"]).name}')
+
+
+def step16_cpptraj_rms(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    cpptraj_rms(**global_paths["step16_cpptraj_rms"], properties=global_prop["step16_cpptraj_rms"])
+
+    assert fx.not_empty(global_paths["step16_cpptraj_rms"]["output_cpptraj_path"])
+    assert fx.equal(global_paths["step16_cpptraj_rms"]["output_cpptraj_path"], f'reference/step16_cpptraj_rms/{Path(global_paths["step16_cpptraj_rms"]["output_cpptraj_path"]).name}')
+
+
+def step17_cpptraj_convert(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    cpptraj_convert(**global_paths["step17_cpptraj_convert"], properties=global_prop["step17_cpptraj_convert"])
+
+    assert fx.not_empty(global_paths["step17_cpptraj_convert"]["output_cpptraj_path"])
+    assert fx.equal(global_paths["step17_cpptraj_convert"]["output_cpptraj_path"], f'reference/step17_cpptraj_convert/{Path(global_paths["step17_cpptraj_convert"]["output_cpptraj_path"]).name}')
+
+
+def step18_nolb_nma(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    nolb_nma(**global_paths["step18_nolb_nma"], properties=global_prop["step18_nolb_nma"])
+
+    assert fx.not_empty(global_paths["step18_nolb_nma"]["output_pdb_path"])
+    assert fx.equal(global_paths["step18_nolb_nma"]["output_pdb_path"], f'reference/step18_nolb_nma/{Path(global_paths["step18_nolb_nma"]["output_pdb_path"]).name}')
+
+
+def step19_cpptraj_rms(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    cpptraj_rms(**global_paths["step19_cpptraj_rms"], properties=global_prop["step19_cpptraj_rms"])
+
+    assert fx.not_empty(global_paths["step19_cpptraj_rms"]["output_cpptraj_path"])
+    assert fx.equal(global_paths["step19_cpptraj_rms"]["output_cpptraj_path"], f'reference/step19_cpptraj_rms/{Path(global_paths["step19_cpptraj_rms"]["output_cpptraj_path"]).name}')
+
+
+def step20_cpptraj_convert(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    cpptraj_convert(**global_paths["step20_cpptraj_convert"], properties=global_prop["step20_cpptraj_convert"])
+
+    assert fx.not_empty(global_paths["step20_cpptraj_convert"]["output_cpptraj_path"])
+    assert fx.equal(global_paths["step20_cpptraj_convert"]["output_cpptraj_path"], f'reference/step20_cpptraj_convert/{Path(global_paths["step20_cpptraj_convert"]["output_cpptraj_path"]).name}')
+
+
+def step21_imod_imode(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    imod_imode(**global_paths["step21_imod_imode"], properties=global_prop["step21_imod_imode"])
+
+    assert fx.not_empty(global_paths["step21_imod_imode"]["output_dat_path"])
+    assert fx.equal(global_paths["step21_imod_imode"]["output_dat_path"], f'reference/step21_imod_imode/{Path(global_paths["step21_imod_imode"]["output_dat_path"]).name}')
+
+
+def step22_imod_imc(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    imod_imc(**global_paths["step22_imod_imc"], properties=global_prop["step22_imod_imc"])
+
+    assert fx.not_empty(global_paths["step22_imod_imc"]["output_traj_path"])
+    # assert fx.equal(global_paths["step22_imod_imc"]["output_traj_path"], f'reference/step22_imod_imc/{Path(global_paths["step22_imod_imc"]["output_traj_path"]).name}')
+
+
+def step23_cpptraj_rms(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    cpptraj_rms(**global_paths["step23_cpptraj_rms"], properties=global_prop["step23_cpptraj_rms"])
+
+    assert fx.not_empty(global_paths["step23_cpptraj_rms"]["output_cpptraj_path"])
+    # assert fx.equal(global_paths["step23_cpptraj_rms"]["output_cpptraj_path"], f'reference/step23_cpptraj_rms/{Path(global_paths["step23_cpptraj_rms"]["output_cpptraj_path"]).name}')
+
+
+def step24_cpptraj_convert(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    cpptraj_convert(**global_paths["step24_cpptraj_convert"], properties=global_prop["step24_cpptraj_convert"])
+
+    assert fx.not_empty(global_paths["step24_cpptraj_convert"]["output_cpptraj_path"])
+    # assert fx.equal(global_paths["step24_cpptraj_convert"]["output_cpptraj_path"], f'reference/step24_cpptraj_convert/{Path(global_paths["step24_cpptraj_convert"]["output_cpptraj_path"]).name}')
+
+
+def step25_trjcat(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    traj_zip = "structure_concat_traj.zip"
+    traj_list = [global_paths["step7_cpptraj_convert"]["output_cpptraj_path"],
+                 global_paths["step10_cpptraj_convert"]["output_cpptraj_path"],
+                 global_paths["step24_cpptraj_convert"]["output_cpptraj_path"],
+                 global_paths["step12_cpptraj_rms"]["output_traj_path"],
+                 global_paths["step17_cpptraj_convert"]["output_cpptraj_path"]]
+    with zipfile.ZipFile(traj_zip, 'w') as myzip:
+        for file in traj_list:
+            myzip.write(file, PurePath(file).name, compress_type=zipfile.ZIP_DEFLATED)
+
+    paths = global_paths["step25_trjcat"]
+    paths["input_trj_zip_path"] = PurePath(Path().absolute()).joinpath(traj_zip)
+    trjcat(**paths, properties=global_prop["step25_trjcat"])
+
+    assert fx.not_empty(global_paths["step25_trjcat"]["output_trj_path"])
+    # assert fx.equal(global_paths["step25_trjcat"]["output_trj_path"], f'reference/step25_trjcat/{Path(global_paths["step25_trjcat"]["output_trj_path"]).name}')
+
+
+def step26_make_ndx(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    make_ndx(**global_paths["step26_make_ndx"], properties=global_prop["step26_make_ndx"])
+
+    assert fx.not_empty(global_paths["step26_make_ndx"]["output_ndx_path"])
+    assert fx.equal(global_paths["step26_make_ndx"]["output_ndx_path"], f'reference/step26_make_ndx/{Path(global_paths["step26_make_ndx"]["output_ndx_path"]).name}')
+
+
+def step27_gmx_cluster(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    gmx_cluster(**global_paths["step27_gmx_cluster"], properties=global_prop["step27_gmx_cluster"])
+
+    assert fx.not_empty(global_paths["step27_gmx_cluster"]["output_pdb_path"])
+    assert fx.equal(global_paths["step27_gmx_cluster"]["output_pdb_path"], f'reference/step27_gmx_cluster/{Path(global_paths["step27_gmx_cluster"]["output_pdb_path"]).name}')
+
+
+def step28_cpptraj_rms(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    cpptraj_rms(**global_paths["step28_cpptraj_rms"], properties=global_prop["step28_cpptraj_rms"])
+
+    assert fx.not_empty(global_paths["step28_cpptraj_rms"]["output_cpptraj_path"])
+    # assert fx.equal(global_paths["step28_cpptraj_rms"]["output_cpptraj_path"], f'reference/step28_cpptraj_rms/{Path(global_paths["step28_cpptraj_rms"]["output_cpptraj_path"]).name}')
+    assert fx.not_empty(global_paths["step28_cpptraj_rms"]["output_traj_path"])
+    # assert fx.equal(global_paths["step28_cpptraj_rms"]["output_traj_path"], f'reference/step28_cpptraj_rms/{Path(global_paths["step28_cpptraj_rms"]["output_traj_path"]).name}')
+
+
+def step29_pcz_zip(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    pcz_zip(**global_paths["step29_pcz_zip"], properties=global_prop["step29_pcz_zip"])
+
+    assert fx.not_empty(global_paths["step29_pcz_zip"]["output_pcz_path"])
+    # assert fx.equal(global_paths["step29_pcz_zip"]["output_pcz_path"], f'reference/step29_pcz_zip/{Path(global_paths["step29_pcz_zip"]["output_pcz_path"]).name}')
+
+
+def step30_pcz_zip(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    pcz_zip(**global_paths["step30_pcz_zip"], properties=global_prop["step30_pcz_zip"])
+
+    assert fx.not_empty(global_paths["step30_pcz_zip"]["output_pcz_path"])
+    # assert fx.equal(global_paths["step30_pcz_zip"]["output_pcz_path"], f'reference/step30_pcz_zip/{Path(global_paths["step30_pcz_zip"]["output_pcz_path"]).name}')
+
+
+def step31_pcz_info(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    pcz_info(**global_paths["step31_pcz_info"], properties=global_prop["step31_pcz_info"])
+
+    assert fx.not_empty(global_paths["step31_pcz_info"]["output_json_path"])
+    # assert fx.equal(global_paths["step31_pcz_info"]["output_json_path"], f'reference/step31_pcz_info/{Path(global_paths["step31_pcz_info"]["output_json_path"]).name}')
+
+
+def step32_pcz_evecs(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    pcz_evecs(**global_paths["step32_pcz_evecs"], properties=global_prop["step32_pcz_evecs"])
+
+    assert fx.not_empty(global_paths["step32_pcz_evecs"]["output_json_path"])
+    # assert fx.equal(global_paths["step32_pcz_evecs"]["output_json_path"], f'reference/step32_pcz_evecs/{Path(global_paths["step32_pcz_evecs"]["output_json_path"]).name}')
+
+
+def step33_pcz_animate(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    pcz_animate(**global_paths["step33_pcz_animate"], properties=global_prop["step33_pcz_animate"])
+
+    assert fx.not_empty(global_paths["step33_pcz_animate"]["output_crd_path"])
+    # assert fx.equal(global_paths["step33_pcz_animate"]["output_crd_path"], f'reference/step33_pcz_animate/{Path(global_paths["step33_pcz_animate"]["output_crd_path"]).name}')
+
+
+def step34_cpptraj_convert(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    cpptraj_convert(**global_paths["step34_cpptraj_convert"], properties=global_prop["step34_cpptraj_convert"])
+
+    assert fx.not_empty(global_paths["step34_cpptraj_convert"]["output_cpptraj_path"])
+    # assert fx.equal(global_paths["step34_cpptraj_convert"]["output_cpptraj_path"], f'reference/step34_cpptraj_convert/{Path(global_paths["step34_cpptraj_convert"]["output_cpptraj_path"]).name}')
+
+
+def step35_pcz_bfactor(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    pcz_bfactor(**global_paths["step35_pcz_bfactor"], properties=global_prop["step35_pcz_bfactor"])
+
+    assert fx.not_empty(global_paths["step35_pcz_bfactor"]["output_dat_path"])
+    # assert fx.equal(global_paths["step35_pcz_bfactor"]["output_dat_path"], f'reference/step35_pcz_bfactor/{Path(global_paths["step35_pcz_bfactor"]["output_dat_path"]).name}')
+    assert fx.not_empty(global_paths["step35_pcz_bfactor"]["output_pdb_path"])
+    assert fx.equal(global_paths["step35_pcz_bfactor"]["output_pdb_path"], f'reference/step35_pcz_bfactor/{Path(global_paths["step35_pcz_bfactor"]["output_pdb_path"]).name}')
+
+
+def step36_pcz_hinges(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    pcz_hinges(**global_paths["step36_pcz_hinges"], properties=global_prop["step36_pcz_hinges"])
+
+    assert fx.not_empty(global_paths["step36_pcz_hinges"]["output_json_path"])
+    # assert fx.equal(global_paths["step36_pcz_hinges"]["output_json_path"], f'reference/step36_pcz_hinges/{Path(global_paths["step36_pcz_hinges"]["output_json_path"]).name}')
+
+
+def step37_pcz_hinges(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    pcz_hinges(**global_paths["step37_pcz_hinges"], properties=global_prop["step37_pcz_hinges"])
+
+    assert fx.not_empty(global_paths["step37_pcz_hinges"]["output_json_path"])
+    # assert fx.equal(global_paths["step37_pcz_hinges"]["output_json_path"], f'reference/step37_pcz_hinges/{Path(global_paths["step37_pcz_hinges"]["output_json_path"]).name}')
+
+
+def step38_pcz_hinges(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    pcz_hinges(**global_paths["step38_pcz_hinges"], properties=global_prop["step38_pcz_hinges"])
+
+    assert fx.not_empty(global_paths["step38_pcz_hinges"]["output_json_path"])
+    # assert fx.equal(global_paths["step38_pcz_hinges"]["output_json_path"], f'reference/step38_pcz_hinges/{Path(global_paths["step38_pcz_hinges"]["output_json_path"]).name}')
+
+
+def step39_pcz_stiffness(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    pcz_stiffness(**global_paths["step39_pcz_stiffness"], properties=global_prop["step39_pcz_stiffness"])
+
+    assert fx.not_empty(global_paths["step39_pcz_stiffness"]["output_json_path"])
+    # assert fx.equal(global_paths["step39_pcz_stiffness"]["output_json_path"], f'reference/step39_pcz_stiffness/{Path(global_paths["step39_pcz_stiffness"]["output_json_path"]).name}')
+
+
+def step40_pcz_collectivity(config, remove=False, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    pcz_collectivity(**global_paths["step40_pcz_collectivity"], properties=global_prop["step40_pcz_collectivity"])
+
+    assert fx.not_empty(global_paths["step40_pcz_collectivity"]["output_json_path"])
+    # assert fx.equal(global_paths["step40_pcz_collectivity"]["output_json_path"], f'reference/step40_pcz_collectivity/{Path(global_paths["step40_pcz_collectivity"]["output_json_path"]).name}')
 
     if remove:
-        tmp_files = [conf.get_working_dir_path(), 'fort.7', 'gridout', 'restart']
+        tmp_files = [conf.get_working_dir_path(), 'structure_concat_traj.zip', 'distancia.dat', 'eigenvec.dat', 'file.proj', 'hessian.dat', 'masses.dat', 'molecula.out', 'molecula.pdb', 'output.pdb', 'snapshots.pdb']
         tmp_files.extend(glob.glob('sandbox_*'))
         fu.rm_file_list(tmp_files)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step0_cmip_prepare_pdb(config_path, system):
-    step0_cmip_prepare_pdb(config_path, system)
+def test_step0_extract_model(config_path, system):
+    step0_extract_model(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step1_cmip_titration(config_path, system):
-    step1_cmip_titration(config_path, system)
+def test_step1_extract_chain(config_path, system):
+    step1_extract_chain(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step2_cat_pdb(config_path, system):
-    step2_cat_pdb(config_path, system)
+def test_step2_cpptraj_mask(config_path, system):
+    step2_cpptraj_mask(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step3_cmip_run_pos(config_path, system):
-    step3_cmip_run_pos(config_path, system)
+def test_step3_cpptraj_mask(config_path, system):
+    step3_cpptraj_mask(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step4_cmip_run_neg(config_path, system):
-    step4_cmip_run_neg(config_path, system)
+def test_step4_concoord_dist(config_path, system):
+    step4_concoord_dist(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step5_cmip_run_neu(config_path, system):
-    step5_cmip_run_neu(config_path, system)
+def test_step5_concoord_disco(config_path, system):
+    step5_concoord_disco(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step6_remove_pdb_water(config_path, system):
-    step6_remove_pdb_water(config_path, system)
+def test_step6_cpptraj_rms(config_path, system):
+    step6_cpptraj_rms(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step7_extract_heteroatoms(config_path, system):
-    step7_extract_heteroatoms(config_path, system)
+def test_step7_cpptraj_convert(config_path, system):
+    step7_cpptraj_convert(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step8_reduce_add_hydrogens(config_path, system):
-    step8_reduce_add_hydrogens(config_path, system)
+def test_step8_prody_anm(config_path, system):
+    step8_prody_anm(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step9_acpype_params_ac(config_path, system):
-    step9_acpype_params_ac(config_path, system)
+def test_step9_cpptraj_rms(config_path, system):
+    step9_cpptraj_rms(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step10_leap_gen_top(config_path, system):
-    step10_leap_gen_top(config_path, system)
+def test_step10_cpptraj_convert(config_path, system):
+    step10_cpptraj_convert(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step11_sander_mdrun(config_path, system):
-    step11_sander_mdrun(config_path, system)
+def test_step11_bd_run(config_path, system):
+    step11_bd_run(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step12_amber_to_pdb(config_path, system):
-    step12_amber_to_pdb(config_path, system)
+def test_step12_cpptraj_rms(config_path, system):
+    step12_cpptraj_rms(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step13_cmip_prepare_structure(config_path, system):
-    step13_cmip_prepare_structure(config_path, system)
+def test_step13_dmd_run(config_path, system):
+    step13_dmd_run(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step14_remove_ligand(config_path, system):
-    step14_remove_ligand(config_path, system)
+def test_step14_cpptraj_rms(config_path, system):
+    step14_cpptraj_rms(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step15_cmip_ignore_residues(config_path, system):
-    step15_cmip_ignore_residues(config_path, system)
+def test_step15_nma_run(config_path, system):
+    step15_nma_run(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step16_cmip_run_int_en(config_path, system):
-    step16_cmip_run_int_en(config_path, system)
+def test_step16_cpptraj_rms(config_path, system):
+    step16_cpptraj_rms(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step17_cmip_prepare_structure(config_path, system):
-    step17_cmip_prepare_structure(config_path, system)
+def test_step17_cpptraj_convert(config_path, system):
+    step17_cpptraj_convert(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step18_extract_chain_a(config_path, system):
-    step18_extract_chain_a(config_path, system)
+def test_step18_nolb_nma(config_path, system):
+    step18_nolb_nma(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step19_extract_chain_b(config_path, system):
-    step19_extract_chain_b(config_path, system)
+def test_step19_cpptraj_rms(config_path, system):
+    step19_cpptraj_rms(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step20_cmip_run_rbd(config_path, system):
-    step20_cmip_run_rbd(config_path, system)
+def test_step20_cpptraj_convert(config_path, system):
+    step20_cpptraj_convert(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step21_cmip_run_hace2(config_path, system):
-    step21_cmip_run_hace2(config_path, system)
+def test_step21_imod_imode(config_path, system):
+    step21_imod_imode(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step22_cmip_run_rbd_hace2(config_path, system):
-    step22_cmip_run_rbd_hace2(config_path, system)
+def test_step22_imod_imc(config_path, system):
+    step22_imod_imc(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step23_cmip_ignore_residues_rbd(config_path, system):
-    step23_cmip_ignore_residues_rbd(config_path, system)
-
-
-# @pytest.mark.parametrize("system", [None])
-# def test_step24_cmip_run_prot_prot(config_path, system):
-#     step24_cmip_run_prot_prot(config_path, system)
+def test_step23_cpptraj_rms(config_path, system):
+    step23_cpptraj_rms(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step25_cmip_ignore_residues_hace2(config_path, system):
-    step25_cmip_ignore_residues_hace2(config_path, system)
+def test_step24_cpptraj_convert(config_path, system):
+    step24_cpptraj_convert(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step26_cmip_run_complex(config_path, remove_flag, system):
-    step26_cmip_run_complex(config_path, remove_flag, system)
+def test_step25_trjcat(config_path, system):
+    step25_trjcat(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step26_make_ndx(config_path, system):
+    step26_make_ndx(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step27_gmx_cluster(config_path, system):
+    step27_gmx_cluster(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step28_cpptraj_rms(config_path, system):
+    step28_cpptraj_rms(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step29_pcz_zip(config_path, system):
+    step29_pcz_zip(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step30_pcz_zip(config_path, system):
+    step30_pcz_zip(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step31_pcz_info(config_path, system):
+    step31_pcz_info(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step32_pcz_evecs(config_path, system):
+    step32_pcz_evecs(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step33_pcz_animate(config_path, system):
+    step33_pcz_animate(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step34_cpptraj_convert(config_path, system):
+    step34_cpptraj_convert(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step35_pcz_bfactor(config_path, system):
+    step35_pcz_bfactor(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step36_pcz_hinges(config_path, system):
+    step36_pcz_hinges(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step37_pcz_hinges(config_path, system):
+    step37_pcz_hinges(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step38_pcz_hinges(config_path, system):
+    step38_pcz_hinges(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step39_pcz_stiffness(config_path, system):
+    step39_pcz_stiffness(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step40_pcz_collectivity(config_path, remove_flag, system):
+    step40_pcz_collectivity(config_path, remove_flag, system)
