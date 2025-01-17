@@ -4,7 +4,6 @@ import time
 import argparse
 import csv
 import json
-import shutil
 from Bio.PDB.PDBParser import PDBParser
 from Bio.PDB.PDBIO import PDBIO
 from biobb_common.configuration import settings
@@ -15,6 +14,7 @@ from biobb_analysis.ambertools.cpptraj_bfactor import cpptraj_bfactor
 from biobb_analysis.ambertools.cpptraj_rgyr import cpptraj_rgyr
 from biobb_analysis.ambertools.cpptraj_convert import cpptraj_convert
 from biobb_analysis.gromacs.gmx_cluster import gmx_cluster
+
 
 def getBfactorsList(input):
     file = open(input)
@@ -31,6 +31,7 @@ def getBfactorsList(input):
 
     return bfactors
 
+
 def saveBfactor(input, output, bfactors):
     # load input into BioPython structure
     structure = PDBParser(QUIET=True).get_structure('structure', input)
@@ -43,8 +44,9 @@ def saveBfactor(input, output, bfactors):
 
     # save the structure
     io = PDBIO()
-    io.set_structure(structure) 
+    io.set_structure(structure)
     io.save(output)
+
 
 def saveClusters(input, output):
     file = open(input)
@@ -54,9 +56,9 @@ def saveClusters(input, output):
     start = False
     for row in csv_reader:
 
-        if start: 
+        if start:
             col = row[0].split('|')
-            if len(col[0].strip()): 
+            if len(col[0].strip()):
                 clusters.append({
                     'cluster': col[0].strip(),
                     'population': col[1].strip().split()[0]
@@ -67,6 +69,7 @@ def saveClusters(input, output):
 
     with open(output, 'w') as outfile:
         json.dump(clusters, outfile)
+
 
 def main(config, system=None):
     start_time = time.time()
@@ -117,10 +120,10 @@ def main(config, system=None):
     global_log.info('Elapsed time: %.1f minutes' % (elapsed_time/60))
     global_log.info('')
 
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Protein MD Analysis pipeline using BioExcel Building Blocks")
     parser.add_argument('--config', required=True)
     parser.add_argument('--system', required=False)
     args = parser.parse_args()
     main(args.config, args.system)
-

@@ -1,0 +1,20 @@
+Using linkage method for clustering
+Using RMSD cutoff 0.2 nm
+The RMSD ranges from 0.0706648 to 0.144052 nm
+Average RMSD is 0.111331
+Number of structures for matrix 51
+Energy of the matrix is 0.370526.
+
+Found 1 clusters
+
+Writing middle structure for each cluster to /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_protein_md_analysis/python/sandbox_f18ea84c-7027-4351-bb28-8e34b120c4ef/output.cluster.pdb
+
+cl. | #st  rmsd | middle rmsd | cluster members
+  1 |  51  0.111 |    450 .103 |      0     10     20     30     40     50     60
+    |           |             |     70     80     90    100    110    120    130
+    |           |             |    140    150    160    170    180    190    200
+    |           |             |    210    220    230    240    250    260    270
+    |           |             |    280    290    300    310    320    330    340
+    |           |             |    350    360    370    380    390    400    410
+    |           |             |    420    430    440    450    460    470    480
+    |           |             |    490    500
