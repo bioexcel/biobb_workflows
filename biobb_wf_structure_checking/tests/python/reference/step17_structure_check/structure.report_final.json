@@ -1,0 +1,176 @@
+{
+ "FASTA": {
+  "canonical": "",
+  "structure": ">pdb_sq_A Frags: 1-195\nSMEEKLKKTNIIFVVGGPGSGKGTQCEKIVQKYGYTHLSTGDLLRSEVSSGSARGKKLSE\nIMEKGQLVPLETVLDMLRDAMVAKVNTSKGFLIDGYPREVQQGEEFERRIGQPTLLLYVD\nAGPETMTQRLLKRGETSGRVDDNEETIKKRLETYYKATEPVIAFYEKRGIVRKVNAEGSV\nDSVFSQVCTHLDALL\n"
+ },
+ "add_hydrogen": {
+  "ionic_detected": [
+   "GLU A3",
+   "GLU A4",
+   "LYS A5",
+   "LYS A7",
+   "LYS A8",
+   "LYS A22",
+   "CYS A26",
+   "GLU A27",
+   "LYS A28",
+   "LYS A32",
+   "TYR A33",
+   "TYR A35",
+   "ASP A42",
+   "ARG A45",
+   "GLU A47",
+   "ARG A54",
+   "LYS A56",
+   "LYS A57",
+   "GLU A60",
+   "GLU A63",
+   "LYS A64",
+   "GLU A71",
+   "ASP A75",
+   "ARG A78",
+   "ASP A79",
+   "LYS A84",
+   "LYS A89",
+   "ASP A94",
+   "TYR A96",
+   "ARG A98",
+   "GLU A99",
+   "GLU A104",
+   "GLU A105",
+   "GLU A107",
+   "ARG A108",
+   "ARG A109",
+   "TYR A118",
+   "ASP A120",
+   "GLU A124",
+   "ARG A129",
+   "LYS A132",
+   "ARG A133",
+   "GLU A135",
+   "ARG A139",
+   "ASP A141",
+   "ASP A142",
+   "GLU A144",
+   "GLU A145",
+   "LYS A148",
+   "LYS A149",
+   "ARG A150",
+   "GLU A152",
+   "TYR A154",
+   "TYR A155",
+   "LYS A156",
+   "GLU A159",
+   "TYR A165",
+   "GLU A166",
+   "LYS A167",
+   "ARG A168",
+   "ARG A172",
+   "LYS A173",
+   "GLU A177",
+   "ASP A181",
+   "CYS A188",
+   "ASP A192"
+  ]
+ },
+ "altloc": {},
+ "amide": {
+  "n_amides": 12
+ },
+ "backbone": {},
+ "chains": {
+  "A": "Protein/0",
+  "unlabelled": false
+ },
+ "chiral": {
+  "n_chirals": 23
+ },
+ "chiral_bck": {
+  "n_chirals": 176
+ },
+ "cistransbck": {
+  "cis": [
+   [
+    "TYR A96",
+    "PRO A97",
+    -10.786
+   ]
+  ]
+ },
+ "clashes": {
+  "detected": {
+   "apolar": [],
+   "negative": [],
+   "polar_acceptor": [],
+   "polar_donor": [],
+   "positive": [
+    {
+     "at1": "ARG A45.NH2",
+     "at2": "ARG A139.NH1",
+     "dist": 3.3053
+    },
+    {
+     "at1": "ARG A133.NH2",
+     "at2": "ARG A139.NE",
+     "dist": 3.1559
+    }
+   ],
+   "severe": []
+  }
+ },
+ "fixside": {},
+ "getss": {},
+ "headers": {
+  "entry_id": "",
+  "method": "unknown",
+  "resolution": "N.A.",
+  "title": ""
+ },
+ "inscodes": {},
+ "ligands": {},
+ "loaded_structure": "/Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_structure_checking/python/sandbox_9e68a134-0267-43a4-94ec-1408c0784d7d/structure.final.pdb",
+ "metals": {},
+ "models": {
+  "nmodels": 1
+ },
+ "rem_hydrogen": {
+  "n_detected": 195
+ },
+ "sequences": {},
+ "stats": {
+  "biounit": false,
+  "ca_only": false,
+  "chain_guess_details": [
+   {
+    "A": {
+     "DNA": 0.0,
+     "Other": 0.01025641025641022,
+     "Protein": 0.9897435897435898,
+     "RNA": 0.0
+    }
+   }
+  ],
+  "chain_ids": [
+   {
+    "A": "Protein"
+   }
+  ],
+  "models_type": 0,
+  "nchains": [
+   1
+  ],
+  "nmodels": 1,
+  "stats": {
+   "num_ats": 3078,
+   "num_h": 1557,
+   "num_res": 195,
+   "num_wat": 0,
+   "res_h": 195,
+   "res_hetats": 0,
+   "res_insc": 0,
+   "res_ligands": 0
+  },
+  "total_charge": null
+ },
+ "water": {}
+}
