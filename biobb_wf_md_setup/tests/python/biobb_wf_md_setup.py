@@ -381,7 +381,7 @@ def step23_rmsd_exp(config, remove=False, system=None):
     # assert fx.equal(global_paths["step23_rmsd_exp"]["output_xvg_path"], f'reference/step23_rmsd_exp/{Path(global_paths["step23_rmsd_exp"]["output_xvg_path"]).name}')
 
     if remove:
-        tmp_files = [conf.get_working_dir_path(), 'fort.7', 'gridout', 'restart']
+        tmp_files = [conf.get_working_dir_path()]
         tmp_files.extend(glob.glob('sandbox_*'))
         fu.rm_file_list(tmp_files)
 

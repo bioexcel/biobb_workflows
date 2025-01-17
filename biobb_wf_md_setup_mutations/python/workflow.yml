@@ -2,8 +2,7 @@ global_properties:
   working_dir_path: biobb_wf_md_setup_mutations
   can_write_console_log: False
   run_md: true
-
-mutations: ["A:Gly4Lys","A:Leu8Met","A:Tyr20Gln"]
+  mutations: ["A:Gly4Lys","A:Leu8Met","A:Tyr20Gln"]
 
 step0_reduce_remove_hydrogens:
   tool: reduce_remove_hydrogens

@@ -1,0 +1,78 @@
+# This file was created Thu Jan 16 12:42:21 2025
+# Created by:
+#                :-) GROMACS - gmx gyrate, 2022.2-conda_forge (-:
+# 
+# Executable:   /Users/gbayarri/miniconda3/envs/biobb_wf_md_setup_mutations/bin.SSE2/gmx
+# Data prefix:  /Users/gbayarri/miniconda3/envs/biobb_wf_md_setup_mutations
+# Working dir:  /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_md_setup_mutations/python
+# Command line:
+#   gmx gyrate -s /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_md_setup_mutations/python/sandbox_321e6335-fb2e-4f1f-96cd-2316046ca861/gppmd.tpr -f /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_md_setup_mutations/python/sandbox_321e6335-fb2e-4f1f-96cd-2316046ca861/md.imaged.rot.xtc -o /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_md_setup_mutations/python/sandbox_321e6335-fb2e-4f1f-96cd-2316046ca861/setup.rgyr.xvg -xvg xmgr -n /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_md_setup_mutations/python/sandbox_321e6335-fb2e-4f1f-96cd-2316046ca861/str_index.ndx
+# gmx gyrate is part of G R O M A C S:
+#
+# Georgetown Riga Oslo Madrid Amsterdam Chisinau Stockholm
+#
+@    title "Radius of gyration (total and around axes)"
+@    xaxis  label "Time (ps)"
+@    yaxis  label "Rg (nm)"
+@TYPE nxy
+@ view 0.15, 0.15, 0.75, 0.85
+@ legend on
+@ legend box on
+@ legend loctype view
+@ legend 0.78, 0.8
+@ legend length 2
+@ legend string 0 "Rg"
+@ legend string 1 "Rg\sX\N"
+@ legend string 2 "Rg\sY\N"
+@ legend string 3 "Rg\sZ\N"
+         0     1.40917     1.20545     1.02965     1.20756
+        10     1.41201       1.208     1.03293     1.20887
+        20     1.41643     1.20807     1.03733     1.21534
+        30     1.41539     1.21184     1.02428     1.22022
+        40     1.42253     1.21558     1.03309     1.22567
+        50     1.41218     1.20481     1.03553     1.21022
+        60     1.41497     1.20834     1.03676     1.21215
+        70     1.42151     1.22235     1.04277     1.20825
+        80      1.4151     1.20964     1.04152     1.20706
+        90     1.41672     1.21749      1.0297     1.21311
+       100     1.42131     1.21675     1.03294      1.2218
+       110     1.41845     1.21594     1.03979     1.21009
+       120     1.41828     1.21576     1.03908     1.21049
+       130     1.41837      1.2121     1.03725     1.21591
+       140     1.43103     1.22871     1.05188     1.21635
+       150     1.41778     1.21899     1.03258     1.21163
+       160     1.42431     1.21872     1.04518     1.21639
+       170     1.42867     1.22858     1.04284     1.21872
+       180     1.43137     1.22445      1.0462      1.2263
+       190     1.42768     1.22985     1.04159     1.21618
+       200     1.41229       1.211     1.03333     1.20616
+       210     1.40953     1.20626     1.03461     1.20337
+       220     1.41533     1.21196     1.03436     1.21143
+       230     1.42219     1.21888     1.03513     1.21987
+       240     1.41855     1.21296     1.04519     1.20866
+       250     1.41739     1.21467     1.03519     1.21282
+       260     1.40566     1.19735     1.03162     1.20577
+       270     1.41249     1.20281      1.0391     1.20987
+       280     1.41414     1.20531     1.04052     1.21002
+       290     1.41574     1.21362     1.03504     1.21014
+       300     1.40806     1.19215     1.04125     1.20825
+       310     1.40989     1.19828     1.03865     1.20868
+       320     1.41147     1.20339     1.03298     1.21216
+       330     1.41358     1.20669     1.03816     1.20935
+       340     1.41678     1.20853     1.03509     1.21762
+       350     1.41144     1.20299     1.03594     1.20995
+       360     1.41521     1.21012     1.03505      1.2124
+       370     1.41543     1.21111     1.03196     1.21456
+       380     1.42114     1.22309     1.03919      1.2097
+       390     1.42038     1.21277     1.03423     1.22251
+       400      1.4186     1.21684     1.04079     1.20868
+       410       1.421     1.21954     1.04028     1.21204
+       420     1.41962     1.21698     1.03518     1.21574
+       430     1.42012     1.21272       1.043     1.21447
+       440     1.42028     1.21544     1.03787     1.21652
+       450     1.42055     1.22028     1.04042     1.21012
+       460     1.42115     1.21852     1.04343     1.21069
+       470     1.42625     1.22408     1.04138     1.21884
+       480     1.42482      1.2231     1.03612     1.22093
+       490     1.42196     1.21638     1.04244     1.21558
+       500      1.4246     1.21617      1.0531     1.21279

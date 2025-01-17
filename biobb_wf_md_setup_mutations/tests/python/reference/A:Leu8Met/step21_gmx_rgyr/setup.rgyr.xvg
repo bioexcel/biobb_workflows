@@ -1,0 +1,78 @@
+# This file was created Thu Jan 16 13:32:47 2025
+# Created by:
+#                :-) GROMACS - gmx gyrate, 2022.2-conda_forge (-:
+# 
+# Executable:   /Users/gbayarri/miniconda3/envs/biobb_wf_md_setup_mutations/bin.SSE2/gmx
+# Data prefix:  /Users/gbayarri/miniconda3/envs/biobb_wf_md_setup_mutations
+# Working dir:  /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_md_setup_mutations/python
+# Command line:
+#   gmx gyrate -s /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_md_setup_mutations/python/sandbox_06a14041-e36a-4846-8242-73f79a6b36c4/gppmd.tpr -f /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_md_setup_mutations/python/sandbox_06a14041-e36a-4846-8242-73f79a6b36c4/md.imaged.rot.xtc -o /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_md_setup_mutations/python/sandbox_06a14041-e36a-4846-8242-73f79a6b36c4/setup.rgyr.xvg -xvg xmgr -n /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_md_setup_mutations/python/sandbox_06a14041-e36a-4846-8242-73f79a6b36c4/str_index.ndx
+# gmx gyrate is part of G R O M A C S:
+#
+# GROningen MAchine for Chemical Simulation
+#
+@    title "Radius of gyration (total and around axes)"
+@    xaxis  label "Time (ps)"
+@    yaxis  label "Rg (nm)"
+@TYPE nxy
+@ view 0.15, 0.15, 0.75, 0.85
+@ legend on
+@ legend box on
+@ legend loctype view
+@ legend 0.78, 0.8
+@ legend length 2
+@ legend string 0 "Rg"
+@ legend string 1 "Rg\sX\N"
+@ legend string 2 "Rg\sY\N"
+@ legend string 3 "Rg\sZ\N"
+         0      1.4033     1.20171     1.02546     1.20117
+        10     1.41662     1.21467     1.03981     1.20707
+        20     1.41828      1.2157     1.02693     1.22086
+        30     1.41568      1.2146     1.02586     1.21683
+        40     1.41932     1.21354     1.02887      1.2238
+        50     1.40701     1.20605     1.02652     1.20459
+        60     1.41924     1.21404     1.03395     1.21883
+        70     1.40144     1.19242      1.0332     1.19945
+        80     1.41185     1.20643     1.02848     1.21384
+        90     1.41401     1.21295     1.02003     1.21948
+       100     1.41175     1.21121     1.02251     1.21389
+       110     1.41213     1.20776     1.02149     1.21906
+       120     1.41397      1.2093     1.02735     1.21688
+       130     1.41381     1.20881     1.02625     1.21791
+       140     1.40683     1.19956     1.02621      1.2109
+       150     1.40852     1.20224     1.02165     1.21601
+       160      1.4134     1.20423     1.02794     1.22006
+       170     1.41809     1.21223     1.03947     1.21324
+       180     1.41111     1.20062     1.03672     1.21086
+       190     1.41136     1.20907     1.03388     1.20545
+       200      1.4072     1.19665     1.03681      1.2056
+       210     1.41112     1.20576     1.03018     1.21135
+       220     1.41747     1.21066     1.03781     1.21477
+       230       1.414     1.20808     1.04179     1.20582
+       240     1.41304     1.20574      1.0364     1.21057
+       250      1.4275     1.22139       1.044      1.2222
+       260     1.42078     1.21592     1.03688     1.21805
+       270     1.42238     1.21986     1.03454     1.21984
+       280     1.41508     1.21565     1.03749     1.20444
+       290     1.42091     1.22383     1.03365     1.21317
+       300     1.40956     1.20705     1.03915     1.19871
+       310     1.42714      1.2305     1.03156     1.22279
+       320     1.42916     1.23069       1.038     1.22187
+       330     1.42463      1.2235     1.04567     1.21192
+       340     1.41673     1.21655     1.04176     1.20374
+       350      1.4209     1.21677     1.04122     1.21378
+       360     1.42512     1.22117     1.04118     1.21926
+       370     1.42552     1.21508     1.04546     1.22262
+       380     1.41801     1.21496     1.03595     1.21335
+       390      1.4271     1.22635     1.04287     1.21727
+       400     1.43389     1.23467     1.05256     1.21647
+       410     1.42843     1.22699     1.04822     1.21515
+       420     1.42782     1.22822     1.04368     1.21636
+       430     1.41625     1.21494     1.03993     1.20583
+       440     1.41988     1.21749     1.04688     1.20578
+       450     1.42573     1.22549     1.04598     1.21225
+       460     1.42339      1.2208     1.03962     1.21694
+       470     1.42449     1.22568     1.04179     1.21275
+       480     1.41625     1.21452     1.03332      1.2119
+       490     1.42245     1.22188     1.04432     1.20959
+       500     1.42063     1.21691     1.04048     1.21363
