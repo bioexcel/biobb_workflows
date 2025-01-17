@@ -12,7 +12,6 @@ from biobb_gromacs.gromacs.pdb2gmx import pdb2gmx
 from biobb_gromacs.gromacs.make_ndx import make_ndx
 from biobb_gromacs.gromacs.genrestr import genrestr
 from biobb_analysis.gromacs.gmx_trjconv_str import gmx_trjconv_str
-from biobb_structure_utils.utils.cat_pdb import cat_pdb
 from biobb_gromacs.gromacs_extra.append_ligand import append_ligand
 from biobb_gromacs.gromacs.editconf import editconf
 from biobb_gromacs.gromacs.solvate import solvate
@@ -46,7 +45,7 @@ def main(config, system=None):
 
     global_log.info("step5_pdb2gmx: Create protein system topology")
     pdb2gmx(**global_paths["step5_pdb2gmx"], properties=global_prop["step5_pdb2gmx"])
-    
+
     global_log.info("step9_make_ndx: Creating an index file for the small molecule heavy atoms")
     make_ndx(**global_paths["step9_make_ndx"], properties=global_prop["step9_make_ndx"])
 
@@ -131,10 +130,10 @@ def main(config, system=None):
     global_log.info("step33_gmx_rgyr: Generate Radius of Gyration plot for the resulting setup trajectory from the free md step")
     gmx_rgyr(**global_paths["step33_gmx_rgyr"], properties=global_prop["step33_gmx_rgyr"])
 
-    if conf.properties['run_md']:
+    if conf.properties['global_properties']['run_md']:
         global_log.info("step36_grompp_md: Preprocess long MD simulation after setup")
         grompp(**global_paths["step36_grompp_md"], properties=global_prop["step36_grompp_md"])
-    
+
     elapsed_time = time.time() - start_time
     global_log.info('')
     global_log.info('')
@@ -146,6 +145,7 @@ def main(config, system=None):
     global_log.info('')
     global_log.info('Elapsed time: %.1f minutes' % (elapsed_time/60))
     global_log.info('')
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Protein Ligand Complex MD Setup tutorial using BioExcel Building Blocks")
