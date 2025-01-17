@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-#import os
 import time
 import argparse
 from biobb_common.configuration import settings
@@ -10,6 +9,7 @@ from biobb_vs.utils.box import box
 from biobb_chemistry.babelm.babel_convert import babel_convert
 from biobb_structure_utils.utils.str_check_add_hydrogens import str_check_add_hydrogens
 from biobb_vs.vina.autodock_vina_run import autodock_vina_run
+
 
 def main(config, system=None):
     start_time = time.time()
@@ -47,6 +47,7 @@ def main(config, system=None):
     global_log.info('')
     global_log.info('Elapsed time: %.1f minutes' % (elapsed_time/60))
     global_log.info('')
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Protein-ligand Docking tutorial using BioExcel Building Blocks")
