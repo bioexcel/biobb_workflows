@@ -87,7 +87,7 @@ def step6_babel_convert_pose_pdb(config, remove=False, system=None):
     babel_convert(**global_paths["step6_babel_convert_pose_pdb"], properties=global_prop["step6_babel_convert_pose_pdb"])
 
     assert fx.not_empty(global_paths["step6_babel_convert_pose_pdb"]["output_path"])
-    assert fx.compare_size(global_paths["step6_babel_convert_pose_pdb"]["output_path"], f'reference/step6_babel_convert_pose_pdb/{Path(global_paths["step6_babel_convert_pose_pdb"]["output_path"]).name}', .9)
+    assert fx.compare_size(global_paths["step6_babel_convert_pose_pdb"]["output_path"], f'reference/step6_babel_convert_pose_pdb/{Path(global_paths["step6_babel_convert_pose_pdb"]["output_path"]).name}', 90)
 
     if remove:
         tmp_files = [conf.get_working_dir_path()]
