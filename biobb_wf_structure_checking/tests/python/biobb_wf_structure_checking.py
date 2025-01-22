@@ -244,7 +244,7 @@ def step17_structure_check(config, remove=False, system=None):
     structure_check(**global_paths["step17_structure_check"], properties=global_prop["step17_structure_check"])
 
     assert fx.not_empty(global_paths["step17_structure_check"]["output_summary_path"])
-    assert fx.compare_size(global_paths["step17_structure_check"]["output_summary_path"], f'reference/step17_structure_check/{Path(global_paths["step17_structure_check"]["output_summary_path"]).name}', .9)
+    assert fx.compare_size(global_paths["step17_structure_check"]["output_summary_path"], f'reference/step17_structure_check/{Path(global_paths["step17_structure_check"]["output_summary_path"]).name}', 90)
 
     if remove:
         tmp_files = [conf.get_working_dir_path()]

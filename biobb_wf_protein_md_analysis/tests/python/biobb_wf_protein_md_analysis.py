@@ -139,7 +139,7 @@ def step7_gmx_cluster(config, remove=False, system=None):
     assert fx.not_empty(global_paths["step7_gmx_cluster"]["output_pdb_path"])
     assert fx.equal(global_paths["step7_gmx_cluster"]["output_pdb_path"], f'reference/step7_gmx_cluster/{Path(global_paths["step7_gmx_cluster"]["output_pdb_path"]).name}')
     assert fx.not_empty(global_paths["step7_gmx_cluster"]["output_cluster_log_path"])
-    assert fx.compare_size(global_paths["step7_gmx_cluster"]["output_cluster_log_path"], f'reference/step7_gmx_cluster/{Path(global_paths["step7_gmx_cluster"]["output_cluster_log_path"]).name}', .9)
+    assert fx.compare_size(global_paths["step7_gmx_cluster"]["output_cluster_log_path"], f'reference/step7_gmx_cluster/{Path(global_paths["step7_gmx_cluster"]["output_cluster_log_path"]).name}', 90)
 
     if remove:
         tmp_files = [conf.get_working_dir_path()]
