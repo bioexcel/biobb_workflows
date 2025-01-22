@@ -143,7 +143,6 @@ def step7_gmx_cluster(config, remove=False, system=None):
 
     if remove:
         tmp_files = [conf.get_working_dir_path()]
-        tmp_files.extend(glob.glob('sandbox_*'))
         fu.rm_file_list(tmp_files)
 
 

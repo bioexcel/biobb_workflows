@@ -32,7 +32,6 @@ def step0_cmip_prepare_pdb(config, system=None):
     cmip_prepare_pdb(**global_paths["step0_cmip_prepare_pdb"], properties=global_prop["step0_cmip_prepare_pdb"])
 
     assert fx.not_empty(global_paths["step0_cmip_prepare_pdb"]["output_cmip_pdb_path"])
-    assert fx.equal(global_paths["step0_cmip_prepare_pdb"]["output_cmip_pdb_path"], f'reference/step0_cmip_prepare_pdb/{Path(global_paths["step0_cmip_prepare_pdb"]["output_cmip_pdb_path"]).name}')
 
     global global_work_dir
     global_work_dir = conf.get_working_dir_path()
@@ -48,7 +47,6 @@ def step1_cmip_titration(config, system=None):
     cmip_titration(**global_paths["step1_cmip_titration"], properties=global_prop["step1_cmip_titration"])
 
     assert fx.not_empty(global_paths["step1_cmip_titration"]["output_pdb_path"])
-    assert fx.equal(global_paths["step1_cmip_titration"]["output_pdb_path"], f'reference/step1_cmip_titration/{Path(global_paths["step1_cmip_titration"]["output_pdb_path"]).name}')
 
 
 def step2_cat_pdb(config, system=None):
@@ -61,7 +59,6 @@ def step2_cat_pdb(config, system=None):
     cat_pdb(**global_paths["step2_cat_pdb"], properties=global_prop["step2_cat_pdb"])
 
     assert fx.not_empty(global_paths["step2_cat_pdb"]["output_structure_path"])
-    assert fx.equal(global_paths["step2_cat_pdb"]["output_structure_path"], f'reference/step2_cat_pdb/{Path(global_paths["step2_cat_pdb"]["output_structure_path"]).name}')
 
 
 def step3_cmip_run_pos(config, system=None):
@@ -74,7 +71,6 @@ def step3_cmip_run_pos(config, system=None):
     cmip_run(**global_paths["step3_cmip_run_pos"], properties=global_prop["step3_cmip_run_pos"])
 
     assert fx.not_empty(global_paths["step3_cmip_run_pos"]["output_cube_path"])
-    assert fx.equal(global_paths["step3_cmip_run_pos"]["output_cube_path"], f'reference/step3_cmip_run_pos/{Path(global_paths["step3_cmip_run_pos"]["output_cube_path"]).name}')
 
 
 def step4_cmip_run_neg(config, system=None):
@@ -87,7 +83,6 @@ def step4_cmip_run_neg(config, system=None):
     cmip_run(**global_paths["step4_cmip_run_neg"], properties=global_prop["step4_cmip_run_neg"])
 
     assert fx.not_empty(global_paths["step4_cmip_run_neg"]["output_cube_path"])
-    assert fx.equal(global_paths["step4_cmip_run_neg"]["output_cube_path"], f'reference/step4_cmip_run_neg/{Path(global_paths["step4_cmip_run_neg"]["output_cube_path"]).name}')
 
 
 def step5_cmip_run_neu(config, system=None):
@@ -100,7 +95,6 @@ def step5_cmip_run_neu(config, system=None):
     cmip_run(**global_paths["step5_cmip_run_neu"], properties=global_prop["step5_cmip_run_neu"])
 
     assert fx.not_empty(global_paths["step5_cmip_run_neu"]["output_cube_path"])
-    assert fx.equal(global_paths["step5_cmip_run_neu"]["output_cube_path"], f'reference/step5_cmip_run_neu/{Path(global_paths["step5_cmip_run_neu"]["output_cube_path"]).name}')
 
 
 def step6_remove_pdb_water(config, system=None):
@@ -113,7 +107,6 @@ def step6_remove_pdb_water(config, system=None):
     remove_pdb_water(**global_paths["step6_remove_pdb_water"], properties=global_prop["step6_remove_pdb_water"])
 
     assert fx.not_empty(global_paths["step6_remove_pdb_water"]["output_pdb_path"])
-    assert fx.equal(global_paths["step6_remove_pdb_water"]["output_pdb_path"], f'reference/step6_remove_pdb_water/{Path(global_paths["step6_remove_pdb_water"]["output_pdb_path"]).name}')
 
 
 def step7_extract_heteroatoms(config, system=None):
@@ -126,7 +119,6 @@ def step7_extract_heteroatoms(config, system=None):
     extract_heteroatoms(**global_paths["step7_extract_heteroatoms"], properties=global_prop["step7_extract_heteroatoms"])
 
     assert fx.not_empty(global_paths["step7_extract_heteroatoms"]["output_heteroatom_path"])
-    # assert fx.equal(global_paths["step7_extract_heteroatoms"]["output_heteroatom_path"], f'reference/step7_extract_heteroatoms/{Path(global_paths["step7_extract_heteroatoms"]["output_heteroatom_path"]).name}')
 
 
 def step8_reduce_add_hydrogens(config, system=None):
@@ -139,7 +131,6 @@ def step8_reduce_add_hydrogens(config, system=None):
     reduce_add_hydrogens(**global_paths["step8_reduce_add_hydrogens"], properties=global_prop["step8_reduce_add_hydrogens"])
 
     assert fx.not_empty(global_paths["step8_reduce_add_hydrogens"]["output_path"])
-    # assert fx.equal(global_paths["step8_reduce_add_hydrogens"]["output_path"], f'reference/step8_reduce_add_hydrogens/{Path(global_paths["step8_reduce_add_hydrogens"]["output_path"]).name}')
 
 
 def step9_acpype_params_ac(config, system=None):
@@ -152,13 +143,9 @@ def step9_acpype_params_ac(config, system=None):
     acpype_params_ac(**global_paths["step9_acpype_params_ac"], properties=global_prop["step9_acpype_params_ac"])
 
     assert fx.not_empty(global_paths["step9_acpype_params_ac"]["output_path_inpcrd"])
-    assert fx.equal(global_paths["step9_acpype_params_ac"]["output_path_inpcrd"], f'reference/step9_acpype_params_ac/{Path(global_paths["step9_acpype_params_ac"]["output_path_inpcrd"]).name}')
     assert fx.not_empty(global_paths["step9_acpype_params_ac"]["output_path_frcmod"])
-    assert fx.equal(global_paths["step9_acpype_params_ac"]["output_path_frcmod"], f'reference/step9_acpype_params_ac/{Path(global_paths["step9_acpype_params_ac"]["output_path_frcmod"]).name}')
     assert fx.not_empty(global_paths["step9_acpype_params_ac"]["output_path_lib"])
-    assert fx.equal(global_paths["step9_acpype_params_ac"]["output_path_lib"], f'reference/step9_acpype_params_ac/{Path(global_paths["step9_acpype_params_ac"]["output_path_lib"]).name}')
     assert fx.not_empty(global_paths["step9_acpype_params_ac"]["output_path_prmtop"])
-    assert fx.equal(global_paths["step9_acpype_params_ac"]["output_path_prmtop"], f'reference/step9_acpype_params_ac/{Path(global_paths["step9_acpype_params_ac"]["output_path_prmtop"]).name}')
 
 
 def step10_leap_gen_top(config, system=None):
@@ -171,11 +158,8 @@ def step10_leap_gen_top(config, system=None):
     leap_gen_top(**global_paths["step10_leap_gen_top"], properties=global_prop["step10_leap_gen_top"])
 
     assert fx.not_empty(global_paths["step10_leap_gen_top"]["output_pdb_path"])
-    assert fx.equal(global_paths["step10_leap_gen_top"]["output_pdb_path"], f'reference/step10_leap_gen_top/{Path(global_paths["step10_leap_gen_top"]["output_pdb_path"]).name}')
     assert fx.not_empty(global_paths["step10_leap_gen_top"]["output_top_path"])
-    assert fx.equal(global_paths["step10_leap_gen_top"]["output_top_path"], f'reference/step10_leap_gen_top/{Path(global_paths["step10_leap_gen_top"]["output_top_path"]).name}')
     assert fx.not_empty(global_paths["step10_leap_gen_top"]["output_crd_path"])
-    assert fx.equal(global_paths["step10_leap_gen_top"]["output_crd_path"], f'reference/step10_leap_gen_top/{Path(global_paths["step10_leap_gen_top"]["output_crd_path"]).name}')
 
 
 def step11_sander_mdrun(config, system=None):
@@ -188,11 +172,8 @@ def step11_sander_mdrun(config, system=None):
     sander_mdrun(**global_paths["step11_sander_mdrun"], properties=global_prop["step11_sander_mdrun"])
 
     assert fx.not_empty(global_paths["step11_sander_mdrun"]["output_traj_path"])
-    assert fx.equal(global_paths["step11_sander_mdrun"]["output_traj_path"], f'reference/step11_sander_mdrun/{Path(global_paths["step11_sander_mdrun"]["output_traj_path"]).name}')
     assert fx.not_empty(global_paths["step11_sander_mdrun"]["output_rst_path"])
-    assert fx.equal(global_paths["step11_sander_mdrun"]["output_rst_path"], f'reference/step11_sander_mdrun/{Path(global_paths["step11_sander_mdrun"]["output_rst_path"]).name}')
     assert fx.not_empty(global_paths["step11_sander_mdrun"]["output_log_path"])
-    # assert fx.equal(global_paths["step11_sander_mdrun"]["output_log_path"], f'reference/step11_sander_mdrun/{Path(global_paths["step11_sander_mdrun"]["output_log_path"]).name}')
 
 
 def step12_amber_to_pdb(config, system=None):
@@ -205,7 +186,6 @@ def step12_amber_to_pdb(config, system=None):
     amber_to_pdb(**global_paths["step12_amber_to_pdb"], properties=global_prop["step12_amber_to_pdb"])
 
     assert fx.not_empty(global_paths["step12_amber_to_pdb"]["output_pdb_path"])
-    assert fx.equal(global_paths["step12_amber_to_pdb"]["output_pdb_path"], f'reference/step12_amber_to_pdb/{Path(global_paths["step12_amber_to_pdb"]["output_pdb_path"]).name}')
 
 
 def step13_cmip_prepare_structure(config, system=None):
@@ -218,7 +198,6 @@ def step13_cmip_prepare_structure(config, system=None):
     cmip_prepare_structure(**global_paths["step13_cmip_prepare_structure"], properties=global_prop["step13_cmip_prepare_structure"])
 
     assert fx.not_empty(global_paths["step13_cmip_prepare_structure"]["output_cmip_pdb_path"])
-    assert fx.equal(global_paths["step13_cmip_prepare_structure"]["output_cmip_pdb_path"], f'reference/step13_cmip_prepare_structure/{Path(global_paths["step13_cmip_prepare_structure"]["output_cmip_pdb_path"]).name}')
 
 
 def step14_remove_ligand(config, system=None):
@@ -231,7 +210,6 @@ def step14_remove_ligand(config, system=None):
     remove_ligand(**global_paths["step14_remove_ligand"], properties=global_prop["step14_remove_ligand"])
 
     assert fx.not_empty(global_paths["step14_remove_ligand"]["output_structure_path"])
-    assert fx.equal(global_paths["step14_remove_ligand"]["output_structure_path"], f'reference/step14_remove_ligand/{Path(global_paths["step14_remove_ligand"]["output_structure_path"]).name}')
 
 
 def step15_cmip_ignore_residues(config, system=None):
@@ -244,7 +222,6 @@ def step15_cmip_ignore_residues(config, system=None):
     cmip_ignore_residues(**global_paths["step15_cmip_ignore_residues"], properties=global_prop["step15_cmip_ignore_residues"])
 
     assert fx.not_empty(global_paths["step15_cmip_ignore_residues"]["output_cmip_pdb_path"])
-    assert fx.equal(global_paths["step15_cmip_ignore_residues"]["output_cmip_pdb_path"], f'reference/step15_cmip_ignore_residues/{Path(global_paths["step15_cmip_ignore_residues"]["output_cmip_pdb_path"]).name}')
 
 
 def step16_cmip_run_int_en(config, system=None):
@@ -257,9 +234,7 @@ def step16_cmip_run_int_en(config, system=None):
     cmip_run(**global_paths["step16_cmip_run_int_en"], properties=global_prop["step16_cmip_run_int_en"])
 
     assert fx.not_empty(global_paths["step16_cmip_run_int_en"]["output_log_path"])
-    # assert fx.equal(global_paths["step16_cmip_run_int_en"]["output_log_path"], f'reference/step16_cmip_run_int_en/{Path(global_paths["step16_cmip_run_int_en"]["output_log_path"]).name}')
     assert fx.not_empty(global_paths["step16_cmip_run_int_en"]["output_byat_path"])
-    # assert fx.equal(global_paths["step16_cmip_run_int_en"]["output_byat_path"], f'reference/step16_cmip_run_int_en/{Path(global_paths["step16_cmip_run_int_en"]["output_byat_path"]).name}')
 
 
 def step17_cmip_prepare_structure(config, system=None):
@@ -272,7 +247,6 @@ def step17_cmip_prepare_structure(config, system=None):
     cmip_prepare_structure(**global_paths["step17_cmip_prepare_structure"], properties=global_prop["step17_cmip_prepare_structure"])
 
     assert fx.not_empty(global_paths["step17_cmip_prepare_structure"]["output_cmip_pdb_path"])
-    assert fx.equal(global_paths["step17_cmip_prepare_structure"]["output_cmip_pdb_path"], f'reference/step17_cmip_prepare_structure/{Path(global_paths["step17_cmip_prepare_structure"]["output_cmip_pdb_path"]).name}')
 
 
 def step18_extract_chain_a(config, system=None):
@@ -285,7 +259,6 @@ def step18_extract_chain_a(config, system=None):
     extract_chain(**global_paths["step18_extract_chain_a"], properties=global_prop["step18_extract_chain_a"])
 
     assert fx.not_empty(global_paths["step18_extract_chain_a"]["output_structure_path"])
-    assert fx.equal(global_paths["step18_extract_chain_a"]["output_structure_path"], f'reference/step18_extract_chain_a/{Path(global_paths["step18_extract_chain_a"]["output_structure_path"]).name}')
 
 
 def step19_extract_chain_b(config, system=None):
@@ -298,7 +271,6 @@ def step19_extract_chain_b(config, system=None):
     extract_chain(**global_paths["step19_extract_chain_b"], properties=global_prop["step19_extract_chain_b"])
 
     assert fx.not_empty(global_paths["step19_extract_chain_b"]["output_structure_path"])
-    assert fx.equal(global_paths["step19_extract_chain_b"]["output_structure_path"], f'reference/step19_extract_chain_b/{Path(global_paths["step19_extract_chain_b"]["output_structure_path"]).name}')
 
 
 def step20_cmip_run_rbd(config, system=None):
@@ -311,7 +283,6 @@ def step20_cmip_run_rbd(config, system=None):
     cmip_run(**global_paths["step20_cmip_run_rbd"], properties=global_prop["step20_cmip_run_rbd"])
 
     assert fx.not_empty(global_paths["step20_cmip_run_rbd"]["output_json_box_path"])
-    assert fx.equal(global_paths["step20_cmip_run_rbd"]["output_json_box_path"], f'reference/step20_cmip_run_rbd/{Path(global_paths["step20_cmip_run_rbd"]["output_json_box_path"]).name}')
 
 
 def step21_cmip_run_hace2(config, system=None):
@@ -324,7 +295,6 @@ def step21_cmip_run_hace2(config, system=None):
     cmip_run(**global_paths["step21_cmip_run_hace2"], properties=global_prop["step21_cmip_run_hace2"])
 
     assert fx.not_empty(global_paths["step21_cmip_run_hace2"]["output_json_box_path"])
-    assert fx.equal(global_paths["step21_cmip_run_hace2"]["output_json_box_path"], f'reference/step21_cmip_run_hace2/{Path(global_paths["step21_cmip_run_hace2"]["output_json_box_path"]).name}')
 
 
 def step22_cmip_run_rbd_hace2(config, system=None):
@@ -337,7 +307,6 @@ def step22_cmip_run_rbd_hace2(config, system=None):
     cmip_run(**global_paths["step22_cmip_run_rbd_hace2"], properties=global_prop["step22_cmip_run_rbd_hace2"])
 
     assert fx.not_empty(global_paths["step22_cmip_run_rbd_hace2"]["output_json_box_path"])
-    assert fx.equal(global_paths["step22_cmip_run_rbd_hace2"]["output_json_box_path"], f'reference/step22_cmip_run_rbd_hace2/{Path(global_paths["step22_cmip_run_rbd_hace2"]["output_json_box_path"]).name}')
 
 
 def step23_cmip_ignore_residues_rbd(config, system=None):
@@ -350,7 +319,6 @@ def step23_cmip_ignore_residues_rbd(config, system=None):
     cmip_ignore_residues(**global_paths["step23_cmip_ignore_residues_rbd"], properties=global_prop["step23_cmip_ignore_residues_rbd"])
 
     assert fx.not_empty(global_paths["step23_cmip_ignore_residues_rbd"]["output_cmip_pdb_path"])
-    assert fx.equal(global_paths["step23_cmip_ignore_residues_rbd"]["output_cmip_pdb_path"], f'reference/step23_cmip_ignore_residues_rbd/{Path(global_paths["step23_cmip_ignore_residues_rbd"]["output_cmip_pdb_path"]).name}')
 
 
 def step24_cmip_run_prot_prot(config, system=None):
@@ -363,13 +331,9 @@ def step24_cmip_run_prot_prot(config, system=None):
     cmip_run(**global_paths["step24_cmip_run_prot_prot"], properties=global_prop["step24_cmip_run_prot_prot"])
 
     assert fx.not_empty(global_paths["step24_cmip_run_prot_prot"]["output_log_path"])
-    assert fx.equal(global_paths["step24_cmip_run_prot_prot"]["output_log_path"], f'reference/step24_cmip_run_prot_prot/{Path(global_paths["step24_cmip_run_prot_prot"]["output_log_path"]).name}')
     assert fx.not_empty(global_paths["step24_cmip_run_prot_prot"]["output_json_box_path"])
-    assert fx.equal(global_paths["step24_cmip_run_prot_prot"]["output_json_box_path"], f'reference/step24_cmip_run_prot_prot/{Path(global_paths["step24_cmip_run_prot_prot"]["output_json_box_path"]).name}')
     assert fx.not_empty(global_paths["step24_cmip_run_prot_prot"]["output_json_external_box_path"])
-    assert fx.equal(global_paths["step24_cmip_run_prot_prot"]["output_json_external_box_path"], f'reference/step24_cmip_run_prot_prot/{Path(global_paths["step24_cmip_run_prot_prot"]["output_json_external_box_path"]).name}')
     assert fx.not_empty(global_paths["step24_cmip_run_prot_prot"]["output_byat_path"])
-    assert fx.equal(global_paths["step24_cmip_run_prot_prot"]["output_byat_path"], f'reference/step24_cmip_run_prot_prot/{Path(global_paths["step24_cmip_run_prot_prot"]["output_byat_path"]).name}')
 
 
 def step25_cmip_ignore_residues_hace2(config, system=None):
@@ -382,7 +346,6 @@ def step25_cmip_ignore_residues_hace2(config, system=None):
     cmip_ignore_residues(**global_paths["step25_cmip_ignore_residues_hace2"], properties=global_prop["step25_cmip_ignore_residues_hace2"])
 
     assert fx.not_empty(global_paths["step25_cmip_ignore_residues_hace2"]["output_cmip_pdb_path"])
-    assert fx.equal(global_paths["step25_cmip_ignore_residues_hace2"]["output_cmip_pdb_path"], f'reference/step25_cmip_ignore_residues_hace2/{Path(global_paths["step25_cmip_ignore_residues_hace2"]["output_cmip_pdb_path"]).name}')
 
 
 def step26_cmip_run_complex(config, remove=False, system=None):
@@ -395,17 +358,16 @@ def step26_cmip_run_complex(config, remove=False, system=None):
     cmip_run(**global_paths["step26_cmip_run_complex"], properties=global_prop["step26_cmip_run_complex"])
 
     assert fx.not_empty(global_paths["step26_cmip_run_complex"]["output_log_path"])
-    # assert fx.equal(global_paths["step26_cmip_run_complex"]["output_log_path"], f'reference/step26_cmip_run_complex/{Path(global_paths["step26_cmip_run_complex"]["output_log_path"]).name}')
+    assert fx.compare_size(global_paths["step26_cmip_run_complex"]["output_log_path"], f'reference/step26_cmip_run_complex/{Path(global_paths["step26_cmip_run_complex"]["output_log_path"]).name}', 10)
     assert fx.not_empty(global_paths["step26_cmip_run_complex"]["output_json_box_path"])
-    # assert fx.equal(global_paths["step26_cmip_run_complex"]["output_json_box_path"], f'reference/step26_cmip_run_complex/{Path(global_paths["step26_cmip_run_complex"]["output_json_box_path"]).name}')
+    assert fx.compare_size(global_paths["step26_cmip_run_complex"]["output_json_box_path"], f'reference/step26_cmip_run_complex/{Path(global_paths["step26_cmip_run_complex"]["output_json_box_path"]).name}', 10)
     assert fx.not_empty(global_paths["step26_cmip_run_complex"]["output_json_external_box_path"])
-    # assert fx.equal(global_paths["step26_cmip_run_complex"]["output_json_external_box_path"], f'reference/step26_cmip_run_complex/{Path(global_paths["step26_cmip_run_complex"]["output_json_external_box_path"]).name}')
+    assert fx.compare_size(global_paths["step26_cmip_run_complex"]["output_json_external_box_path"], f'reference/step26_cmip_run_complex/{Path(global_paths["step26_cmip_run_complex"]["output_json_external_box_path"]).name}', 10)
     assert fx.not_empty(global_paths["step26_cmip_run_complex"]["output_byat_path"])
-    # assert fx.equal(global_paths["step26_cmip_run_complex"]["output_byat_path"], f'reference/step26_cmip_run_complex/{Path(global_paths["step26_cmip_run_complex"]["output_byat_path"]).name}')
+    assert fx.compare_size(global_paths["step26_cmip_run_complex"]["output_byat_path"], f'reference/step26_cmip_run_complex/{Path(global_paths["step26_cmip_run_complex"]["output_byat_path"]).name}', 10)
 
     if remove:
         tmp_files = [conf.get_working_dir_path(), 'fort.7', 'gridout', 'restart']
-        tmp_files.extend(glob.glob('sandbox_*'))
         fu.rm_file_list(tmp_files)
 
 

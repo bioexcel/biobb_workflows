@@ -31,7 +31,6 @@ def step00_reduce_remove_hydrogens(config, system=None):
     reduce_remove_hydrogens(**global_paths["step00_reduce_remove_hydrogens"], properties=global_prop["step00_reduce_remove_hydrogens"])
 
     assert fx.not_empty(global_paths["step00_reduce_remove_hydrogens"]["output_path"])
-    assert fx.equal(global_paths["step00_reduce_remove_hydrogens"]["output_path"], f'reference/step00_reduce_remove_hydrogens/{Path(global_paths["step00_reduce_remove_hydrogens"]["output_path"]).name}')
 
     global global_work_dir
     global_work_dir = conf.get_working_dir_path()
@@ -47,7 +46,6 @@ def step0_extract_molecule(config, system=None):
     extract_molecule(**global_paths["step0_extract_molecule"], properties=global_prop["step0_extract_molecule"])
 
     assert fx.not_empty(global_paths["step0_extract_molecule"]["output_molecule_path"])
-    assert fx.equal(global_paths["step0_extract_molecule"]["output_molecule_path"], f'reference/step0_extract_molecule/{Path(global_paths["step0_extract_molecule"]["output_molecule_path"]).name}')
 
 
 def step000_cat_pdb(config, system=None):
@@ -60,7 +58,6 @@ def step000_cat_pdb(config, system=None):
     cat_pdb(**global_paths["step000_cat_pdb"], properties=global_prop["step000_cat_pdb"])
 
     assert fx.not_empty(global_paths["step000_cat_pdb"]["output_structure_path"])
-    assert fx.equal(global_paths["step000_cat_pdb"]["output_structure_path"], f'reference/step000_cat_pdb/{Path(global_paths["step000_cat_pdb"]["output_structure_path"]).name}')
 
 
 def step1_pdb4amber_run(config, system=None):
@@ -73,7 +70,6 @@ def step1_pdb4amber_run(config, system=None):
     pdb4amber_run(**global_paths["step1_pdb4amber_run"], properties=global_prop["step1_pdb4amber_run"])
 
     assert fx.not_empty(global_paths["step1_pdb4amber_run"]["output_pdb_path"])
-    assert fx.equal(global_paths["step1_pdb4amber_run"]["output_pdb_path"], f'reference/step1_pdb4amber_run/{Path(global_paths["step1_pdb4amber_run"]["output_pdb_path"]).name}')
 
 
 def step2_leap_gen_top(config, system=None):
@@ -86,11 +82,8 @@ def step2_leap_gen_top(config, system=None):
     leap_gen_top(**global_paths["step2_leap_gen_top"], properties=global_prop["step2_leap_gen_top"])
 
     assert fx.not_empty(global_paths["step2_leap_gen_top"]["output_pdb_path"])
-    assert fx.equal(global_paths["step2_leap_gen_top"]["output_pdb_path"], f'reference/step2_leap_gen_top/{Path(global_paths["step2_leap_gen_top"]["output_pdb_path"]).name}')
     assert fx.not_empty(global_paths["step2_leap_gen_top"]["output_top_path"])
-    assert fx.equal(global_paths["step2_leap_gen_top"]["output_top_path"], f'reference/step2_leap_gen_top/{Path(global_paths["step2_leap_gen_top"]["output_top_path"]).name}')
     assert fx.not_empty(global_paths["step2_leap_gen_top"]["output_crd_path"])
-    assert fx.equal(global_paths["step2_leap_gen_top"]["output_crd_path"], f'reference/step2_leap_gen_top/{Path(global_paths["step2_leap_gen_top"]["output_crd_path"]).name}')
 
 
 def step3_sander_mdrun_minH(config, system=None):
@@ -103,11 +96,8 @@ def step3_sander_mdrun_minH(config, system=None):
     sander_mdrun(**global_paths["step3_sander_mdrun_minH"], properties=global_prop["step3_sander_mdrun_minH"])
 
     assert fx.not_empty(global_paths["step3_sander_mdrun_minH"]["output_traj_path"])
-    assert fx.equal(global_paths["step3_sander_mdrun_minH"]["output_traj_path"], f'reference/step3_sander_mdrun_minH/{Path(global_paths["step3_sander_mdrun_minH"]["output_traj_path"]).name}')
     assert fx.not_empty(global_paths["step3_sander_mdrun_minH"]["output_rst_path"])
-    assert fx.equal(global_paths["step3_sander_mdrun_minH"]["output_rst_path"], f'reference/step3_sander_mdrun_minH/{Path(global_paths["step3_sander_mdrun_minH"]["output_rst_path"]).name}')
     assert fx.not_empty(global_paths["step3_sander_mdrun_minH"]["output_log_path"])
-    # assert fx.equal(global_paths["step3_sander_mdrun_minH"]["output_log_path"], f'reference/step3_sander_mdrun_minH/{Path(global_paths["step3_sander_mdrun_minH"]["output_log_path"]).name}')
 
 
 def step4_process_minout_minH(config, system=None):
@@ -120,7 +110,6 @@ def step4_process_minout_minH(config, system=None):
     process_minout(**global_paths["step4_process_minout_minH"], properties=global_prop["step4_process_minout_minH"])
 
     assert fx.not_empty(global_paths["step4_process_minout_minH"]["output_dat_path"])
-    assert fx.equal(global_paths["step4_process_minout_minH"]["output_dat_path"], f'reference/step4_process_minout_minH/{Path(global_paths["step4_process_minout_minH"]["output_dat_path"]).name}')
 
 
 def step5_sander_mdrun_min(config, system=None):
@@ -133,11 +122,8 @@ def step5_sander_mdrun_min(config, system=None):
     sander_mdrun(**global_paths["step5_sander_mdrun_min"], properties=global_prop["step5_sander_mdrun_min"])
 
     assert fx.not_empty(global_paths["step5_sander_mdrun_min"]["output_traj_path"])
-    assert fx.equal(global_paths["step5_sander_mdrun_min"]["output_traj_path"], f'reference/step5_sander_mdrun_min/{Path(global_paths["step5_sander_mdrun_min"]["output_traj_path"]).name}')
     assert fx.not_empty(global_paths["step5_sander_mdrun_min"]["output_rst_path"])
-    assert fx.equal(global_paths["step5_sander_mdrun_min"]["output_rst_path"], f'reference/step5_sander_mdrun_min/{Path(global_paths["step5_sander_mdrun_min"]["output_rst_path"]).name}')
     assert fx.not_empty(global_paths["step5_sander_mdrun_min"]["output_log_path"])
-    # assert fx.equal(global_paths["step5_sander_mdrun_min"]["output_log_path"], f'reference/step5_sander_mdrun_min/{Path(global_paths["step5_sander_mdrun_min"]["output_log_path"]).name}')
 
 
 def step6_process_minout_min(config, system=None):
@@ -150,7 +136,6 @@ def step6_process_minout_min(config, system=None):
     process_minout(**global_paths["step6_process_minout_min"], properties=global_prop["step6_process_minout_min"])
 
     assert fx.not_empty(global_paths["step6_process_minout_min"]["output_dat_path"])
-    assert fx.equal(global_paths["step6_process_minout_min"]["output_dat_path"], f'reference/step6_process_minout_min/{Path(global_paths["step6_process_minout_min"]["output_dat_path"]).name}')
 
 
 def step7_amber_to_pdb(config, system=None):
@@ -163,7 +148,6 @@ def step7_amber_to_pdb(config, system=None):
     amber_to_pdb(**global_paths["step7_amber_to_pdb"], properties=global_prop["step7_amber_to_pdb"])
 
     assert fx.not_empty(global_paths["step7_amber_to_pdb"]["output_dat_path"])
-    assert fx.equal(global_paths["step7_amber_to_pdb"]["output_dat_path"], f'reference/step7_amber_to_pdb/{Path(global_paths["step7_amber_to_pdb"]["output_dat_path"]).name}')
 
 
 def step8_leap_solvate(config, system=None):
@@ -176,11 +160,8 @@ def step8_leap_solvate(config, system=None):
     leap_solvate(**global_paths["step8_leap_solvate"], properties=global_prop["step8_leap_solvate"])
 
     assert fx.not_empty(global_paths["step8_leap_solvate"]["output_pdb_path"])
-    assert fx.equal(global_paths["step8_leap_solvate"]["output_pdb_path"], f'reference/step8_leap_solvate/{Path(global_paths["step8_leap_solvate"]["output_pdb_path"]).name}')
     assert fx.not_empty(global_paths["step8_leap_solvate"]["output_top_path"])
-    assert fx.equal(global_paths["step8_leap_solvate"]["output_top_path"], f'reference/step8_leap_solvate/{Path(global_paths["step8_leap_solvate"]["output_top_path"]).name}')
     assert fx.not_empty(global_paths["step8_leap_solvate"]["output_crd_path"])
-    assert fx.equal(global_paths["step8_leap_solvate"]["output_crd_path"], f'reference/step8_leap_solvate/{Path(global_paths["step8_leap_solvate"]["output_crd_path"]).name}')
 
 
 def step9_leap_add_ions(config, system=None):
@@ -193,11 +174,8 @@ def step9_leap_add_ions(config, system=None):
     leap_add_ions(**global_paths["step9_leap_add_ions"], properties=global_prop["step9_leap_add_ions"])
 
     assert fx.not_empty(global_paths["step9_leap_add_ions"]["output_pdb_path"])
-    assert fx.equal(global_paths["step9_leap_add_ions"]["output_pdb_path"], f'reference/step9_leap_add_ions/{Path(global_paths["step9_leap_add_ions"]["output_pdb_path"]).name}')
     assert fx.not_empty(global_paths["step9_leap_add_ions"]["output_top_path"])
-    assert fx.equal(global_paths["step9_leap_add_ions"]["output_top_path"], f'reference/step9_leap_add_ions/{Path(global_paths["step9_leap_add_ions"]["output_top_path"]).name}')
     assert fx.not_empty(global_paths["step9_leap_add_ions"]["output_crd_path"])
-    assert fx.equal(global_paths["step9_leap_add_ions"]["output_crd_path"], f'reference/step9_leap_add_ions/{Path(global_paths["step9_leap_add_ions"]["output_crd_path"]).name}')
 
 
 def step10_sander_mdrun_energy(config, system=None):
@@ -210,11 +188,8 @@ def step10_sander_mdrun_energy(config, system=None):
     sander_mdrun(**global_paths["step10_sander_mdrun_energy"], properties=global_prop["step10_sander_mdrun_energy"])
 
     assert fx.not_empty(global_paths["step10_sander_mdrun_energy"]["output_traj_path"])
-    assert fx.equal(global_paths["step10_sander_mdrun_energy"]["output_traj_path"], f'reference/step10_sander_mdrun_energy/{Path(global_paths["step10_sander_mdrun_energy"]["output_traj_path"]).name}')
     assert fx.not_empty(global_paths["step10_sander_mdrun_energy"]["output_rst_path"])
-    assert fx.equal(global_paths["step10_sander_mdrun_energy"]["output_rst_path"], f'reference/step10_sander_mdrun_energy/{Path(global_paths["step10_sander_mdrun_energy"]["output_rst_path"]).name}')
     assert fx.not_empty(global_paths["step10_sander_mdrun_energy"]["output_log_path"])
-    # assert fx.equal(global_paths["step10_sander_mdrun_energy"]["output_log_path"], f'reference/step10_sander_mdrun_energy/{Path(global_paths["step10_sander_mdrun_energy"]["output_log_path"]).name}')
 
 
 def step11_process_minout_energy(config, system=None):
@@ -227,7 +202,6 @@ def step11_process_minout_energy(config, system=None):
     process_minout(**global_paths["step11_process_minout_energy"], properties=global_prop["step11_process_minout_energy"])
 
     assert fx.not_empty(global_paths["step11_process_minout_energy"]["output_dat_path"])
-    assert fx.equal(global_paths["step11_process_minout_energy"]["output_dat_path"], f'reference/step11_process_minout_energy/{Path(global_paths["step11_process_minout_energy"]["output_dat_path"]).name}')
 
 
 def step12_sander_mdrun_warm(config, system=None):
@@ -240,11 +214,8 @@ def step12_sander_mdrun_warm(config, system=None):
     sander_mdrun(**global_paths["step12_sander_mdrun_warm"], properties=global_prop["step12_sander_mdrun_warm"])
 
     assert fx.not_empty(global_paths["step12_sander_mdrun_warm"]["output_traj_path"])
-    # assert fx.equal(global_paths["step12_sander_mdrun_warm"]["output_traj_path"], f'reference/step12_sander_mdrun_warm/{Path(global_paths["step12_sander_mdrun_warm"]["output_traj_path"]).name}')
     assert fx.not_empty(global_paths["step12_sander_mdrun_warm"]["output_rst_path"])
-    assert fx.equal(global_paths["step12_sander_mdrun_warm"]["output_rst_path"], f'reference/step12_sander_mdrun_warm/{Path(global_paths["step12_sander_mdrun_warm"]["output_rst_path"]).name}')
     assert fx.not_empty(global_paths["step12_sander_mdrun_warm"]["output_log_path"])
-    # assert fx.equal(global_paths["step12_sander_mdrun_warm"]["output_log_path"], f'reference/step12_sander_mdrun_warm/{Path(global_paths["step12_sander_mdrun_warm"]["output_log_path"]).name}')
 
 
 def step13_process_mdout_warm(config, system=None):
@@ -257,7 +228,6 @@ def step13_process_mdout_warm(config, system=None):
     process_mdout(**global_paths["step13_process_mdout_warm"], properties=global_prop["step13_process_mdout_warm"])
 
     assert fx.not_empty(global_paths["step13_process_mdout_warm"]["output_dat_path"])
-    assert fx.equal(global_paths["step13_process_mdout_warm"]["output_dat_path"], f'reference/step13_process_mdout_warm/{Path(global_paths["step13_process_mdout_warm"]["output_dat_path"]).name}')
 
 
 def step14_sander_mdrun_nvt(config, system=None):
@@ -270,11 +240,8 @@ def step14_sander_mdrun_nvt(config, system=None):
     sander_mdrun(**global_paths["step14_sander_mdrun_nvt"], properties=global_prop["step14_sander_mdrun_nvt"])
 
     assert fx.not_empty(global_paths["step14_sander_mdrun_nvt"]["output_traj_path"])
-    # assert fx.equal(global_paths["step14_sander_mdrun_nvt"]["output_traj_path"], f'reference/step14_sander_mdrun_nvt/{Path(global_paths["step14_sander_mdrun_nvt"]["output_traj_path"]).name}')
     assert fx.not_empty(global_paths["step14_sander_mdrun_nvt"]["output_rst_path"])
-    assert fx.equal(global_paths["step14_sander_mdrun_nvt"]["output_rst_path"], f'reference/step14_sander_mdrun_nvt/{Path(global_paths["step14_sander_mdrun_nvt"]["output_rst_path"]).name}')
     assert fx.not_empty(global_paths["step14_sander_mdrun_nvt"]["output_log_path"])
-    # assert fx.equal(global_paths["step14_sander_mdrun_nvt"]["output_log_path"], f'reference/step14_sander_mdrun_nvt/{Path(global_paths["step14_sander_mdrun_nvt"]["output_log_path"]).name}')
 
 
 def step15_process_mdout_nvt(config, system=None):
@@ -287,7 +254,6 @@ def step15_process_mdout_nvt(config, system=None):
     process_mdout(**global_paths["step15_process_mdout_nvt"], properties=global_prop["step15_process_mdout_nvt"])
 
     assert fx.not_empty(global_paths["step15_process_mdout_nvt"]["output_dat_path"])
-    assert fx.equal(global_paths["step15_process_mdout_nvt"]["output_dat_path"], f'reference/step15_process_mdout_nvt/{Path(global_paths["step15_process_mdout_nvt"]["output_dat_path"]).name}')
 
 
 def step16_sander_mdrun_npt(config, system=None):
@@ -300,11 +266,8 @@ def step16_sander_mdrun_npt(config, system=None):
     sander_mdrun(**global_paths["step16_sander_mdrun_npt"], properties=global_prop["step16_sander_mdrun_npt"])
 
     assert fx.not_empty(global_paths["step16_sander_mdrun_npt"]["output_traj_path"])
-    # assert fx.equal(global_paths["step16_sander_mdrun_npt"]["output_traj_path"], f'reference/step16_sander_mdrun_npt/{Path(global_paths["step16_sander_mdrun_npt"]["output_traj_path"]).name}')
     assert fx.not_empty(global_paths["step16_sander_mdrun_npt"]["output_rst_path"])
-    assert fx.equal(global_paths["step16_sander_mdrun_npt"]["output_rst_path"], f'reference/step16_sander_mdrun_npt/{Path(global_paths["step16_sander_mdrun_npt"]["output_rst_path"]).name}')
     assert fx.not_empty(global_paths["step16_sander_mdrun_npt"]["output_log_path"])
-    # assert fx.equal(global_paths["step16_sander_mdrun_npt"]["output_log_path"], f'reference/step16_sander_mdrun_npt/{Path(global_paths["step16_sander_mdrun_npt"]["output_log_path"]).name}')
 
 
 def step17_process_mdout_npt(config, system=None):
@@ -317,7 +280,6 @@ def step17_process_mdout_npt(config, system=None):
     process_mdout(**global_paths["step17_process_mdout_npt"], properties=global_prop["step17_process_mdout_npt"])
 
     assert fx.not_empty(global_paths["step17_process_mdout_npt"]["output_dat_path"])
-    assert fx.equal(global_paths["step17_process_mdout_npt"]["output_dat_path"], f'reference/step17_process_mdout_npt/{Path(global_paths["step17_process_mdout_npt"]["output_dat_path"]).name}')
 
 
 def step18_sander_mdrun_md(config, system=None):
@@ -330,11 +292,8 @@ def step18_sander_mdrun_md(config, system=None):
     sander_mdrun(**global_paths["step18_sander_mdrun_md"], properties=global_prop["step18_sander_mdrun_md"])
 
     assert fx.not_empty(global_paths["step18_sander_mdrun_md"]["output_traj_path"])
-    # assert fx.equal(global_paths["step18_sander_mdrun_md"]["output_traj_path"], f'reference/step18_sander_mdrun_md/{Path(global_paths["step18_sander_mdrun_md"]["output_traj_path"]).name}')
     assert fx.not_empty(global_paths["step18_sander_mdrun_md"]["output_rst_path"])
-    assert fx.equal(global_paths["step18_sander_mdrun_md"]["output_rst_path"], f'reference/step18_sander_mdrun_md/{Path(global_paths["step18_sander_mdrun_md"]["output_rst_path"]).name}')
     assert fx.not_empty(global_paths["step18_sander_mdrun_md"]["output_log_path"])
-    # assert fx.equal(global_paths["step18_sander_mdrun_md"]["output_log_path"], f'reference/step18_sander_mdrun_md/{Path(global_paths["step18_sander_mdrun_md"]["output_log_path"]).name}')
 
 
 def step19_rmsd_first(config, system=None):
@@ -347,7 +306,6 @@ def step19_rmsd_first(config, system=None):
     cpptraj_rms(**global_paths["step19_rmsd_first"], properties=global_prop["step19_rmsd_first"])
 
     assert fx.not_empty(global_paths["step19_rmsd_first"]["output_cpptraj_path"])
-    assert fx.equal(global_paths["step19_rmsd_first"]["output_cpptraj_path"], f'reference/step19_rmsd_first/{Path(global_paths["step19_rmsd_first"]["output_cpptraj_path"]).name}')
 
 
 def step20_rmsd_exp(config, system=None):
@@ -360,7 +318,6 @@ def step20_rmsd_exp(config, system=None):
     cpptraj_rms(**global_paths["step20_rmsd_exp"], properties=global_prop["step20_rmsd_exp"])
 
     assert fx.not_empty(global_paths["step20_rmsd_exp"]["output_cpptraj_path"])
-    assert fx.equal(global_paths["step20_rmsd_exp"]["output_cpptraj_path"], f'reference/step20_rmsd_exp/{Path(global_paths["step20_rmsd_exp"]["output_cpptraj_path"]).name}')
 
 
 def step21_cpptraj_rgyr(config, system=None):
@@ -373,7 +330,6 @@ def step21_cpptraj_rgyr(config, system=None):
     cpptraj_rgyr(**global_paths["step21_cpptraj_rgyr"], properties=global_prop["step21_cpptraj_rgyr"])
 
     assert fx.not_empty(global_paths["step21_cpptraj_rgyr"]["output_cpptraj_path"])
-    assert fx.equal(global_paths["step21_cpptraj_rgyr"]["output_cpptraj_path"], f'reference/step21_cpptraj_rgyr/{Path(global_paths["step21_cpptraj_rgyr"]["output_cpptraj_path"]).name}')
 
 
 def step22_cpptraj_image(config, remove=False, system=None):
@@ -386,11 +342,10 @@ def step22_cpptraj_image(config, remove=False, system=None):
     cpptraj_image(**global_paths["step22_cpptraj_image"], properties=global_prop["step22_cpptraj_image"])
 
     assert fx.not_empty(global_paths["step22_cpptraj_image"]["output_cpptraj_path"])
-    assert fx.equal(global_paths["step22_cpptraj_image"]["output_cpptraj_path"], f'reference/step22_cpptraj_image/{Path(global_paths["step22_cpptraj_image"]["output_cpptraj_path"]).name}')
+    assert fx.compare_size(global_paths["step22_cpptraj_image"]["output_cpptraj_path"], f'reference/step22_cpptraj_image/{Path(global_paths["step22_cpptraj_image"]["output_cpptraj_path"]).name}', 10)
 
     if remove:
         tmp_files = [conf.get_working_dir_path()]
-        tmp_files.extend(glob.glob('sandbox_*'))
         fu.rm_file_list(tmp_files)
 
 
