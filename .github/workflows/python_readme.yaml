@@ -10,11 +10,14 @@ jobs:
   python_readme:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
+      - uses: peter-murray/workflow-application-token-action@v3
+        id: generate_token
         with:
-          repository: bioexcel/biobb_workflows
-          path: ./
+          application_id: ${{ vars.GHAPUSH }}
+          application_private_key: ${{ secrets.GHAPUSH }}
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - name: Copy README files
         run: |
           cp common/python/README_subrepo.md biobb_wf_amber_abc_setup/python/README.md
@@ -56,6 +59,8 @@ jobs:
           sed -i "s/<repository>/biobb_wf_virtual-screening/g" biobb_wf_virtual-screening_fpocket/python/README.md
           sed -i "s/<subrepository>/fpocket/g" biobb_wf_virtual-screening_fpocket/python/README.md
       - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
