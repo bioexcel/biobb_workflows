@@ -3,15 +3,54 @@ name: Python workflow Tests
 on:
   push:
     paths:
+      - biobb_wf_amber_abc_setup/python/workflow.env.yml
+      - biobb_wf_amber_abc_setup/python/workflow.py
+      - biobb_wf_amber_abc_setup/python/workflow.yml
+      - biobb_wf_amber_md_setup/python/workflow.env.yml
+      - biobb_wf_amber_md_setup/python/workflow.py
+      - biobb_wf_amber_md_setup/python/workflow.yml
+      - biobb_wf_amber_md_setup_lig/python/workflow.env.yml
+      - biobb_wf_amber_md_setup_lig/python/workflow.py
+      - biobb_wf_amber_md_setup_lig/python/workflow.yml
+      - biobb_wf_cmip/python/workflow.env.yml
+      - biobb_wf_cmip/python/workflow.py
+      - biobb_wf_cmip/python/workflow.yml
+      - biobb_wf_dna_helparms/python/workflow.env.yml
+      - biobb_wf_dna_helparms/python/workflow.py
+      - biobb_wf_dna_helparms/python/workflow.yml
+      - biobb_wf_flexdyn/python/workflow.env.yml
+      - biobb_wf_flexdyn/python/workflow.py
+      - biobb_wf_flexdyn/python/workflow.yml
+      - biobb_wf_flexserv/python/workflow.env.yml
+      - biobb_wf_flexserv/python/workflow.py
+      - biobb_wf_flexserv/python/workflow.yml
+      - biobb_wf_godmd/python/workflow.env.yml
+      - biobb_wf_godmd/python/workflow.py
+      - biobb_wf_godmd/python/workflow.yml
       - biobb_wf_ligand_parameterization/python/workflow.env.yml
       - biobb_wf_ligand_parameterization/python/workflow.py
       - biobb_wf_ligand_parameterization/python/workflow.yml
+      - biobb_wf_md_setup/python/workflow.env.yml
+      - biobb_wf_md_setup/python/workflow.py
+      - biobb_wf_md_setup/python/workflow.yml
+      - biobb_wf_md_setup_mutations/python/workflow.env.yml
+      - biobb_wf_md_setup_mutations/python/workflow.py
+      - biobb_wf_md_setup_mutations/python/workflow.yml
+      # - biobb_wf_pmx_tutorial/python/workflow.env.yml
+      # - biobb_wf_pmx_tutorial/python/workflow.py
+      # - biobb_wf_pmx_tutorial/python/workflow.yml
+      - biobb_wf_protein_md_analysis/python/workflow.env.yml
+      - biobb_wf_protein_md_analysis/python/workflow.py
+      - biobb_wf_protein_md_analysis/python/workflow.yml
+      - biobb_wf_protein-complex_md_setup/python/workflow.env.yml
+      - biobb_wf_protein-complex_md_setup/python/workflow.py
+      - biobb_wf_protein-complex_md_setup/python/workflow.yml
+      - biobb_wf_structure_checking/python/workflow.env.yml
+      - biobb_wf_structure_checking/python/workflow.py
+      - biobb_wf_structure_checking/python/workflow.yml
       - biobb_wf_virtual-screening_fpocket/python/workflow.env.yml
       - biobb_wf_virtual-screening_fpocket/python/workflow.py
       - biobb_wf_virtual-screening_fpocket/python/workflow.yml
-      #- biobb_wf_md_setup/python/workflow.env.yml
-      #- biobb_wf_md_setup/python/workflow.py
-      #- biobb_wf_md_setup/python/workflow.yml
   workflow_dispatch:
 
 jobs:
@@ -19,27 +58,156 @@ jobs:
     name: Filter Files
     runs-on: self-hosted
     outputs:
+      biobb_wf_amber_abc_setup_changed: ${{ steps.filter.outputs.biobb_wf_amber_abc_setup }}
+      biobb_wf_amber_md_setup_changed: ${{ steps.filter.outputs.biobb_wf_amber_md_setup }}
+      biobb_wf_amber_md_setup_lig_changed: ${{ steps.filter.outputs.biobb_wf_amber_md_setup_lig }}
+      biobb_wf_cmip_changed: ${{ steps.filter.outputs.biobb_wf_cmip }}
+      biobb_wf_dna_helparms_changed: ${{ steps.filter.outputs.biobb_wf_dna_helparms }}
+      biobb_wf_flexdyn_changed: ${{ steps.filter.outputs.biobb_wf_flexdyn }}
+      biobb_wf_flexserv_changed: ${{ steps.filter.outputs.biobb_wf_flexserv }}
+      biobb_wf_godmd_changed: ${{ steps.filter.outputs.biobb_wf_godmd }}
       biobb_wf_ligand_parameterization_changed: ${{ steps.filter.outputs.biobb_wf_ligand_parameterization }}
-      biobb_wf_virtual-screening_fpocket_changed: ${{ steps.filter.outputs.biobb_wf_virtual-screening_fpocket }}
       biobb_wf_md_setup_changed: ${{ steps.filter.outputs.biobb_wf_md_setup }}
+      biobb_wf_md_setup_mutations_changed: ${{ steps.filter.outputs.biobb_wf_md_setup_mutations }}
+      # biobb_wf_pmx_tutorial_changed: ${{ steps.filter.outputs.biobb_wf_pmx_tutorial }}
+      biobb_wf_protein_md_analysis_changed: ${{ steps.filter.outputs.biobb_wf_protein_md_analysis }}
+      biobb_wf_protein-complex_md_setup_changed: ${{ steps.filter.outputs.biobb_wf_protein-complex_md_setup }}
+      biobb_wf_structure_checking_changed: ${{ steps.filter.outputs.biobb_wf_structure_checking }}
+      biobb_wf_virtual-screening_fpocket_changed: ${{ steps.filter.outputs.biobb_wf_virtual-screening_fpocket }}
     steps:
       - name: Filter Changed Files
         id: filter
         uses: dorny/paths-filter@v2
         with:
           filters: |
+            biobb_wf_amber_abc_setup:
+              - "biobb_wf_amber_abc_setup/python/workflow.env.yml"
+              - "biobb_wf_amber_abc_setup/python/workflow.py"
+              - "biobb_wf_amber_abc_setup/python/workflow.yml"
+            biobb_wf_amber_md_setup:
+              - "biobb_wf_amber_md_setup/python/workflow.env.yml"
+              - "biobb_wf_amber_md_setup/python/workflow.py"
+              - "biobb_wf_amber_md_setup/python/workflow.yml"
+            biobb_wf_amber_md_setup_lig:  
+              - "biobb_wf_amber_md_setup_lig/python/workflow.env.yml"
+              - "biobb_wf_amber_md_setup_lig/python/workflow.py"
+              - "biobb_wf_amber_md_setup_lig/python/workflow.yml"
+            biobb_wf_cmip:
+              - "biobb_wf_cmip/python/workflow.env.yml"
+              - "biobb_wf_cmip/python/workflow.py"
+              - "biobb_wf_cmip/python/workflow.yml"
+            biobb_wf_dna_helparms:
+              - "biobb_wf_dna_helparms/python/workflow.env.yml"
+              - "biobb_wf_dna_helparms/python/workflow.py"
+              - "biobb_wf_dna_helparms/python/workflow.yml"
+            biobb_wf_flexdyn:
+              - "biobb_wf_flexdyn/python/workflow.env.yml"
+              - "biobb_wf_flexdyn/python/workflow.py"
+              - "biobb_wf_flexdyn/python/workflow.yml"
+            biobb_wf_flexserv:
+              - "biobb_wf_flexserv/python/workflow.env.yml"
+              - "biobb_wf_flexserv/python/workflow.py"
+              - "biobb_wf_flexserv/python/workflow.yml"
+            biobb_wf_godmd:
+              - "biobb_wf_godmd/python/workflow.env.yml"
+              - "biobb_wf_godmd/python/workflow.py"
+              - "biobb_wf_godmd/python/workflow.yml"
             biobb_wf_ligand_parameterization:
               - "biobb_wf_ligand_parameterization/python/workflow.env.yml"
               - "biobb_wf_ligand_parameterization/python/workflow.py"
               - "biobb_wf_ligand_parameterization/python/workflow.yml"
-            biobb_wf_virtual-screening_fpocket:
-              - "biobb_wf_virtual-screening_fpocket/python/workflow.env.yml"
-              - "biobb_wf_virtual-screening_fpocket/python/workflow.py"
-              - "biobb_wf_virtual-screening_fpocket/python/workflow.yml"
             biobb_wf_md_setup:
               - "biobb_wf_md_setup/python/workflow.env.yml"
               - "biobb_wf_md_setup/python/workflow.py"
               - "biobb_wf_md_setup/python/workflow.yml"
+            biobb_wf_md_setup_mutations:
+              - "biobb_wf_md_setup_mutations/python/workflow.env.yml"
+              - "biobb_wf_md_setup_mutations/python/workflow.py"
+              - "biobb_wf_md_setup_mutations/python/workflow.yml"
+            biobb_wf_pmx_tutorial:
+              - "biobb_wf_pmx_tutorial/python/workflow.env.yml"
+              - "biobb_wf_pmx_tutorial/python/workflow.py"
+              - "biobb_wf_pmx_tutorial/python/workflow.yml"
+            biobb_wf_protein_md_analysis:
+              - "biobb_wf_protein_md_analysis/python/workflow.env.yml"
+              - "biobb_wf_protein_md_analysis/python/workflow.py"
+              - "biobb_wf_protein_md_analysis/python/workflow.yml"
+            biobb_wf_protein-complex_md_setup:
+              - "biobb_wf_protein-complex_md_setup/python/workflow.env.yml"
+              - "biobb_wf_protein-complex_md_setup/python/workflow.py"
+              - "biobb_wf_protein-complex_md_setup/python/workflow.yml"
+            biobb_wf_structure_checking:
+              - "biobb_wf_structure_checking/python/workflow.env.yml"
+              - "biobb_wf_structure_checking/python/workflow.py"
+              - "biobb_wf_structure_checking/python/workflow.yml"
+            biobb_wf_virtual-screening_fpocket:
+              - "biobb_wf_virtual-screening_fpocket/python/workflow.env.yml"
+              - "biobb_wf_virtual-screening_fpocket/python/workflow.py"
+              - "biobb_wf_virtual-screening_fpocket/python/workflow.yml"
+
+  biobb_wf_amber_abc_setup: 
+    name: biobb_wf_amber_abc_setup
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_amber_abc_setup_changed == 'true'
+    with:
+      wf_name: biobb_wf_amber_abc_setup  
+
+  biobb_wf_amber_md_setup:
+    name: biobb_wf_amber_md_setup
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_amber_md_setup_changed == 'true'
+    with:
+      wf_name: biobb_wf_amber_md_setup
+
+  biobb_wf_amber_md_setup_lig:
+    name: biobb_wf_amber_md_setup_lig
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_amber_md_setup_lig_changed == 'true'
+    with:
+      wf_name: biobb_wf_amber_md_setup_lig
+
+  biobb_wf_dna_helparms:
+    name: biobb_wf_dna_helparms
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_dna_helparms_changed == 'true'
+    with:
+      wf_name: biobb_wf_dna_helparms
+
+  biobb_wf_cmip:
+    name: biobb_wf_cmip
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_cmip_changed == 'true'
+    with:
+      wf_name: biobb_wf_cmip
+
+  biobb_wf_flexdyn:
+    name: biobb_wf_flexdyn
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_flexdyn_changed == 'true'
+    with:
+      wf_name: biobb_wf_flexdyn
+
+  biobb_wf_flexserv:
+    name: biobb_wf_flexserv
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_flexserv_changed == 'true'
+    with:
+      wf_name: biobb_wf_flexserv
+
+  biobb_wf_godmd:
+    name: biobb_wf_godmd
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_godmd_changed == 'true'
+    with:
+      wf_name: biobb_wf_godmd
 
   biobb_wf_ligand_parameterization:
     name: biobb_wf_ligand_parameterization
@@ -49,6 +217,54 @@ jobs:
     with:
       wf_name: biobb_wf_ligand_parameterization
 
+  biobb_wf_md_setup:
+    name: biobb_wf_md_setup
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_md_setup_changed == 'true'
+    with:
+      wf_name: biobb_wf_md_setup
+
+  biobb_wf_md_setup_mutations:
+    name: biobb_wf_md_setup_mutations
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_md_setup_mutations_changed == 'true'
+    with:
+      wf_name: biobb_wf_md_setup_mutations
+
+  # biobb_wf_pmx_tutorial:
+  #   name: biobb_wf_pmx_tutorial
+  #   needs: filter-files
+  #   uses: ./.github/workflows/python-reusable.yaml
+  #   if: needs.filter-files.outputs.biobb_wf_pmx_tutorial_changed == 'true'
+  #   with:
+  #     wf_name: biobb_wf_pmx_tutorial
+
+  biobb_wf_protein_md_analysis:
+    name: biobb_wf_protein_md_analysis
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_protein_md_analysis_changed == 'true'
+    with:
+      wf_name: biobb_wf_protein_md_analysis
+
+  biobb_wf_protein-complex_md_setup:
+    name: biobb_wf_protein-complex_md_setup
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_protein-complex_md_setup_changed == 'true'
+    with:
+      wf_name: biobb_wf_protein-complex_md_setup
+
+  biobb_wf_structure_checking:
+    name: biobb_wf_structure_checking
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_structure_checking_changed == 'true'
+    with:
+      wf_name: biobb_wf_structure_checking
+
   biobb_wf_virtual-screening_fpocket:
     name: biobb_wf_virtual-screening_fpocket
     needs: filter-files
@@ -56,11 +272,3 @@ jobs:
     if: needs.filter-files.outputs.biobb_wf_virtual-screening_fpocket_changed == 'true'
     with:
       wf_name: biobb_wf_virtual-screening_fpocket
-
-  # biobb_wf_md_setup:
-  #   name: biobb_wf_md_setup
-  #   needs: filter-files
-  #   uses: ./.github/workflows/python-reusable.yaml
-  #   if: needs.filter-files.outputs.biobb_wf_md_setup_changed == 'true'
-  #   with:
-  #     wf_name: biobb_wf_md_setup
