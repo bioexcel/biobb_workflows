@@ -5,8 +5,10 @@ on:
     paths:
       - biobb_wf_ligand_parameterization/python/workflow.env.yml
       - biobb_wf_ligand_parameterization/python/workflow.py
+      - biobb_wf_ligand_parameterization/python/workflow.yml
       #- biobb_wf_md_setup/python/workflow.env.yml
       #- biobb_wf_md_setup/python/workflow.py
+      #- biobb_wf_md_setup/python/workflow.yml
   workflow_dispatch:
 
 jobs:
@@ -25,9 +27,11 @@ jobs:
             biobb_wf_ligand_parameterization:
               - "biobb_wf_ligand_parameterization/python/workflow.env.yml"
               - "biobb_wf_ligand_parameterization/python/workflow.py"
+              - "biobb_wf_ligand_parameterization/python/workflow.yml"
             biobb_wf_md_setup:
               - "biobb_wf_md_setup/python/workflow.env.yml"
               - "biobb_wf_md_setup/python/workflow.py"
+              - "biobb_wf_md_setup/python/workflow.yml"
 
   biobb_wf_ligand_parameterization:
     name: biobb_wf_ligand_parameterization
