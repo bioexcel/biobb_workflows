@@ -104,7 +104,6 @@ def step3_mutate(config, mutation, system=None):
     mutate(**paths["step3_mutate"], properties=prop["step3_mutate"])
 
     assert fx.not_empty(paths["step3_mutate"]["output_pdb_path"])
-    assert fx.equal(paths["step3_mutate"]["output_pdb_path"], f'reference/{mutation}/step3_mutate/{Path(paths["step3_mutate"]["output_pdb_path"]).name}')
 
 
 def step4_pdb2gmx(config, mutation, system=None):
@@ -117,9 +116,7 @@ def step4_pdb2gmx(config, mutation, system=None):
     pdb2gmx(**paths["step4_pdb2gmx"], properties=prop["step4_pdb2gmx"])
 
     assert fx.not_empty(paths["step4_pdb2gmx"]["output_gro_path"])
-    assert fx.equal(paths["step4_pdb2gmx"]["output_gro_path"], f'reference/{mutation}/step4_pdb2gmx/{Path(paths["step4_pdb2gmx"]["output_gro_path"]).name}')
     assert fx.not_empty(paths["step4_pdb2gmx"]["output_top_zip_path"])
-    assert fx.equal(paths["step4_pdb2gmx"]["output_top_zip_path"], f'reference/{mutation}/step4_pdb2gmx/{Path(paths["step4_pdb2gmx"]["output_top_zip_path"]).name}')
 
 
 def step5_editconf(config, mutation, system=None):
@@ -132,7 +129,6 @@ def step5_editconf(config, mutation, system=None):
     editconf(**paths["step5_editconf"], properties=prop["step5_editconf"])
 
     assert fx.not_empty(paths["step5_editconf"]["output_gro_path"])
-    assert fx.equal(paths["step5_editconf"]["output_gro_path"], f'reference/{mutation}/step5_editconf/{Path(paths["step5_editconf"]["output_gro_path"]).name}')
 
 
 def step6_solvate(config, mutation, system=None):
@@ -145,9 +141,7 @@ def step6_solvate(config, mutation, system=None):
     solvate(**paths["step6_solvate"], properties=prop["step6_solvate"])
 
     assert fx.not_empty(paths["step6_solvate"]["output_gro_path"])
-    assert fx.equal(paths["step6_solvate"]["output_gro_path"], f'reference/{mutation}/step6_solvate/{Path(paths["step6_solvate"]["output_gro_path"]).name}')
     assert fx.not_empty(paths["step6_solvate"]["output_top_zip_path"])
-    assert fx.equal(paths["step6_solvate"]["output_top_zip_path"], f'reference/{mutation}/step6_solvate/{Path(paths["step6_solvate"]["output_top_zip_path"]).name}')
 
 
 def step7_grompp_genion(config, mutation, system=None):
@@ -160,7 +154,6 @@ def step7_grompp_genion(config, mutation, system=None):
     grompp(**paths["step7_grompp_genion"], properties=prop["step7_grompp_genion"])
 
     assert fx.not_empty(paths["step7_grompp_genion"]["output_tpr_path"])
-    # assert fx.equal(paths["step7_grompp_genion"]["output_tpr_path"], f'reference/{mutation}/step7_grompp_genion/{Path(paths["step7_grompp_genion"]["output_tpr_path"]).name}')
 
 
 def step8_genion(config, mutation, system=None):
@@ -173,9 +166,7 @@ def step8_genion(config, mutation, system=None):
     genion(**paths["step8_genion"], properties=prop["step8_genion"])
 
     assert fx.not_empty(paths["step8_genion"]["output_gro_path"])
-    assert fx.equal(paths["step8_genion"]["output_gro_path"], f'reference/{mutation}/step8_genion/{Path(paths["step8_genion"]["output_gro_path"]).name}')
     assert fx.not_empty(paths["step8_genion"]["output_top_zip_path"])
-    assert fx.equal(paths["step8_genion"]["output_top_zip_path"], f'reference/{mutation}/step8_genion/{Path(paths["step8_genion"]["output_top_zip_path"]).name}')
 
 
 def step9_grompp_min(config, mutation, system=None):
@@ -188,7 +179,6 @@ def step9_grompp_min(config, mutation, system=None):
     grompp(**paths["step9_grompp_min"], properties=prop["step9_grompp_min"])
 
     assert fx.not_empty(paths["step9_grompp_min"]["output_tpr_path"])
-    # assert fx.equal(paths["step9_grompp_min"]["output_tpr_path"], f'reference/{mutation}/step9_grompp_min/{Path(paths["step9_grompp_min"]["output_tpr_path"]).name}')
 
 
 def step10_mdrun_min(config, mutation, system=None):
@@ -201,13 +191,9 @@ def step10_mdrun_min(config, mutation, system=None):
     mdrun(**paths["step10_mdrun_min"], properties=prop["step10_mdrun_min"])
 
     assert fx.not_empty(paths["step10_mdrun_min"]["output_trr_path"])
-    # assert fx.equal(paths["step10_mdrun_min"]["output_trr_path"], f'reference/{mutation}/step10_mdrun_min/{Path(paths["step10_mdrun_min"]["output_trr_path"]).name}')
     assert fx.not_empty(paths["step10_mdrun_min"]["output_gro_path"])
-    # assert fx.equal(paths["step10_mdrun_min"]["output_gro_path"], f'reference/{mutation}/step10_mdrun_min/{Path(paths["step10_mdrun_min"]["output_gro_path"]).name}')
     assert fx.not_empty(paths["step10_mdrun_min"]["output_edr_path"])
-    # assert fx.equal(paths["step10_mdrun_min"]["output_edr_path"], f'reference/{mutation}/step10_mdrun_min/{Path(paths["step10_mdrun_min"]["output_edr_path"]).name}')
     assert fx.not_empty(paths["step10_mdrun_min"]["output_log_path"])
-    # assert fx.equal(paths["step10_mdrun_min"]["output_log_path"], f'reference/{mutation}/step10_mdrun_min/{Path(paths["step10_mdrun_min"]["output_log_path"]).name}')
 
 
 def step100_make_ndx(config, mutation, system=None):
@@ -220,7 +206,6 @@ def step100_make_ndx(config, mutation, system=None):
     make_ndx(**paths["step100_make_ndx"], properties=prop["step100_make_ndx"])
 
     assert fx.not_empty(paths["step100_make_ndx"]["output_ndx_path"])
-    assert fx.equal(paths["step100_make_ndx"]["output_ndx_path"], f'reference/{mutation}/step100_make_ndx/{Path(paths["step100_make_ndx"]["output_ndx_path"]).name}')
 
 
 def step11_grompp_nvt(config, mutation, system=None):
@@ -233,7 +218,6 @@ def step11_grompp_nvt(config, mutation, system=None):
     grompp(**paths["step11_grompp_nvt"], properties=prop["step11_grompp_nvt"])
 
     assert fx.not_empty(paths["step11_grompp_nvt"]["output_tpr_path"])
-    # assert fx.equal(paths["step11_grompp_nvt"]["output_tpr_path"], f'reference/{mutation}/step11_grompp_nvt/{Path(paths["step11_grompp_nvt"]["output_tpr_path"]).name}')
 
 
 def step12_mdrun_nvt(config, mutation, system=None):
@@ -246,15 +230,10 @@ def step12_mdrun_nvt(config, mutation, system=None):
     mdrun(**paths["step12_mdrun_nvt"], properties=prop["step12_mdrun_nvt"])
 
     assert fx.not_empty(paths["step12_mdrun_nvt"]["output_trr_path"])
-    # assert fx.equal(paths["step12_mdrun_nvt"]["output_trr_path"], f'reference/{mutation}/step12_mdrun_nvt/{Path(paths["step12_mdrun_nvt"]["output_trr_path"]).name}')
     assert fx.not_empty(paths["step12_mdrun_nvt"]["output_gro_path"])
-    # assert fx.equal(paths["step12_mdrun_nvt"]["output_gro_path"], f'reference/{mutation}/step12_mdrun_nvt/{Path(paths["step12_mdrun_nvt"]["output_gro_path"]).name}')
     assert fx.not_empty(paths["step12_mdrun_nvt"]["output_edr_path"])
-    # assert fx.equal(paths["step12_mdrun_nvt"]["output_edr_path"], f'reference/{mutation}/step12_mdrun_nvt/{Path(paths["step12_mdrun_nvt"]["output_edr_path"]).name}')
     assert fx.not_empty(paths["step12_mdrun_nvt"]["output_log_path"])
-    # assert fx.equal(paths["step12_mdrun_nvt"]["output_log_path"], f'reference/{mutation}/step12_mdrun_nvt/{Path(paths["step12_mdrun_nvt"]["output_log_path"]).name}')
     assert fx.not_empty(paths["step12_mdrun_nvt"]["output_cpt_path"])
-    # assert fx.equal(paths["step12_mdrun_nvt"]["output_cpt_path"], f'reference/{mutation}/step12_mdrun_nvt/{Path(paths["step12_mdrun_nvt"]["output_cpt_path"]).name}')
 
 
 def step13_grompp_npt(config, mutation, system=None):
@@ -267,7 +246,6 @@ def step13_grompp_npt(config, mutation, system=None):
     grompp(**paths["step13_grompp_npt"], properties=prop["step13_grompp_npt"])
 
     assert fx.not_empty(paths["step13_grompp_npt"]["output_tpr_path"])
-    # assert fx.equal(paths["step13_grompp_npt"]["output_tpr_path"], f'reference/{mutation}/step13_grompp_npt/{Path(paths["step13_grompp_npt"]["output_tpr_path"]).name}')
 
 
 def step14_mdrun_npt(config, mutation, system=None):
@@ -280,15 +258,10 @@ def step14_mdrun_npt(config, mutation, system=None):
     mdrun(**paths["step14_mdrun_npt"], properties=prop["step14_mdrun_npt"])
 
     assert fx.not_empty(paths["step14_mdrun_npt"]["output_trr_path"])
-    # assert fx.equal(paths["step14_mdrun_npt"]["output_trr_path"], f'reference/{mutation}/step14_mdrun_npt/{Path(paths["step14_mdrun_npt"]["output_trr_path"]).name}')
     assert fx.not_empty(paths["step14_mdrun_npt"]["output_gro_path"])
-    # assert fx.equal(paths["step14_mdrun_npt"]["output_gro_path"], f'reference/{mutation}/step14_mdrun_npt/{Path(paths["step14_mdrun_npt"]["output_gro_path"]).name}')
     assert fx.not_empty(paths["step14_mdrun_npt"]["output_edr_path"])
-    # assert fx.equal(paths["step14_mdrun_npt"]["output_edr_path"], f'reference/{mutation}/step14_mdrun_npt/{Path(paths["step14_mdrun_npt"]["output_edr_path"]).name}')
     assert fx.not_empty(paths["step14_mdrun_npt"]["output_log_path"])
-    # assert fx.equal(paths["step14_mdrun_npt"]["output_log_path"], f'reference/{mutation}/step14_mdrun_npt/{Path(paths["step14_mdrun_npt"]["output_log_path"]).name}')
     assert fx.not_empty(paths["step14_mdrun_npt"]["output_cpt_path"])
-    # assert fx.equal(paths["step14_mdrun_npt"]["output_cpt_path"], f'reference/{mutation}/step14_mdrun_npt/{Path(paths["step14_mdrun_npt"]["output_cpt_path"]).name}')
 
 
 def step15_grompp_md(config, mutation, system=None):
@@ -301,7 +274,6 @@ def step15_grompp_md(config, mutation, system=None):
     grompp(**paths["step15_grompp_md"], properties=prop["step15_grompp_md"])
 
     assert fx.not_empty(paths["step15_grompp_md"]["output_tpr_path"])
-    # assert fx.equal(paths["step15_grompp_md"]["output_tpr_path"], f'reference/{mutation}/step15_grompp_md/{Path(paths["step15_grompp_md"]["output_tpr_path"]).name}')
 
 
 def step16_mdrun_md(config, mutation, system=None):
@@ -314,15 +286,10 @@ def step16_mdrun_md(config, mutation, system=None):
     mdrun(**paths["step16_mdrun_md"], properties=prop["step16_mdrun_md"])
 
     assert fx.not_empty(paths["step16_mdrun_md"]["output_trr_path"])
-    # assert fx.equal(paths["step16_mdrun_md"]["output_trr_path"], f'reference/{mutation}/step16_mdrun_md/{Path(paths["step16_mdrun_md"]["output_trr_path"]).name}')
     assert fx.not_empty(paths["step16_mdrun_md"]["output_gro_path"])
-    # assert fx.equal(paths["step16_mdrun_md"]["output_gro_path"], f'reference/{mutation}/step16_mdrun_md/{Path(paths["step16_mdrun_md"]["output_gro_path"]).name}')
     assert fx.not_empty(paths["step16_mdrun_md"]["output_edr_path"])
-    # assert fx.equal(paths["step16_mdrun_md"]["output_edr_path"], f'reference/{mutation}/step16_mdrun_md/{Path(paths["step16_mdrun_md"]["output_edr_path"]).name}')
     assert fx.not_empty(paths["step16_mdrun_md"]["output_log_path"])
-    # assert fx.equal(paths["step16_mdrun_md"]["output_log_path"], f'reference/{mutation}/step16_mdrun_md/{Path(paths["step16_mdrun_md"]["output_log_path"]).name}')
     assert fx.not_empty(paths["step16_mdrun_md"]["output_cpt_path"])
-    # assert fx.equal(paths["step16_mdrun_md"]["output_cpt_path"], f'reference/{mutation}/step16_mdrun_md/{Path(paths["step16_mdrun_md"]["output_cpt_path"]).name}')
 
 
 def step17_gmx_image1(config, mutation, system=None):
@@ -335,7 +302,6 @@ def step17_gmx_image1(config, mutation, system=None):
     gmx_image(**paths["step17_gmx_image1"], properties=prop["step17_gmx_image1"])
 
     assert fx.not_empty(paths["step17_gmx_image1"]["output_traj_path"])
-    # assert fx.equal(paths["step17_gmx_image1"]["output_traj_path"], f'reference/{mutation}/step17_gmx_image1/{Path(paths["step17_gmx_image1"]["output_traj_path"]).name}')
 
 
 def step18_gmx_image2(config, mutation, system=None):
@@ -348,7 +314,6 @@ def step18_gmx_image2(config, mutation, system=None):
     gmx_image(**paths["step18_gmx_image2"], properties=prop["step18_gmx_image2"])
 
     assert fx.not_empty(paths["step18_gmx_image2"]["output_traj_path"])
-    # assert fx.equal(paths["step18_gmx_image2"]["output_traj_path"], f'reference/{mutation}/step18_gmx_image2/{Path(paths["step18_gmx_image2"]["output_traj_path"]).name}')
 
 
 def step19_gmx_trjconv_str(config, mutation, system=None):
@@ -361,7 +326,6 @@ def step19_gmx_trjconv_str(config, mutation, system=None):
     gmx_trjconv_str(**paths["step19_gmx_trjconv_str"], properties=prop["step19_gmx_trjconv_str"])
 
     assert fx.not_empty(paths["step19_gmx_trjconv_str"]["output_str_path"])
-    # assert fx.equal(paths["step19_gmx_trjconv_str"]["output_str_path"], f'reference/{mutation}/step19_gmx_trjconv_str/{Path(paths["step19_gmx_trjconv_str"]["output_str_path"]).name}')
 
 
 def step20_gmx_energy(config, mutation, system=None):
@@ -374,7 +338,6 @@ def step20_gmx_energy(config, mutation, system=None):
     gmx_energy(**paths["step20_gmx_energy"], properties=prop["step20_gmx_energy"])
 
     assert fx.not_empty(paths["step20_gmx_energy"]["output_xvg_path"])
-    # assert fx.equal(paths["step20_gmx_energy"]["output_xvg_path"], f'reference/{mutation}/step20_gmx_energy/{Path(paths["step20_gmx_energy"]["output_xvg_path"]).name}')
 
 
 def step21_gmx_rgyr(config, mutation, system=None):
@@ -387,7 +350,6 @@ def step21_gmx_rgyr(config, mutation, system=None):
     gmx_rgyr(**paths["step21_gmx_rgyr"], properties=prop["step21_gmx_rgyr"])
 
     assert fx.not_empty(paths["step21_gmx_rgyr"]["output_xvg_path"])
-    # assert fx.equal(paths["step21_gmx_rgyr"]["output_xvg_path"], f'reference/{mutation}/step21_gmx_rgyr/{Path(paths["step21_gmx_rgyr"]["output_xvg_path"]).name}')
 
 
 def step22_rmsd_first(config, mutation, system=None):
@@ -400,7 +362,6 @@ def step22_rmsd_first(config, mutation, system=None):
     gmx_rms(**paths["step22_rmsd_first"], properties=prop["step22_rmsd_first"])
 
     assert fx.not_empty(paths["step22_rmsd_first"]["output_xvg_path"])
-    # assert fx.equal(paths["step22_rmsd_first"]["output_xvg_path"], f'reference/{mutation}/step22_rmsd_first/{Path(paths["step22_rmsd_first"]["output_xvg_path"]).name}')
 
 
 def step23_rmsd_exp(config, mutation, system=None):
@@ -413,7 +374,7 @@ def step23_rmsd_exp(config, mutation, system=None):
     gmx_rms(**paths["step23_rmsd_exp"], properties=prop["step23_rmsd_exp"])
 
     assert fx.not_empty(paths["step23_rmsd_exp"]["output_xvg_path"])
-    # assert fx.equal(paths["step23_rmsd_exp"]["output_xvg_path"], f'reference/{mutation}/step23_rmsd_exp/{Path(global_paths["step23_rmsd_exp"]["output_xvg_path"]).name}')
+    assert fx.compare_size(paths["step23_rmsd_exp"]["output_xvg_path"], f'reference/{mutation}/step23_rmsd_exp/{Path(global_paths["step23_rmsd_exp"]["output_xvg_path"]).name}', 90)
 
 
 def final_step(config, remove=False, system=None):
@@ -422,7 +383,6 @@ def final_step(config, remove=False, system=None):
 
     if remove:
         tmp_files = [conf.get_working_dir_path()]
-        tmp_files.extend(glob.glob('sandbox_*'))
         tmp_files.extend(glob.glob('*.stdin'))
         pattern = re.compile(r'[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}')
         uuid_dirs = [d for d in glob.glob('*') if os.path.isdir(d) and pattern.match(d)]

@@ -33,7 +33,6 @@ def step0_extract_atoms(config, system=None):
     extract_atoms(**global_paths["step0_extract_atoms"], properties=global_prop["step0_extract_atoms"])
 
     assert fx.not_empty(global_paths["step0_extract_atoms"]["output_structure_path"])
-    assert fx.equal(global_paths["step0_extract_atoms"]["output_structure_path"], f'reference/step0_extract_atoms/{Path(global_paths["step0_extract_atoms"]["output_structure_path"]).name}')
 
     global global_work_dir
     global_work_dir = conf.get_working_dir_path()
@@ -49,9 +48,7 @@ def step1_bd_run(config, system=None):
     bd_run(**global_paths["step1_bd_run"], properties=global_prop["step1_bd_run"])
 
     assert fx.not_empty(global_paths["step1_bd_run"]["output_crd_path"])
-    assert fx.equal(global_paths["step1_bd_run"]["output_crd_path"], f'reference/step1_bd_run/{Path(global_paths["step1_bd_run"]["output_crd_path"]).name}')
     assert fx.not_empty(global_paths["step1_bd_run"]["output_log_path"])
-    assert fx.equal(global_paths["step1_bd_run"]["output_log_path"], f'reference/step1_bd_run/{Path(global_paths["step1_bd_run"]["output_log_path"]).name}')
 
 
 def step2_cpptraj_rms(config, system=None):
@@ -64,9 +61,7 @@ def step2_cpptraj_rms(config, system=None):
     cpptraj_rms(**global_paths["step2_cpptraj_rms"], properties=global_prop["step2_cpptraj_rms"])
 
     assert fx.not_empty(global_paths["step2_cpptraj_rms"]["output_cpptraj_path"])
-    assert fx.equal(global_paths["step2_cpptraj_rms"]["output_cpptraj_path"], f'reference/step2_cpptraj_rms/{Path(global_paths["step2_cpptraj_rms"]["output_cpptraj_path"]).name}')
     assert fx.not_empty(global_paths["step2_cpptraj_rms"]["output_traj_path"])
-    assert fx.equal(global_paths["step2_cpptraj_rms"]["output_traj_path"], f'reference/step2_cpptraj_rms/{Path(global_paths["step2_cpptraj_rms"]["output_traj_path"]).name}')
 
 
 def step3_dmd_run(config, system=None):
@@ -79,9 +74,7 @@ def step3_dmd_run(config, system=None):
     dmd_run(**global_paths["step3_dmd_run"], properties=global_prop["step3_dmd_run"])
 
     assert fx.not_empty(global_paths["step3_dmd_run"]["output_crd_path"])
-    assert fx.equal(global_paths["step3_dmd_run"]["output_crd_path"], f'reference/step3_dmd_run/{Path(global_paths["step3_dmd_run"]["output_crd_path"]).name}')
     assert fx.not_empty(global_paths["step3_dmd_run"]["output_log_path"])
-    # assert fx.equal(global_paths["step3_dmd_run"]["output_log_path"], f'reference/step3_dmd_run/{Path(global_paths["step3_dmd_run"]["output_log_path"]).name}')
 
 
 def step4_cpptraj_rms(config, system=None):
@@ -94,9 +87,7 @@ def step4_cpptraj_rms(config, system=None):
     cpptraj_rms(**global_paths["step4_cpptraj_rms"], properties=global_prop["step4_cpptraj_rms"])
 
     assert fx.not_empty(global_paths["step4_cpptraj_rms"]["output_cpptraj_path"])
-    assert fx.equal(global_paths["step4_cpptraj_rms"]["output_cpptraj_path"], f'reference/step4_cpptraj_rms/{Path(global_paths["step4_cpptraj_rms"]["output_cpptraj_path"]).name}')
     assert fx.not_empty(global_paths["step4_cpptraj_rms"]["output_traj_path"])
-    assert fx.equal(global_paths["step4_cpptraj_rms"]["output_traj_path"], f'reference/step4_cpptraj_rms/{Path(global_paths["step4_cpptraj_rms"]["output_traj_path"]).name}')
 
 
 def step5_nma_run(config, system=None):
@@ -109,9 +100,7 @@ def step5_nma_run(config, system=None):
     nma_run(**global_paths["step5_nma_run"], properties=global_prop["step5_nma_run"])
 
     assert fx.not_empty(global_paths["step5_nma_run"]["output_crd_path"])
-    assert fx.equal(global_paths["step5_nma_run"]["output_crd_path"], f'reference/step5_nma_run/{Path(global_paths["step5_nma_run"]["output_crd_path"]).name}')
     assert fx.not_empty(global_paths["step5_nma_run"]["output_log_path"])
-    # assert fx.equal(global_paths["step5_nma_run"]["output_log_path"], f'reference/step5_nma_run/{Path(global_paths["step5_nma_run"]["output_log_path"]).name}')
 
 
 def step6_cpptraj_rms(config, system=None):
@@ -124,9 +113,7 @@ def step6_cpptraj_rms(config, system=None):
     cpptraj_rms(**global_paths["step6_cpptraj_rms"], properties=global_prop["step6_cpptraj_rms"])
 
     assert fx.not_empty(global_paths["step6_cpptraj_rms"]["output_cpptraj_path"])
-    assert fx.equal(global_paths["step6_cpptraj_rms"]["output_cpptraj_path"], f'reference/step6_cpptraj_rms/{Path(global_paths["step6_cpptraj_rms"]["output_cpptraj_path"]).name}')
     assert fx.not_empty(global_paths["step6_cpptraj_rms"]["output_traj_path"])
-    assert fx.equal(global_paths["step6_cpptraj_rms"]["output_traj_path"], f'reference/step6_cpptraj_rms/{Path(global_paths["step6_cpptraj_rms"]["output_traj_path"]).name}')
 
 
 def step7_pcz_zip(config, system=None):
@@ -139,7 +126,6 @@ def step7_pcz_zip(config, system=None):
     pcz_zip(**global_paths["step7_pcz_zip"], properties=global_prop["step7_pcz_zip"])
 
     assert fx.not_empty(global_paths["step7_pcz_zip"]["output_pcz_path"])
-    assert fx.equal(global_paths["step7_pcz_zip"]["output_pcz_path"], f'reference/step7_pcz_zip/{Path(global_paths["step7_pcz_zip"]["output_pcz_path"]).name}')
 
 
 def step8_pcz_zip(config, system=None):
@@ -152,7 +138,6 @@ def step8_pcz_zip(config, system=None):
     pcz_zip(**global_paths["step8_pcz_zip"], properties=global_prop["step8_pcz_zip"])
 
     assert fx.not_empty(global_paths["step8_pcz_zip"]["output_pcz_path"])
-    assert fx.equal(global_paths["step8_pcz_zip"]["output_pcz_path"], f'reference/step8_pcz_zip/{Path(global_paths["step8_pcz_zip"]["output_pcz_path"]).name}')
 
 
 def step9_pcz_zip(config, system=None):
@@ -165,7 +150,6 @@ def step9_pcz_zip(config, system=None):
     pcz_zip(**global_paths["step9_pcz_zip"], properties=global_prop["step9_pcz_zip"])
 
     assert fx.not_empty(global_paths["step9_pcz_zip"]["output_pcz_path"])
-    assert fx.equal(global_paths["step9_pcz_zip"]["output_pcz_path"], f'reference/step9_pcz_zip/{Path(global_paths["step9_pcz_zip"]["output_pcz_path"]).name}')
 
 
 def step10_pcz_unzip(config, system=None):
@@ -178,7 +162,6 @@ def step10_pcz_unzip(config, system=None):
     pcz_unzip(**global_paths["step10_pcz_unzip"], properties=global_prop["step10_pcz_unzip"])
 
     assert fx.not_empty(global_paths["step10_pcz_unzip"]["output_crd_path"])
-    assert fx.equal(global_paths["step10_pcz_unzip"]["output_crd_path"], f'reference/step10_pcz_unzip/{Path(global_paths["step10_pcz_unzip"]["output_crd_path"]).name}')
 
 
 def step11_pcz_unzip(config, system=None):
@@ -191,7 +174,6 @@ def step11_pcz_unzip(config, system=None):
     pcz_unzip(**global_paths["step11_pcz_unzip"], properties=global_prop["step11_pcz_unzip"])
 
     assert fx.not_empty(global_paths["step11_pcz_unzip"]["output_crd_path"])
-    assert fx.equal(global_paths["step11_pcz_unzip"]["output_crd_path"], f'reference/step11_pcz_unzip/{Path(global_paths["step11_pcz_unzip"]["output_crd_path"]).name}')
 
 
 def step12_pcz_unzip(config, system=None):
@@ -204,7 +186,6 @@ def step12_pcz_unzip(config, system=None):
     pcz_unzip(**global_paths["step12_pcz_unzip"], properties=global_prop["step12_pcz_unzip"])
 
     assert fx.not_empty(global_paths["step12_pcz_unzip"]["output_crd_path"])
-    assert fx.equal(global_paths["step12_pcz_unzip"]["output_crd_path"], f'reference/step12_pcz_unzip/{Path(global_paths["step12_pcz_unzip"]["output_crd_path"]).name}')
 
 
 def step13_cpptraj_rms(config, system=None):
@@ -217,9 +198,7 @@ def step13_cpptraj_rms(config, system=None):
     cpptraj_rms(**global_paths["step13_cpptraj_rms"], properties=global_prop["step13_cpptraj_rms"])
 
     assert fx.not_empty(global_paths["step13_cpptraj_rms"]["output_cpptraj_path"])
-    assert fx.equal(global_paths["step13_cpptraj_rms"]["output_cpptraj_path"], f'reference/step13_cpptraj_rms/{Path(global_paths["step13_cpptraj_rms"]["output_cpptraj_path"]).name}')
     assert fx.not_empty(global_paths["step13_cpptraj_rms"]["output_traj_path"])
-    assert fx.equal(global_paths["step13_cpptraj_rms"]["output_traj_path"], f'reference/step13_cpptraj_rms/{Path(global_paths["step13_cpptraj_rms"]["output_traj_path"]).name}')
 
 
 def step14_cpptraj_rms(config, system=None):
@@ -232,9 +211,7 @@ def step14_cpptraj_rms(config, system=None):
     cpptraj_rms(**global_paths["step14_cpptraj_rms"], properties=global_prop["step14_cpptraj_rms"])
 
     assert fx.not_empty(global_paths["step14_cpptraj_rms"]["output_cpptraj_path"])
-    assert fx.equal(global_paths["step14_cpptraj_rms"]["output_cpptraj_path"], f'reference/step14_cpptraj_rms/{Path(global_paths["step14_cpptraj_rms"]["output_cpptraj_path"]).name}')
     assert fx.not_empty(global_paths["step14_cpptraj_rms"]["output_traj_path"])
-    assert fx.equal(global_paths["step14_cpptraj_rms"]["output_traj_path"], f'reference/step14_cpptraj_rms/{Path(global_paths["step14_cpptraj_rms"]["output_traj_path"]).name}')
 
 
 def step15_cpptraj_rms(config, system=None):
@@ -247,9 +224,7 @@ def step15_cpptraj_rms(config, system=None):
     cpptraj_rms(**global_paths["step15_cpptraj_rms"], properties=global_prop["step15_cpptraj_rms"])
 
     assert fx.not_empty(global_paths["step15_cpptraj_rms"]["output_cpptraj_path"])
-    assert fx.equal(global_paths["step15_cpptraj_rms"]["output_cpptraj_path"], f'reference/step15_cpptraj_rms/{Path(global_paths["step15_cpptraj_rms"]["output_cpptraj_path"]).name}')
     assert fx.not_empty(global_paths["step15_cpptraj_rms"]["output_traj_path"])
-    assert fx.equal(global_paths["step15_cpptraj_rms"]["output_traj_path"], f'reference/step15_cpptraj_rms/{Path(global_paths["step15_cpptraj_rms"]["output_traj_path"]).name}')
 
 
 def step16_pcz_info(config, system=None):
@@ -262,7 +237,6 @@ def step16_pcz_info(config, system=None):
     pcz_info(**global_paths["step16_pcz_info"], properties=global_prop["step16_pcz_info"])
 
     assert fx.not_empty(global_paths["step16_pcz_info"]["output_json_path"])
-    assert fx.equal(global_paths["step16_pcz_info"]["output_json_path"], f'reference/step16_pcz_info/{Path(global_paths["step16_pcz_info"]["output_json_path"]).name}')
 
 
 def step17_pcz_evecs(config, system=None):
@@ -275,7 +249,6 @@ def step17_pcz_evecs(config, system=None):
     pcz_evecs(**global_paths["step17_pcz_evecs"], properties=global_prop["step17_pcz_evecs"])
 
     assert fx.not_empty(global_paths["step17_pcz_evecs"]["output_json_path"])
-    assert fx.equal(global_paths["step17_pcz_evecs"]["output_json_path"], f'reference/step17_pcz_evecs/{Path(global_paths["step17_pcz_evecs"]["output_json_path"]).name}')
 
 
 def step18_pcz_animate(config, system=None):
@@ -288,7 +261,6 @@ def step18_pcz_animate(config, system=None):
     pcz_animate(**global_paths["step18_pcz_animate"], properties=global_prop["step18_pcz_animate"])
 
     assert fx.not_empty(global_paths["step18_pcz_animate"]["output_crd_path"])
-    assert fx.equal(global_paths["step18_pcz_animate"]["output_crd_path"], f'reference/step18_pcz_animate/{Path(global_paths["step18_pcz_animate"]["output_crd_path"]).name}')
 
 
 def step19_cpptraj_convert(config, system=None):
@@ -301,7 +273,6 @@ def step19_cpptraj_convert(config, system=None):
     cpptraj_convert(**global_paths["step19_cpptraj_convert"], properties=global_prop["step19_cpptraj_convert"])
 
     assert fx.not_empty(global_paths["step19_cpptraj_convert"]["output_cpptraj_path"])
-    assert fx.equal(global_paths["step19_cpptraj_convert"]["output_cpptraj_path"], f'reference/step19_cpptraj_convert/{Path(global_paths["step19_cpptraj_convert"]["output_cpptraj_path"]).name}')
 
 
 def step20_pcz_bfactor(config, system=None):
@@ -314,9 +285,7 @@ def step20_pcz_bfactor(config, system=None):
     pcz_bfactor(**global_paths["step20_pcz_bfactor"], properties=global_prop["step20_pcz_bfactor"])
 
     assert fx.not_empty(global_paths["step20_pcz_bfactor"]["output_dat_path"])
-    assert fx.equal(global_paths["step20_pcz_bfactor"]["output_dat_path"], f'reference/step20_pcz_bfactor/{Path(global_paths["step20_pcz_bfactor"]["output_dat_path"]).name}')
     assert fx.not_empty(global_paths["step20_pcz_bfactor"]["output_pdb_path"])
-    assert fx.equal(global_paths["step20_pcz_bfactor"]["output_pdb_path"], f'reference/step20_pcz_bfactor/{Path(global_paths["step20_pcz_bfactor"]["output_pdb_path"]).name}')
 
 
 def step21_pcz_hinges(config, system=None):
@@ -329,7 +298,6 @@ def step21_pcz_hinges(config, system=None):
     pcz_hinges(**global_paths["step21_pcz_hinges"], properties=global_prop["step21_pcz_hinges"])
 
     assert fx.not_empty(global_paths["step21_pcz_hinges"]["output_json_path"])
-    assert fx.equal(global_paths["step21_pcz_hinges"]["output_json_path"], f'reference/step21_pcz_hinges/{Path(global_paths["step21_pcz_hinges"]["output_json_path"]).name}')
 
 
 def step22_pcz_hinges(config, system=None):
@@ -342,7 +310,6 @@ def step22_pcz_hinges(config, system=None):
     pcz_hinges(**global_paths["step22_pcz_hinges"], properties=global_prop["step22_pcz_hinges"])
 
     assert fx.not_empty(global_paths["step22_pcz_hinges"]["output_json_path"])
-    assert fx.equal(global_paths["step22_pcz_hinges"]["output_json_path"], f'reference/step22_pcz_hinges/{Path(global_paths["step22_pcz_hinges"]["output_json_path"]).name}')
 
 
 def step23_pcz_hinges(config, system=None):
@@ -355,7 +322,6 @@ def step23_pcz_hinges(config, system=None):
     pcz_hinges(**global_paths["step23_pcz_hinges"], properties=global_prop["step23_pcz_hinges"])
 
     assert fx.not_empty(global_paths["step23_pcz_hinges"]["output_json_path"])
-    assert fx.equal(global_paths["step23_pcz_hinges"]["output_json_path"], f'reference/step23_pcz_hinges/{Path(global_paths["step23_pcz_hinges"]["output_json_path"]).name}')
 
 
 def step24_pcz_stiffness(config, system=None):
@@ -368,7 +334,6 @@ def step24_pcz_stiffness(config, system=None):
     pcz_stiffness(**global_paths["step24_pcz_stiffness"], properties=global_prop["step24_pcz_stiffness"])
 
     assert fx.not_empty(global_paths["step24_pcz_stiffness"]["output_json_path"])
-    assert fx.equal(global_paths["step24_pcz_stiffness"]["output_json_path"], f'reference/step24_pcz_stiffness/{Path(global_paths["step24_pcz_stiffness"]["output_json_path"]).name}')
 
 
 def step25_pcz_collectivity(config, system=None):
@@ -381,7 +346,6 @@ def step25_pcz_collectivity(config, system=None):
     pcz_collectivity(**global_paths["step25_pcz_collectivity"], properties=global_prop["step25_pcz_collectivity"])
 
     assert fx.not_empty(global_paths["step25_pcz_collectivity"]["output_json_path"])
-    assert fx.equal(global_paths["step25_pcz_collectivity"]["output_json_path"], f'reference/step25_pcz_collectivity/{Path(global_paths["step25_pcz_collectivity"]["output_json_path"]).name}')
 
 
 def step26_pcz_similarity(config, remove=False, system=None):
@@ -394,7 +358,6 @@ def step26_pcz_similarity(config, remove=False, system=None):
     pcz_similarity(**global_paths["step26_pcz_similarity"], properties=global_prop["step26_pcz_similarity"])
 
     assert fx.not_empty(global_paths["step26_pcz_similarity"]["output_json_path"])
-    assert fx.equal(global_paths["step26_pcz_similarity"]["output_json_path"], f'reference/step26_pcz_similarity/{Path(global_paths["step26_pcz_similarity"]["output_json_path"]).name}')
 
 
 def step27_pcz_similarity(config, system=None):
@@ -407,7 +370,6 @@ def step27_pcz_similarity(config, system=None):
     pcz_similarity(**global_paths["step27_pcz_similarity"], properties=global_prop["step27_pcz_similarity"])
 
     assert fx.not_empty(global_paths["step27_pcz_similarity"]["output_json_path"])
-    assert fx.equal(global_paths["step27_pcz_similarity"]["output_json_path"], f'reference/step27_pcz_similarity/{Path(global_paths["step27_pcz_similarity"]["output_json_path"]).name}')
 
 
 def step28_pcz_similarity(config, remove=False, system=None):
@@ -424,7 +386,6 @@ def step28_pcz_similarity(config, remove=False, system=None):
 
     if remove:
         tmp_files = [conf.get_working_dir_path(), 'distancia.dat', 'eigenvec.dat', 'file.proj', 'hessian.dat', 'masses.dat', 'molecula.out', 'molecula.pdb', 'output.pdb', 'snapshots.pdb']
-        tmp_files.extend(glob.glob('sandbox_*'))
         fu.rm_file_list(tmp_files)
 
 

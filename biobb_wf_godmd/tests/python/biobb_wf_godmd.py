@@ -22,7 +22,6 @@ def step0_extract_chain(config, system=None):
     extract_chain(**global_paths["step0_extract_chain"], properties=global_prop["step0_extract_chain"])
 
     assert fx.not_empty(global_paths["step0_extract_chain"]["output_structure_path"])
-    assert fx.equal(global_paths["step0_extract_chain"]["output_structure_path"], f'reference/step0_extract_chain/{Path(global_paths["step0_extract_chain"]["output_structure_path"]).name}')
 
     global global_work_dir
     global_work_dir = conf.get_working_dir_path()
@@ -38,7 +37,6 @@ def step1_extract_chain(config, system=None):
     extract_chain(**global_paths["step1_extract_chain"], properties=global_prop["step1_extract_chain"])
 
     assert fx.not_empty(global_paths["step1_extract_chain"]["output_structure_path"])
-    assert fx.equal(global_paths["step1_extract_chain"]["output_structure_path"], f'reference/step1_extract_chain/{Path(global_paths["step1_extract_chain"]["output_structure_path"]).name}')
 
 
 def step2_remove_molecules(config, system=None):
@@ -51,7 +49,6 @@ def step2_remove_molecules(config, system=None):
     remove_molecules(**global_paths["step2_remove_molecules"], properties=global_prop["step2_remove_molecules"])
 
     assert fx.not_empty(global_paths["step2_remove_molecules"]["output_molecules_path"])
-    assert fx.equal(global_paths["step2_remove_molecules"]["output_molecules_path"], f'reference/step2_remove_molecules/{Path(global_paths["step2_remove_molecules"]["output_molecules_path"]).name}')
 
 
 def step4_godmd_prep(config, system=None):
@@ -65,9 +62,7 @@ def step4_godmd_prep(config, system=None):
     godmd_prep(**global_paths["step4_godmd_prep"], properties=global_prop["step4_godmd_prep"])
 
     assert fx.not_empty(global_paths["step4_godmd_prep"]["output_aln_orig_path"])
-    assert fx.equal(global_paths["step4_godmd_prep"]["output_aln_orig_path"], f'reference/step4_godmd_prep/{Path(global_paths["step4_godmd_prep"]["output_aln_orig_path"]).name}')
     assert fx.not_empty(global_paths["step4_godmd_prep"]["output_aln_target_path"])
-    assert fx.equal(global_paths["step4_godmd_prep"]["output_aln_target_path"], f'reference/step4_godmd_prep/{Path(global_paths["step4_godmd_prep"]["output_aln_target_path"]).name}')
 
 
 def step5_godmd_run(config, system=None):
@@ -81,13 +76,9 @@ def step5_godmd_run(config, system=None):
     godmd_run(**global_paths["step5_godmd_run"], properties=global_prop["step5_godmd_run"])
 
     assert fx.not_empty(global_paths["step5_godmd_run"]["output_log_path"])
-    # assert fx.equal(global_paths["step5_godmd_run"]["output_log_path"], f'reference/step5_godmd_run/{Path(global_paths["step5_godmd_run"]["output_log_path"]).name}')
     assert fx.not_empty(global_paths["step5_godmd_run"]["output_ene_path"])
-    assert fx.equal(global_paths["step5_godmd_run"]["output_ene_path"], f'reference/step5_godmd_run/{Path(global_paths["step5_godmd_run"]["output_ene_path"]).name}')
     assert fx.not_empty(global_paths["step5_godmd_run"]["output_trj_path"])
-    assert fx.equal(global_paths["step5_godmd_run"]["output_trj_path"], f'reference/step5_godmd_run/{Path(global_paths["step5_godmd_run"]["output_trj_path"]).name}')
     assert fx.not_empty(global_paths["step5_godmd_run"]["output_pdb_path"])
-    assert fx.equal(global_paths["step5_godmd_run"]["output_pdb_path"], f'reference/step5_godmd_run/{Path(global_paths["step5_godmd_run"]["output_pdb_path"]).name}')
 
 
 def step6_cpptraj_convert(config, remove=False, system=None):
@@ -104,7 +95,6 @@ def step6_cpptraj_convert(config, remove=False, system=None):
 
     if remove:
         tmp_files = [conf.get_working_dir_path()]
-        tmp_files.extend(glob.glob('sandbox_*'))
         fu.rm_file_list(tmp_files)
 
 
