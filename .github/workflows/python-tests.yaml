@@ -6,6 +6,9 @@ on:
       - biobb_wf_ligand_parameterization/python/workflow.env.yml
       - biobb_wf_ligand_parameterization/python/workflow.py
       - biobb_wf_ligand_parameterization/python/workflow.yml
+      - biobb_wf_virtual-screening_fpocket/python/workflow.env.yml
+      - biobb_wf_virtual-screening_fpocket/python/workflow.py
+      - biobb_wf_virtual-screening_fpocket/python/workflow.yml
       #- biobb_wf_md_setup/python/workflow.env.yml
       #- biobb_wf_md_setup/python/workflow.py
       #- biobb_wf_md_setup/python/workflow.yml
@@ -17,6 +20,7 @@ jobs:
     runs-on: self-hosted
     outputs:
       biobb_wf_ligand_parameterization_changed: ${{ steps.filter.outputs.biobb_wf_ligand_parameterization }}
+      biobb_wf_virtual-screening_fpocket_changed: ${{ steps.filter.outputs.biobb_wf_virtual-screening_fpocket }}
       biobb_wf_md_setup_changed: ${{ steps.filter.outputs.biobb_wf_md_setup }}
     steps:
       - name: Filter Changed Files
@@ -28,6 +32,10 @@ jobs:
               - "biobb_wf_ligand_parameterization/python/workflow.env.yml"
               - "biobb_wf_ligand_parameterization/python/workflow.py"
               - "biobb_wf_ligand_parameterization/python/workflow.yml"
+            biobb_wf_virtual-screening_fpocket:
+              - "biobb_wf_virtual-screening_fpocket/python/workflow.env.yml"
+              - "biobb_wf_virtual-screening_fpocket/python/workflow.py"
+              - "biobb_wf_virtual-screening_fpocket/python/workflow.yml"
             biobb_wf_md_setup:
               - "biobb_wf_md_setup/python/workflow.env.yml"
               - "biobb_wf_md_setup/python/workflow.py"
@@ -40,6 +48,14 @@ jobs:
     if: needs.filter-files.outputs.biobb_wf_ligand_parameterization_changed == 'true'
     with:
       wf_name: biobb_wf_ligand_parameterization
+
+  biobb_wf_virtual-screening_fpocket:
+    name: biobb_wf_virtual-screening_fpocket
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputsbiobb_wf_virtual-screening_fpocket_changed == 'true'
+    with:
+      wf_name: biobb_wf_virtual-screening_fpocket
 
   # biobb_wf_md_setup:
   #   name: biobb_wf_md_setup
