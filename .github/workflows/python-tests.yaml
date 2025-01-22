@@ -53,7 +53,7 @@ jobs:
     name: biobb_wf_virtual-screening_fpocket
     needs: filter-files
     uses: ./.github/workflows/python-reusable.yaml
-    if: needs.filter-files.outputsbiobb_wf_virtual-screening_fpocket_changed == 'true'
+    if: needs.filter-files.outputs.biobb_wf_virtual-screening_fpocket_changed == 'true'
     with:
       wf_name: biobb_wf_virtual-screening_fpocket
 
