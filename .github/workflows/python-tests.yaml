@@ -77,7 +77,7 @@ jobs:
     steps:
       - name: Filter Changed Files
         id: filter
-        uses: dorny/paths-filter@v2
+        uses: dorny/paths-filter@v3
         with:
           filters: |
             biobb_wf_amber_abc_setup:
