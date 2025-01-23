@@ -12,9 +12,9 @@ on:
       - biobb_wf_amber_md_setup_lig/python/workflow.env.yml
       - biobb_wf_amber_md_setup_lig/python/workflow.py
       - biobb_wf_amber_md_setup_lig/python/workflow.yml
-      - biobb_wf_cmip/python/workflow.env.yml
-      - biobb_wf_cmip/python/workflow.py
-      - biobb_wf_cmip/python/workflow.yml
+      # - biobb_wf_cmip/python/workflow.env.yml
+      # - biobb_wf_cmip/python/workflow.py
+      # - biobb_wf_cmip/python/workflow.yml
       - biobb_wf_dna_helparms/python/workflow.env.yml
       - biobb_wf_dna_helparms/python/workflow.py
       - biobb_wf_dna_helparms/python/workflow.yml
@@ -61,7 +61,7 @@ jobs:
       biobb_wf_amber_abc_setup_changed: ${{ steps.filter.outputs.biobb_wf_amber_abc_setup }}
       biobb_wf_amber_md_setup_changed: ${{ steps.filter.outputs.biobb_wf_amber_md_setup }}
       biobb_wf_amber_md_setup_lig_changed: ${{ steps.filter.outputs.biobb_wf_amber_md_setup_lig }}
-      biobb_wf_cmip_changed: ${{ steps.filter.outputs.biobb_wf_cmip }}
+      # biobb_wf_cmip_changed: ${{ steps.filter.outputs.biobb_wf_cmip }}
       biobb_wf_dna_helparms_changed: ${{ steps.filter.outputs.biobb_wf_dna_helparms }}
       biobb_wf_flexdyn_changed: ${{ steps.filter.outputs.biobb_wf_flexdyn }}
       biobb_wf_flexserv_changed: ${{ steps.filter.outputs.biobb_wf_flexserv }}
@@ -177,13 +177,13 @@ jobs:
     with:
       wf_name: biobb_wf_dna_helparms
 
-  biobb_wf_cmip:
-    name: biobb_wf_cmip
-    needs: filter-files
-    uses: ./.github/workflows/python-reusable.yaml
-    if: needs.filter-files.outputs.biobb_wf_cmip_changed == 'true'
-    with:
-      wf_name: biobb_wf_cmip
+  # biobb_wf_cmip:
+  #   name: biobb_wf_cmip
+  #   needs: filter-files
+  #   uses: ./.github/workflows/python-reusable.yaml
+  #   if: needs.filter-files.outputs.biobb_wf_cmip_changed == 'true'
+  #   with:
+  #     wf_name: biobb_wf_cmip
 
   biobb_wf_flexdyn:
     name: biobb_wf_flexdyn
