@@ -18,8 +18,14 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-        with:
-          path: ../bw
+
+      - name: Move repository to a shorter path
+        run: |
+          mv ${{ github.workspace }}/biobb_workflows $HOME/bw
+          echo "NEW_WORKSPACE=$HOME/bw" >> $GITHUB_ENV
+
+      - name: Change directory to new workspace
+        run: cd ${{ env.NEW_WORKSPACE }}
 
       - run: echo "Repository -> ${{ github.repository }}"
       - run: echo "Branch -> ${{ github.ref }}"
@@ -28,7 +34,7 @@ jobs:
 
       - name: List files in the repository
         run: |
-          ls ${{ github.workspace }}
+          ls ${{ env.NEW_WORKSPACE }}
 
       - name: Remove all micromamba installations
         run: |
