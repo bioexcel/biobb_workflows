@@ -7,7 +7,7 @@ on:
 name: CWL README
 jobs:
   cwl_readme:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: peter-murray/workflow-application-token-action@v3
         id: generate_token
