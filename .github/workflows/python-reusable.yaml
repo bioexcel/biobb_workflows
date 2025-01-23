@@ -18,8 +18,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
         with:
-          repository: bioexcel/biobb_workflows
-          path: biobb_workflows
+          path: .
 
       - run: echo "Repository -> ${{ github.repository }}"
       - run: echo "Branch -> ${{ github.ref }}"
