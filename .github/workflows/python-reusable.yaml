@@ -6,10 +6,14 @@ on:
       wf_name:
         required: true
         type: string
+      runs_on:
+        required: false
+        type: string
+        default: self-hosted
 
 jobs:
   python:
-    runs-on: self-hosted
+    runs-on: ${{ inputs.runs_on }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
