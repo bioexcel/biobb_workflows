@@ -14,11 +14,12 @@ on:
 jobs:
   python:
     runs-on: ${{ inputs.runs_on }}
+    timeout-minutes: 1440
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
         with:
-          path: bw
+          path: $HOME/bw
 
       - run: echo "Repository -> ${{ github.repository }}"
       - run: echo "Branch -> ${{ github.ref }}"
