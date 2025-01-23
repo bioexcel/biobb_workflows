@@ -21,7 +21,7 @@ jobs:
 
       - name: Move repository to a shorter path
         run: |
-          mv ${{ github.workspace }}/biobb_workflows $HOME/bw
+          mv ${{ github.workspace }} $HOME/bw
           echo "NEW_WORKSPACE=$HOME/bw" >> $GITHUB_ENV
 
       - name: Change directory to new workspace
