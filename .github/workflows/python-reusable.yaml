@@ -19,32 +19,19 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
-      - name: Move repository to a shorter path
-        run: |
-          mv ${{ github.workspace }} $HOME/bw
-          echo "NEW_WORKSPACE=$HOME/bw" >> $GITHUB_ENV
-
-      - name: Change directory to new workspace
-        run: cd ${{ env.NEW_WORKSPACE }}
-
-      - name: Echo repository info
-        run: |
-          echo "Repository -> ${{ github.repository }}"
-          echo "Branch -> ${{ github.ref }}"
-          echo "Trigger event -> ${{ github.event_name }}"
-          echo "Runner OS -> ${{ runner.os }}"
-        working-directory: ${{ env.NEW_WORKSPACE }}
+      - run: echo "Repository -> ${{ github.repository }}"
+      - run: echo "Branch -> ${{ github.ref }}"
+      - run: echo "Trigger event -> ${{ github.event_name }}"
+      - run: echo "Runner OS -> ${{ runner.os }}"
 
       - name: List files in the repository
         run: |
-          ls ${{ env.NEW_WORKSPACE }}
-        working-directory: ${{ env.NEW_WORKSPACE }}
+          ls ${{ github.workspace }}
 
       - name: Remove all micromamba installations
         run: |
           rm -rf $HOME/.bash_profile $HOME/.conda $HOME/micromamba $HOME/micromamba-bin 2>/dev/null
           touch $HOME/.bash_profile
-        working-directory: ${{ env.NEW_WORKSPACE }}
 
       - name: setup-micromamba
         uses: mamba-org/setup-micromamba@v2.0.0
@@ -57,12 +44,10 @@ jobs:
           create-args: >-
             pytest
             imagehash
-        working-directory: ${{ env.NEW_WORKSPACE }}
 
       - name: List installed package versions
         shell: bash -l {0}
         run: micromamba list
-        working-directory: ${{ env.NEW_WORKSPACE }}
 
       - name: Run tests
         shell: bash -l {0}
@@ -73,4 +58,3 @@ jobs:
 
           # Production one
           pytest ${{ inputs.wf_name }}.py --config ../../python/workflow.yml --remove
-        working-directory: ${{ env.NEW_WORKSPACE }}
