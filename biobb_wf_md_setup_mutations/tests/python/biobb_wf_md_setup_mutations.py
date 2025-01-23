@@ -374,7 +374,7 @@ def step23_rmsd_exp(config, mutation, system=None):
     gmx_rms(**paths["step23_rmsd_exp"], properties=prop["step23_rmsd_exp"])
 
     assert fx.not_empty(paths["step23_rmsd_exp"]["output_xvg_path"])
-    assert fx.compare_size(paths["step23_rmsd_exp"]["output_xvg_path"], f'reference/{mutation}/step23_rmsd_exp/{Path(global_paths["step23_rmsd_exp"]["output_xvg_path"]).name}', 90)
+    assert fx.compare_size(paths["step23_rmsd_exp"]["output_xvg_path"], f'reference/{mutation}/step23_rmsd_exp/{Path(paths["step23_rmsd_exp"]["output_xvg_path"]).name}', 90)
 
 
 def final_step(config, remove=False, system=None):
