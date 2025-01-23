@@ -75,4 +75,5 @@ Take into account that depending on the number of steps, the tools executed and 
 
 ## <a name="get-output"></a>Get output results
 
+
 Once the workflow is finished, you will have all the files generated in every step in the same folder.
