@@ -123,6 +123,12 @@ def main(config, system=None):
             elif ensemble == "stateB":
                 dhdl_paths_listB.append(paths["step10_gmx_mdrun"]["output_dhdl_path"])
 
+        for file_path in state_pdb_list:
+            try:
+                os.remove(file_path)
+            except OSError as e:
+                print(f"Error removing {file_path} : {e.strerror}")
+
     # Creating zip file containing all the dhdl files
     dhdlA_path = 'dhdlA.zip'
     dhdlB_path = 'dhdlB.zip'
