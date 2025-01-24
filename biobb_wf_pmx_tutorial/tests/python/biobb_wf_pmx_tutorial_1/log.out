@@ -1,4 +1,0 @@
-13:33:38     Module: biobb_analysis.gromacs.gmx_trjconv_str_ens Version: 5.0.1
-13:33:42     Executing: gmx trjconv -f /Users/gbayarri/projects/BioBB/biobb_workflows/biobb_wf_pmx_tutor...
-13:33:42     Exit code: 0
-13:33:42     

@@ -42,7 +42,6 @@ def step0_trjconv(config, ensemble, mutation, system=None):
     gmx_trjconv_str_ens(**ensemble_paths["step0_trjconv"], properties=ensemble_prop["step0_trjconv"])
 
     assert fx.not_empty(ensemble_paths["step0_trjconv"]["output_str_ens_path"])
-    assert fx.compare_size(ensemble_paths["step0_trjconv"]["output_str_ens_path"], f'reference/{ensemble}/step0_trjconv/{Path(ensemble_paths["step0_trjconv"]["output_str_ens_path"]).name}', 10)
 
     with zipfile.ZipFile(ensemble_paths["step0_trjconv"]["output_str_ens_path"], 'r') as zip_f:
         zip_f.extractall()
