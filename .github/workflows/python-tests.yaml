@@ -36,9 +36,9 @@ on:
       - biobb_wf_md_setup_mutations/python/workflow.env.yml
       - biobb_wf_md_setup_mutations/python/workflow.py
       - biobb_wf_md_setup_mutations/python/workflow.yml
-      # - biobb_wf_pmx_tutorial/python/workflow.env.yml
-      # - biobb_wf_pmx_tutorial/python/workflow.py
-      # - biobb_wf_pmx_tutorial/python/workflow.yml
+      - biobb_wf_pmx_tutorial/python/workflow.env.yml
+      - biobb_wf_pmx_tutorial/python/workflow.py
+      - biobb_wf_pmx_tutorial/python/workflow.yml
       - biobb_wf_protein_md_analysis/python/workflow.env.yml
       - biobb_wf_protein_md_analysis/python/workflow.py
       - biobb_wf_protein_md_analysis/python/workflow.yml
@@ -69,7 +69,7 @@ jobs:
       biobb_wf_ligand_parameterization_changed: ${{ steps.filter.outputs.biobb_wf_ligand_parameterization }}
       biobb_wf_md_setup_changed: ${{ steps.filter.outputs.biobb_wf_md_setup }}
       biobb_wf_md_setup_mutations_changed: ${{ steps.filter.outputs.biobb_wf_md_setup_mutations }}
-      # biobb_wf_pmx_tutorial_changed: ${{ steps.filter.outputs.biobb_wf_pmx_tutorial }}
+      biobb_wf_pmx_tutorial_changed: ${{ steps.filter.outputs.biobb_wf_pmx_tutorial }}
       biobb_wf_protein_md_analysis_changed: ${{ steps.filter.outputs.biobb_wf_protein_md_analysis }}
       biobb_wf_protein-complex_md_setup_changed: ${{ steps.filter.outputs.biobb_wf_protein-complex_md_setup }}
       biobb_wf_structure_checking_changed: ${{ steps.filter.outputs.biobb_wf_structure_checking }}
@@ -235,13 +235,13 @@ jobs:
       wf_name: biobb_wf_md_setup_mutations
       runs_on: bsc
 
-  # biobb_wf_pmx_tutorial:
-  #   name: biobb_wf_pmx_tutorial
-  #   needs: filter-files
-  #   uses: ./.github/workflows/python-reusable.yaml
-  #   if: needs.filter-files.outputs.biobb_wf_pmx_tutorial_changed == 'true'
-  #   with:
-  #     wf_name: biobb_wf_pmx_tutorial
+  biobb_wf_pmx_tutorial:
+    name: biobb_wf_pmx_tutorial
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_pmx_tutorial_changed == 'true'
+    with:
+      wf_name: biobb_wf_pmx_tutorial
 
   biobb_wf_protein_md_analysis:
     name: biobb_wf_protein_md_analysis
