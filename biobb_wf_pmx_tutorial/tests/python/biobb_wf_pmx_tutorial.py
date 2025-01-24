@@ -2,7 +2,6 @@ import pytest
 import glob
 import os
 import zipfile
-from pathlib import Path
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools import test_fixtures as fx
