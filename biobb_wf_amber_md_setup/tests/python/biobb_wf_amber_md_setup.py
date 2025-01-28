@@ -1,5 +1,4 @@
 import pytest
-import glob
 from pathlib import Path
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
