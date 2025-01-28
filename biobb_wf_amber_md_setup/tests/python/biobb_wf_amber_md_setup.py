@@ -147,7 +147,7 @@ def step7_amber_to_pdb(config, system=None):
 
     amber_to_pdb(**global_paths["step7_amber_to_pdb"], properties=global_prop["step7_amber_to_pdb"])
 
-    assert fx.not_empty(global_paths["step7_amber_to_pdb"]["output_dat_path"])
+    assert fx.not_empty(global_paths["step7_amber_to_pdb"]["output_pdb_path"])
 
 
 def step8_leap_solvate(config, system=None):
