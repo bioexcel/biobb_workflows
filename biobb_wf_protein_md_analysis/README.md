@@ -24,7 +24,7 @@ This workflow computes a set of Quality Control (QC) analyses on top of an uploa
 * [Docker](docker)
 
 ## Copyright & Licensing
-This software has been developed in the [MMB group](http://mmb.irbbarcelona.org) at the [BSC](http://www.bsc.es/) & [IRB](https://www.irbbarcelona.org/) for the [European BioExcel](http://bioexcel.eu/), funded by the European Commission (EU H2020 [823830](http://cordis.europa.eu/projects/823830), EU H2020 [675728](http://cordis.europa.eu/projects/675728)).
+This software has been developed in the [MMB group](http://mmb.irbbarcelona.org) at the [BSC](http://www.bsc.es/) & [IRB](https://www.irbbarcelona.org/) for the [European BioExcel](http://bioexcel.eu/), funded by the European Commission (EU Horizon Europe [101093290](https://cordis.europa.eu/project/id/101093290), EU H2020 [823830](http://cordis.europa.eu/projects/823830), EU H2020 [675728](http://cordis.europa.eu/projects/675728)).
 
 * (c) 2015-2025 [Barcelona Supercomputing Center](https://www.bsc.es/)
 * (c) 2015-2025 [Institute for Research in Biomedicine](https://www.irbbarcelona.org/)
