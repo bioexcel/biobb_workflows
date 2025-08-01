@@ -2,7 +2,7 @@ name: Python workflow Tests
 
 on:
   push:
-    paths:
+    # paths:
       # - biobb_wf_amber_abc_setup/python/workflow.env.yml
       # - biobb_wf_amber_abc_setup/python/workflow.py
       # - biobb_wf_amber_abc_setup/python/workflow.yml
