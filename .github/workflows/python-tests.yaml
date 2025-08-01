@@ -75,6 +75,9 @@ jobs:
       biobb_wf_structure_checking_changed: ${{ steps.filter.outputs.biobb_wf_structure_checking }}
       biobb_wf_virtual-screening_fpocket_changed: ${{ steps.filter.outputs.biobb_wf_virtual-screening_fpocket }}
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
       - name: Filter Changed Files
         id: filter
         uses: dorny/paths-filter@v3
