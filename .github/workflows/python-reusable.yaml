@@ -9,7 +9,7 @@ on:
       runs_on:
         required: false
         type: string
-        default: self-hosted
+        default: ubuntu-latest
 
 jobs:
   python:
