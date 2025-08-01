@@ -65,7 +65,7 @@ jobs:
       biobb_wf_dna_helparms_changed: ${{ steps.filter.outputs.biobb_wf_dna_helparms }}
       biobb_wf_flexdyn_changed: ${{ steps.filter.outputs.biobb_wf_flexdyn }}
       biobb_wf_flexserv_changed: ${{ steps.filter.outputs.biobb_wf_flexserv }}
-      biobb_wf_godmd_changed: ${{ steps.filter.outputs.biobb_wf_godmd }}
+      # biobb_wf_godmd_changed: ${{ steps.filter.outputs.biobb_wf_godmd }}
       biobb_wf_ligand_parameterization_changed: ${{ steps.filter.outputs.biobb_wf_ligand_parameterization }}
       biobb_wf_md_setup_changed: ${{ steps.filter.outputs.biobb_wf_md_setup }}
       biobb_wf_md_setup_mutations_changed: ${{ steps.filter.outputs.biobb_wf_md_setup_mutations }}
@@ -111,10 +111,10 @@ jobs:
               - "biobb_wf_flexserv/python/workflow.env.yml"
               - "biobb_wf_flexserv/python/workflow.py"
               - "biobb_wf_flexserv/python/workflow.yml"
-            biobb_wf_godmd:
-              - "biobb_wf_godmd/python/workflow.env.yml"
-              - "biobb_wf_godmd/python/workflow.py"
-              - "biobb_wf_godmd/python/workflow.yml"
+            # biobb_wf_godmd:
+            #   - "biobb_wf_godmd/python/workflow.env.yml"
+            #   - "biobb_wf_godmd/python/workflow.py"
+            #   - "biobb_wf_godmd/python/workflow.yml"
             biobb_wf_ligand_parameterization:
               - "biobb_wf_ligand_parameterization/python/workflow.env.yml"
               - "biobb_wf_ligand_parameterization/python/workflow.py"
@@ -204,13 +204,13 @@ jobs:
     with:
       wf_name: biobb_wf_flexserv
 
-  biobb_wf_godmd:
-    name: biobb_wf_godmd
-    needs: filter-files
-    uses: ./.github/workflows/python-reusable.yaml
-    if: needs.filter-files.outputs.biobb_wf_godmd_changed == 'true'
-    with:
-      wf_name: biobb_wf_godmd
+  # biobb_wf_godmd:
+  #   name: biobb_wf_godmd
+  #   needs: filter-files
+  #   uses: ./.github/workflows/python-reusable.yaml
+  #   if: needs.filter-files.outputs.biobb_wf_godmd_changed == 'true'
+  #   with:
+  #     wf_name: biobb_wf_godmd
 
   biobb_wf_ligand_parameterization:
     name: biobb_wf_ligand_parameterization
