@@ -26,7 +26,7 @@ jobs:
 
       - name: List files in the repository
         run: |
-          ls -R ${{ github.workspace }}
+          ls ${{ github.workspace }}
 
       - name: Remove all micromamba installations
         run: |
@@ -57,4 +57,4 @@ jobs:
           cd ${{ inputs.wf_name }}/tests/python
 
           # Production one
-          pytest -s ${{ inputs.wf_name }}.py --config ../../python/workflow.yml --remove
+          pytest ${{ inputs.wf_name }}.py --config ../../python/workflow.yml --remove
