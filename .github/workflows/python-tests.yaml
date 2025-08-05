@@ -227,7 +227,6 @@ jobs:
     if: needs.filter-files.outputs.biobb_wf_md_setup_changed == 'true'
     with:
       wf_name: biobb_wf_md_setup
-      runs_on: bsc
 
   biobb_wf_md_setup_mutations:
     name: biobb_wf_md_setup_mutations
@@ -236,7 +235,6 @@ jobs:
     if: needs.filter-files.outputs.biobb_wf_md_setup_mutations_changed == 'true'
     with:
       wf_name: biobb_wf_md_setup_mutations
-      runs_on: bsc
 
   biobb_wf_pmx_tutorial:
     name: biobb_wf_pmx_tutorial
@@ -261,7 +259,6 @@ jobs:
     if: needs.filter-files.outputs.biobb_wf_protein-complex_md_setup_changed == 'true'
     with:
       wf_name: biobb_wf_protein-complex_md_setup
-      runs_on: bsc
 
   biobb_wf_structure_checking:
     name: biobb_wf_structure_checking
