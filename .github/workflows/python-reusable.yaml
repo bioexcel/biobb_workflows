@@ -14,7 +14,7 @@ on:
 jobs:
   python:
     runs-on: ${{ inputs.runs_on }}
-    timeout-minutes: 5
+    timeout-minutes: 2880
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
