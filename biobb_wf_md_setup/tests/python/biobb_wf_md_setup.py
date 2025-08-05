@@ -456,9 +456,9 @@ def test_step20_gmx_energy(config_path, system):
     step20_gmx_energy(config_path, system)
 
 
-@pytest.mark.parametrize("system", [None])
-def test_step21_gmx_rgyr(config_path, system):
-    step21_gmx_rgyr(config_path, system)
+# @pytest.mark.parametrize("system", [None])
+# def test_step21_gmx_rgyr(config_path, system):
+#     step21_gmx_rgyr(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])

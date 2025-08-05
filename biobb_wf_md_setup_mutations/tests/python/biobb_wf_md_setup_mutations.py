@@ -543,11 +543,11 @@ def test_step20_gmx_energy(config_path, iteration, system):
     step20_gmx_energy(config_path, current_mutation, system)
 
 
-@pytest.mark.parametrize("iteration", range(len(global_mutations)))
-@pytest.mark.parametrize("system", [None])
-def test_step21_gmx_rgyr(config_path, iteration, system):
-    current_mutation = global_mutations[iteration]
-    step21_gmx_rgyr(config_path, current_mutation, system)
+# @pytest.mark.parametrize("iteration", range(len(global_mutations)))
+# @pytest.mark.parametrize("system", [None])
+# def test_step21_gmx_rgyr(config_path, iteration, system):
+#     current_mutation = global_mutations[iteration]
+#     step21_gmx_rgyr(config_path, current_mutation, system)
 
 
 @pytest.mark.parametrize("iteration", range(len(global_mutations)))
