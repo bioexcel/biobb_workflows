@@ -2,55 +2,6 @@ name: Python workflow Tests
 
 on:
   push:
-    # paths:
-      # - biobb_wf_amber_abc_setup/python/workflow.env.yml
-      # - biobb_wf_amber_abc_setup/python/workflow.py
-      # - biobb_wf_amber_abc_setup/python/workflow.yml
-      # - biobb_wf_amber_md_setup/python/workflow.env.yml
-      # - biobb_wf_amber_md_setup/python/workflow.py
-      # - biobb_wf_amber_md_setup/python/workflow.yml
-      # - biobb_wf_amber_md_setup_lig/python/workflow.env.yml
-      # - biobb_wf_amber_md_setup_lig/python/workflow.py
-      # - biobb_wf_amber_md_setup_lig/python/workflow.yml
-      # - biobb_wf_cmip/python/workflow.env.yml
-      # - biobb_wf_cmip/python/workflow.py
-      # - biobb_wf_cmip/python/workflow.yml
-      # - biobb_wf_dna_helparms/python/workflow.env.yml
-      # - biobb_wf_dna_helparms/python/workflow.py
-      # - biobb_wf_dna_helparms/python/workflow.yml
-      # - biobb_wf_flexdyn/python/workflow.env.yml
-      # - biobb_wf_flexdyn/python/workflow.py
-      # - biobb_wf_flexdyn/python/workflow.yml
-      # - biobb_wf_flexserv/python/workflow.env.yml
-      # - biobb_wf_flexserv/python/workflow.py
-      # - biobb_wf_flexserv/python/workflow.yml
-      # - biobb_wf_godmd/python/workflow.env.yml
-      # - biobb_wf_godmd/python/workflow.py
-      # - biobb_wf_godmd/python/workflow.yml
-      # - biobb_wf_ligand_parameterization/python/workflow.env.yml
-      # - biobb_wf_ligand_parameterization/python/workflow.py
-      # - biobb_wf_ligand_parameterization/python/workflow.yml
-      # - biobb_wf_md_setup/python/workflow.env.yml
-      # - biobb_wf_md_setup/python/workflow.py
-      # - biobb_wf_md_setup/python/workflow.yml
-      # - biobb_wf_md_setup_mutations/python/workflow.env.yml
-      # - biobb_wf_md_setup_mutations/python/workflow.py
-      # - biobb_wf_md_setup_mutations/python/workflow.yml
-      # - biobb_wf_pmx_tutorial/python/workflow.env.yml
-      # - biobb_wf_pmx_tutorial/python/workflow.py
-      # - biobb_wf_pmx_tutorial/python/workflow.yml
-      # - biobb_wf_protein_md_analysis/python/workflow.env.yml
-      # - biobb_wf_protein_md_analysis/python/workflow.py
-      # - biobb_wf_protein_md_analysis/python/workflow.yml
-      # - biobb_wf_protein-complex_md_setup/python/workflow.env.yml
-      # - biobb_wf_protein-complex_md_setup/python/workflow.py
-      # - biobb_wf_protein-complex_md_setup/python/workflow.yml
-      # - biobb_wf_structure_checking/python/workflow.env.yml
-      # - biobb_wf_structure_checking/python/workflow.py
-      # - biobb_wf_structure_checking/python/workflow.yml
-      # - biobb_wf_virtual-screening_fpocket/python/workflow.env.yml
-      # - biobb_wf_virtual-screening_fpocket/python/workflow.py
-      # - biobb_wf_virtual-screening_fpocket/python/workflow.yml
   workflow_dispatch:
 
 jobs:
@@ -61,10 +12,12 @@ jobs:
       biobb_wf_amber_abc_setup_changed: ${{ steps.filter.outputs.biobb_wf_amber_abc_setup }}
       biobb_wf_amber_md_setup_changed: ${{ steps.filter.outputs.biobb_wf_amber_md_setup }}
       biobb_wf_amber_md_setup_lig_changed: ${{ steps.filter.outputs.biobb_wf_amber_md_setup_lig }}
+      # NOT WORKING BECAUSE OF FORTRAN MEMORY ERROR (TRYING TO ALLOCATE 25G BUT ONLY 7G AVAILABLE)
       # biobb_wf_cmip_changed: ${{ steps.filter.outputs.biobb_wf_cmip }}
       biobb_wf_dna_helparms_changed: ${{ steps.filter.outputs.biobb_wf_dna_helparms }}
       biobb_wf_flexdyn_changed: ${{ steps.filter.outputs.biobb_wf_flexdyn }}
       biobb_wf_flexserv_changed: ${{ steps.filter.outputs.biobb_wf_flexserv }}
+      # NOT WORKING BECAUSE OF FORTRAN STR LENGTH ERROR
       # biobb_wf_godmd_changed: ${{ steps.filter.outputs.biobb_wf_godmd }}
       biobb_wf_ligand_parameterization_changed: ${{ steps.filter.outputs.biobb_wf_ligand_parameterization }}
       biobb_wf_md_setup_changed: ${{ steps.filter.outputs.biobb_wf_md_setup }}
