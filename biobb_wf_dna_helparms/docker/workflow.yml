@@ -1,6 +1,6 @@
-working_dir_path: biobb_wf_dna_helparms
-can_write_console_log: False
-run_md: False
+global_properties:
+  working_dir_path: biobb_wf_dna_helparms
+  can_write_console_log: False
 
 step1_biobb_curves:
   tool: biobb_curves

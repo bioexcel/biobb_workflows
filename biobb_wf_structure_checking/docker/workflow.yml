@@ -1,6 +1,6 @@
-working_dir_path: biobb_wf_structure_checking
-can_write_console_log: False
-run_md: true
+global_properties:
+  working_dir_path: biobb_wf_structure_checking
+  can_write_console_log: False
 
 step0_structure_check_init:
   tool: structure_check

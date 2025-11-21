@@ -1,17 +1,16 @@
-working_dir_path: biobb_wf_pmx_tutorial
-can_write_console_log: False
-
-mutations:
-  stateA: 10Ala
-  stateB: 10Ile
-
-input_trajs:
-  stateA:
-    input_tpr_path: /data/pmx_tutorial/stateA.tpr
-    input_traj_path: /data/pmx_tutorial/stateA_1ns.xtc
-  stateB:
-    input_tpr_path: /data/pmx_tutorial/stateB.tpr
-    input_traj_path: /data/pmx_tutorial/stateB_1ns.xtc
+global_properties:
+  working_dir_path: biobb_wf_pmx_tutorial
+  can_write_console_log: False
+  mutations:
+    stateA: 10Ala
+    stateB: 10Ile
+  input_trajs:
+    stateA:
+      input_tpr_path: pmx_tutorial/stateA.tpr
+      input_traj_path: pmx_tutorial/stateA_1ns.xtc
+    stateB:
+      input_tpr_path: pmx_tutorial/stateB.tpr
+      input_traj_path: pmx_tutorial/stateB_1ns.xtc
 
 step0_trjconv:
   paths:

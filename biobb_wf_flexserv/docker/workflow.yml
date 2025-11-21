@@ -1,5 +1,6 @@
-working_dir_path: biobb_wf_flexserv
-can_write_console_log: False
+global_properties:
+  working_dir_path: biobb_wf_flexserv
+  can_write_console_log: False
 
 step0_extract_atoms:
   tool: extract_atoms

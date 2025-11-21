@@ -1,6 +1,6 @@
-working_dir_path: biobb_wf_amber_abc_setup
-can_write_console_log: False
-run_md: False
+global_properties:
+  working_dir_path: biobb_wf_amber_abc_setup
+  can_write_console_log: False
 
 step1_leap_gen_top:
   tool: leap_gen_top

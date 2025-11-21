@@ -1,6 +1,7 @@
-working_dir_path: biobb_wf_protein_md_analysis
-can_write_console_log: False
-run_md: False
+global_properties:
+  working_dir_path: biobb_wf_protein_md_analysis
+  can_write_console_log: False
+  run_md: False
 
 step1_cpptraj_average:
   tool: cpptraj_average

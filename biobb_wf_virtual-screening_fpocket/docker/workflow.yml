@@ -1,6 +1,6 @@
-working_dir_path: biobb_wf_virtual-screening_fpocket
-can_write_console_log: False
-run_md: False
+global_properties:
+  working_dir_path: biobb_wf_virtual-screening_fpocket
+  can_write_console_log: False
 
 step1_fpocket_select:
   tool: fpocket_select

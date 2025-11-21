@@ -1,6 +1,6 @@
-working_dir_path: biobb_wf_ligand_parameterization
-can_write_console_log: False
-run_md: False
+global_properties:
+  working_dir_path: biobb_wf_ligand_parameterization
+  can_write_console_log: False
 
 
 step2_babel_minimize:
