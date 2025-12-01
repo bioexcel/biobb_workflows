@@ -18,7 +18,7 @@ ARG REPO
 ARG SUBREPO
 
 # Check if REPO variable is set
-RUN if [ -z "$REPO" ]; then echo "REPO variable is not set. Cancelling build." && exit 1; fi
+RUN if [ -z "$REPO" ]; then echo "REPO variable is not set. Cancelling build" && exit 1; fi
 
 # Define REPOSITORY & SUBREPOSITORY environment variables
 ENV REPOSITORY=$REPO
