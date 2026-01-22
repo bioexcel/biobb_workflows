@@ -1,6 +1,9 @@
 # Base docker with miniconda
 FROM continuumio/miniconda3
 
+# Define the version of the Docker image
+LABEL version="2025.1"
+
 # Define working dir
 WORKDIR /app
 
