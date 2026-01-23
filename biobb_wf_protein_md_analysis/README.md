@@ -4,7 +4,7 @@ Launch workflow:
 
 Download and install workflow:
 
-[![Install - Docker](https://img.shields.io/badge/install_&_run-Docker_Hub-006fb6?logo=Docker&logoColor=ffffff)](https://hub.docker.com/r/biobb/biobb_wf_protein_md_analysis)
+[![Install - Docker](https://img.shields.io/badge/install_&_run-GHCR-006fb6?logo=Docker&logoColor=ffffff)](https://github.com/bioexcel/biobb_workflows/pkgs/container/biobb_wf_protein_md_analysis)
 
 WorkflowHub flavours:
 
@@ -26,8 +26,8 @@ This workflow computes a set of Quality Control (QC) analyses on top of an uploa
 ## Copyright & Licensing
 This software has been developed in the [MMB group](http://mmb.irbbarcelona.org) at the [BSC](http://www.bsc.es/) & [IRB](https://www.irbbarcelona.org/) for the [European BioExcel](http://bioexcel.eu/), funded by the European Commission (EU Horizon Europe [101093290](https://cordis.europa.eu/project/id/101093290), EU H2020 [823830](http://cordis.europa.eu/projects/823830), EU H2020 [675728](http://cordis.europa.eu/projects/675728)).
 
-* (c) 2015-2025 [Barcelona Supercomputing Center](https://www.bsc.es/)
-* (c) 2015-2025 [Institute for Research in Biomedicine](https://www.irbbarcelona.org/)
+* (c) 2015-2026 [Barcelona Supercomputing Center](https://www.bsc.es/)
+* (c) 2015-2026 [Institute for Research in Biomedicine](https://www.irbbarcelona.org/)
 
 Licensed under the
 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0), see the file LICENSE for details.
