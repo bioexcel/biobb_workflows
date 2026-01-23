@@ -1,18 +1,18 @@
 # <a name="execute-wf"></a>Execute workflow through docker container
 
-All the **BioBB workflows** can be executed via **docker container**. Inside this container there are all the necessary **dependencies** for executing the workflow. These workflows are available via [**docker hub**](https://hub.docker.com/), though in this repository you can find as well all the necessary files for **building** them **in house**.
+All the **BioBB workflows** can be executed via **docker container**. Inside this container there are all the necessary **dependencies** for executing the workflow. These workflows are available via [**GitHub Container Registry**](https://github.com/orgs/bioexcel/packages?repo_name=biobb_workflows) (GHCR), though in this repository you can find as well all the necessary files for **building** them **in house**.
 
 ## <a name="requirements"></a>Requirements
 
 For executing this **BioBB workflow**, there is a single requirement: to have [**Docker**](https://docs.docker.com/engine/install/) installed in your computer. Once this requirement is fulfilled, you will be able to install the workflow.
 
-## <a name="download"></a>Download and execute container from docker hub
+## <a name="download"></a>Download and execute container from GHCR
 
-Below there are the steps to follow for downloading and running the container from [**docker hub**](https://hub.docker.com/r/biobb/biobb_wf_flexdyn).
+Below there are the steps to follow for downloading and running the container from [**GHCR**](https://github.com/bioexcel/biobb_workflows/pkgs/container/biobb_wf_flexdyn).
 
-In the following link you can find all the BioBB workflows available in docker hub:
+In the following link you can find all the BioBB workflows available in GHCR:
 
-<https://hub.docker.com/u/biobb>
+<https://github.com/orgs/bioexcel/packages?repo_name=biobb_workflows>
 
 ### <a name="pull"></a>Download container
 
