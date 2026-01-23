@@ -54,3 +54,7 @@
 	path = biobb_wf_virtual-screening_fpocket/jupyter
 	url = https://github.com/bioexcel/biobb_wf_virtual-screening
 	branch = main
+[submodule "biobb_wf_mem/jupyter"]
+	path = biobb_wf_mem/jupyter
+	url = https://github.com/bioexcel/biobb_wf_mem
+	branch = main
