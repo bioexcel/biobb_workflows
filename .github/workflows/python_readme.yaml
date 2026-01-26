@@ -31,6 +31,7 @@ jobs:
           cp common/python/README_common.md biobb_wf_ligand_parameterization/python/README.md
           cp common/python/README_common.md biobb_wf_md_setup/python/README.md
           cp common/python/README_common.md biobb_wf_md_setup_mutations/python/README.md
+          cp common/python/README_common.md biobb_wf_mem/python/README.md
           cp common/python/README_common.md biobb_wf_pmx_tutorial/python/README.md
           cp common/python/README_common.md biobb_wf_protein_md_analysis/python/README.md
           cp common/python/README_common.md biobb_wf_protein-complex_md_setup/python/README.md
@@ -52,6 +53,7 @@ jobs:
           sed -i "s/<repository>/biobb_wf_ligand_parameterization/g" biobb_wf_ligand_parameterization/python/README.md
           sed -i "s/<repository>/biobb_wf_md_setup/g" biobb_wf_md_setup/python/README.md
           sed -i "s/<repository>/biobb_wf_md_setup_mutations/g" biobb_wf_md_setup_mutations/python/README.md
+          sed -i "s/<repository>/biobb_wf_mem/g" biobb_wf_mem/python/README.md
           sed -i "s/<repository>/biobb_wf_pmx_tutorial/g" biobb_wf_pmx_tutorial/python/README.md
           sed -i "s/<repository>/biobb_wf_protein_md_analysis/g" biobb_wf_protein_md_analysis/python/README.md
           sed -i "s/<repository>/biobb_wf_protein-complex_md_setup/g" biobb_wf_protein-complex_md_setup/python/README.md
