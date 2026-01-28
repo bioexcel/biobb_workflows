@@ -58,3 +58,7 @@
 	path = biobb_wf_mem/jupyter
 	url = https://github.com/bioexcel/biobb_wf_mem
 	branch = main
+[submodule "biobb_wf_haddock/jupyter"]
+	path = biobb_wf_haddock/jupyter
+	url = https://github.com/bioexcel/biobb_wf_haddock
+	branch = main

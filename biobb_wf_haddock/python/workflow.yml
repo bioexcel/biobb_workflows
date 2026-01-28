@@ -1,0 +1,157 @@
+global_properties:
+  working_dir_path: biobb_wf_haddock
+  can_write_console_log: False
+
+step1_biobb_pdb_merge:
+  tool: biobb_pdb_merge
+  paths:
+    input_file_path: antibody_HL.zip
+    output_file_path: antibody_clean_merge.pdb
+
+step5_biobb_pdb_merge:
+  tool: biobb_pdb_merge
+  paths:
+    input_file_path: complex_HL.zip
+    output_file_path: complex_antibody_clean.pdb
+
+step9_haddock3_passive_from_active:
+  tool: haddock3_passive_from_active
+  paths:
+    input_pdb_path: antigen_clean.pdb
+    output_actpass_path: antigen_actpass.txt
+  properties:
+    active_list: '72,73,74,75,81,83,84,89,90,92,94,96,97,98,115,116,117'
+
+step10_haddock3_actpass_to_ambig:
+  tool: haddock3_actpass_to_ambig
+  paths:
+    input_actpass1_path: antibody_actpass.txt
+    input_actpass2_path: dependency/step9_haddock3_passive_from_active/output_actpass_path
+    output_tbl_path: ambig-paratope-NMR-epitope.tbl
+  properties:
+    segid_one: A
+    segid_two: B
+
+step11_haddock3_restrain_bodies:
+  tool: haddock3_restrain_bodies
+  paths:
+    input_structure_path: antibody_clean.pdb
+    output_tbl_path: antibody-unambig.tbl
+
+step12_topology:
+  tool: topology
+  paths:
+    mol1_input_pdb_path: antibody_clean.pdb
+    mol2_input_pdb_path: antigen_clean.pdb
+    mol1_output_top_zip_path: 1_top_mol1.zip
+    mol2_output_top_zip_path: 1_top_mol2.zip
+    output_haddock_wf_data: haddock_wf_data
+
+step13_rigid_body:
+  tool: rigid_body
+  paths:
+    input_haddock_wf_data: dependency/step12_topology/output_haddock_wf_data
+    output_haddock_wf_data: haddock_wf_data
+    ambig_restraints_table_path: dependency/step10_haddock3_actpass_to_ambig/output_tbl_path
+    unambig_restraints_table_path: dependency/step11_haddock3_restrain_bodies/output_tbl_path
+  properties:
+    cfg:
+      sampling: 10
+      clean: False
+    # remove_tmp: False
+
+step14_capri_eval1:
+  tool: capri_eval
+  paths:
+    input_haddock_wf_data: dependency/step13_rigid_body/output_haddock_wf_data
+    output_haddock_wf_data: haddock_wf_data
+    reference_pdb_path: complex_clean.pdb
+    output_evaluation_zip_path: 3_caprieval.zip
+
+step15_sele_top:
+  tool: sele_top
+  paths:
+    input_haddock_wf_data: dependency/step14_capri_eval1/output_haddock_wf_data
+    output_haddock_wf_data: haddock_wf_data
+    output_selection_zip_path: 4_selected.zip
+  properties:
+    cfg:
+      select: 8
+
+step16_flex_ref:
+  tool: flex_ref
+  paths:
+    input_haddock_wf_data: dependency/step15_sele_top/output_haddock_wf_data
+    output_haddock_wf_data: haddock_wf_data
+    refinement_output_zip_path: 5_flexref.zip
+    ambig_restraints_table_path: dependency/step10_haddock3_actpass_to_ambig/output_tbl_path
+    unambig_restraints_table_path: dependency/step11_haddock3_restrain_bodies/output_tbl_path
+  properties:
+    cfg:
+      tolerance: 5
+      clean: False
+
+step17_capri_eval2:
+  tool: capri_eval
+  paths:
+    input_haddock_wf_data: dependency/step16_flex_ref/output_haddock_wf_data
+    output_haddock_wf_data: haddock_wf_data
+    reference_pdb_path: complex_clean.pdb
+    output_evaluation_zip_path: 6_caprieval2.zip
+
+step18_em_ref:
+  tool: em_ref
+  paths:
+    input_haddock_wf_data: dependency/step17_capri_eval2/output_haddock_wf_data
+    output_haddock_wf_data: haddock_wf_data
+    refinement_output_zip_path: 7_emref.zip
+    ambig_restraints_table_path: dependency/step10_haddock3_actpass_to_ambig/output_tbl_path
+    unambig_restraints_table_path: dependency/step11_haddock3_restrain_bodies/output_tbl_path
+  properties:
+    cfg:
+      tolerance: 5
+      clean: False
+
+step19_capri_eval3:
+  tool: capri_eval
+  paths:
+    input_haddock_wf_data: dependency/step18_em_ref/output_haddock_wf_data
+    output_haddock_wf_data: haddock_wf_data
+    reference_pdb_path: complex_clean.pdb
+    output_evaluation_zip_path: 8_caprieval3.zip
+
+step20_clust_fcc:
+  tool: clust_fcc
+  paths:
+    input_haddock_wf_data: dependency/step19_capri_eval3/output_haddock_wf_data
+    output_haddock_wf_data: haddock_wf_data
+    output_cluster_zip_path: 9_clustfcc.zip
+  properties:
+    cfg:
+      plot_matrix: True
+
+step21_sele_top_clusts:
+  tool: sele_top_clusts
+  paths:
+    input_haddock_wf_data: dependency/step20_clust_fcc/output_haddock_wf_data
+    output_haddock_wf_data: haddock_wf_data
+    output_cluster_zip_path: 10_seletopclusts.zip
+  properties:
+    cfg:
+      top_models: 4
+      clean: False
+
+step22_capri_eval4:
+  tool: capri_eval
+  paths:
+    input_haddock_wf_data: dependency/step21_sele_top_clusts/output_haddock_wf_data
+    output_haddock_wf_data: haddock_wf_data
+    reference_pdb_path: complex_clean.pdb
+    output_evaluation_zip_path: 11_caprieval4.zip
+
+step23_contact_map:
+  tool: contact_map
+  paths:
+    input_haddock_wf_data: dependency/step22_capri_eval4/output_haddock_wf_data
+    output_haddock_wf_data: haddock_wf_data
+    output_contact_map_zip_path: 12_contact_map.zip

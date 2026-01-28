@@ -1,6 +1,5 @@
 import pytest
 import re
-import glob
 import os
 import shutil
 import zipfile
@@ -52,7 +51,7 @@ def step1_biobb_curves(config, system=None):
 
     assert fx.not_empty(global_paths["step1_biobb_curves"]["output_cda_path"])
     assert fx.not_empty(global_paths["step1_biobb_curves"]["output_lis_path"])
-   
+
     global global_work_dir
     global_work_dir = conf.get_working_dir_path()
 

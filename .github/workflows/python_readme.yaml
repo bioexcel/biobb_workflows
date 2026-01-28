@@ -28,6 +28,7 @@ jobs:
           cp common/python/README_common.md biobb_wf_flexdyn/python/README.md
           cp common/python/README_common.md biobb_wf_flexserv/python/README.md
           cp common/python/README_common.md biobb_wf_godmd/python/README.md
+          cp common/python/README_common.md biobb_wf_haddock/python/README.md
           cp common/python/README_common.md biobb_wf_ligand_parameterization/python/README.md
           cp common/python/README_common.md biobb_wf_md_setup/python/README.md
           cp common/python/README_common.md biobb_wf_md_setup_mutations/python/README.md
@@ -50,6 +51,7 @@ jobs:
           sed -i "s/<repository>/biobb_wf_flexdyn/g" biobb_wf_flexdyn/python/README.md
           sed -i "s/<repository>/biobb_wf_flexserv/g" biobb_wf_flexserv/python/README.md
           sed -i "s/<repository>/biobb_wf_godmd/g" biobb_wf_godmd/python/README.md
+          sed -i "s/<repository>/biobb_wf_haddock/g" biobb_wf_haddock/python/README.md
           sed -i "s/<repository>/biobb_wf_ligand_parameterization/g" biobb_wf_ligand_parameterization/python/README.md
           sed -i "s/<repository>/biobb_wf_md_setup/g" biobb_wf_md_setup/python/README.md
           sed -i "s/<repository>/biobb_wf_md_setup_mutations/g" biobb_wf_md_setup_mutations/python/README.md
