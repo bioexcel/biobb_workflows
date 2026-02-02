@@ -1,0 +1,200 @@
+global_properties:
+  working_dir_path: biobb_wf_autoencoder
+  can_write_console_log: False
+
+step1_gmx_image1:
+  tool: gmx_image
+  paths:
+    input_traj_path: file:trj_in.xtc
+    input_top_path: file:str_in.pdb
+    output_traj_path: trj_in_fit.xtc
+  properties:
+    fit_selection: Backbone
+    output_selection: System
+    center: False
+    fit: rot+trans
+
+step2_mdfeaturizer1:
+  tool: MDFeaturizer
+  paths:
+    input_trajectory_path: dependency/step1_gmx_image1/output_traj_path
+    input_topology_path: file:str_in.pdb
+    output_dataset_pt_path: apo.pt
+    output_stats_pt_path: apo_stats.pt
+  properties:
+    cartesian:
+      selection: 'name CA'
+    disable_sandbox: True
+    disable_logs: True
+
+step3_build_model:
+  tool: buildModel
+  paths:
+    input_stats_pt_path: dependency/step2_mdfeaturizer1/output_stats_pt_path
+    output_model_pth_path: model.pth
+  properties:
+    model_type: AutoEncoder
+    n_cvs: 3
+    encoder_layers: [933, 747, 561, 375, 189]
+    decoder_layers: [189, 375, 561, 747, 933]
+    options: 
+      norm_in:
+        mode: min_max
+      encoder:
+        activation: relu
+        batchnorm: True
+        dropout: 0.0
+        last_layer_activation: False
+      decoder:
+        activation: relu
+        batchnorm: True
+        dropout: 0.0
+        last_layer_activation: sigmoid
+      optimizer:
+        lr: 0.00001
+
+step4_train_model:
+  tool: trainModel
+  paths:
+    input_dataset_pt_path: dependency/step2_mdfeaturizer1/output_dataset_pt_path
+    input_model_pth_path: dependency/step3_build_model/output_model_pth_path
+    output_model_pth_path: apo_trained_model.pth
+    output_metrics_npz_path: model_training_metrics.npz
+  properties:
+    Dataset:
+      batch_size: 128
+      shuffle: True
+      split:
+        random_split: True
+        train_prop: 0.9
+        val_prop: 0.1
+    Trainer:
+      max_epochs: 5 ###### to 5 for testing, use 1000 for real training
+      enable_checkpointing: False
+      callbacks: {}
+
+step5_gmx_image2:
+  tool: gmx_image
+  paths:
+    input_traj_path: file:test_trj_in.xtc
+    input_top_path: file:str_in.pdb
+    output_traj_path: test_trj_in_fit.xtc
+  properties:
+    fit_selection: Backbone
+    output_selection: System
+    center: False
+    fit: rot+trans
+
+step6_mdfeaturizer2:
+  tool: MDFeaturizer
+  paths:
+    input_trajectory_path: dependency/step5_gmx_image2/output_traj_path
+    input_topology_path: file:test_str_in.pdb
+    output_dataset_pt_path: holo.pt
+    output_stats_pt_path: holo_stats.pt
+  properties:
+    cartesian:
+      selection: 'name CA'
+    disable_sandbox: True
+
+step7_evaluate_model:
+  tool: evaluateModel
+  paths:
+    input_model_pth_path: dependency/step4_train_model/output_model_pth_path
+    input_dataset_pt_path: dependency/step2_mdfeaturizer1/output_dataset_pt_path
+    output_results_npz_path: apo_eval_results.npz
+  properties:
+    Dataset:
+      batch_size: 64
+
+step8_make_ndx1:
+  tool: make_ndx
+  paths:
+    input_structure_path: file:str_in.pdb
+    output_ndx_path: apo.ndx
+  properties:
+    selection: 'a CA'
+
+step9_make_ndx2:
+  tool: make_ndx
+  paths:
+    input_structure_path: file:test_str_in.pdb
+    output_ndx_path: holo.ndx
+  properties:
+    selection: 'a CA'
+
+step10_gmx_rmsf1:
+  tool: gmx_rmsf
+  paths:
+    input_structure_path: file:str_in.pdb
+    input_traj_path: file:trj_in.xtc
+    input_index_path: dependency/step8_make_ndx1/output_ndx_path
+    output_xvg_path: apo_rmsf.xvg
+  properties:
+    xvg: xmgr
+    selection: Protein
+
+step11_gmx_rmsf2:
+  tool: gmx_rmsf
+  paths:
+    input_structure_path: file:test_str_in.pdb
+    input_traj_path: file:test_trj_in.xtc
+    input_index_path: dependency/step9_make_ndx2/output_ndx_path
+    output_xvg_path: holo_rmsf.xvg
+  properties:
+    xvg: xmgr
+    selection: Protein
+
+step12_feat2traj:
+  tool: feat2traj
+  paths:
+    input_results_npz_path: dependency/step7_evaluate_model/output_results_npz_path
+    input_stats_pt_path: dependency/step6_mdfeaturizer2/output_stats_pt_path
+    output_traj_path: holo_recon.xtc
+    output_top_path: holo_recon.pdb
+
+step13_gmx_rmsf3:
+  tool: gmx_rmsf
+  paths:
+    input_structure_path: dependency/step12_feat2traj/output_top_path
+    input_traj_path: dependency/step12_feat2traj/output_traj_path
+    input_index_path: dependency/step9_make_ndx2/output_ndx_path
+    output_xvg_path: holo_recon_rmsf.xvg
+  properties:
+    xvg: xmgr
+    selection: Protein
+
+step14_generate_plumed:
+  tool: generatePlumed
+  paths:
+    input_model_pth_path: dependency/step4_train_model/output_model_pth_path
+    input_ndx_path: dependency/step8_make_ndx1/output_ndx_path
+    input_reference_pdb_path: file:str_in.pdb
+    input_stats_pt_path: dependency/step2_mdfeaturizer1/output_stats_pt_path
+    output_model_ptc_path: plumed_model.ptc
+    output_plumed_dat_path: plumed.dat
+    output_features_dat_path: features.dat
+  properties:
+    additional_actions:
+      - name: ENERGY
+        label: ene
+    fit_to_template:
+      STRIDE: 1
+      TYPE: OPTIMAL
+    group:
+      label: backbone
+      selection: backbone
+    bias:
+      - name: METAD
+        label: bias
+        params:
+          ARG: "cv.*"
+          PACE: 500
+          HEIGHT: 1.2
+          SIGMA: 0.35
+          FILE: HILLS
+          BIASFACTOR: 8
+    prints:
+      ARG: "cv.*,bias.*"
+      STRIDE: 1
+      FILE: COLVAR

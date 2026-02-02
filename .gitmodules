@@ -62,3 +62,7 @@
 	path = biobb_wf_haddock/jupyter
 	url = https://github.com/bioexcel/biobb_wf_haddock
 	branch = main
+[submodule "biobb_wf_autoencoder/jupyter"]
+	path = biobb_wf_autoencoder/jupyter
+	url = https://github.com/bioexcel/biobb_wf_autoencoder
+	branch = main
