@@ -53,6 +53,8 @@ def main(config, system=None):
     global_log.info("step3_cpptraj_mask: Generating the reduced (coarse-grained) structure (alpha carbons)")
     cpptraj_mask(**global_paths["step3_cpptraj_mask"], properties=global_prop["step3_cpptraj_mask"])
 
+    os.environ['CONCOORDLIB'] = os.getenv('CONDA_PREFIX') + '/share/concoord/lib'
+
     props = global_prop["step4_concoord_dist"]
     props["env_vars_dict"]["CONCOORDLIB"] = os.getenv('CONDA_PREFIX') + '/share/concoord/lib'
 

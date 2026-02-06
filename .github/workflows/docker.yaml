@@ -23,6 +23,7 @@ jobs:
           sed -i '83a\        cp -r /data/ABCix_config_files \\"$dir/ABCix_config_files\\"; \\' biobb_wf_amber_abc_setup/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_amber_md_setup/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_amber_md_setup_lig/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_autoencoder/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_cmip/docker/Dockerfile
           sed -i '83a\        cp -r /data/Files \\"$dir/Files\\"; \\' biobb_wf_cmip/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_dna_helparms/docker/Dockerfile

@@ -69,7 +69,7 @@ step4_train_model:
         train_prop: 0.9
         val_prop: 0.1
     Trainer:
-      max_epochs: 5 ###### to 5 for testing, use 1000 for real training
+      max_epochs: 100
       enable_checkpointing: False
       callbacks: {}
 

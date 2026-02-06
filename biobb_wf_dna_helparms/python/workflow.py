@@ -244,7 +244,7 @@ def main(config, system=None):
     series_shift = Path(timeseries_dir).glob('series_shift_*.csv')
     global_log.info("step18_basepair_stiffness: Computing basepair stiffness")
     for f in series_shift:
-        pair = re.findall('(\d+\_[GATC]{2})', str(f))[0]
+        pair = re.findall(r'(\d+_[GATC]{2})', str(f))[0]
         paths = global_paths["step18_basepair_stiffness"]
         paths["input_filename_shift"] = f
         paths["input_filename_slide"] = PurePath(timeseries_dir).joinpath(f'series_slide_{pair}.csv')
@@ -263,7 +263,7 @@ def main(config, system=None):
     series_shift = Path(timeseries_dir).glob('series_shift_*.csv')
     global_log.info("step19_dna_bimodality: Computing basepair bimodality")
     for f in series_shift:
-        pair = re.findall('(\d+\_[GATC]{2})', str(f))[0]
+        pair = re.findall(r'(\d+_[GATC]{2})', str(f))[0]
         paths = global_paths["step19_dna_bimodality"]
         global_log.info(f"\tComputing {pair} parameters")
         for helpar in base_pair_step:
@@ -301,7 +301,7 @@ def main(config, system=None):
     series_shear = Path(timeseries_dir).glob('series_shear_*.csv')
     global_log.info("step22_intrahpcorr: Helical Parameter Correlations: Intra-base pair")
     for f in series_shear:
-        pair = re.findall('(\d+\_[GATC]{1})', str(f))[0]
+        pair = re.findall(r'(\d+_[GATC]{1})', str(f))[0]
         paths = global_paths["step22_intrahpcorr"]
         paths["input_filename_shear"] = f
         paths["input_filename_stretch"] = PurePath(timeseries_dir).joinpath(f'series_stretch_{pair}.csv')
@@ -320,7 +320,7 @@ def main(config, system=None):
     series_shift = Path(timeseries_dir).glob('series_shift_*.csv')
     global_log.info("step23_interhpcorr: Helical Parameter Correlations: Inter-base pair steps")
     for f in series_shift:
-        pair = re.findall('(\d+\_[GATC]{2})', str(f))[0]
+        pair = re.findall(r'(\d+_[GATC]{2})', str(f))[0]
         paths = global_paths["step23_interhpcorr"]
         paths["input_filename_shift"] = f
         paths["input_filename_slide"] = PurePath(timeseries_dir).joinpath(f'series_slide_{pair}.csv')

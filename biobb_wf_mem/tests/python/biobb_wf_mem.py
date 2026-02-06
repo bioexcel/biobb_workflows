@@ -1,4 +1,5 @@
 import pytest
+from pathlib import Path
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools import test_fixtures as fx
@@ -10,7 +11,7 @@ from biobb_mem.gorder.gorder_aa import gorder_aa
 from biobb_mem.fatslim.fatslim_apl import fatslim_apl
 from biobb_mem.ambertools.cpptraj_density import cpptraj_density
 from biobb_mem.mdanalysis_biobb.mda_hole import mda_hole
-# from biobb_mem.lipyphilic_biobb.lpp_flip_flop import lpp_flip_flop
+from biobb_mem.lipyphilic_biobb.lpp_flip_flop import lpp_flip_flop
 
 global_work_dir = None
 
@@ -137,25 +138,21 @@ def step10_mda_hole(config, system=None):
     assert fx.not_empty(global_paths["step10_mda_hole"]["output_csv_path"])
 
 
-# def step11_lpp_flip_flop(config, remove=False, system=None):
-#     conf = settings.ConfReader(config, system)
-#     conf.working_dir_path = global_work_dir
-#     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
-#     global_prop = conf.get_prop_dic(global_log=global_log)
-#     global_paths = conf.get_paths_dic()
+def step11_lpp_flip_flop(config, remove=False, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
 
-#     lpp_flip_flop(**global_paths["step11_lpp_flip_flop"], properties=global_prop["step11_lpp_flip_flop"])
+    lpp_flip_flop(**global_paths["step11_lpp_flip_flop"], properties=global_prop["step11_lpp_flip_flop"])
 
-#     assert fx.not_empty(global_paths["step11_lpp_flip_flop"]["output_flipflop_path"])
+    assert fx.not_empty(global_paths["step11_lpp_flip_flop"]["output_flip_flop_path"])
+    assert fx.compare_size(global_paths["step11_lpp_flip_flop"]["output_flip_flop_path"], f'reference/step11_lpp_flip_flop/{Path(global_paths["step11_lpp_flip_flop"]["output_flip_flop_path"]).name}', 10)
 
-#     global global_work_dir
-#     global_work_dir = conf.get_working_dir_path()
-
-#     assert fx.compare_size(global_paths["step11_lpp_flip_flop"]["output_flipflop_path"], f'reference/step11_lpp_flip_flop/{Path(global_paths["step11_lpp_flip_flop"]["output_flipflop_path"]).name}', 10)
-
-#     if remove:
-#         tmp_files = [conf.get_working_dir_path()]
-#         fu.rm_file_list(tmp_files)
+    if remove:
+        tmp_files = [conf.get_working_dir_path()]
+        fu.rm_file_list(tmp_files)
 
 
 @pytest.mark.parametrize("system", [None])
@@ -208,6 +205,6 @@ def test_step10_mda_hole(config_path, system):
     step10_mda_hole(config_path, system)
 
 
-# @pytest.mark.parametrize("system", [None])
-# def test_step11_lpp_flip_flop(config_path, remove_flag, system):
-#     step11_lpp_flip_flop(config_path, remove_flag, system)
+@pytest.mark.parametrize("system", [None])
+def test_step11_lpp_flip_flop(config_path, remove_flag, system):
+    step11_lpp_flip_flop(config_path, remove_flag, system)

@@ -36,6 +36,8 @@ def main(config, system=None):
 
         gmx_trjconv_str_ens(**ensemble_paths["step0_trjconv"], properties=ensemble_prop["step0_trjconv"])
 
+        os.environ['GMXLIB'] = os.getenv('CONDA_PREFIX') + '/lib/python3.12/site-packages/pmx/data/mutff'
+
         with zipfile.ZipFile(ensemble_paths["step0_trjconv"]["output_str_ens_path"], 'r') as zip_f:
             zip_f.extractall()
             state_pdb_list = zip_f.namelist()
@@ -45,25 +47,29 @@ def main(config, system=None):
             prop = conf.get_prop_dic(prefix=os.path.join(ensemble, pdb_name), global_log=global_log)
             paths = conf.get_paths_dic(prefix=os.path.join(ensemble, pdb_name))
 
+            # os.environ['GMXLIB'] = os.getenv('CONDA_PREFIX') + '/lib/python3.12/site-packages/pmx/data/mutff'
+
             # Create and launch bb
             global_log.info("Step 1: pmx mutate: Generate Hybrid Structure")
             paths['step1_pmx_mutate']['input_structure_path'] = pdb_path
             prop['step1_pmx_mutate']['mutation_list'] = mutation
-            prop['step1_pmx_mutate']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.10/site-packages/pmx/data/mutff'
+            prop['step1_pmx_mutate']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.12/site-packages/pmx/data/mutff'
             pmxmutate(**paths["step1_pmx_mutate"], properties=prop["step1_pmx_mutate"])
 
             # Step 2: gmx pdb2gmx: Generate Topology
             # From pmx tutorial:
             # gmx pdb2gmx -f mut.pdb -ff amber99sb-star-ildn-mut -water tip3p -o pdb2gmx.pdb
             global_log.info("Step 2: gmx pdb2gmx: Generate Topology")
-            prop['step2_gmx_pdb2gmx']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.10/site-packages/pmx/data/mutff'
+            prop['step2_gmx_pdb2gmx']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.12/site-packages/pmx/data/mutff'
             pdb2gmx(**paths["step2_gmx_pdb2gmx"], properties=prop["step2_gmx_pdb2gmx"])
+
+            exit()
 
             # Step 3: pmx gentop: Generate Hybrid Topology
             # From pmx tutorial:
             # python generate_hybrid_topology.py -itp topol_Protein.itp -o topol_Protein.itp -ff amber99sb-star-ildn-mut
             global_log.info("Step 3: pmx gentop: Generate Hybrid Topology")
-            prop['step3_pmx_gentop']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.10/site-packages/pmx/data/mutff'
+            prop['step3_pmx_gentop']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.12/site-packages/pmx/data/mutff'
             pmxgentop(**paths["step3_pmx_gentop"], properties=prop["step3_pmx_gentop"])
 
             # Step 4: gmx make_ndx: Generate Gromacs Index File to select atoms to freeze
@@ -84,7 +90,7 @@ def main(config, system=None):
                 # From pmx tutorial:
                 # gmx grompp -c pdb2gmx.pdb -p topol.top -f ../../mdp/em_FREEZE.mdp -o em.tpr -n ../index.ndx
                 global_log.info("Step 5: gmx grompp: Creating portable binary run file for energy minimization")
-                prop['step5_gmx_grompp']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.10/site-packages/pmx/data/mutff'
+                prop['step5_gmx_grompp']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.12/site-packages/pmx/data/mutff'
                 grompp(**paths["step5_gmx_grompp"], properties=prop["step5_gmx_grompp"])
 
                 # Step 6: gmx mdrun: Running energy minimization
@@ -97,7 +103,7 @@ def main(config, system=None):
             # From pmx tutorial:
             # gmx grompp -c emout.gro -p topol.top -f ../../mdp/eq_20ps.mdp -o eq_20ps.tpr -maxwarn 1
             global_log.info(ensemble+" Step 7: gmx grompp: Creating portable binary run file for system equilibration")
-            prop['step7_gmx_grompp']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.10/site-packages/pmx/data/mutff'
+            prop['step7_gmx_grompp']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.12/site-packages/pmx/data/mutff'
             grompp(**paths["step7_gmx_grompp"], properties=prop["step7_gmx_grompp"])
 
             # Step 8: gmx mdrun: Running system equilibration
@@ -110,7 +116,7 @@ def main(config, system=None):
             # From pmx tutorial:
             # gmx grompp -c eqout.gro -p topol.top -f ../../mdp/ti.mdp -o ti.tpr -maxwarn 1
             global_log.info(ensemble+" Step 9: Creating portable binary run file for thermodynamic integration (ti)")
-            prop['step9_gmx_grompp']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.10/site-packages/pmx/data/mutff'
+            prop['step9_gmx_grompp']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.12/site-packages/pmx/data/mutff'
             grompp(**paths["step9_gmx_grompp"], properties=prop["step9_gmx_grompp"])
 
             # Step 10: gmx mdrun: Running thermodynamic integration

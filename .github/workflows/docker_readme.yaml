@@ -24,6 +24,7 @@ jobs:
           cp common/docker/README_subrepo.md biobb_wf_amber_abc_setup/docker/README.md
           cp common/docker/README_subrepo.md biobb_wf_amber_md_setup/docker/README.md
           cp common/docker/README_subrepo.md biobb_wf_amber_md_setup_lig/docker/README.md
+          cp common/docker/README_common.md biobb_wf_autoencoder/docker/README.md
           cp common/docker/README_common.md biobb_wf_cmip/docker/README.md
           cp common/docker/README_common.md biobb_wf_dna_helparms/docker/README.md
           cp common/docker/README_common.md biobb_wf_flexdyn/docker/README.md
@@ -46,6 +47,7 @@ jobs:
           sed -i "s/<repository>/biobb_wf_amber/g" biobb_wf_amber_md_setup_lig/docker/README.md
           sed -i "s/<subrepository>/md_setup_lig/g" biobb_wf_amber_md_setup_lig/docker/README.md
           sed -i "s/<repository>/biobb_wf_cmip/g" biobb_wf_cmip/docker/README.md
+          sed -i "s/<repository>/biobb_wf_autoencoder/g" biobb_wf_autoencoder/docker/README.md
           sed -i "s/<repository>/biobb_wf_dna_helparms/g" biobb_wf_dna_helparms/docker/README.md
           sed -i "s/<repository>/biobb_wf_flexdyn/g" biobb_wf_flexdyn/docker/README.md
           sed -i "s/<repository>/biobb_wf_flexserv/g" biobb_wf_flexserv/docker/README.md

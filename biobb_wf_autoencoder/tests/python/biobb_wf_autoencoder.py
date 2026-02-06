@@ -1,4 +1,5 @@
 import pytest
+from pathlib import Path
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools import test_fixtures as fx
@@ -10,7 +11,7 @@ from biobb_pytorch.mdae.evaluate_model import evaluateModel
 from biobb_gromacs.gromacs.make_ndx import make_ndx
 from biobb_analysis.gromacs.gmx_rmsf import gmx_rmsf
 from biobb_pytorch.mdae.feat2traj import feat2traj
-# from biobb_pytorch.mdae.make_plumed import generatePlumed
+from biobb_pytorch.mdae.make_plumed import generatePlumed
 
 global_work_dir = None
 
@@ -177,27 +178,23 @@ def step13_gmx_rmsf3(config, system=None):
     assert fx.not_empty(global_paths["step13_gmx_rmsf3"]["output_xvg_path"])
 
 
-# def step14_generate_plumed(config, remove=False, system=None):
-#     conf = settings.ConfReader(config, system)
-#     conf.working_dir_path = global_work_dir
-#     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
-#     global_prop = conf.get_prop_dic(global_log=global_log)
-#     global_paths = conf.get_paths_dic()
+def step14_generate_plumed(config, remove=False, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
 
-#     generatePlumed(**global_paths["step14_generate_plumed"], properties=global_prop["step14_generate_plumed"])
+    generatePlumed(**global_paths["step14_generate_plumed"], properties=global_prop["step14_generate_plumed"])
 
-#     assert fx.not_empty(global_paths["step14_generate_plumed"]["output_model_ptc_path"])
-#     assert fx.not_empty(global_paths["step14_generate_plumed"]["output_plumed_dat_path"])
-#     assert fx.not_empty(global_paths["step14_generate_plumed"]["output_features_dat_path"])
+    assert fx.not_empty(global_paths["step14_generate_plumed"]["output_model_ptc_path"])
+    assert fx.not_empty(global_paths["step14_generate_plumed"]["output_plumed_dat_path"])
+    assert fx.not_empty(global_paths["step14_generate_plumed"]["output_features_dat_path"])
+    assert fx.compare_size(global_paths["step14_generate_plumed"]["output_plumed_dat_path"], f'reference/step14_generate_plumed/{Path(global_paths["step14_generate_plumed"]["output_plumed_dat_path"]).name}', 10)
 
-#     global global_work_dir
-#     global_work_dir = conf.get_working_dir_path()
-
-#     assert fx.compare_size(global_paths["step14_generate_plumed"]["output_plumed_dat_path"], f'reference/step14_generate_plumed/{Path(global_paths["step14_generate_plumed"]["output_plumed_dat_path"]).name}', 10)
-
-#     if remove:
-#         tmp_files = [conf.get_working_dir_path()]
-#         fu.rm_file_list(tmp_files)
+    if remove:
+        tmp_files = [conf.get_working_dir_path()]
+        fu.rm_file_list(tmp_files)
 
 
 @pytest.mark.parametrize("system", [None])
@@ -265,6 +262,6 @@ def test_step13_gmx_rmsf3(config_path, system):
     step13_gmx_rmsf3(config_path, system)
 
 
-# @pytest.mark.parametrize("system", [None])
-# def test_step14_generate_plumed(config_path, remove_flag, system):
-#     step14_generate_plumed(config_path, remove_flag, system)
+@pytest.mark.parametrize("system", [None])
+def test_step14_generate_plumed(config_path, remove_flag, system):
+    step14_generate_plumed(config_path, remove_flag, system)

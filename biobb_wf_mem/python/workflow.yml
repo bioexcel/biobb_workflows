@@ -119,7 +119,7 @@ step11_lpp_flip_flop:
     input_traj_path: dependency/step2_gmx_image2/output_traj_path
     input_top_path: file:structure.pdb
     input_leaflets_path: dependency/step4_lpp_assign_leaflets/output_leaflets_path
-    output_flipflop_path: flip_flop.csv
+    output_flip_flop_path: flip_flop.csv
   properties:
     lipid_sel: (resname DPPC and element P)
     steps: 1

@@ -12,7 +12,7 @@ from biobb_pytorch.mdae.evaluate_model import evaluateModel
 from biobb_gromacs.gromacs.make_ndx import make_ndx
 from biobb_analysis.gromacs.gmx_rmsf import gmx_rmsf
 from biobb_pytorch.mdae.feat2traj import feat2traj
-# from biobb_pytorch.mdae.make_plumed import generatePlumed
+from biobb_pytorch.mdae.make_plumed import generatePlumed
 
 
 def main(config, system=None):
@@ -61,8 +61,8 @@ def main(config, system=None):
     global_log.info("step13_gmx_rmsf3: Original Holo vs Reconstructed Holo Trajectories")
     gmx_rmsf(**global_paths["step13_gmx_rmsf3"], properties=global_prop["step13_gmx_rmsf3"])
 
-    # global_log.info("step14_generate_plumed: Extract CV & Generate Plumed File")
-    # generatePlumed(**global_paths["step14_generate_plumed"], properties=global_prop["step14_generate_plumed"])
+    global_log.info("step14_generate_plumed: Extract CV & Generate Plumed File")
+    generatePlumed(**global_paths["step14_generate_plumed"], properties=global_prop["step14_generate_plumed"])
 
     elapsed_time = time.time() - start_time
     global_log.info('')
