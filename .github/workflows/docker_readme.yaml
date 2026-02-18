@@ -30,9 +30,11 @@ jobs:
           cp common/docker/README_common.md biobb_wf_flexdyn/docker/README.md
           cp common/docker/README_common.md biobb_wf_flexserv/docker/README.md
           cp common/docker/README_common.md biobb_wf_godmd/docker/README.md
+          cp common/docker/README_common.md biobb_wf_haddock/docker/README.md
           cp common/docker/README_common.md biobb_wf_ligand_parameterization/docker/README.md
           cp common/docker/README_common.md biobb_wf_md_setup/docker/README.md
           cp common/docker/README_python.md biobb_wf_md_setup_mutations/docker/README.md
+          cp common/docker/README_common.md biobb_wf_mem/docker/README.md
           cp common/docker/README_common.md biobb_wf_pmx_tutorial/docker/README.md
           cp common/docker/README_python.md biobb_wf_protein_md_analysis/docker/README.md
           cp common/docker/README_common.md biobb_wf_protein-complex_md_setup/docker/README.md
@@ -52,9 +54,11 @@ jobs:
           sed -i "s/<repository>/biobb_wf_flexdyn/g" biobb_wf_flexdyn/docker/README.md
           sed -i "s/<repository>/biobb_wf_flexserv/g" biobb_wf_flexserv/docker/README.md
           sed -i "s/<repository>/biobb_wf_godmd/g" biobb_wf_godmd/docker/README.md
+          sed -i "s/<repository>/biobb_wf_haddock/g" biobb_wf_haddock/docker/README.md
           sed -i "s/<repository>/biobb_wf_ligand_parameterization/g" biobb_wf_ligand_parameterization/docker/README.md
           sed -i "s/<repository>/biobb_wf_md_setup/g" biobb_wf_md_setup/docker/README.md
           sed -i "s/<repository>/biobb_wf_md_setup_mutations/g" biobb_wf_md_setup_mutations/docker/README.md
+          sed -i "s/<repository>/biobb_wf_mem/g" biobb_wf_mem/docker/README.md
           sed -i "s/<repository>/biobb_wf_pmx_tutorial/g" biobb_wf_pmx_tutorial/docker/README.md
           sed -i "s/<repository>/biobb_wf_protein_md_analysis/g" biobb_wf_protein_md_analysis/docker/README.md
           sed -i "s/<repository>/biobb_wf_protein-complex_md_setup/g" biobb_wf_protein-complex_md_setup/docker/README.md

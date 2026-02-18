@@ -35,8 +35,10 @@ jobs:
           cp common/docker/Dockerfile biobb_wf_flexserv/docker/Dockerfile
           sed -i '83a\        cp -r /data/Files \\"$dir/Files\\"; \\' biobb_wf_flexserv/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_godmd/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_haddock/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_ligand_parameterization/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_md_setup/docker/Dockerfile
+          cp common/docker/Dockerfile biobb_wf_mem/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_pmx_tutorial/docker/Dockerfile
           sed -i '83a\        cp -r /data/pmx_tutorial \\"$dir/pmx_tutorial\\"; \\' biobb_wf_pmx_tutorial/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_protein-complex_md_setup/docker/Dockerfile

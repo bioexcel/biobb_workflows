@@ -36,8 +36,6 @@ def main(config, system=None):
 
         gmx_trjconv_str_ens(**ensemble_paths["step0_trjconv"], properties=ensemble_prop["step0_trjconv"])
 
-        os.environ['GMXLIB'] = os.getenv('CONDA_PREFIX') + '/lib/python3.12/site-packages/pmx/data/mutff/'
-
         with zipfile.ZipFile(ensemble_paths["step0_trjconv"]["output_str_ens_path"], 'r') as zip_f:
             zip_f.extractall()
             state_pdb_list = zip_f.namelist()

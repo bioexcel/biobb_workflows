@@ -295,7 +295,7 @@ step26_make_ndx:
     input_structure_path: dependency/step3_cpptraj_mask/output_cpptraj_path
     output_ndx_path: structure_gmx_ndx.ndx
   properties:
-    selection: 3
+    selection: '3'
 
 step27_gmx_cluster:
   tool: gmx_cluster

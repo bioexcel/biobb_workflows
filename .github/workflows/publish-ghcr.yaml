@@ -117,6 +117,16 @@ jobs:
           docker rmi ghcr.io/bioexcel/biobb_wf_godmd:latest
           docker system prune -f
 
+      - name: Build and push biobb_wf_haddock image
+        run: |
+          cd biobb_wf_haddock/docker
+          docker build --build-arg REPO=biobb_wf_haddock -t ghcr.io/bioexcel/biobb_wf_haddock:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_haddock:latest .
+          docker push ghcr.io/bioexcel/biobb_wf_haddock:${{ env.VERSION }}
+          docker push ghcr.io/bioexcel/biobb_wf_haddock:latest
+          docker rmi ghcr.io/bioexcel/biobb_wf_haddock:${{ env.VERSION }}
+          docker rmi ghcr.io/bioexcel/biobb_wf_haddock:latest
+          docker system prune -f
+
       - name: Build and push biobb_wf_ligand_parameterization image
         run: |
           cd biobb_wf_ligand_parameterization/docker
@@ -145,6 +155,16 @@ jobs:
           docker push ghcr.io/bioexcel/biobb_wf_md_setup_mutations:latest
           docker rmi ghcr.io/bioexcel/biobb_wf_md_setup_mutations:${{ env.VERSION }}
           docker rmi ghcr.io/bioexcel/biobb_wf_md_setup_mutations:latest
+          docker system prune -f
+
+      - name: Build and push biobb_wf_mem image
+        run: |
+          cd biobb_wf_mem/docker
+          docker build --build-arg REPO=biobb_wf_mem -t ghcr.io/bioexcel/biobb_wf_mem:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_mem:latest .
+          docker push ghcr.io/bioexcel/biobb_wf_mem:${{ env.VERSION }}
+          docker push ghcr.io/bioexcel/biobb_wf_mem:latest
+          docker rmi ghcr.io/bioexcel/biobb_wf_mem:${{ env.VERSION }}
+          docker rmi ghcr.io/bioexcel/biobb_wf_mem:latest
           docker system prune -f
 
       - name: Build and push biobb_wf_pmx_tutorial image

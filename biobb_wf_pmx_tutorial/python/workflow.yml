@@ -37,7 +37,6 @@ step2_gmx_pdb2gmx:
     output_top_zip_path: mut_gmx.top.zip
   properties:
     force_field: amber99sb-star-ildn-mut
-    remove_tmp: False
 
 step3_pmx_gentop:
   paths:
