@@ -14,7 +14,7 @@ https://anaconda.org/channels/conda-forge/packages/ambertools/files
 
 ## Modify workflow properties
 
-Uncomment the following lines in workflow.yml for all the sander_mdrun steps in the workflow (set the desired number of processes according to the resources available):
+Uncomment the following lines in [workflow.yml](workflow.yml) for all the sander_mdrun steps in the workflow (set the desired number of processes according to the resources available):
 
 ```yaml
 binary_path: sander.MPI
