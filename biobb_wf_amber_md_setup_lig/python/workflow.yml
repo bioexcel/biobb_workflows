@@ -56,6 +56,9 @@ step3_sander_mdrun_minH:
     output_rst_path: sander.h_min.rst
     output_log_path: sander.h_min.log
   properties:
+    # binary_path: sander.MPI
+    # mpi_np: 8
+    # mpi_bin: mpirun
     simulation_type: min_vacuo
     mdin : 
       maxcyc: 500
@@ -83,6 +86,9 @@ step5_sander_mdrun_min:
     output_rst_path: sander.n_min.rst
     output_log_path: sander.n_min.log
   properties:
+    # binary_path: sander.MPI
+    # mpi_np: 8
+    # mpi_bin: mpirun
     simulation_type: min_vacuo
     mdin : 
       maxcyc: 500
@@ -149,6 +155,9 @@ step10_sander_mdrun_energy:
     output_rst_path: sander.min.rst
     output_log_path: sander.min.log
   properties:
+    # binary_path: sander.MPI
+    # mpi_np: 8
+    # mpi_bin: mpirun
     simulation_type: minimization
     mdin : 
       maxcyc: 500
@@ -175,6 +184,9 @@ step12_sander_mdrun_warm:
     output_rst_path: sander.heat.rst
     output_log_path: sander.heat.log
   properties:
+    # binary_path: sander.MPI
+    # mpi_np: 8
+    # mpi_bin: mpirun
     simulation_type: heat
     mdin : 
       maxcyc: 50000
@@ -201,6 +213,9 @@ step14_sander_mdrun_nvt:
     output_rst_path: sander.nvt.rst
     output_log_path: sander.nvt.log
   properties:
+    # binary_path: sander.MPI
+    # mpi_np: 8
+    # mpi_bin: mpirun
     simulation_type: nvt
     mdin : 
       nstlim: 25000
@@ -227,6 +242,9 @@ step16_sander_mdrun_npt:
     output_rst_path: sander.npt.rst
     output_log_path: sander.npt.log
   properties:
+    # binary_path: sander.MPI
+    # mpi_np: 8
+    # mpi_bin: mpirun
     simulation_type: npt
     mdin : 
       nstlim: 25000
@@ -252,6 +270,9 @@ step18_sander_mdrun_md:
     output_rst_path: sander.free.rst
     output_log_path: sander.free.log
   properties:
+    # binary_path: sander.MPI
+    # mpi_np: 8
+    # mpi_bin: mpirun
     simulation_type: free
     mdin : 
       nstlim: 250000
