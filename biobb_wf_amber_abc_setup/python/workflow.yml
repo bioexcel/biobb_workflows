@@ -74,9 +74,9 @@ step6_sander_mdrun_eq1:
     output_log_path: sander.eq1.log
     output_mdinfo_path: sander.eq1.mdinfo
   properties:
-    # binary_path: sander.MPI
-    # mpi_np: 8
-    # mpi_bin: mpirun
+    binary_path: sander.MPI
+    mpi_np: 4
+    mpi_bin: mpirun
     mdin: 
       maxcyc: 1000
       restraintmask: ":DA,DC,DG,DT,D=3,D=5&!@H="
@@ -101,9 +101,9 @@ step8_sander_mdrun_eq2:
     output_log_path: sander.eq2.log
     output_mdinfo_path: sander.eq2.mdinfo
   properties:
-    # binary_path: sander.MPI
-    # mpi_np: 8
-    # mpi_bin: mpirun
+    binary_path: sander.MPI
+    mpi_np: 4
+    mpi_bin: mpirun
     mdin: 
       nstlim: 15000
       restraintmask: ":DA,DC,DG,DT,D=3,D=5&!@H="
@@ -128,9 +128,9 @@ step10_sander_mdrun_eq3:
     output_log_path: sander.eq3.log
     output_mdinfo_path: sander.eq3.mdinfo
   properties:
-    # binary_path: sander.MPI
-    # mpi_np: 8
-    # mpi_bin: mpirun
+    binary_path: sander.MPI
+    mpi_np: 4
+    mpi_bin: mpirun
     mdin: 
       maxcyc: 1000
       restraintmask: ":DA,DC,DG,DT,D=3,D=5&!@H="
@@ -155,9 +155,9 @@ step12_sander_mdrun_eq4:
     output_log_path: sander.eq4.log
     output_mdinfo_path: sander.eq4.mdinfo
   properties:
-    # binary_path: sander.MPI
-    # mpi_np: 8
-    # mpi_bin: mpirun
+    binary_path: sander.MPI
+    mpi_np: 4
+    mpi_bin: mpirun
     mdin: 
       maxcyc: 1000
       restraintmask: ":DA,DC,DG,DT,D=3,D=5&!@H="
@@ -182,9 +182,9 @@ step14_sander_mdrun_eq5:
     output_log_path: sander.eq5.log
     output_mdinfo_path: sander.eq5.mdinfo
   properties:
-    # binary_path: sander.MPI
-    # mpi_np: 8
-    # mpi_bin: mpirun
+    binary_path: sander.MPI
+    mpi_np: 4
+    mpi_bin: mpirun
     mdin: 
       maxcyc: 1000
 
@@ -208,9 +208,9 @@ step16_sander_mdrun_eq6:
     output_log_path: sander.eq6.log
     output_mdinfo_path: sander.eq6.mdinfo
   properties:
-    # binary_path: sander.MPI
-    # mpi_np: 8
-    # mpi_bin: mpirun
+    binary_path: sander.MPI
+    mpi_np: 4
+    mpi_bin: mpirun
     mdin: 
       nstlim: 5000
       restraintmask: ":DA,DC,DG,DT,D=3,D=5&!@H="
@@ -235,9 +235,9 @@ step18_sander_mdrun_eq7:
     output_log_path: sander.eq7.log
     output_mdinfo_path: sander.eq7.mdinfo
   properties:
-    # binary_path: sander.MPI
-    # mpi_np: 8
-    # mpi_bin: mpirun
+    binary_path: sander.MPI
+    mpi_np: 4
+    mpi_bin: mpirun
     mdin: 
       nstlim: 5000
       restraintmask: ":DA,DC,DG,DT,D=3,D=5&!@H="
@@ -262,9 +262,9 @@ step20_sander_mdrun_eq8:
     output_log_path: sander.eq8.log
     output_mdinfo_path: sander.eq8.mdinfo
   properties:
-    # binary_path: sander.MPI
-    # mpi_np: 8
-    # mpi_bin: mpirun
+    binary_path: sander.MPI
+    mpi_np: 4
+    mpi_bin: mpirun
     mdin: 
       nstlim: 10000
       restraintmask: ":DA,DC,DG,DT,D=3,D=5&@P,O5=,C5=,C4=,C3=,O3="
@@ -289,9 +289,9 @@ step22_sander_mdrun_eq9:
     output_log_path: sander.eq9.log
     output_mdinfo_path: sander.eq9.mdinfo
   properties:
-    # binary_path: sander.MPI
-    # mpi_np: 8
-    # mpi_bin: mpirun
+    binary_path: sander.MPI
+    mpi_np: 4
+    mpi_bin: mpirun
     mdin: 
       nstlim: 10000
 
@@ -315,9 +315,9 @@ step24_sander_mdrun_eq10:
     output_log_path: sander.eq10.log
     output_mdinfo_path: sander.eq10.mdinfo
   properties:
-    # binary_path: sander.MPI
-    # mpi_np: 8
-    # mpi_bin: mpirun
+    binary_path: sander.MPI
+    mpi_np: 4
+    mpi_bin: mpirun
     mdin: 
       nstlim: 10000
       ntpr: 50
@@ -342,9 +342,9 @@ step26_sander_mdrun_md:
     output_mdinfo_path: sander.md.mdinfo
     output_log_path: sander.md.log
   properties:
-    # binary_path: sander.MPI
-    # mpi_np: 8
-    # mpi_bin: mpirun
+    binary_path: sander.MPI
+    mpi_np: 4
+    mpi_bin: mpirun
     mdin: 
       nstlim: 25000
       ntpr: 50
