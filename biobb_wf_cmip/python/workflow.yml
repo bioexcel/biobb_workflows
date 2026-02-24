@@ -105,6 +105,9 @@ step11_sander_mdrun:
     output_rst_path: structure.amber.rst
     output_log_path: structure.amber.log
   properties:
+    binary_path: sander.MPI
+    mpi_np: 4
+    mpi_bin: mpirun
     simulation_type: minimization
     mdin:
       ntb: 0

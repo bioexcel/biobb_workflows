@@ -110,6 +110,9 @@ step14_sander_mdrun:
     output_rst_path: structure.trj.rst
     output_log_path: structure.trj.log
   properties:
+    binary_path: sander.MPI
+    mpi_np: 4
+    mpi_bin: mpirun
     simulation_type: minimization
     mdin:
       ntb : 0
