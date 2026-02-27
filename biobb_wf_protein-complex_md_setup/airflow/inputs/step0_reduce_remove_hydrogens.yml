@@ -1,0 +1,5 @@
+input_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: structure.pdb
+output_path: structure.noH.pdb

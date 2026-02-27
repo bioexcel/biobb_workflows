@@ -1,0 +1,15 @@
+config: '{"mdp": {"nsteps": 50000, "tc-grps": "Protein_Other Water_and_ions", "Define":
+  "-DPOSRES -DPOSRES_LIGAND"}, "simulation_type": "nvt"}'
+input_gro_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: step20_mdrun_min/output_gro_path
+input_ndx_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: step22_make_ndx/output_ndx_path
+input_top_zip_path:
+  class: File
+  format: https://edamontology.org/format_3987
+  path: step18_genion/output_top_zip_path
+output_tpr_path: complex.gppnvt.tpr

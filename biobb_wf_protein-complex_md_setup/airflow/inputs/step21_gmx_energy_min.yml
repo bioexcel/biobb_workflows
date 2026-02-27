@@ -1,0 +1,6 @@
+config: '{"terms": ["Potential"]}'
+input_energy_path:
+  class: File
+  format: https://edamontology.org/format_2330
+  path: step20_mdrun_min/output_edr_path
+output_xvg_path: complex.min.energy.xvg

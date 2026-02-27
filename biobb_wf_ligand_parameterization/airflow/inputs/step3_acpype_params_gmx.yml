@@ -1,0 +1,8 @@
+config: '{"basename": "biobb_GMX_LP", "charge": -1}'
+input_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step2_babel_minimize/output_path
+output_path_gro: output.params.gro
+output_path_itp: output.params.itp
+output_path_top: output.params.top

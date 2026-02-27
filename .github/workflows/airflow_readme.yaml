@@ -1,0 +1,58 @@
+on:
+  push:
+    paths:
+      - common/airflow/README.md
+  workflow_dispatch:
+
+name: Airflow README
+jobs:
+  airflow_readme:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: peter-murray/workflow-application-token-action@v3
+        id: generate_token
+        with:
+          application_id: ${{ vars.GHAPUSH }}
+          application_private_key: ${{ secrets.GHAPUSH }}
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+      - name: Copy README files
+        run: |
+          # cp common/airflow/README.md biobb_wf_amber_abc_setup/airflow/README.md
+          # cp common/airflow/README.md biobb_wf_amber_md_setup/airflow/README.md
+          # cp common/airflow/README.md biobb_wf_amber_md_setup_lig/airflow/README.md
+          # cp common/airflow/README.md biobb_wf_autoencoder/airflow/README.md
+          # cp common/airflow/README.md biobb_wf_flexdyn/airflow/README.md
+          # cp common/airflow/README.md biobb_wf_flexserv/airflow/README.md
+          # cp common/airflow/README.md biobb_wf_godmd/airflow/README.md
+          cp common/airflow/README.md biobb_wf_ligand_parameterization/airflow/README.md
+          cp common/airflow/README.md biobb_wf_md_setup/airflow/README.md
+          # cp common/airflow/README.md biobb_wf_md_setup_mutations/airflow/README.md
+          # cp common/airflow/README.md biobb_wf_mem/airflow/README.md
+          cp common/airflow/README.md biobb_wf_protein-complex_md_setup/airflow/README.md
+          # cp common/airflow/README.md biobb_wf_structure_checking/airflow/README.md
+          # cp common/airflow/README.md biobb_wf_virtual-screening_fpocket/airflow/README.md
+      - name: Replace placeholders in README
+        run: |
+          # sed -i "s/++repository++/biobb_wf_amber_abc_setup/g" biobb_wf_amber_abc_setup/airflow/README.md
+          # sed -i "s/++repository++/biobb_wf_amber_md_setup/g" biobb_wf_amber_md_setup/airflow/README.md
+          # sed -i "s/++repository++/biobb_wf_amber_md_setup_lig/g" biobb_wf_amber_md_setup_lig/airflow/README.md
+          # sed -i "s/++repository++/biobb_wf_autoencoder/g" biobb_wf_autoencoder/airflow/README.md
+          # sed -i "s/++repository++/biobb_wf_flexdyn/g" biobb_wf_flexdyn/airflow/README.md
+          # sed -i "s/++repository++/biobb_wf_flexserv/g" biobb_wf_flexserv/airflow/README.md
+          # sed -i "s/++repository++/biobb_wf_godmd/g" biobb_wf_godmd/airflow/README.md
+          sed -i "s/++repository++/biobb_wf_ligand_parameterization/g" biobb_wf_ligand_parameterization/airflow/README.md
+          sed -i "s/++repository++/biobb_wf_md_setup/g" biobb_wf_md_setup/airflow/README.md
+          # sed -i "s/++repository++/biobb_wf_md_setup_mutations/g" biobb_wf_md_setup_mutations/airflow/README.md
+          # sed -i "s/++repository++/biobb_wf_mem/g" biobb_wf_mem/airflow/README.md
+          sed -i "s/++repository++/biobb_wf_protein-complex_md_setup/g" biobb_wf_protein-complex_md_setup/airflow/README.md
+          # sed -i "s/++repository++/biobb_wf_structure_checking/g" biobb_wf_structure_checking/airflow/README.md
+          # sed -i "s/++repository++/biobb_wf_virtual-screening_fpocket/g" biobb_wf_virtual-screening_fpocket/airflow/README.md
+      - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add */airflow/README.md && git commit -m "Updated airflow README" && git push

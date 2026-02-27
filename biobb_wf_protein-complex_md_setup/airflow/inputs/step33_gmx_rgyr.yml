@@ -1,0 +1,14 @@
+config: '{"selection": "Protein_Other"}'
+input_index_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: step22_make_ndx/output_ndx_path
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: step29_grompp_md/output_tpr_path
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_3875
+  path: step34b_gmx_image2/output_traj_path
+output_xvg_path: complex.rgyr.xvg

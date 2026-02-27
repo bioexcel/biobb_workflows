@@ -1,0 +1,10 @@
+config: '{"force_constants": "1000 1000 1000", "restrained_group": "System"}'
+input_ndx_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: step9_make_ndx/output_ndx_path
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: ligand.gro
+output_itp_path: ligand.posres.itp

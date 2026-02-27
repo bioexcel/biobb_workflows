@@ -1,0 +1,8 @@
+input_tpr_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: step9_grompp_min/output_tpr_path
+output_edr_path: min.edr
+output_gro_path: min.gro
+output_log_path: min.log
+output_trr_path: min.trr

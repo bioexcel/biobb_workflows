@@ -1,0 +1,9 @@
+input_structure1:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step11_gmx_trjconv_str_protein/output_str_path
+input_structure2:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step12_gmx_trjconv_str_ligand/output_str_path
+output_structure_path: complex_H.pdb

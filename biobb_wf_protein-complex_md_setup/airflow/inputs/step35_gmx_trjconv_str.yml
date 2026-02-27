@@ -1,0 +1,14 @@
+config: '{"pbc": "mol", "selection": "System"}'
+input_index_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: step22_make_ndx/output_ndx_path
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: step30_mdrun_md/output_gro_path
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: step19_grompp_min/output_tpr_path
+output_str_path: complex.md.gro

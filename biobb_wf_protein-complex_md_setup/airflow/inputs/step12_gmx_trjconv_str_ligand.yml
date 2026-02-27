@@ -1,0 +1,10 @@
+config: '{"selection": "System"}'
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: ligand.gro
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: ligand.gro
+output_str_path: ligand_H.pdb

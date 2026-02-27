@@ -1,0 +1,6 @@
+config: '{"terms": ["Pressure", "Density"]}'
+input_energy_path:
+  class: File
+  format: https://edamontology.org/format_2330
+  path: step27_mdrun_npt/output_edr_path
+output_xvg_path: complex.npt.PD.xvg

@@ -1,0 +1,6 @@
+config: '{"selection": "0 & ! a H*"}'
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: ligand.gro
+output_ndx_path: ligand.index.ndx

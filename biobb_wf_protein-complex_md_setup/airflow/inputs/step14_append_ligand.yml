@@ -1,0 +1,14 @@
+config: '{"posres_name": "POSRES_LIGAND"}'
+input_itp_path:
+  class: File
+  format: https://edamontology.org/format_3883
+  path: ligand.itp
+input_posres_itp_path:
+  class: File
+  format: https://edamontology.org/format_3883
+  path: step10_genrestr/output_itp_path
+input_top_zip_path:
+  class: File
+  format: https://edamontology.org/format_3987
+  path: step5_pdb2gmx/output_top_zip_path
+output_top_zip_path: complex.top.zip

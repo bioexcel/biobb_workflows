@@ -1,0 +1,7 @@
+config: '{"criteria": "1e-10", "method": "sd", "force_field": "GAFF", "hydrogens":
+  false}'
+input_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: ligand.pdb
+output_path: ligand.H.min.mol2

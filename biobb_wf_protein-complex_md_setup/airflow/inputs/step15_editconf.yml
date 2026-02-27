@@ -1,0 +1,6 @@
+config: '{"distance_to_molecule": 0.8, "box_type": "octahedron"}'
+input_gro_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step13_cat_pdb_hydrogens/output_structure_path
+output_gro_path: complex.editconf.pdb
