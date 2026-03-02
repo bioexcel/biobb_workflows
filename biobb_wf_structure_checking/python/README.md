@@ -1,5 +1,7 @@
 # <a name="execute-wf"></a>Execute workflow through python script
 
+<div style="text-align: center"><img src="../../common/images/python.png" height="100" /></div>
+
 To execute the workflow through a python script, please follow the next steps:
 
 ## <a name="files"></a>Workflow files
