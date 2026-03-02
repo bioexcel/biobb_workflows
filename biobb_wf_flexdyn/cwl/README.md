@@ -1,5 +1,7 @@
 # <a name="execute-wf"></a>Execute workflow through CWL script
 
+<div align="center"><img src="../../common/images/cwl.png" height="100" /></div>
+
 To execute the workflow through a CWL script, please follow the next steps:
 
 ## <a name="files"></a>Workflow files
@@ -9,9 +11,9 @@ Below you can find the list of all the needed **files** for executing this workf
 * **workflow.cwl:** the CWL file with all the steps to execute this workflow.
 * **workflow_input_descriptions.yml:** the configuration file with the I/O dependencies and settings for each step of the workflow.
 * **inputs:** the inputs vary depending on the workflow, all the needed files are available in this same repository, just be sure to have them in the same folder where **workflow.yml** is.
-* **BioBB adapters:** be sure to have the **biobb_adapters** folder at the same level where the **workflow.cwl** and **workflow_input_descriptions.yml** files are.
-
 > **IMPORTANT!** The Concoord software doesn't work with dockers on Mac ARM, so in case you are using this type of computer, please comment the steps 4 to 7 as indicated in both **workflow.cwl** and **workflow_input_descriptions.yml** files.
+
+* **BioBB adapters:** be sure to have the **biobb_adapters** folder at the same level where the **workflow.cwl** and **workflow_input_descriptions.yml** files are.
 
 ## <a name="run-wf"></a>Run workflow with cwltool
 
