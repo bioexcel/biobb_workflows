@@ -1,5 +1,7 @@
 # <a name="execute-wf"></a>Execute workflow through Apache Airflow
 
+<div align="center"><img src="../../common/images/airflow.png" height="120" /></div>
+
 Below can be found the instructions for running the **BioBB workflow** in Apache Airflow through **cwltool**. To install and execute the workflow, please follow the next steps:
 
 ## <a name="files"></a>Files
@@ -46,7 +48,7 @@ Below you can find the instructions for executing the workflow **via command lin
 
 3) Monitor workflow status:
 
-        docker exec 55e0a7c5b2b8 airflow tasks states-for-dag-run biobb_wf_ligand_parameterization [dag_run_id]
+        docker exec [CONTAINER ID]3 airflow tasks states-for-dag-run biobb_wf_ligand_parameterization [dag_run_id]
 
 ### <a name="run-wf-i"></a>Run workflow via GUI
 
