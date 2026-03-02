@@ -1,5 +1,7 @@
 # <a name="execute-wf"></a>Execute workflow through Galaxy
 
+<div align="center"><img src="../../common/images/galaxy.jpg" height="95" /></div>
+
 To execute the workflow through Galaxy, please follow the next steps:
 
 ## <a name="galaxy"></a>Access to INB's Galaxy server
