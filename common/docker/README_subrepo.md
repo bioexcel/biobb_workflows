@@ -1,5 +1,7 @@
 # <a name="execute-wf"></a>Execute workflow through docker container
 
+<div style="text-align: center"><img src="../../common/images/docker.png" height="80" /></div>
+
 All the **BioBB workflows** can be executed via **docker container**. Inside this container there are all the necessary **dependencies** for executing the workflow. These workflows are available via [**GitHub Container Registry**](https://github.com/orgs/bioexcel/packages?repo_name=biobb_workflows) (GHCR), though in this repository you can find as well all the necessary files for **building** them **in house**.
 
 ## <a name="requirements"></a>Requirements

@@ -7,6 +7,7 @@ Welcome to the global repository for all the **BioExcel Building Blocks Workflow
 * Jupyter Notebooks
 * Pure Python
 * Docker
+* Apache Airflow
 
 ## Installation
 

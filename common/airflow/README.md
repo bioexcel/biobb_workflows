@@ -1,5 +1,7 @@
 # <a name="execute-wf"></a>Execute workflow through Apache Airflow
 
+<div style="text-align: center"><img src="../../common/images/airflow.png" height="120" /></div>
+
 Below can be found the instructions for running the **BioBB workflow** in Apache Airflow through **cwltool**. To install and execute the workflow, please follow the next steps:
 
 ## <a name="files"></a>Files
