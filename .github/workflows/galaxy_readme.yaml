@@ -1,0 +1,40 @@
+on:
+  push:
+    paths:
+      - common/galaxy/README.md
+  workflow_dispatch:
+
+name: Galaxy README
+jobs:
+  galaxy_readme:
+    runs-on: self-hosted
+    steps:
+      - uses: peter-murray/workflow-application-token-action@v3
+        id: generate_token
+        with:
+          application_id: ${{ vars.GHAPUSH }}
+          application_private_key: ${{ secrets.GHAPUSH }}
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+      - name: Copy README files
+        run: |
+          cp common/galaxy/README.md biobb_wf_amber_abc_setup/galaxy/README.md
+          cp common/galaxy/README.md biobb_wf_amber_md_setup/galaxy/README.md
+          cp common/galaxy/README.md biobb_wf_amber_md_setup_lig/galaxy/README.md
+          cp common/galaxy/README.md biobb_wf_flexdyn/galaxy/README.md
+          cp common/galaxy/README.md biobb_wf_flexserv/galaxy/README.md
+          cp common/galaxy/README.md biobb_wf_godmd/galaxy/README.md
+          cp common/galaxy/README.md biobb_wf_ligand_parameterization/galaxy/README.md
+          cp common/galaxy/README.md biobb_wf_md_setup/galaxy/README.md
+          cp common/galaxy/README.md biobb_wf_md_setup_mutations/galaxy/README.md
+          cp common/galaxy/README.md biobb_wf_protein-complex_md_setup/galaxy/README.md
+          cp common/galaxy/README.md biobb_wf_structure_checking/galaxy/README.md
+          cp common/galaxy/README.md biobb_wf_virtual-screening_fpocket/galaxy/README.md
+      - name: Commit and push changes
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add */galaxy/README.md && git commit -m "Updated galaxy README" && git push
