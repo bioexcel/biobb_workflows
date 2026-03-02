@@ -48,7 +48,7 @@ Below you can find the instructions for executing the workflow **via command lin
 
 3) Monitor workflow status:
 
-        docker exec [CONTAINER ID]3 airflow tasks states-for-dag-run biobb_wf_protein-complex_md_setup [dag_run_id]
+        docker exec [CONTAINER ID] airflow tasks states-for-dag-run biobb_wf_protein-complex_md_setup [dag_run_id]
 
 ### <a name="run-wf-i"></a>Run workflow via GUI
 
