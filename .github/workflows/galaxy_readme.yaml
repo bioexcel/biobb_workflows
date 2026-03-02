@@ -27,7 +27,6 @@ jobs:
           cp common/galaxy/README.md biobb_wf_godmd/galaxy/README.md
           cp common/galaxy/README.md biobb_wf_ligand_parameterization/galaxy/README.md
           cp common/galaxy/README.md biobb_wf_md_setup/galaxy/README.md
-          cp common/galaxy/README.md biobb_wf_md_setup_mutations/galaxy/README.md
           cp common/galaxy/README.md biobb_wf_protein-complex_md_setup/galaxy/README.md
           cp common/galaxy/README.md biobb_wf_structure_checking/galaxy/README.md
           cp common/galaxy/README.md biobb_wf_virtual-screening_fpocket/galaxy/README.md
