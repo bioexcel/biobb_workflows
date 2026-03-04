@@ -2,6 +2,7 @@ on:
   push:
     paths:
       - common/airflow/README.md
+      - .github/workflows/airflow_readme.yaml
   workflow_dispatch:
 
 name: Airflow README
