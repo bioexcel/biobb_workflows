@@ -12,15 +12,18 @@ jobs:
       biobb_wf_amber_abc_setup_changed: ${{ steps.filter.outputs.biobb_wf_amber_abc_setup }}
       biobb_wf_amber_md_setup_changed: ${{ steps.filter.outputs.biobb_wf_amber_md_setup }}
       biobb_wf_amber_md_setup_lig_changed: ${{ steps.filter.outputs.biobb_wf_amber_md_setup_lig }}
+      biobb_wf_autoencoder_changed: ${{ steps.filter.outputs.biobb_wf_autoencoder }}
       # NOT WORKING BECAUSE OF FORTRAN MEMORY ERROR (TRYING TO ALLOCATE 25G BUT ONLY 7G AVAILABLE)
       # biobb_wf_cmip_changed: ${{ steps.filter.outputs.biobb_wf_cmip }}
       biobb_wf_dna_helparms_changed: ${{ steps.filter.outputs.biobb_wf_dna_helparms }}
       biobb_wf_flexdyn_changed: ${{ steps.filter.outputs.biobb_wf_flexdyn }}
       biobb_wf_flexserv_changed: ${{ steps.filter.outputs.biobb_wf_flexserv }}
       biobb_wf_godmd_changed: ${{ steps.filter.outputs.biobb_wf_godmd }}
+      biobb_wf_haddock_changed: ${{ steps.filter.outputs.biobb_wf_haddock }}
       biobb_wf_ligand_parameterization_changed: ${{ steps.filter.outputs.biobb_wf_ligand_parameterization }}
       biobb_wf_md_setup_changed: ${{ steps.filter.outputs.biobb_wf_md_setup }}
       biobb_wf_md_setup_mutations_changed: ${{ steps.filter.outputs.biobb_wf_md_setup_mutations }}
+      biobb_wf_mem_changed: ${{ steps.filter.outputs.biobb_wf_mem }}
       biobb_wf_pmx_tutorial_changed: ${{ steps.filter.outputs.biobb_wf_pmx_tutorial }}
       biobb_wf_protein_md_analysis_changed: ${{ steps.filter.outputs.biobb_wf_protein_md_analysis }}
       biobb_wf_protein-complex_md_setup_changed: ${{ steps.filter.outputs.biobb_wf_protein-complex_md_setup }}
@@ -47,6 +50,10 @@ jobs:
               - "biobb_wf_amber_md_setup_lig/python/workflow.env.yml"
               - "biobb_wf_amber_md_setup_lig/python/workflow.py"
               - "biobb_wf_amber_md_setup_lig/python/workflow.yml"
+            biobb_wf_autoencoder:
+              - "biobb_wf_autoencoder/python/workflow.env.yml"
+              - "biobb_wf_autoencoder/python/workflow.py"
+              - "biobb_wf_autoencoder/python/workflow.yml"
             # biobb_wf_cmip:
             #   - "biobb_wf_cmip/python/workflow.env.yml"
             #   - "biobb_wf_cmip/python/workflow.py"
@@ -67,6 +74,10 @@ jobs:
               - "biobb_wf_godmd/python/workflow.env.yml"
               - "biobb_wf_godmd/python/workflow.py"
               - "biobb_wf_godmd/python/workflow.yml"
+            biobb_wf_haddock:
+              - "biobb_wf_haddock/python/workflow.env.yml"
+              - "biobb_wf_haddock/python/workflow.py"
+              - "biobb_wf_haddock/python/workflow.yml"
             biobb_wf_ligand_parameterization:
               - "biobb_wf_ligand_parameterization/python/workflow.env.yml"
               - "biobb_wf_ligand_parameterization/python/workflow.py"
@@ -79,6 +90,10 @@ jobs:
               - "biobb_wf_md_setup_mutations/python/workflow.env.yml"
               - "biobb_wf_md_setup_mutations/python/workflow.py"
               - "biobb_wf_md_setup_mutations/python/workflow.yml"
+            biobb_wf_mem:
+              - "biobb_wf_mem/python/workflow.env.yml"
+              - "biobb_wf_mem/python/workflow.py"
+              - "biobb_wf_mem/python/workflow.yml"
             biobb_wf_pmx_tutorial:
               - "biobb_wf_pmx_tutorial/python/workflow.env.yml"
               - "biobb_wf_pmx_tutorial/python/workflow.py"
@@ -124,6 +139,14 @@ jobs:
     with:
       wf_name: biobb_wf_amber_md_setup_lig
 
+  biobb_wf_autoencoder:
+    name: biobb_wf_autoencoder
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_autoencoder_changed == 'true'
+    with:
+      wf_name: biobb_wf_autoencoder
+
   biobb_wf_dna_helparms:
     name: biobb_wf_dna_helparms
     needs: filter-files
@@ -164,6 +187,14 @@ jobs:
     with:
       wf_name: biobb_wf_godmd
 
+  biobb_wf_haddock:
+    name: biobb_wf_haddock
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_haddock_changed == 'true'
+    with:
+      wf_name: biobb_wf_haddock
+
   biobb_wf_ligand_parameterization:
     name: biobb_wf_ligand_parameterization
     needs: filter-files
@@ -187,6 +218,14 @@ jobs:
     if: needs.filter-files.outputs.biobb_wf_md_setup_mutations_changed == 'true'
     with:
       wf_name: biobb_wf_md_setup_mutations
+
+  biobb_wf_mem:
+    name: biobb_wf_mem
+    needs: filter-files
+    uses: ./.github/workflows/python-reusable.yaml
+    if: needs.filter-files.outputs.biobb_wf_mem_changed == 'true'
+    with:
+      wf_name: biobb_wf_mem
 
   biobb_wf_pmx_tutorial:
     name: biobb_wf_pmx_tutorial
