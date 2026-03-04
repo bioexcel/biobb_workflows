@@ -28,7 +28,7 @@ jobs:
           # cp common/airflow/README.md biobb_wf_godmd/airflow/README.md
           cp common/airflow/README.md biobb_wf_ligand_parameterization/airflow/README.md
           cp common/airflow/README.md biobb_wf_md_setup/airflow/README.md
-          # cp common/airflow/README.md biobb_wf_md_setup_mutations/airflow/README.md
+          cp common/airflow/README.md biobb_wf_md_setup_mutations/airflow/README.md
           # cp common/airflow/README.md biobb_wf_mem/airflow/README.md
           cp common/airflow/README.md biobb_wf_protein-complex_md_setup/airflow/README.md
           # cp common/airflow/README.md biobb_wf_structure_checking/airflow/README.md
@@ -44,7 +44,7 @@ jobs:
           # sed -i "s/++repository++/biobb_wf_godmd/g" biobb_wf_godmd/airflow/README.md
           sed -i "s/++repository++/biobb_wf_ligand_parameterization/g" biobb_wf_ligand_parameterization/airflow/README.md
           sed -i "s/++repository++/biobb_wf_md_setup/g" biobb_wf_md_setup/airflow/README.md
-          # sed -i "s/++repository++/biobb_wf_md_setup_mutations/g" biobb_wf_md_setup_mutations/airflow/README.md
+          sed -i "s/++repository++/biobb_wf_md_setup_mutations/g" biobb_wf_md_setup_mutations/airflow/README.md
           # sed -i "s/++repository++/biobb_wf_mem/g" biobb_wf_mem/airflow/README.md
           sed -i "s/++repository++/biobb_wf_protein-complex_md_setup/g" biobb_wf_protein-complex_md_setup/airflow/README.md
           # sed -i "s/++repository++/biobb_wf_structure_checking/g" biobb_wf_structure_checking/airflow/README.md

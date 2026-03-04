@@ -1,0 +1,9 @@
+input_tpr_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: step11_grompp_nvt/output_tpr_path
+output_cpt_path: nvt.cpt
+output_edr_path: nvt.edr
+output_gro_path: nvt.gro
+output_log_path: nvt.log
+output_trr_path: nvt.trr

@@ -21,14 +21,14 @@ from biobb_haddock.haddock_restraints.haddock3_passive_from_active import haddoc
 from biobb_haddock.haddock_restraints.haddock3_actpass_to_ambig import haddock3_actpass_to_ambig
 from biobb_haddock.haddock_restraints.haddock3_restrain_bodies import haddock3_restrain_bodies
 from biobb_haddock.haddock.topology import topology
-# from biobb_haddock.haddock.rigid_body import rigid_body
-# from biobb_haddock.haddock.capri_eval import capri_eval
-# from biobb_haddock.haddock.sele_top import sele_top
-# from biobb_haddock.haddock.flex_ref import flex_ref
-# from biobb_haddock.haddock.em_ref import em_ref
-# from biobb_haddock.haddock.clust_fcc import clust_fcc
-# from biobb_haddock.haddock.sele_top_clusts import sele_top_clusts
-# from biobb_haddock.haddock.contact_map import contact_map
+from biobb_haddock.haddock.rigid_body import rigid_body
+from biobb_haddock.haddock.capri_eval import capri_eval
+from biobb_haddock.haddock.sele_top import sele_top
+from biobb_haddock.haddock.flex_ref import flex_ref
+from biobb_haddock.haddock.em_ref import em_ref
+from biobb_haddock.haddock.clust_fcc import clust_fcc
+from biobb_haddock.haddock.sele_top_clusts import sele_top_clusts
+from biobb_haddock.haddock.contact_map import contact_map
 
 
 def main(config, system=None):
@@ -207,46 +207,46 @@ def main(config, system=None):
     paths['mol2_input_pdb_path'] = antigen_prep
     topology(**paths, properties=global_prop["step12_topology"])
 
-    # global_log.info("step13_rigid_body: Rigid body sampling")
-    # rigid_body(**global_paths["step13_rigid_body"], properties=global_prop["step13_rigid_body"])
+    global_log.info("step13_rigid_body: Rigid body sampling")
+    rigid_body(**global_paths["step13_rigid_body"], properties=global_prop["step13_rigid_body"])
 
-    # global_log.info("step14_capri_eval1: 1st CAPRI evaluation")
-    # paths = global_paths["step14_capri_eval1"]
-    # paths['reference_pdb_path'] = complex_prep
-    # capri_eval(**paths, properties=global_prop["step14_capri_eval1"])
+    global_log.info("step14_capri_eval1: 1st CAPRI evaluation")
+    paths = global_paths["step14_capri_eval1"]
+    paths['reference_pdb_path'] = complex_prep
+    capri_eval(**paths, properties=global_prop["step14_capri_eval1"])
 
-    # global_log.info("step15_sele_top: Select Top structures")
-    # sele_top(**global_paths["step15_sele_top"], properties=global_prop["step15_sele_top"])
+    global_log.info("step15_sele_top: Select Top structures")
+    sele_top(**global_paths["step15_sele_top"], properties=global_prop["step15_sele_top"])
 
-    # global_log.info("step16_flex_ref: Flexible Refinement")
-    # flex_ref(**global_paths["step16_flex_ref"], properties=global_prop["step16_flex_ref"])
+    global_log.info("step16_flex_ref: Flexible Refinement")
+    flex_ref(**global_paths["step16_flex_ref"], properties=global_prop["step16_flex_ref"])
 
-    # global_log.info("step17_capri_eval2: 2nd CAPRI evaluation")
-    # paths = global_paths["step17_capri_eval2"]
-    # paths['reference_pdb_path'] = complex_prep
-    # capri_eval(**paths, properties=global_prop["step17_capri_eval2"])
+    global_log.info("step17_capri_eval2: 2nd CAPRI evaluation")
+    paths = global_paths["step17_capri_eval2"]
+    paths['reference_pdb_path'] = complex_prep
+    capri_eval(**paths, properties=global_prop["step17_capri_eval2"])
 
-    # global_log.info("step18_em_ref: Energy minimization refinement")
-    # em_ref(**global_paths["step18_em_ref"], properties=global_prop["step18_em_ref"])
+    global_log.info("step18_em_ref: Energy minimization refinement")
+    em_ref(**global_paths["step18_em_ref"], properties=global_prop["step18_em_ref"])
 
-    # global_log.info("step19_capri_eval3: 3rd CAPRI evaluation")
-    # paths = global_paths["step19_capri_eval3"]
-    # paths['reference_pdb_path'] = complex_prep
-    # capri_eval(**paths, properties=global_prop["step19_capri_eval3"])
+    global_log.info("step19_capri_eval3: 3rd CAPRI evaluation")
+    paths = global_paths["step19_capri_eval3"]
+    paths['reference_pdb_path'] = complex_prep
+    capri_eval(**paths, properties=global_prop["step19_capri_eval3"])
 
-    # global_log.info("step20_clust_fcc: Clustering")
-    # clust_fcc(**global_paths["step20_clust_fcc"], properties=global_prop["step20_clust_fcc"])
+    global_log.info("step20_clust_fcc: Clustering")
+    clust_fcc(**global_paths["step20_clust_fcc"], properties=global_prop["step20_clust_fcc"])
 
-    # global_log.info("step21_sele_top_clusts: Clustering")
-    # sele_top_clusts(**global_paths["step21_sele_top_clusts"], properties=global_prop["step21_sele_top_clusts"])
+    global_log.info("step21_sele_top_clusts: Clustering")
+    sele_top_clusts(**global_paths["step21_sele_top_clusts"], properties=global_prop["step21_sele_top_clusts"])
 
-    # global_log.info("step22_capri_eval4: Final CAPRI evaluation")
-    # paths = global_paths["step22_capri_eval4"]
-    # paths['reference_pdb_path'] = complex_prep
-    # capri_eval(**paths, properties=global_prop["step22_capri_eval4"])
+    global_log.info("step22_capri_eval4: Final CAPRI evaluation")
+    paths = global_paths["step22_capri_eval4"]
+    paths['reference_pdb_path'] = complex_prep
+    capri_eval(**paths, properties=global_prop["step22_capri_eval4"])
 
-    # global_log.info("step23_contact_map: Contacts analysis")
-    # contact_map(**global_paths["step23_contact_map"], properties=global_prop["step23_contact_map"])
+    global_log.info("step23_contact_map: Contacts analysis")
+    contact_map(**global_paths["step23_contact_map"], properties=global_prop["step23_contact_map"])
 
     elapsed_time = time.time() - start_time
     global_log.info('')

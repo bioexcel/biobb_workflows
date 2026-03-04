@@ -1,0 +1,14 @@
+config: '{"selection": "Protein-H"}'
+input_index_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: step100_make_ndx/output_ndx_path
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: step9_grompp_min/output_tpr_path
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_3875
+  path: step18_gmx_image2/output_traj_path
+output_xvg_path: setup.rmsd_exp.xvg

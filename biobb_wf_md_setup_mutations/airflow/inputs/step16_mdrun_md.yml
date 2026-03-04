@@ -1,0 +1,9 @@
+input_tpr_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: step15_grompp_md/output_tpr_path
+output_cpt_path: md.cpt
+output_edr_path: md.edr
+output_gro_path: md.gro
+output_log_path: md.log
+output_trr_path: md.trr

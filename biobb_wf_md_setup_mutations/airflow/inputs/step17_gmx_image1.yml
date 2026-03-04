@@ -1,0 +1,15 @@
+config: '{"center_selection": "Protein", "output_selection": "System", "pbc": "mol",
+  "center": true, "ur": "compact"}'
+input_index_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: step100_make_ndx/output_ndx_path
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: step9_grompp_min/output_tpr_path
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_3910
+  path: step16_mdrun_md/output_trr_path
+output_traj_path: md.imaged.trr

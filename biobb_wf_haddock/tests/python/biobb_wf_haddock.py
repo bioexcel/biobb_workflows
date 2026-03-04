@@ -19,14 +19,14 @@ from biobb_haddock.haddock_restraints.haddock3_passive_from_active import haddoc
 from biobb_haddock.haddock_restraints.haddock3_actpass_to_ambig import haddock3_actpass_to_ambig
 from biobb_haddock.haddock_restraints.haddock3_restrain_bodies import haddock3_restrain_bodies
 from biobb_haddock.haddock.topology import topology
-# from biobb_haddock.haddock.rigid_body import rigid_body
-# from biobb_haddock.haddock.capri_eval import capri_eval
-# from biobb_haddock.haddock.sele_top import sele_top
-# from biobb_haddock.haddock.flex_ref import flex_ref
-# from biobb_haddock.haddock.em_ref import em_ref
-# from biobb_haddock.haddock.clust_fcc import clust_fcc
-# from biobb_haddock.haddock.sele_top_clusts import sele_top_clusts
-# from biobb_haddock.haddock.contact_map import contact_map
+from biobb_haddock.haddock.rigid_body import rigid_body
+from biobb_haddock.haddock.capri_eval import capri_eval
+from biobb_haddock.haddock.sele_top import sele_top
+from biobb_haddock.haddock.flex_ref import flex_ref
+from biobb_haddock.haddock.em_ref import em_ref
+from biobb_haddock.haddock.clust_fcc import clust_fcc
+from biobb_haddock.haddock.sele_top_clusts import sele_top_clusts
+from biobb_haddock.haddock.contact_map import contact_map
 
 global_work_dir = None
 cwd = os.getcwd()
@@ -323,6 +323,178 @@ def step12_topology(config, system=None):
     assert fx.not_empty(global_paths["step12_topology"]["output_haddock_wf_data"])
 
 
+def step13_rigid_body(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    rigid_body(**global_paths["step13_rigid_body"], properties=global_prop["step13_rigid_body"])
+
+    assert fx.not_empty(global_paths["step13_rigid_body"]["output_haddock_wf_data"])
+
+
+def step14_capri_eval1(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    step8_pth = os.path.join(conf.get_working_dir_path(), "step8_merge_heavy_light_antigen")
+    complex_prep = f'{step8_pth}/complex_clean.pdb'
+
+    paths = global_paths["step14_capri_eval1"]
+    paths['reference_pdb_path'] = complex_prep
+    capri_eval(**paths, properties=global_prop["step14_capri_eval1"])
+
+    assert fx.not_empty(global_paths["step14_capri_eval1"]["output_haddock_wf_data"])
+    assert fx.not_empty(global_paths["step14_capri_eval1"]["output_evaluation_zip_path"])
+
+
+def step15_sele_top(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    sele_top(**global_paths["step15_sele_top"], properties=global_prop["step15_sele_top"])
+
+    assert fx.not_empty(global_paths["step15_sele_top"]["output_haddock_wf_data"])
+    assert fx.not_empty(global_paths["step15_sele_top"]["output_selection_zip_path"])
+
+
+def step16_flex_ref(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    flex_ref(**global_paths["step16_flex_ref"], properties=global_prop["step16_flex_ref"])
+
+    assert fx.not_empty(global_paths["step16_flex_ref"]["output_haddock_wf_data"])
+    assert fx.not_empty(global_paths["step16_flex_ref"]["refinement_output_zip_path"])
+
+
+def step17_capri_eval2(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    step8_pth = os.path.join(conf.get_working_dir_path(), "step8_merge_heavy_light_antigen")
+    complex_prep = f'{step8_pth}/complex_clean.pdb'
+
+    paths = global_paths["step17_capri_eval2"]
+    paths['reference_pdb_path'] = complex_prep
+    capri_eval(**paths, properties=global_prop["step17_capri_eval2"])
+
+    assert fx.not_empty(global_paths["step17_capri_eval2"]["output_haddock_wf_data"])
+    assert fx.not_empty(global_paths["step17_capri_eval2"]["output_evaluation_zip_path"])
+
+
+def step18_em_ref(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    em_ref(**global_paths["step18_em_ref"], properties=global_prop["step18_em_ref"])
+
+    assert fx.not_empty(global_paths["step18_em_ref"]["output_haddock_wf_data"])
+    assert fx.not_empty(global_paths["step18_em_ref"]["refinement_output_zip_path"])
+
+
+def step19_capri_eval3(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    step8_pth = os.path.join(conf.get_working_dir_path(), "step8_merge_heavy_light_antigen")
+    complex_prep = f'{step8_pth}/complex_clean.pdb'
+
+    paths = global_paths["step19_capri_eval3"]
+    paths['reference_pdb_path'] = complex_prep
+    capri_eval(**paths, properties=global_prop["step19_capri_eval3"])
+
+    assert fx.not_empty(global_paths["step19_capri_eval3"]["output_haddock_wf_data"])
+    assert fx.not_empty(global_paths["step19_capri_eval3"]["output_evaluation_zip_path"])
+
+
+def step20_clust_fcc(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    clust_fcc(**global_paths["step20_clust_fcc"], properties=global_prop["step20_clust_fcc"])
+
+    assert fx.not_empty(global_paths["step20_clust_fcc"]["output_haddock_wf_data"])
+    assert fx.not_empty(global_paths["step20_clust_fcc"]["output_cluster_zip_path"])
+
+
+def step21_sele_top_clusts(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    sele_top_clusts(**global_paths["step21_sele_top_clusts"], properties=global_prop["step21_sele_top_clusts"])
+
+    assert fx.not_empty(global_paths["step21_sele_top_clusts"]["output_haddock_wf_data"])
+
+
+def step22_capri_eval4(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    step8_pth = os.path.join(conf.get_working_dir_path(), "step8_merge_heavy_light_antigen")
+    complex_prep = f'{step8_pth}/complex_clean.pdb'
+
+    paths = global_paths["step22_capri_eval4"]
+    paths['reference_pdb_path'] = complex_prep
+    capri_eval(**paths, properties=global_prop["step22_capri_eval4"])
+
+    assert fx.not_empty(global_paths["step22_capri_eval4"]["output_haddock_wf_data"])
+    assert fx.not_empty(global_paths["step22_capri_eval4"]["output_evaluation_zip_path"])
+
+
+def step23_contact_map(config, remove=False, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    global_paths = conf.get_paths_dic()
+
+    contact_map(**global_paths["step23_contact_map"], properties=global_prop["step23_contact_map"])
+
+    assert fx.not_empty(global_paths["step23_contact_map"]["output_haddock_wf_data"])
+    assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/00_topoaa/antibody_clean.pdb"), f'reference/step23_contact_map/haddock_wf_data/data/00_topoaa/antibody_clean.pdb', 10)
+    assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/00_topoaa/antigen_clean.pdb"), f'reference/step23_contact_map/haddock_wf_data/data/00_topoaa/antigen_clean.pdb', 10)
+    assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/01_rigidbody/ambig-paratope-NMR-epitope.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/01_rigidbody/ambig-paratope-NMR-epitope.tbl', 10)
+    assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/01_rigidbody/antibody-unambig.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/01_rigidbody/antibody-unambig.tbl', 10)
+    assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/02_flexref/antibody-unambig.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/02_flexref/antibody-unambig.tbl', 10)
+    assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/02_flexref/antibody-unambig.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/02_flexref/antibody-unambig.tbl', 10)
+    assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/03_emref/antibody-unambig.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/03_emref/antibody-unambig.tbl', 10)
+    assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/03_emref/antibody-unambig.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/03_emref/antibody-unambig.tbl', 10)
+
+    if remove:
+        tmp_files = [conf.get_working_dir_path()]
+        fu.rm_file_list(tmp_files)
+
+
 @pytest.mark.parametrize("system", [None])
 def test_step0_prepare_antibody_reduce(config_path, system):
     step0_prepare_antibody_reduce(config_path, system)
@@ -386,3 +558,58 @@ def test_step11_haddock3_restrain_bodies(config_path, system):
 @pytest.mark.parametrize("system", [None])
 def test_step12_topology(config_path, system):
     step12_topology(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step13_rigid_body(config_path, system):
+    step13_rigid_body(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step14_capri_eval1(config_path, system):
+    step14_capri_eval1(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step15_sele_top(config_path, system):
+    step15_sele_top(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step16_flex_ref(config_path, system):
+    step16_flex_ref(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step17_capri_eval2(config_path, system):
+    step17_capri_eval2(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step18_em_ref(config_path, system):
+    step18_em_ref(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step19_capri_eval3(config_path, system):
+    step19_capri_eval3(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step20_clust_fcc(config_path, system):
+    step20_clust_fcc(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step21_sele_top_clusts(config_path, system):
+    step21_sele_top_clusts(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step22_capri_eval4(config_path, system):
+    step22_capri_eval4(config_path, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step23_contact_map(config_path, remove_flag, system):
+    step23_contact_map(config_path, remove_flag, system)

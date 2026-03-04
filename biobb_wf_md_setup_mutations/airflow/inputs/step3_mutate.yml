@@ -1,0 +1,6 @@
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step2_fix_side_chain/output_pdb_path
+output_pdb_path: mutate.pdb
+config: '{"mutation_list": "MUTATION"}'

@@ -58,7 +58,6 @@ step13_rigid_body:
     cfg:
       sampling: 10
       clean: False
-    # remove_tmp: False
 
 step14_capri_eval1:
   tool: capri_eval
