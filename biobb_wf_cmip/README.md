@@ -5,7 +5,7 @@ Launch workflow:
 
 Download and install workflow:
 
-[![Install - Docker](https://img.shields.io/badge/install_&_run-Docker_Hub-006fb6?logo=Docker&logoColor=ffffff)](https://github.com/bioexcel/biobb_workflows/pkgs/container/biobb_wf_cmip)
+[![Install - Docker](https://img.shields.io/badge/install_&_run-GHCR-006fb6?logo=Docker&logoColor=ffffff)](https://github.com/bioexcel/biobb_workflows/pkgs/container/biobb_wf_cmip)
 
 WorkflowHub flavours:
 
