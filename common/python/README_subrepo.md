@@ -63,12 +63,12 @@ To run the tests for this workflow, the **pytest framework** and the **imagehash
 
 Once the pytest framework is installed, please go to the [**python tests folder**](../tests/python) and execute:
 
-    pytest <repository>.py --config ../../python/workflow.yml --remove
+    pytest <repository>_<subrepository>.py --config ../../python/workflow.yml --remove
 
 To disable the output capturing and show all the logs for each step, please add the **-s** flag:
 
-    pytest -s <repository>.py --config ../../python/workflow.yml --remove
+    pytest -s <repository>_<subrepository>.py --config ../../python/workflow.yml --remove
 
 If you want to preserve all the temporary files generated during the tests, just remove the **--remove** flag:
 
-    pytest <repository>.py --config ../../python/workflow.yml
+    pytest <repository>_<subrepository>.py --config ../../python/workflow.yml
