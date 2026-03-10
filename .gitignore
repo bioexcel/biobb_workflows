@@ -2,6 +2,8 @@
 .DS_Store
 *_test
 *_old
+__pycache__
+lightning_logs/
 
 ######
 

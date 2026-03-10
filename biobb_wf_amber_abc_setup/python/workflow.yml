@@ -75,7 +75,7 @@ step6_sander_mdrun_eq1:
     output_mdinfo_path: sander.eq1.mdinfo
   properties:
     binary_path: sander.MPI
-    mpi_np: 2
+    mpi_np: 4
     mpi_bin: mpirun
     mdin: 
       maxcyc: 1000
@@ -102,7 +102,7 @@ step8_sander_mdrun_eq2:
     output_mdinfo_path: sander.eq2.mdinfo
   properties:
     binary_path: sander.MPI
-    mpi_np: 2
+    mpi_np: 4
     mpi_bin: mpirun
     mdin: 
       nstlim: 15000
@@ -129,7 +129,7 @@ step10_sander_mdrun_eq3:
     output_mdinfo_path: sander.eq3.mdinfo
   properties:
     binary_path: sander.MPI
-    mpi_np: 2
+    mpi_np: 4
     mpi_bin: mpirun
     mdin: 
       maxcyc: 1000
@@ -156,7 +156,7 @@ step12_sander_mdrun_eq4:
     output_mdinfo_path: sander.eq4.mdinfo
   properties:
     binary_path: sander.MPI
-    mpi_np: 2
+    mpi_np: 4
     mpi_bin: mpirun
     mdin: 
       maxcyc: 1000
@@ -183,7 +183,7 @@ step14_sander_mdrun_eq5:
     output_mdinfo_path: sander.eq5.mdinfo
   properties:
     binary_path: sander.MPI
-    mpi_np: 2
+    mpi_np: 4
     mpi_bin: mpirun
     mdin: 
       maxcyc: 1000
@@ -209,7 +209,7 @@ step16_sander_mdrun_eq6:
     output_mdinfo_path: sander.eq6.mdinfo
   properties:
     binary_path: sander.MPI
-    mpi_np: 2
+    mpi_np: 4
     mpi_bin: mpirun
     mdin: 
       nstlim: 5000
@@ -236,7 +236,7 @@ step18_sander_mdrun_eq7:
     output_mdinfo_path: sander.eq7.mdinfo
   properties:
     binary_path: sander.MPI
-    mpi_np: 2
+    mpi_np: 4
     mpi_bin: mpirun
     mdin: 
       nstlim: 5000
@@ -263,7 +263,7 @@ step20_sander_mdrun_eq8:
     output_mdinfo_path: sander.eq8.mdinfo
   properties:
     binary_path: sander.MPI
-    mpi_np: 2
+    mpi_np: 4
     mpi_bin: mpirun
     mdin: 
       nstlim: 10000
@@ -290,7 +290,7 @@ step22_sander_mdrun_eq9:
     output_mdinfo_path: sander.eq9.mdinfo
   properties:
     binary_path: sander.MPI
-    mpi_np: 2
+    mpi_np: 4
     mpi_bin: mpirun
     mdin: 
       nstlim: 10000
@@ -316,7 +316,7 @@ step24_sander_mdrun_eq10:
     output_mdinfo_path: sander.eq10.mdinfo
   properties:
     binary_path: sander.MPI
-    mpi_np: 2
+    mpi_np: 4
     mpi_bin: mpirun
     mdin: 
       nstlim: 10000
@@ -343,7 +343,7 @@ step26_sander_mdrun_md:
     output_log_path: sander.md.log
   properties:
     binary_path: sander.MPI
-    mpi_np: 2
+    mpi_np: 4
     mpi_bin: mpirun
     mdin: 
       nstlim: 25000
