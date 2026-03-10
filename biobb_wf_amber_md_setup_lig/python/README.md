@@ -63,12 +63,12 @@ To run the tests for this workflow, the **pytest framework** and the **imagehash
 
 Once the pytest framework is installed, please go to the [**python tests folder**](../tests/python) and execute:
 
-    pytest biobb_wf_amber.py --config ../../python/workflow.yml --remove
+    pytest biobb_wf_amber_md_setup_lig.py --config ../../python/workflow.yml --remove
 
 To disable the output capturing and show all the logs for each step, please add the **-s** flag:
 
-    pytest -s biobb_wf_amber.py --config ../../python/workflow.yml --remove
+    pytest -s biobb_wf_amber_md_setup_lig.py --config ../../python/workflow.yml --remove
 
 If you want to preserve all the temporary files generated during the tests, just remove the **--remove** flag:
 
-    pytest biobb_wf_amber.py --config ../../python/workflow.yml
+    pytest biobb_wf_amber_md_setup_lig.py --config ../../python/workflow.yml
