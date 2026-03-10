@@ -32,12 +32,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Reduce MPI cores for CI
-        run: |
-          sed -i "s/mpi_np: 4/mpi_np: 2/g" biobb_wf_amber_abc_setup/python/workflow.yml
-          sed -i "s/mpi_np: 4/mpi_np: 2/g" biobb_wf_amber_md_setup/python/workflow.yml
-          sed -i "s/mpi_np: 4/mpi_np: 2/g" biobb_wf_amber_md_setup_lig/python/workflow.yml
       
       - name: Filter Changed Files
         id: filter

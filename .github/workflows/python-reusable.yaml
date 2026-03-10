@@ -19,6 +19,11 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
+      - name: Reduce MPI cores for Amber workflows
+        if: contains(inputs.wf_name, 'amber')
+        run: |
+          sed -i "s/mpi_np: 4/mpi_np: 2/g" ${{ inputs.wf_name }}/python/workflow.yml
+
       - run: echo "Repository -> ${{ github.repository }}"
       - run: echo "Branch -> ${{ github.ref }}"
       - run: echo "Trigger event -> ${{ github.event_name }}"
