@@ -22,7 +22,14 @@ jobs:
       - name: Reduce MPI cores for Amber workflows
         if: contains(inputs.wf_name, 'amber')
         run: |
-          sed -i "s/mpi_np: 4/mpi_np: 2/g" ${{ inputs.wf_name }}/python/workflow.yml
+          sed -i "s/mpi_np: [0-9]*/mpi_np: 2/g" ${{ inputs.wf_name }}/python/workflow.yml
+          sed -i "s/nstlim: [0-9]*/nstlim: 100/g" ${{ inputs.wf_name }}/python/workflow.yml
+          sed -i "s/maxcyc: [0-9]*/maxcyc: 50/g" ${{ inputs.wf_name }}/python/workflow.yml
+
+      - name: Reduce MDRun steps for PMX workflow
+        if: contains(inputs.wf_name, 'pmx')
+        run: |
+          sed -i "s/nsteps: [0-9]*/nsteps: 50/g" ${{ inputs.wf_name }}/python/workflow.yml
 
       - run: echo "Repository -> ${{ github.repository }}"
       - run: echo "Branch -> ${{ github.ref }}"

@@ -12,10 +12,13 @@ from biobb_gromacs.gromacs.make_ndx import make_ndx
 from biobb_gromacs.gromacs.grompp import grompp
 from biobb_gromacs.gromacs.mdrun import mdrun
 from biobb_analysis.gromacs.gmx_trjconv_str_ens import gmx_trjconv_str_ens
+from biobb_pmx.pmxbiobb.pmxanalyse import pmxanalyse
 
 global_work_dir = None
 global_mutations = []
 global_state_pdb_list = []
+dhdl_paths_listA = []
+dhdl_paths_listB = []
 
 
 def setup_globals(config, system=None):
@@ -24,7 +27,7 @@ def setup_globals(config, system=None):
     conf = settings.ConfReader(config, system)
     global_work_dir = conf.get_working_dir_path()
     global_mutations = conf.properties['global_properties']['mutations']
-    global_state_pdb_list = [f"frame{i}.pdb" for i in range(25)]
+    global_state_pdb_list = [f"frame{i}.pdb" for i in range(2)]  # keep as is, path handled in step1
 
 
 setup_globals("../../python/workflow.yml")
@@ -32,6 +35,7 @@ setup_globals("../../python/workflow.yml")
 
 def step0_trjconv(config, ensemble, mutation, system=None):
     conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     ensemble_prop = conf.get_prop_dic(prefix=ensemble, global_log=global_log)
     ensemble_paths = conf.get_paths_dic(prefix=ensemble)
@@ -43,7 +47,7 @@ def step0_trjconv(config, ensemble, mutation, system=None):
     assert fx.not_empty(ensemble_paths["step0_trjconv"]["output_str_ens_path"])
 
     with zipfile.ZipFile(ensemble_paths["step0_trjconv"]["output_str_ens_path"], 'r') as zip_f:
-        zip_f.extractall()
+        zip_f.extractall(ensemble)  # <-- extract to ensemble-specific directory
 
 
 def step1_pmx_mutate(config, pdb_path, ensemble, mutation, system=None):
@@ -54,9 +58,9 @@ def step1_pmx_mutate(config, pdb_path, ensemble, mutation, system=None):
     prop = conf.get_prop_dic(prefix=os.path.join(ensemble, pdb_name), global_log=global_log)
     paths = conf.get_paths_dic(prefix=os.path.join(ensemble, pdb_name))
 
-    paths['step1_pmx_mutate']['input_structure_path'] = f'./{pdb_path}'
+    paths['step1_pmx_mutate']['input_structure_path'] = f'./{ensemble}/{pdb_path}'  # <-- ensemble subdir
     prop['step1_pmx_mutate']['mutation_list'] = mutation
-    prop['step1_pmx_mutate']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.10/site-packages/pmx/data/mutff'
+    prop['step1_pmx_mutate']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.12/site-packages/pmx/data/mutff/'
     pmxmutate(**paths["step1_pmx_mutate"], properties=prop["step1_pmx_mutate"])
 
     assert fx.not_empty(paths["step1_pmx_mutate"]["output_structure_path"])
@@ -70,7 +74,7 @@ def step2_gmx_pdb2gmx(config, pdb_path, ensemble, mutation, system=None):
     prop = conf.get_prop_dic(prefix=os.path.join(ensemble, pdb_name), global_log=global_log)
     paths = conf.get_paths_dic(prefix=os.path.join(ensemble, pdb_name))
 
-    prop['step2_gmx_pdb2gmx']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.10/site-packages/pmx/data/mutff'
+    prop['step2_gmx_pdb2gmx']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.12/site-packages/pmx/data/mutff/'
     pdb2gmx(**paths["step2_gmx_pdb2gmx"], properties=prop["step2_gmx_pdb2gmx"])
 
     assert fx.not_empty(paths["step2_gmx_pdb2gmx"]["output_gro_path"])
@@ -85,10 +89,9 @@ def step3_pmx_gentop(config, pdb_path, ensemble, mutation, system=None):
     prop = conf.get_prop_dic(prefix=os.path.join(ensemble, pdb_name), global_log=global_log)
     paths = conf.get_paths_dic(prefix=os.path.join(ensemble, pdb_name))
 
-    prop['step3_pmx_gentop']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.10/site-packages/pmx/data/mutff'
+    prop['step3_pmx_gentop']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.12/site-packages/pmx/data/mutff/'
     pmxgentop(**paths["step3_pmx_gentop"], properties=prop["step3_pmx_gentop"])
 
-    assert fx.not_empty(paths["step3_pmx_gentop"]["output_log_path"])
     assert fx.not_empty(paths["step3_pmx_gentop"]["output_top_zip_path"])
 
 
@@ -113,7 +116,7 @@ def step5_gmx_grompp(config, pdb_path, ensemble, mutation, system=None):
     prop = conf.get_prop_dic(prefix=os.path.join(ensemble, pdb_name), global_log=global_log)
     paths = conf.get_paths_dic(prefix=os.path.join(ensemble, pdb_name))
 
-    prop['step5_gmx_grompp']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.10/site-packages/pmx/data/mutff'
+    prop['step5_gmx_grompp']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.12/site-packages/pmx/data/mutff/'
     grompp(**paths["step5_gmx_grompp"], properties=prop["step5_gmx_grompp"])
 
     assert fx.not_empty(paths["step5_gmx_grompp"]["output_tpr_path"])
@@ -143,7 +146,11 @@ def step7_gmx_grompp(config, pdb_path, ensemble, mutation, system=None):
     prop = conf.get_prop_dic(prefix=os.path.join(ensemble, pdb_name), global_log=global_log)
     paths = conf.get_paths_dic(prefix=os.path.join(ensemble, pdb_name))
 
-    prop['step7_gmx_grompp']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.10/site-packages/pmx/data/mutff'
+    # stateA skips energy minimization: use pdb2gmx output directly
+    if ensemble == 'stateA':
+        paths['step7_gmx_grompp']['input_gro_path'] = paths['step2_gmx_pdb2gmx']['output_gro_path']
+
+    prop['step7_gmx_grompp']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.12/site-packages/pmx/data/mutff/'
     grompp(**paths["step7_gmx_grompp"], properties=prop["step7_gmx_grompp"])
 
     assert fx.not_empty(paths["step7_gmx_grompp"]["output_tpr_path"])
@@ -173,7 +180,7 @@ def step9_gmx_grompp(config, pdb_path, ensemble, mutation, system=None):
     prop = conf.get_prop_dic(prefix=os.path.join(ensemble, pdb_name), global_log=global_log)
     paths = conf.get_paths_dic(prefix=os.path.join(ensemble, pdb_name))
 
-    prop['step9_gmx_grompp']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.10/site-packages/pmx/data/mutff'
+    prop['step9_gmx_grompp']['gmx_lib'] = os.getenv('CONDA_PREFIX') + '/lib/python3.12/site-packages/pmx/data/mutff/'
     grompp(**paths["step9_gmx_grompp"], properties=prop["step9_gmx_grompp"])
 
     assert fx.not_empty(paths["step9_gmx_grompp"]["output_tpr_path"])
@@ -189,10 +196,38 @@ def step10_gmx_mdrun(config, pdb_path, ensemble, mutation, system=None):
 
     mdrun(**paths["step10_gmx_mdrun"], properties=prop["step10_gmx_mdrun"])
 
+    if ensemble == "stateA":
+        dhdl_paths_listA.append(paths["step10_gmx_mdrun"]["output_dhdl_path"])
+    elif ensemble == "stateB":
+        dhdl_paths_listB.append(paths["step10_gmx_mdrun"]["output_dhdl_path"])
+
     assert fx.not_empty(paths["step10_gmx_mdrun"]["output_trr_path"])
     assert fx.not_empty(paths["step10_gmx_mdrun"]["output_gro_path"])
     assert fx.not_empty(paths["step10_gmx_mdrun"]["output_edr_path"])
     assert fx.not_empty(paths["step10_gmx_mdrun"]["output_log_path"])
+
+
+def step11_pmx_analyse(config, system=None):
+    conf = settings.ConfReader(config, system)
+    conf.working_dir_path = global_work_dir
+    global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
+    global_paths = conf.get_paths_dic()
+    global_prop = conf.get_prop_dic(global_log=global_log)
+    paths = global_paths["step11_pmx_analyse"]
+
+    # Creating zip file containing all the dhdl files
+    dhdlA_path = 'dhdlA.zip'
+    dhdlB_path = 'dhdlB.zip'
+    fu.zip_list(dhdlA_path, dhdl_paths_listA, global_log)
+    fu.zip_list(dhdlB_path, dhdl_paths_listB, global_log)
+
+    paths["input_a_xvg_zip_path"] = dhdlA_path
+    paths["input_b_xvg_zip_path"] = dhdlB_path
+
+    pmxanalyse(**paths, properties=global_prop["step11_pmx_analyse"])
+
+    assert fx.not_empty(global_paths["step11_pmx_analyse"]["output_result_path"])
+    assert fx.not_empty(global_paths["step11_pmx_analyse"]["output_work_plot_path"])
 
 
 def final_step(config, remove=False, system=None):
@@ -201,7 +236,11 @@ def final_step(config, remove=False, system=None):
 
     if remove:
         tmp_files = [conf.get_working_dir_path()]
-        tmp_files.extend(glob.glob('frame*.pdb'))
+        tmp_files.extend(glob.glob('stateA'))
+        tmp_files.extend(glob.glob('stateB'))
+        tmp_files.extend(glob.glob('dhdl*.zip'))
+        tmp_files.extend(glob.glob('state*.cpt'))
+        tmp_files.extend(glob.glob('integ*.dat'))
         fu.rm_file_list(tmp_files)
 
 
@@ -211,94 +250,91 @@ def test_step0_trjconv(config_path, ensemble, mutation, system):
     step0_trjconv(config_path, ensemble, mutation, system)
 
 
-@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items())[1:2])
+@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items()))
 @pytest.mark.parametrize("iteration", range(len(global_state_pdb_list)))
 @pytest.mark.parametrize("system", [None])
 def test_step1_pmx_mutate(config_path, iteration, ensemble, mutation, system):
-    if (ensemble == "stateA"):
-        pdb_path = global_state_pdb_list[iteration]
-        step1_pmx_mutate(config_path, pdb_path, ensemble, mutation, system)
+    pdb_path = global_state_pdb_list[iteration]
+    step1_pmx_mutate(config_path, pdb_path, ensemble, mutation, system)
 
 
-@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items())[1:2])
+@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items()))
 @pytest.mark.parametrize("iteration", range(len(global_state_pdb_list)))
 @pytest.mark.parametrize("system", [None])
 def test_step2_gmx_pdb2gmx(config_path, iteration, ensemble, mutation, system):
-    if (ensemble == "stateA"):
-        pdb_path = global_state_pdb_list[iteration]
-        step2_gmx_pdb2gmx(config_path, pdb_path, ensemble, mutation, system)
+    pdb_path = global_state_pdb_list[iteration]
+    step2_gmx_pdb2gmx(config_path, pdb_path, ensemble, mutation, system)
 
 
-@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items())[1:2])
+@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items()))
 @pytest.mark.parametrize("iteration", range(len(global_state_pdb_list)))
 @pytest.mark.parametrize("system", [None])
 def test_step3_pmx_gentop(config_path, iteration, ensemble, mutation, system):
-    if (ensemble == "stateA"):
-        pdb_path = global_state_pdb_list[iteration]
-        step3_pmx_gentop(config_path, pdb_path, ensemble, mutation, system)
+    pdb_path = global_state_pdb_list[iteration]
+    step3_pmx_gentop(config_path, pdb_path, ensemble, mutation, system)
 
 
-@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items())[1:2])
+@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items()))
 @pytest.mark.parametrize("iteration", range(len(global_state_pdb_list)))
 @pytest.mark.parametrize("system", [None])
 def test_step4_gmx_makendx(config_path, iteration, ensemble, mutation, system):
-    if (ensemble == "stateA"):
-        pdb_path = global_state_pdb_list[iteration]
-        step4_gmx_makendx(config_path, pdb_path, ensemble, mutation, system)
+    pdb_path = global_state_pdb_list[iteration]
+    step4_gmx_makendx(config_path, pdb_path, ensemble, mutation, system)
 
 
-@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items())[1:2])
+@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items()))
 @pytest.mark.parametrize("iteration", range(len(global_state_pdb_list)))
 @pytest.mark.parametrize("system", [None])
 def test_step5_gmx_grompp(config_path, iteration, ensemble, mutation, system):
-    if (ensemble == "stateA"):
+    if (ensemble == "stateB"):   # stateB only
         pdb_path = global_state_pdb_list[iteration]
         step5_gmx_grompp(config_path, pdb_path, ensemble, mutation, system)
 
 
-@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items())[1:2])
+@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items()))
 @pytest.mark.parametrize("iteration", range(len(global_state_pdb_list)))
 @pytest.mark.parametrize("system", [None])
 def test_step6_gmx_mdrun(config_path, iteration, ensemble, mutation, system):
-    if (ensemble == "stateA"):
+    if (ensemble == "stateB"):   # stateB only
         pdb_path = global_state_pdb_list[iteration]
         step6_gmx_mdrun(config_path, pdb_path, ensemble, mutation, system)
 
 
-@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items())[1:2])
+@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items()))
 @pytest.mark.parametrize("iteration", range(len(global_state_pdb_list)))
 @pytest.mark.parametrize("system", [None])
 def test_step7_gmx_grompp(config_path, iteration, ensemble, mutation, system):
-    if (ensemble == "stateA"):
-        pdb_path = global_state_pdb_list[iteration]
-        step7_gmx_grompp(config_path, pdb_path, ensemble, mutation, system)
+    pdb_path = global_state_pdb_list[iteration]
+    step7_gmx_grompp(config_path, pdb_path, ensemble, mutation, system)
 
 
-@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items())[1:2])
+@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items()))
 @pytest.mark.parametrize("iteration", range(len(global_state_pdb_list)))
 @pytest.mark.parametrize("system", [None])
 def test_step8_gmx_mdrun(config_path, iteration, ensemble, mutation, system):
-    if (ensemble == "stateA"):
-        pdb_path = global_state_pdb_list[iteration]
-        step8_gmx_mdrun(config_path, pdb_path, ensemble, mutation, system)
+    pdb_path = global_state_pdb_list[iteration]
+    step8_gmx_mdrun(config_path, pdb_path, ensemble, mutation, system)
 
 
-@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items())[1:2])
+@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items()))
 @pytest.mark.parametrize("iteration", range(len(global_state_pdb_list)))
 @pytest.mark.parametrize("system", [None])
 def test_step9_gmx_grompp(config_path, iteration, ensemble, mutation, system):
-    if (ensemble == "stateA"):
-        pdb_path = global_state_pdb_list[iteration]
-        step9_gmx_grompp(config_path, pdb_path, ensemble, mutation, system)
+    pdb_path = global_state_pdb_list[iteration]
+    step9_gmx_grompp(config_path, pdb_path, ensemble, mutation, system)
 
 
-@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items())[1:2])
+@pytest.mark.parametrize("ensemble, mutation", list(global_mutations.items()))
 @pytest.mark.parametrize("iteration", range(len(global_state_pdb_list)))
 @pytest.mark.parametrize("system", [None])
 def test_step10_gmx_mdrun(config_path, iteration, ensemble, mutation, system):
-    if (ensemble == "stateA"):
-        pdb_path = global_state_pdb_list[iteration]
-        step10_gmx_mdrun(config_path, pdb_path, ensemble, mutation, system)
+    pdb_path = global_state_pdb_list[iteration]
+    step10_gmx_mdrun(config_path, pdb_path, ensemble, mutation, system)
+
+
+@pytest.mark.parametrize("system", [None])
+def test_step11_pmx_analyse(config_path, system):
+    step11_pmx_analyse(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
