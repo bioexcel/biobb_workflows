@@ -2,7 +2,8 @@
 FROM continuumio/miniconda3
 
 # Define the version of the Docker image
-LABEL version="2025.1"
+LABEL version="2026.1"
+
 
 # Connect this docker image to the biobb_workflows repository
 LABEL org.opencontainers.image.source https://github.com/bioexcel/biobb_workflows
@@ -80,8 +81,8 @@ CMD ["\
             cp /data/\"$USER_JN\" \"$dir/notebook.ipynb\"; \
         else \
             cp /app/notebook.ipynb \"$dir/notebook.ipynb\"; \
-        fi; \
         cp -r /data/ABCix_config_files \"$dir/ABCix_config_files\"; \
+        fi; \
         cd \"$dir\"; \
         source activate $REPOSITORY; \
         jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.base_url=$BASE_URL --NotebookApp.token='' --NotebookApp.password=''; \
