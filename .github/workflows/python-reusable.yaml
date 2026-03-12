@@ -31,6 +31,16 @@ jobs:
         run: |
           sed -i "s/nsteps: [0-9]*/nsteps: 50/g" ${{ inputs.wf_name }}/python/workflow.yml
 
+      - name: Reduce MPI cores for Structure Checking workflow
+        if: contains(inputs.wf_name, 'structure_checking')
+        run: |
+          sed -i "s/mpi_np: [0-9]*/mpi_np: 2/g" ${{ inputs.wf_name }}/python/workflow.yml
+
+      - name: Reduce MDRun steps for GROMACS workflow
+        if: contains(inputs.wf_name, 'biobb_wf_md_setup') || contains(inputs.wf_name, 'biobb_wf_md_setup_mutations') || contains(inputs.wf_name, 'biobb_wf_protein-complex_md_setup')
+        run: |
+          sed -i "s/nsteps: [0-9]*/nsteps: 10/g" ${{ inputs.wf_name }}/python/workflow.yml
+
       - run: echo "Repository -> ${{ github.repository }}"
       - run: echo "Branch -> ${{ github.ref }}"
       - run: echo "Trigger event -> ${{ github.event_name }}"
