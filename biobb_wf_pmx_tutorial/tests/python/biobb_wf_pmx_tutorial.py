@@ -27,7 +27,7 @@ def setup_globals(config, system=None):
     conf = settings.ConfReader(config, system)
     global_work_dir = conf.get_working_dir_path()
     global_mutations = conf.properties['global_properties']['mutations']
-    global_state_pdb_list = [f"frame{i}.pdb" for i in range(2)]  # keep as is, path handled in step1
+    global_state_pdb_list = [f"frame{i}.pdb" for i in range(2)]
 
 
 setup_globals("../../python/workflow.yml")

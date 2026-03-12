@@ -37,11 +37,11 @@ def main(config, system=None):
         gmx_trjconv_str_ens(**ensemble_paths["step0_trjconv"], properties=ensemble_prop["step0_trjconv"])
 
         with zipfile.ZipFile(ensemble_paths["step0_trjconv"]["output_str_ens_path"], 'r') as zip_f:
-            zip_f.extractall()
-            state_pdb_list = zip_f.namelist()
+            zip_f.extractall(conf.get_working_dir_path())
+            state_pdb_list = [os.path.join(conf.get_working_dir_path(), f) for f in zip_f.namelist()]
 
         for pdb_path in state_pdb_list:
-            pdb_name = os.path.splitext(pdb_path)[0]
+            pdb_name = os.path.splitext(os.path.basename(pdb_path))[0]
             prop = conf.get_prop_dic(prefix=os.path.join(ensemble, pdb_name), global_log=global_log)
             paths = conf.get_paths_dic(prefix=os.path.join(ensemble, pdb_name))
 

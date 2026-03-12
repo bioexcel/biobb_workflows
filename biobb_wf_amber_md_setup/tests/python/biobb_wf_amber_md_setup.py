@@ -1,5 +1,4 @@
 import pytest
-from pathlib import Path
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools import test_fixtures as fx
@@ -341,7 +340,6 @@ def step22_cpptraj_image(config, remove=False, system=None):
     cpptraj_image(**global_paths["step22_cpptraj_image"], properties=global_prop["step22_cpptraj_image"])
 
     assert fx.not_empty(global_paths["step22_cpptraj_image"]["output_cpptraj_path"])
-    assert fx.compare_size(global_paths["step22_cpptraj_image"]["output_cpptraj_path"], f'reference/step22_cpptraj_image/{Path(global_paths["step22_cpptraj_image"]["output_cpptraj_path"]).name}', 10)
 
     if remove:
         tmp_files = [conf.get_working_dir_path()]

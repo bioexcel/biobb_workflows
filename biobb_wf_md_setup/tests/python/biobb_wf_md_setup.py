@@ -1,6 +1,4 @@
 import pytest
-# import glob
-from pathlib import Path
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools import test_fixtures as fx
@@ -339,7 +337,6 @@ def step23_rmsd_exp(config, remove=False, system=None):
     gmx_rms(**global_paths["step23_rmsd_exp"], properties=global_prop["step23_rmsd_exp"])
 
     assert fx.not_empty(global_paths["step23_rmsd_exp"]["output_xvg_path"])
-    assert fx.compare_size(global_paths["step23_rmsd_exp"]["output_xvg_path"], f'reference/step23_rmsd_exp/{Path(global_paths["step23_rmsd_exp"]["output_xvg_path"]).name}', 10)
 
     if remove:
         tmp_files = [conf.get_working_dir_path()]

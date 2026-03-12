@@ -65,8 +65,7 @@ step5_gmx_grompp:
       integrator : steep
       emtol: 100
       dt: 0.001
-      # nsteps: 10000
-      nsteps: 100
+      nsteps: 10000
       nstcomm: 1
       nstcalcenergy: 1
       freezegrps: FREEZE
@@ -89,8 +88,7 @@ step7_gmx_grompp:
   properties:
     simulation_type: free
     mdp:
-      # nsteps: 10000
-      nsteps: 100
+      nsteps: 10000
       nstcomm: 1
       nstcalcenergy: 1
       dt: 0.001
@@ -113,8 +111,7 @@ step9_gmx_grompp:
     simulation_type: free
     maxwarn: 1
     mdp:
-      # nsteps: 5000
-      nsteps: 50
+      nsteps: 5000
       free_energy: "yes"
       init-lambda: 0
       delta-lambda: 2e-4
