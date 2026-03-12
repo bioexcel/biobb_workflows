@@ -1,0 +1,126 @@
+global_properties:
+  working_dir_path: biobb_wf_mem
+  can_write_console_log: False
+
+step1_gmx_image1:
+  tool: gmx_image
+  paths:
+    input_traj_path: /data/trajectory.xtc
+    input_top_path: /data/structure.pdb
+    output_traj_path: structure_fit.xtc
+  properties:
+    fit_selection: DPPC
+    output_selection: System
+    center: False
+    fit: rot+trans
+
+step2_gmx_image2:
+  tool: gmx_image
+  paths:
+    input_traj_path: dependency/step1_gmx_image1/output_traj_path
+    input_top_path: /data/structure.pdb
+    output_traj_path: structure_fit2.xtc
+  properties:
+    fit_selection: Backbone
+    output_selection: System
+    center: False
+    fit: transxy
+
+step3_fatslim_membranes:
+  tool: fatslim_membranes
+  paths:
+    input_traj_path: /data/trajectory.xtc
+    input_top_path: /data/structure.pdb
+    output_ndx_path: leaflets.ndx
+  properties:
+    selection: (resname DPPC and element P)
+    cutoff: 2.2
+    ignore_no_box: True
+
+step4_lpp_assign_leaflets:
+  tool: lpp_assign_leaflets
+  paths:
+    input_traj_path: dependency/step2_gmx_image2/output_traj_path
+    input_top_path: /data/structure.pdb
+    output_leaflets_path: leaflets_data.csv
+  properties:
+    lipid_sel: (resname DPPC and element P)
+    steps: 1
+
+step5_lpp_zpositions1:
+  tool: lpp_zpositions
+  paths:
+    input_traj_path: dependency/step2_gmx_image2/output_traj_path
+    input_top_path: /data/structure.pdb
+    output_positions_path: zpositions.csv
+  properties:
+    lipid_sel: (resname DPPC and element P)
+    steps: 1
+    height_sel: (resname DPPC and element P)
+    ignore_no_box: True
+
+step6_lpp_zpositions2:
+  tool: lpp_zpositions
+  paths:
+    input_traj_path: dependency/step2_gmx_image2/output_traj_path
+    input_top_path: /data/structure.pdb
+    output_positions_path: zpositions_around.csv
+  properties:
+    lipid_sel: (resname DPPC and element P)
+    steps: 1
+    height_sel: (resname DPPC and element P) and (cyzone 50 70 -50 protein)
+    ignore_no_box: True
+
+step7_gorder_aa:
+  tool: gorder_aa
+  paths:
+    input_traj_path: /data/trajectory.xtc
+    input_top_path: /data/topology.tpr
+    output_order_path: order.csv
+  properties:
+    handle_pbc: False 
+
+step8_fatslim_apl:
+  tool: fatslim_apl
+  paths:
+    input_traj_path: dependency/step1_gmx_image1/output_traj_path
+    input_top_path: /data/structure.pdb
+    output_csv_path: apl.csv
+  properties:
+    lipid_selection: (resname DPPC and element P)
+    protein_selection: protein and not element H
+    ignore_no_box: True
+
+step9_cpptraj_density:
+  tool: cpptraj_density
+  paths:
+    input_traj_path: dependency/step2_gmx_image2/output_traj_path
+    input_top_path: /data/structure.pdb
+    output_cpptraj_path: density.dat
+  properties:
+    mask: :DPP !:DPP :DPP@P8
+    steps: 1
+
+step10_mda_hole:
+  tool: mda_hole
+  paths:
+    input_traj_path: dependency/step2_gmx_image2/output_traj_path
+    input_top_path: /data/structure.pdb
+    output_hole_path: hole.vmd
+    output_csv_path: hole_profile.csv
+  properties:
+    select: protein
+    steps: 20
+    sample: 0.1
+
+step11_lpp_flip_flop:
+  tool: lpp_flip_flop
+  paths:
+    input_traj_path: dependency/step2_gmx_image2/output_traj_path
+    input_top_path: /data/structure.pdb
+    input_leaflets_path: dependency/step4_lpp_assign_leaflets/output_leaflets_path
+    output_flip_flop_path: flip_flop.csv
+  properties:
+    lipid_sel: (resname DPPC and element P)
+    steps: 1
+    frame_cutoff: 2
