@@ -30,7 +30,7 @@ jobs:
         if: contains(inputs.wf_name, 'biobb_wf_amber_md_setup') || contains(inputs.wf_name, 'biobb_wf_amber_md_setup_lig')
         run: |
           sed -i "s/mpi_np: [0-9]*/mpi_np: 2/g" ${{ inputs.wf_name }}/python/workflow.yml
-          sed -i "s/nstlim: [0-9]*/nstlim: 100/g" ${{ inputs.wf_name }}/python/workflow.yml
+          sed -i "s/nstlim: [0-9]*/nstlim: 500/g" ${{ inputs.wf_name }}/python/workflow.yml
           sed -i "s/maxcyc: [0-9]*/maxcyc: 100/g" ${{ inputs.wf_name }}/python/workflow.yml
 
       - name: Reduce MDRun steps for PMX workflow
