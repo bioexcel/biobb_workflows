@@ -20,7 +20,7 @@ In the following link you can find all the BioBB workflows available in GHCR:
 
 For **downloading** the container to you computer, please type the following instruction in your **terminal**:
 
-    docker pull biobb/biobb_wf_protein_md_analysis
+    docker pull ghcr.io/bioexcel/biobb_wf_protein_md_analysis
 
 ### <a name="run-wf-d"></a>Run workflow
 
@@ -35,7 +35,7 @@ Below you can find the list of all the needed **files** for executing this workf
 
 For **running** the container in python, please type the following instruction in your **terminal**:
 
-    docker run --name <container_name> -v /path/to/inputs:/data biobb/biobb_wf_protein_md_analysis
+    docker run --name <container_name> -v /path/to/inputs:/data ghcr.io/bioexcel/biobb_wf_protein_md_analysis
 
 Where:
 * **container_name** is the name of the container (optional).
@@ -43,7 +43,7 @@ Where:
 
 For **running** the container with a **custom workflow file**, please locate this file in the **same folder** where the inputs are and then type the following instruction in your **terminal**:
 
-    docker run --name <container_name> -e USER_PY=custom.py -v /path/to/inputs:/data biobb/biobb_wf_protein_md_analysis
+    docker run --name <container_name> -e USER_PY=custom.py -v /path/to/inputs:/data ghcr.io/bioexcel/biobb_wf_protein_md_analysis
 
 Take into account that the **dependencies are not customisable**, so this new workflow file **must fulfill** the same **specifications** as the original one.
 

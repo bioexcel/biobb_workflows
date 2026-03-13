@@ -20,7 +20,7 @@ In the following link you can find all the BioBB workflows available in GHCR:
 
 For **downloading** the container to you computer, please type the following instruction in your **terminal**:
 
-    docker pull biobb/biobb_wf_ligand_parameterization
+    docker pull ghcr.io/bioexcel/biobb_wf_ligand_parameterization
 
 ### <a name="run-wf-d"></a>Run workflow
 
@@ -30,7 +30,7 @@ The **BioBB workflows containers** can be executed either **interactively** via 
 
 For **running** the container in Jupyter Notebook, please type the following instruction in your **terminal**:
 
-    docker run --name <container_name> -d -e MODE=jupyter -p <port>:8888 -v /path/to/inputs:/data biobb/biobb_wf_ligand_parameterization
+    docker run --name <container_name> -d -e MODE=jupyter -p <port>:8888 -v /path/to/inputs:/data ghcr.io/bioexcel/biobb_wf_ligand_parameterization
 
 Where:
 * **container_name** is the name of the container (optional).
@@ -45,7 +45,7 @@ Note that **the port can change** depending on the value provided in the previou
 
 For **running** the container with a **custom Jupyter Notebook**, please locate this file in the **same folder** where the inputs are and then type the following instruction in your **terminal**:
 
-    docker run --name <container_name> -d -e MODE=jupyter -e USER_JN=custom.ipynb -p <port>:8888 -v /path/to/inputs:/data biobb/biobb_wf_ligand_parameterization
+    docker run --name <container_name> -d -e MODE=jupyter -e USER_JN=custom.ipynb -p <port>:8888 -v /path/to/inputs:/data ghcr.io/bioexcel/biobb_wf_ligand_parameterization
 
 Take into account that the **dependencies are not customisable**, so this new Jupyter Notebook file **must fulfill** the same **specifications** as the original one.
 
@@ -58,7 +58,7 @@ Below you can find the list of all the needed **files** for executing this workf
 
 For **running** the container in python, please type the following instruction in your **terminal**:
 
-    docker run --name <container_name> -v /path/to/inputs:/data biobb/biobb_wf_ligand_parameterization
+    docker run --name <container_name> -v /path/to/inputs:/data ghcr.io/bioexcel/biobb_wf_ligand_parameterization
 
 Where:
 * **container_name** is the name of the container (optional).
@@ -66,7 +66,7 @@ Where:
 
 For **running** the container with a **custom workflow file**, please locate this file in the **same folder** where the inputs are and then type the following instruction in your **terminal**:
 
-    docker run --name <container_name> -e USER_PY=custom.py -v /path/to/inputs:/data biobb/biobb_wf_ligand_parameterization
+    docker run --name <container_name> -e USER_PY=custom.py -v /path/to/inputs:/data ghcr.io/bioexcel/biobb_wf_ligand_parameterization
 
 Take into account that the **dependencies are not customisable**, so this new workflow file **must fulfill** the same **specifications** as the original one.
 
