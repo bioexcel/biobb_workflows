@@ -106,7 +106,7 @@ Where:
 
 This instruction will run the container in **detached** (or background) mode, so once it's running, you should go to your **browser** and type:
 
-    http://localhost:3000/notebooks/notebook.ipynb
+<http://localhost:3000/notebooks/notebook.ipynb>
 
 Note that **the port can change** depending on the value provided in the previous step.
 
