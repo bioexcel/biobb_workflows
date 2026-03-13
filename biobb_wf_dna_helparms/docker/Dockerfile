@@ -4,7 +4,6 @@ FROM continuumio/miniconda3
 # Define the version of the Docker image
 LABEL version="2026.1"
 
-
 # Connect this docker image to the biobb_workflows repository
 LABEL org.opencontainers.image.source https://github.com/bioexcel/biobb_workflows
 
@@ -45,9 +44,9 @@ RUN conda env create -f /app/workflow.env.yml
 
 # Define an environment variable with default value
 ENV MODE=python
+
 # Copy the .curvesplus folder into the Docker image
 COPY .curvesplus /opt/conda/envs/$REPOSITORY
-
 
 # Define environment variables for the user custom python script and jupyter notebook
 ENV USER_PY=
@@ -84,8 +83,8 @@ CMD ["\
             cp /data/\"$USER_JN\" \"$dir/notebook.ipynb\"; \
         else \
             cp /app/notebook.ipynb \"$dir/notebook.ipynb\"; \
-        cp -r /data/TRAJ \"$dir/TRAJ\"; \
         fi; \
+        cp -r /data/TRAJ \"$dir/TRAJ\"; \
         cd \"$dir\"; \
         source activate $REPOSITORY; \
         jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.base_url=$BASE_URL --NotebookApp.token='' --NotebookApp.password=''; \

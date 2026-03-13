@@ -4,7 +4,6 @@ FROM continuumio/miniconda3
 # Define the version of the Docker image
 LABEL version="2026.1"
 
-
 # Connect this docker image to the biobb_workflows repository
 LABEL org.opencontainers.image.source https://github.com/bioexcel/biobb_workflows
 
@@ -32,6 +31,7 @@ RUN wget https://raw.githubusercontent.com/bioexcel/$REPOSITORY/main/conda_env/e
 RUN if [ -z "$SUBREPOSITORY" ]; then \
     wget https://raw.githubusercontent.com/bioexcel/$REPOSITORY/main/$REPOSITORY/notebooks/$REPOSITORY.ipynb -O /app/notebook.ipynb; \
     wget https://raw.githubusercontent.com/bioexcel/biobb_workflows/main/$REPOSITORY/python/workflow.py -O /app/workflow.py; \
+    wget https://raw.githubusercontent.com/bioexcel/$REPOSITORY/main/$REPOSITORY/notebooks/variables.py -O /app/variables.py; \
 else \
     wget https://raw.githubusercontent.com/bioexcel/$REPOSITORY/main/$REPOSITORY/notebooks/$SUBREPOSITORY/${REPOSITORY}_$SUBREPOSITORY.ipynb -O /app/notebook.ipynb; \
     wget https://raw.githubusercontent.com/bioexcel/biobb_workflows/main/${REPOSITORY}_$SUBREPOSITORY/python/workflow.py -O /app/workflow.py; \
