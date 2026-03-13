@@ -41,7 +41,15 @@ jobs:
           sed -i '83a\        cp -r /data/Files \\"$dir/Files\\"; \\' biobb_wf_flexserv/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_godmd/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_haddock/docker/Dockerfile
-          sed -i '33a\    wget https://raw.githubusercontent.com/bioexcel/$REPOSITORY/main/$REPOSITORY/notebooks/variables.py -O /app/variables.py; \\' biobb_wf_haddock/docker/Dockerfile
+          sed -i '9aRUN apt-get update && \' biobb_wf_haddock/docker/Dockerfile
+          sed -i '10a    apt-get install -y build-essential && \' biobb_wf_haddock/docker/Dockerfile
+          sed -i '11a    rm -rf /var/lib/apt/lists/*' biobb_wf_haddock/docker/Dockerfile
+          sed -i '12a\\' biobb_wf_haddock/docker/Dockerfile          
+          sed -i '37a\    wget https://raw.githubusercontent.com/bioexcel/$REPOSITORY/main/$REPOSITORY/notebooks/variables.py -O /app/variables.py; \\' biobb_wf_haddock/docker/Dockerfile
+          # UNCOMMENT IF PLAIN INSTALLATION DOES NOT WORK
+          # sed -i '49a# Install additional pip packages inside the conda environment' biobb_wf_haddock/docker/Dockerfile
+          # sed -i '50aRUN conda run -n $REPOSITORY pip install haddock3==2025.11.0' biobb_wf_haddock/docker/Dockerfile
+          # sed -i '51a\\' biobb_wf_haddock/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_ligand_parameterization/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_md_setup/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_mem/docker/Dockerfile
