@@ -1,7 +1,7 @@
 # Base docker with miniconda
 FROM continuumio/miniconda3
 
-# Define the version of the Docker image
+# Define the version of the Docker image 
 LABEL version="2026.1"
 
 # Connect this docker image to the biobb_workflows repository
@@ -42,6 +42,14 @@ RUN conda config --set solver libmamba
 # Create new environment
 RUN conda env create -f /app/workflow.env.yml
 
+# Fix OpenMP issues when running amd64 image on ARM64 via QEMU emulation
+# Fix OpenMP issues when running amd64 image on ARM64 via QEMU emulation
+ENV KMP_DUPLICATE_LIB_OK=TRUE
+ENV OMP_NUM_THREADS=1
+ENV KKMP_AFFINITY=disabled
+ENV KMP_DUPLICATE_LIB_OK=TRUE
+ENV OMP_NUM_THREADS=1
+ENV KKMP_AFFINITY=disabled
 # Define an environment variable with default value
 ENV MODE=python
 
