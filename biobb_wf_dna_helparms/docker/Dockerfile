@@ -1,7 +1,7 @@
 # Base docker with miniconda
 FROM continuumio/miniconda3
 
-# Define the version of the Docker image 
+# Define the version of the Docker image
 LABEL version="2026.1"
 
 # Connect this docker image to the biobb_workflows repository
