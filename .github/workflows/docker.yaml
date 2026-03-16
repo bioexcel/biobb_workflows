@@ -48,11 +48,8 @@ jobs:
           sed -i '12a\    rm -rf /var/lib/apt/lists/*' biobb_wf_haddock/docker/Dockerfile
           sed -i '13a\\' biobb_wf_haddock/docker/Dockerfile          
           sed -i '38a\    wget https://raw.githubusercontent.com/bioexcel/$REPOSITORY/main/$REPOSITORY/notebooks/variables.py -O /app/variables.py; \\' biobb_wf_haddock/docker/Dockerfile
-          sed -i '89a\        cp /app/variables.py \\"$dir/variables.py\\"; \\' biobb_wf_haddock/docker/Dockerfile
-          # UNCOMMENT IF PLAIN INSTALLATION DOES NOT WORK
-          # sed -i '49a# Install additional pip packages inside the conda environment' biobb_wf_haddock/docker/Dockerfile
-          # sed -i '50aRUN conda run -n $REPOSITORY pip install haddock3==2025.11.0' biobb_wf_haddock/docker/Dockerfile
-          # sed -i '51a\\' biobb_wf_haddock/docker/Dockerfile
+          sed -i '73a\        cp /data/antibody_actpass.txt /data/*.pdb /data/wf_python/; \\' biobb_wf_haddock/docker/Dockerfile          
+          sed -i '90a\        cp /app/variables.py \\"$dir/variables.py\\"; \\' biobb_wf_haddock/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_ligand_parameterization/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_md_setup/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_mem/docker/Dockerfile
