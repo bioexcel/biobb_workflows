@@ -44,8 +44,8 @@ jobs:
           cp common/docker/Dockerfile biobb_wf_haddock/docker/Dockerfile
           sed -i '9a# Install build tools' biobb_wf_haddock/docker/Dockerfile
           sed -i '10aRUN apt-get update && \' biobb_wf_haddock/docker/Dockerfile
-          sed -i '11a    apt-get install -y build-essential && \' biobb_wf_haddock/docker/Dockerfile
-          sed -i '12a    rm -rf /var/lib/apt/lists/*' biobb_wf_haddock/docker/Dockerfile
+          sed -i '11a\    apt-get install -y build-essential && \' biobb_wf_haddock/docker/Dockerfile
+          sed -i '12a\    rm -rf /var/lib/apt/lists/*' biobb_wf_haddock/docker/Dockerfile
           sed -i '13a\\' biobb_wf_haddock/docker/Dockerfile          
           sed -i '38a\    wget https://raw.githubusercontent.com/bioexcel/$REPOSITORY/main/$REPOSITORY/notebooks/variables.py -O /app/variables.py; \\' biobb_wf_haddock/docker/Dockerfile
           sed -i '89a\        cp /app/variables.py \\"$dir/variables.py\\"; \\' biobb_wf_haddock/docker/Dockerfile
