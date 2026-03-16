@@ -87,7 +87,7 @@ CMD ["\
         else \
             cp /app/notebook.ipynb \"$dir/notebook.ipynb\"; \
         fi; \
-        cp /app/variables.py \\"$dir/variables.py\\"; 
+        cp /app/variables.py \"$dir/variables.py\"; \
         cd \"$dir\"; \
         source activate $REPOSITORY; \
         jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.base_url=$BASE_URL --NotebookApp.token='' --NotebookApp.password=''; \
