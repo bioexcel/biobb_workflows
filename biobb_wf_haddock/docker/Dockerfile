@@ -9,8 +9,8 @@ LABEL org.opencontainers.image.source https://github.com/bioexcel/biobb_workflow
 
 # Install build tools
 RUN apt-get update && 
-apt-get install -y build-essential && 
-rm -rf /var/lib/apt/lists/*
+    apt-get install -y build-essential && 
+    rm -rf /var/lib/apt/lists/*
 
 # Define working dir
 WORKDIR /app
