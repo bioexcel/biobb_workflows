@@ -7,13 +7,13 @@ label: Class to renumerate residues in a PDB structure according to a reference 
   from UniProt.
 
 doc: |-
-  None
+  Fix the residue numbering in a PDB structure according to a reference sequence from UniProt.
 
 baseCommand: fix_pdb
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_model:4.1.0--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_model:5.2.1--pyhdfd78af_0
 
 inputs:
   input_pdb_path:

@@ -12,7 +12,7 @@ baseCommand: sander_mdrun
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_amber:4.1.0--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_amber:5.2.1--pyhdfd78af_0
 
 inputs:
   input_top_path:
@@ -38,7 +38,7 @@ inputs:
       Input coordinates file (AMBER crd)
       Type: string
       File type: input
-      Accepted formats: crd, mdcrd, inpcrd, netcdf, nc, ncrst
+      Accepted formats: crd, mdcrd, inpcrd, netcdf, nc, ncrst, rst
       Example file: https://github.com/bioexcel/biobb_amber/raw/master/biobb_amber/test/data/sander/cln025.inpcrd
     type: File
     format:
@@ -47,6 +47,7 @@ inputs:
     - edam:format_3878
     - edam:format_3650
     - edam:format_3650
+    - edam:format_3886
     - edam:format_3886
     inputBinding:
       position: 2

@@ -12,7 +12,7 @@ baseCommand: prody_anm
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_flexdyn:4.1.0--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_flexdyn:5.2.2--pyhdfd78af_0
 
 inputs:
   input_pdb_path:
@@ -37,7 +37,7 @@ inputs:
       Type: string
       File type: output
       Accepted formats: pdb
-      Example file: https://github.com/bioexcel/biobb_flexdyn/raw/master/biobb_flexdyn/test/reference/prody/prody_output.pdb
+      Example file: https://github.com/bioexcel/biobb_flexdyn/raw/master/biobb_flexdyn/test/reference/flexdyn/prody_output.pdb
     type: string
     format:
     - edam:format_1476

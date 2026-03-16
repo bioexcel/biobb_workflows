@@ -6,13 +6,13 @@ class: CommandLineTool
 label: Class to concat two PDB structures in a single PDB file.
 
 doc: |-
-  None
+  Class to concat two PDB structures in a single PDB file.
 
 baseCommand: cat_pdb
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_structure_utils:4.1.0--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_structure_utils:5.2.1--pyhdfd78af_0
 
 inputs:
   input_structure1:

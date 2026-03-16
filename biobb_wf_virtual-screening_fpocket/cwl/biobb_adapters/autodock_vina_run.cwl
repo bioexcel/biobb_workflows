@@ -12,7 +12,7 @@ baseCommand: autodock_vina_run
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_vs:4.1.1--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_vs:5.2.1--pyhdfd78af_0
 
 inputs:
   input_ligand_pdbqt_path:

@@ -6,13 +6,13 @@ class: CommandLineTool
 label: Class to extract atoms from a 3D structure.
 
 doc: |-
-  None
+  Extracts all atoms from a 3D structure that match a regular expression pattern.
 
 baseCommand: extract_atoms
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_structure_utils:4.1.0--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_structure_utils:5.2.1--pyhdfd78af_0
 
 inputs:
   input_structure_path:

@@ -12,7 +12,7 @@ baseCommand: leap_gen_top
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_amber:4.1.0--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_amber:5.2.1--pyhdfd78af_0
 
 inputs:
   input_pdb_path:
@@ -128,6 +128,23 @@ inputs:
     - edam:format_3987
     inputBinding:
       prefix: --input_params_path
+
+  input_prep_path:
+    label: Additional leap parameter files to load with loadAmberPrep Leap command
+    doc: |-
+      Additional leap parameter files to load with loadAmberPrep Leap command
+      Type: string
+      File type: input
+      Accepted formats: in, leapin, txt, zip
+      Example file: null
+    type: File?
+    format:
+    - edam:format_2330
+    - edam:format_2330
+    - edam:format_2330
+    - edam:format_3987
+    inputBinding:
+      prefix: --input_prep_path
 
   input_source_path:
     label: Additional leap command files to load with source Leap command

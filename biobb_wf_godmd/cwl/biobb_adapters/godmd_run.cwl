@@ -12,7 +12,7 @@ baseCommand: godmd_run
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_godmd:4.1.0--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_godmd:5.2.1--pyhdfd78af_0
 
 inputs:
   input_pdb_orig_path:
@@ -22,7 +22,7 @@ inputs:
       Type: string
       File type: input
       Accepted formats: pdb
-      Example file: https://github.com/bioexcel/biobb_godmd/raw/master/biobb_godmd/test/data/godmd/1ake_A.pdb
+      Example file: https://github.com/bioexcel/biobb_godmd/raw/main/biobb_godmd/test/data/godmd/1ake_A.pdb
     type: File
     format:
     - edam:format_1476
@@ -37,7 +37,7 @@ inputs:
       Type: string
       File type: input
       Accepted formats: pdb
-      Example file: https://github.com/bioexcel/biobb_godmd/raw/master/biobb_godmd/test/data/godmd/4ake_A.pdb
+      Example file: https://github.com/bioexcel/biobb_godmd/raw/main/biobb_godmd/test/data/godmd/4ake_A.pdb
     type: File
     format:
     - edam:format_1476
@@ -53,7 +53,7 @@ inputs:
       Type: string
       File type: input
       Accepted formats: aln, txt
-      Example file: https://github.com/bioexcel/biobb_godmd/raw/master/biobb_godmd/test/data/godmd/1ake_A.aln
+      Example file: https://github.com/bioexcel/biobb_godmd/raw/main/biobb_godmd/test/data/godmd/1ake_A.aln
     type: File
     format:
     - edam:format_2330
@@ -70,7 +70,7 @@ inputs:
       Type: string
       File type: input
       Accepted formats: aln, txt
-      Example file: https://github.com/bioexcel/biobb_godmd/raw/master/biobb_godmd/test/data/godmd/4ake_A.aln
+      Example file: https://github.com/bioexcel/biobb_godmd/raw/main/biobb_godmd/test/data/godmd/4ake_A.aln
     type: File
     format:
     - edam:format_2330
@@ -86,7 +86,7 @@ inputs:
       Type: string
       File type: output
       Accepted formats: log, out, txt, o
-      Example file: https://github.com/bioexcel/biobb_godmd/raw/master/biobb_godmd/test/reference/godmd/godmd.log
+      Example file: https://github.com/bioexcel/biobb_godmd/raw/main/biobb_godmd/test/reference/godmd/godmd.log
     type: string
     format:
     - edam:format_2330
@@ -105,7 +105,7 @@ inputs:
       Type: string
       File type: output
       Accepted formats: log, out, txt, o
-      Example file: https://github.com/bioexcel/biobb_godmd/raw/master/biobb_godmd/test/reference/godmd/godmd_ene.out
+      Example file: https://github.com/bioexcel/biobb_godmd/raw/main/biobb_godmd/test/reference/godmd/godmd_ene.out
     type: string
     format:
     - edam:format_2330
@@ -124,7 +124,7 @@ inputs:
       Type: string
       File type: output
       Accepted formats: trj, crd, mdcrd, x
-      Example file: https://github.com/bioexcel/biobb_godmd/raw/master/biobb_godmd/test/reference/godmd/godmd_trj.mdcrd
+      Example file: https://github.com/bioexcel/biobb_godmd/raw/main/biobb_godmd/test/reference/godmd/godmd_trj.mdcrd
     type: string
     format:
     - edam:format_3878
@@ -143,7 +143,7 @@ inputs:
       Type: string
       File type: output
       Accepted formats: pdb
-      Example file: https://github.com/bioexcel/biobb_godmd/raw/master/biobb_godmd/test/reference/godmd/godmd_pdb.pdb
+      Example file: https://github.com/bioexcel/biobb_godmd/raw/main/biobb_godmd/test/reference/godmd/godmd_pdb.pdb
     type: string
     format:
     - edam:format_1476
@@ -159,7 +159,7 @@ inputs:
       Type: string
       File type: input
       Accepted formats: in, txt
-      Example file: https://github.com/bioexcel/biobb_godmd/raw/master/biobb_godmd/test/data/godmd/params.in
+      Example file: https://github.com/bioexcel/biobb_godmd/raw/main/biobb_godmd/test/data/godmd/params.in
     type: File?
     format:
     - edam:format_2330

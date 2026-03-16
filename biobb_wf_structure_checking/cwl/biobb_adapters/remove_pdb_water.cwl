@@ -13,7 +13,7 @@ baseCommand: remove_pdb_water
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_structure_utils:4.1.0--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_structure_utils:5.2.1--pyhdfd78af_0
 
 inputs:
   input_pdb_path:

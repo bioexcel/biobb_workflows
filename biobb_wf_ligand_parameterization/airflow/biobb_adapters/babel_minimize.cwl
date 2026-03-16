@@ -12,7 +12,7 @@ baseCommand: babel_minimize
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_chemistry:4.1.0--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_chemistry:5.2.1--pyhdfd78af_1
 
 inputs:
   input_path:
@@ -22,7 +22,7 @@ inputs:
       Type: string
       File type: input
       Accepted formats: pdb, mol2
-      Example file: https://github.com/bioexcel/biobb_chemistry/raw/master/biobb_chemistry/test/data/babel/babel.minimize.pdb
+      Example file: https://github.com/bioexcel/biobb_chemistry/raw/master/biobb_chemistry/test/data/babelm/babel.minimize.pdb
     type: File
     format:
     - edam:format_1476
@@ -38,7 +38,7 @@ inputs:
       Type: string
       File type: output
       Accepted formats: pdb, mol2
-      Example file: https://github.com/bioexcel/biobb_chemistry/raw/master/biobb_chemistry/test/reference/babel/ref_babel.minimize.pdb
+      Example file: https://github.com/bioexcel/biobb_chemistry/raw/master/biobb_chemistry/test/reference/babelm/ref_babel.minimize.pdb
     type: string
     format:
     - edam:format_1476

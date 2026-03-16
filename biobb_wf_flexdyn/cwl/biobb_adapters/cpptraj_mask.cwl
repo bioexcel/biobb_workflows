@@ -13,7 +13,7 @@ baseCommand: cpptraj_mask
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_analysis:4.1.0--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_analysis:5.2.1--pyhdfd78af_0
 
 inputs:
   input_top_path:
@@ -115,7 +115,7 @@ outputs:
     type: File
     outputBinding:
       glob: $(inputs.output_cpptraj_path)
-    format: edam:format_1476
+    format: edam:format_3878
 
 $namespaces:
   edam: https://edamontology.org/

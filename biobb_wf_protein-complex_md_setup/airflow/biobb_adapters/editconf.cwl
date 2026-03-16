@@ -6,13 +6,13 @@ class: CommandLineTool
 label: Wrapper class for the GROMACS editconf module.
 
 doc: |-
-  The GROMACS solvate module generates a box around the selected structure.
+  The GROMACS editconf converts generic structure format to .gro, .g96 or .pdb.
 
 baseCommand: editconf
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_gromacs:4.1.1--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_gromacs:5.2.1--pyhdfd78af_0
 
 inputs:
   input_gro_path:

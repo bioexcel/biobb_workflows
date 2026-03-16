@@ -6,13 +6,13 @@ class: CommandLineTool
 label: Fix alternate locations from residues.
 
 doc: |-
-  None
+  Fix alternate locations using the altlocs list or occupancy.
 
 baseCommand: fix_altlocs
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_model:4.1.0--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_model:5.2.1--pyhdfd78af_0
 
 inputs:
   input_pdb_path:
