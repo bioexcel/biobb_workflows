@@ -71,6 +71,7 @@ CMD ["\
             cp /data/\"$USER_PY\" /app/workflow.py; \
         fi; \
         mkdir -p /data/wf_python; \
+        cp /data/antibody_actpass.txt /data/*.pdb /data/wf_python/; \
         cd /data/wf_python; \
         conda run --no-capture-output -n $REPOSITORY python /app/workflow.py --config /data/workflow.yml; \
     else \
