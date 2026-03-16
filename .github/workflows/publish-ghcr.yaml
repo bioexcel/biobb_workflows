@@ -57,15 +57,15 @@ jobs:
       #     docker rmi ghcr.io/bioexcel/biobb_wf_amber_md_setup_lig:latest
       #     docker system prune -f
 
-      - name: Build and push biobb_wf_autoencoder image
-        run: |
-          cd biobb_wf_autoencoder/docker
-          docker build --build-arg REPO=biobb_wf_autoencoder -t ghcr.io/bioexcel/biobb_wf_autoencoder:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_autoencoder:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_autoencoder:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_autoencoder:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_autoencoder:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_autoencoder:latest
-          docker system prune -f
+      # - name: Build and push biobb_wf_autoencoder image
+      #   run: |
+      #     cd biobb_wf_autoencoder/docker
+      #     docker build --build-arg REPO=biobb_wf_autoencoder -t ghcr.io/bioexcel/biobb_wf_autoencoder:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_autoencoder:latest .
+      #     docker push ghcr.io/bioexcel/biobb_wf_autoencoder:${{ env.VERSION }}
+      #     docker push ghcr.io/bioexcel/biobb_wf_autoencoder:latest
+      #     docker rmi ghcr.io/bioexcel/biobb_wf_autoencoder:${{ env.VERSION }}
+      #     docker rmi ghcr.io/bioexcel/biobb_wf_autoencoder:latest
+      #     docker system prune -f
 
       # - name: Build and push biobb_wf_cmip image
       #   run: |
@@ -117,15 +117,15 @@ jobs:
       #     docker rmi ghcr.io/bioexcel/biobb_wf_godmd:latest
       #     docker system prune -f
 
-      # - name: Build and push biobb_wf_haddock image
-      #   run: |
-      #     cd biobb_wf_haddock/docker
-      #     docker build --build-arg REPO=biobb_wf_haddock -t ghcr.io/bioexcel/biobb_wf_haddock:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_haddock:latest .
-      #     docker push ghcr.io/bioexcel/biobb_wf_haddock:${{ env.VERSION }}
-      #     docker push ghcr.io/bioexcel/biobb_wf_haddock:latest
-      #     docker rmi ghcr.io/bioexcel/biobb_wf_haddock:${{ env.VERSION }}
-      #     docker rmi ghcr.io/bioexcel/biobb_wf_haddock:latest
-      #     docker system prune -f
+      - name: Build and push biobb_wf_haddock image
+        run: |
+          cd biobb_wf_haddock/docker
+          docker build --build-arg REPO=biobb_wf_haddock -t ghcr.io/bioexcel/biobb_wf_haddock:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_haddock:latest .
+          docker push ghcr.io/bioexcel/biobb_wf_haddock:${{ env.VERSION }}
+          docker push ghcr.io/bioexcel/biobb_wf_haddock:latest
+          docker rmi ghcr.io/bioexcel/biobb_wf_haddock:${{ env.VERSION }}
+          docker rmi ghcr.io/bioexcel/biobb_wf_haddock:latest
+          docker system prune -f
 
       # - name: Build and push biobb_wf_ligand_parameterization image
       #   run: |
