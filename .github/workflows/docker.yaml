@@ -2,6 +2,7 @@ on:
   push:
     paths:
       - common/docker/Dockerfile
+      - .github/workflows/docker.yaml
   workflow_dispatch:
 
 name: Dockerfile
@@ -47,7 +48,7 @@ jobs:
           sed -i '12a    rm -rf /var/lib/apt/lists/*' biobb_wf_haddock/docker/Dockerfile
           sed -i '13a\\' biobb_wf_haddock/docker/Dockerfile          
           sed -i '38a\    wget https://raw.githubusercontent.com/bioexcel/$REPOSITORY/main/$REPOSITORY/notebooks/variables.py -O /app/variables.py; \\' biobb_wf_haddock/docker/Dockerfile
-          sed -i '89a\        cp /app/variables.py \\"$dir/variables.py\\"; \' biobb_wf_haddock/docker/Dockerfile
+          sed -i '89a\        cp /app/variables.py \\"$dir/variables.py\\"; \\' biobb_wf_haddock/docker/Dockerfile
           # UNCOMMENT IF PLAIN INSTALLATION DOES NOT WORK
           # sed -i '49a# Install additional pip packages inside the conda environment' biobb_wf_haddock/docker/Dockerfile
           # sed -i '50aRUN conda run -n $REPOSITORY pip install haddock3==2025.11.0' biobb_wf_haddock/docker/Dockerfile
@@ -61,7 +62,7 @@ jobs:
           sed -i '47aENV OMP_NUM_THREADS=1' biobb_wf_mem/docker/Dockerfile
           sed -i '48aENV KMP_AFFINITY=disabled' biobb_wf_mem/docker/Dockerfile
           sed -i '49a\\' biobb_wf_mem/docker/Dockerfile
-          sed -i '89a\        cp /app/variables.py \\"$dir/variables.py\\"; \' biobb_wf_mem/docker/Dockerfile
+          sed -i '89a\        cp /app/variables.py \\"$dir/variables.py\\"; \\' biobb_wf_mem/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_pmx_tutorial/docker/Dockerfile
           sed -i '83a\        cp -r /data/pmx_tutorial \\"$dir/pmx_tutorial\\"; \\' biobb_wf_pmx_tutorial/docker/Dockerfile
           cp common/docker/Dockerfile biobb_wf_protein-complex_md_setup/docker/Dockerfile
