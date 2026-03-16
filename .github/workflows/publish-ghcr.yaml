@@ -157,15 +157,15 @@ jobs:
       #     docker rmi ghcr.io/bioexcel/biobb_wf_md_setup_mutations:latest
       #     docker system prune -f
 
-      - name: Build and push biobb_wf_mem image
-        run: |
-          cd biobb_wf_mem/docker
-          docker build --build-arg REPO=biobb_wf_mem -t ghcr.io/bioexcel/biobb_wf_mem:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_mem:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_mem:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_mem:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_mem:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_mem:latest
-          docker system prune -f
+      # - name: Build and push biobb_wf_mem image
+      #   run: |
+      #     cd biobb_wf_mem/docker
+      #     docker build --build-arg REPO=biobb_wf_mem -t ghcr.io/bioexcel/biobb_wf_mem:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_mem:latest .
+      #     docker push ghcr.io/bioexcel/biobb_wf_mem:${{ env.VERSION }}
+      #     docker push ghcr.io/bioexcel/biobb_wf_mem:latest
+      #     docker rmi ghcr.io/bioexcel/biobb_wf_mem:${{ env.VERSION }}
+      #     docker rmi ghcr.io/bioexcel/biobb_wf_mem:latest
+      #     docker system prune -f
 
       # - name: Build and push biobb_wf_pmx_tutorial image
       #   run: |
