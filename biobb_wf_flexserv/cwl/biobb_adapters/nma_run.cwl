@@ -12,7 +12,7 @@ baseCommand: nma_run
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_flexserv:5.2.1--pypl5321hdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_flexserv:5.2.1--py312pl5321hc5e4ab4_0
 
 inputs:
   input_pdb_path:

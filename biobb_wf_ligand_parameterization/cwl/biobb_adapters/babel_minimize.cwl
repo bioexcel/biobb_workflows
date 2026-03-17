@@ -12,7 +12,7 @@ baseCommand: babel_minimize
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_chemistry:5.2.1--pyhdfd78af_1
+    dockerPull: quay.io/biocontainers/biobb_chemistry:5.2.1--pyhdfd78af_0
 
 inputs:
   input_path:
