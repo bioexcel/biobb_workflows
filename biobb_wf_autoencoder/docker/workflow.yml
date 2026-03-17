@@ -164,7 +164,7 @@ step13_gmx_rmsf3:
     xvg: xmgr
     selection: Protein
 
-step14_generate_plumed:
+step14_make_plumed:
   tool: generatePlumed
   paths:
     input_model_pth_path: dependency/step4_train_model/output_model_pth_path
