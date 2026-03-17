@@ -4,14 +4,14 @@ from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools import test_fixtures as fx
 from biobb_analysis.gromacs.gmx_image import gmx_image
-from biobb_pytorch.mdae.mdfeaturizer import MDFeaturizer
-from biobb_pytorch.mdae.build_model import buildModel
-from biobb_pytorch.mdae.train_model import trainModel
-from biobb_pytorch.mdae.evaluate_model import evaluateModel
+from biobb_pytorch.mdae.mdfeaturizer import mdfeaturizer
+from biobb_pytorch.mdae.build_model import build_model
+from biobb_pytorch.mdae.train_model import train_model
+from biobb_pytorch.mdae.evaluate_model import evaluate_model
 from biobb_gromacs.gromacs.make_ndx import make_ndx
 from biobb_analysis.gromacs.gmx_rmsf import gmx_rmsf
 from biobb_pytorch.mdae.feat2traj import feat2traj
-from biobb_pytorch.mdae.make_plumed import generatePlumed
+from biobb_pytorch.mdae.make_plumed import make_plumed
 
 global_work_dir = None
 
@@ -37,7 +37,7 @@ def step2_mdfeaturizer1(config, system=None):
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    MDFeaturizer(**global_paths["step2_mdfeaturizer1"], properties=global_prop["step2_mdfeaturizer1"])
+    mdfeaturizer(**global_paths["step2_mdfeaturizer1"], properties=global_prop["step2_mdfeaturizer1"])
 
     assert fx.not_empty(global_paths["step2_mdfeaturizer1"]["output_dataset_pt_path"])
     assert fx.not_empty(global_paths["step2_mdfeaturizer1"]["output_stats_pt_path"])
@@ -50,7 +50,7 @@ def step3_build_model(config, system=None):
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    buildModel(**global_paths["step3_build_model"], properties=global_prop["step3_build_model"])
+    build_model(**global_paths["step3_build_model"], properties=global_prop["step3_build_model"])
 
     assert fx.not_empty(global_paths["step3_build_model"]["output_model_pth_path"])
 
@@ -62,7 +62,7 @@ def step4_train_model(config, system=None):
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    trainModel(**global_paths["step4_train_model"], properties=global_prop["step4_train_model"])
+    train_model(**global_paths["step4_train_model"], properties=global_prop["step4_train_model"])
 
     assert fx.not_empty(global_paths["step4_train_model"]["output_model_pth_path"])
     assert fx.not_empty(global_paths["step4_train_model"]["output_metrics_npz_path"])
@@ -87,7 +87,7 @@ def step6_mdfeaturizer2(config, system=None):
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    MDFeaturizer(**global_paths["step6_mdfeaturizer2"], properties=global_prop["step6_mdfeaturizer2"])
+    mdfeaturizer(**global_paths["step6_mdfeaturizer2"], properties=global_prop["step6_mdfeaturizer2"])
 
     assert fx.not_empty(global_paths["step6_mdfeaturizer2"]["output_dataset_pt_path"])
     assert fx.not_empty(global_paths["step6_mdfeaturizer2"]["output_stats_pt_path"])
@@ -100,7 +100,7 @@ def step7_evaluate_model(config, system=None):
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    evaluateModel(**global_paths["step7_evaluate_model"], properties=global_prop["step7_evaluate_model"])
+    evaluate_model(**global_paths["step7_evaluate_model"], properties=global_prop["step7_evaluate_model"])
 
     assert fx.not_empty(global_paths["step7_evaluate_model"]["output_results_npz_path"])
 
@@ -178,19 +178,19 @@ def step13_gmx_rmsf3(config, system=None):
     assert fx.not_empty(global_paths["step13_gmx_rmsf3"]["output_xvg_path"])
 
 
-def step14_generate_plumed(config, remove=False, system=None):
+def step14_make_plumed(config, remove=False, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    generatePlumed(**global_paths["step14_generate_plumed"], properties=global_prop["step14_generate_plumed"])
+    make_plumed(**global_paths["step14_make_plumed"], properties=global_prop["step14_make_plumed"])
 
-    assert fx.not_empty(global_paths["step14_generate_plumed"]["output_model_ptc_path"])
-    assert fx.not_empty(global_paths["step14_generate_plumed"]["output_plumed_dat_path"])
-    assert fx.not_empty(global_paths["step14_generate_plumed"]["output_features_dat_path"])
-    assert fx.compare_size(global_paths["step14_generate_plumed"]["output_plumed_dat_path"], f'reference/step14_generate_plumed/{Path(global_paths["step14_generate_plumed"]["output_plumed_dat_path"]).name}', 10)
+    assert fx.not_empty(global_paths["step14_make_plumed"]["output_model_ptc_path"])
+    assert fx.not_empty(global_paths["step14_make_plumed"]["output_plumed_dat_path"])
+    assert fx.not_empty(global_paths["step14_make_plumed"]["output_features_dat_path"])
+    assert fx.compare_size(global_paths["step14_make_plumed"]["output_plumed_dat_path"], f'reference/step14_make_plumed/{Path(global_paths["step14_make_plumed"]["output_plumed_dat_path"]).name}', 10)
 
     if remove:
         tmp_files = [conf.get_working_dir_path()]
@@ -263,5 +263,5 @@ def test_step13_gmx_rmsf3(config_path, system):
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step14_generate_plumed(config_path, remove_flag, system):
-    step14_generate_plumed(config_path, remove_flag, system)
+def test_step14_make_plumed(config_path, remove_flag, system):
+    step14_make_plumed(config_path, remove_flag, system)
