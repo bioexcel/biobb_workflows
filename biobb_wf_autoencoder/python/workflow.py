@@ -5,14 +5,14 @@ import argparse
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_analysis.gromacs.gmx_image import gmx_image
-from biobb_pytorch.mdae.mdfeaturizer import MDFeaturizer
-from biobb_pytorch.mdae.build_model import buildModel
-from biobb_pytorch.mdae.train_model import trainModel
-from biobb_pytorch.mdae.evaluate_model import evaluateModel
+from biobb_pytorch.mdae.mdfeaturizer import mdfeaturizer
+from biobb_pytorch.mdae.build_model import build_model
+from biobb_pytorch.mdae.train_model import train_model
+from biobb_pytorch.mdae.evaluate_model import evaluate_model
 from biobb_gromacs.gromacs.make_ndx import make_ndx
 from biobb_analysis.gromacs.gmx_rmsf import gmx_rmsf
 from biobb_pytorch.mdae.feat2traj import feat2traj
-from biobb_pytorch.mdae.make_plumed import generatePlumed
+from biobb_pytorch.mdae.make_plumed import make_plumed
 
 
 def main(config, system=None):
@@ -26,22 +26,22 @@ def main(config, system=None):
     gmx_image(**global_paths["step1_gmx_image1"], properties=global_prop["step1_gmx_image1"])
 
     global_log.info("step2_mdfeaturizer1: Featurize the train trajectory")
-    MDFeaturizer(**global_paths["step2_mdfeaturizer1"], properties=global_prop["step2_mdfeaturizer1"])
+    mdfeaturizer(**global_paths["step2_mdfeaturizer1"], properties=global_prop["step2_mdfeaturizer1"])
 
     global_log.info("step3_build_model: Build the model")
-    buildModel(**global_paths["step3_build_model"], properties=global_prop["step3_build_model"])
+    build_model(**global_paths["step3_build_model"], properties=global_prop["step3_build_model"])
 
     global_log.info("step4_train_model: Train the model")
-    trainModel(**global_paths["step4_train_model"], properties=global_prop["step4_train_model"])
+    train_model(**global_paths["step4_train_model"], properties=global_prop["step4_train_model"])
 
     global_log.info("step5_gmx_image2: Fit the test trajectory to the apo structure")
     gmx_image(**global_paths["step5_gmx_image2"], properties=global_prop["step5_gmx_image2"])
 
     global_log.info("step6_mdfeaturizer2: Featurize the test trajectory")
-    MDFeaturizer(**global_paths["step6_mdfeaturizer2"], properties=global_prop["step6_mdfeaturizer2"])
+    mdfeaturizer(**global_paths["step6_mdfeaturizer2"], properties=global_prop["step6_mdfeaturizer2"])
 
     global_log.info("step7_evaluate_model: Evaluate the model")
-    evaluateModel(**global_paths["step7_evaluate_model"], properties=global_prop["step7_evaluate_model"])
+    evaluate_model(**global_paths["step7_evaluate_model"], properties=global_prop["step7_evaluate_model"])
 
     global_log.info("step8_make_ndx1: Train Index NDX file generation")
     make_ndx(**global_paths["step8_make_ndx1"], properties=global_prop["step8_make_ndx1"])
@@ -61,8 +61,8 @@ def main(config, system=None):
     global_log.info("step13_gmx_rmsf3: Original Holo vs Reconstructed Holo Trajectories")
     gmx_rmsf(**global_paths["step13_gmx_rmsf3"], properties=global_prop["step13_gmx_rmsf3"])
 
-    global_log.info("step14_generate_plumed: Extract CV & Generate Plumed File")
-    generatePlumed(**global_paths["step14_generate_plumed"], properties=global_prop["step14_generate_plumed"])
+    global_log.info("step14_make_plumed: Extract CV & Generate Plumed File")
+    make_plumed(**global_paths["step14_make_plumed"], properties=global_prop["step14_make_plumed"])
 
     elapsed_time = time.time() - start_time
     global_log.info('')

@@ -15,7 +15,7 @@ step1_gmx_image1:
     fit: rot+trans
 
 step2_mdfeaturizer1:
-  tool: MDFeaturizer
+  tool: mdfeaturizer
   paths:
     input_trajectory_path: dependency/step1_gmx_image1/output_traj_path
     input_topology_path: file:str_in.pdb
@@ -28,7 +28,7 @@ step2_mdfeaturizer1:
     disable_logs: True
 
 step3_build_model:
-  tool: buildModel
+  tool: build_model
   paths:
     input_stats_pt_path: dependency/step2_mdfeaturizer1/output_stats_pt_path
     output_model_pth_path: model.pth
@@ -54,7 +54,7 @@ step3_build_model:
         lr: 0.00001
 
 step4_train_model:
-  tool: trainModel
+  tool: train_model
   paths:
     input_dataset_pt_path: dependency/step2_mdfeaturizer1/output_dataset_pt_path
     input_model_pth_path: dependency/step3_build_model/output_model_pth_path
@@ -86,7 +86,7 @@ step5_gmx_image2:
     fit: rot+trans
 
 step6_mdfeaturizer2:
-  tool: MDFeaturizer
+  tool: mdfeaturizer
   paths:
     input_trajectory_path: dependency/step5_gmx_image2/output_traj_path
     input_topology_path: file:test_str_in.pdb
@@ -98,7 +98,7 @@ step6_mdfeaturizer2:
     disable_sandbox: True
 
 step7_evaluate_model:
-  tool: evaluateModel
+  tool: evaluate_model
   paths:
     input_model_pth_path: dependency/step4_train_model/output_model_pth_path
     input_dataset_pt_path: dependency/step2_mdfeaturizer1/output_dataset_pt_path
@@ -164,8 +164,8 @@ step13_gmx_rmsf3:
     xvg: xmgr
     selection: Protein
 
-step14_generate_plumed:
-  tool: generatePlumed
+step14_make_plumed:
+  tool: make_plumed
   paths:
     input_model_pth_path: dependency/step4_train_model/output_model_pth_path
     input_ndx_path: dependency/step8_make_ndx1/output_ndx_path
