@@ -1,0 +1,79 @@
+step1_gmx_image1_input_traj_path:
+  class: File
+  path: trajectory.xtc
+  format: https://edamontology.org/format_3875
+step1_gmx_image1_input_top_path:
+  class: File
+  path: structure.pdb
+  format: https://edamontology.org/format_1476
+step1_gmx_image1_output_traj_path: structure_fit.xtc
+step1_gmx_image1_config: '{"gmx_image": {"fit_selection": "DPPC", "output_selection": "System", "center": false, "fit": "rot+trans"}}'
+step2_gmx_image2_input_top_path:
+  class: File
+  path: structure.pdb
+  format: https://edamontology.org/format_1476
+step2_gmx_image2_output_traj_path: structure_fit2.xtc
+step2_gmx_image2_config: '{"gmx_image": {"fit_selection": "Backbone", "output_selection": "System", "center": false, "fit": "transxy"}}'
+step3_fatslim_membranes_input_traj_path:
+  class: File
+  path: trajectory.xtc
+  format: https://edamontology.org/format_3875
+step3_fatslim_membranes_input_top_path:
+  class: File
+  path: structure.pdb
+  format: https://edamontology.org/format_1476
+step3_fatslim_membranes_output_ndx_path: leaflets.ndx
+step3_fatslim_membranes_config: '{"fatslim_membranes": {"selection": "(resname DPPC and element P)", "cutoff": 2.2, "ignore_no_box": true}}'
+step4_lpp_assign_leaflets_input_top_path:
+  class: File
+  path: structure.pdb
+  format: https://edamontology.org/format_1476
+step4_lpp_assign_leaflets_output_leaflets_path: leaflets_data.csv
+step4_lpp_assign_leaflets_config: '{"lpp_assign_leaflets": {"lipid_sel": "(resname DPPC and element P)", "steps": 1}}'
+step5_lpp_zpositions1_input_top_path:
+  class: File
+  path: structure.pdb
+  format: https://edamontology.org/format_1476
+step5_lpp_zpositions1_output_positions_path: zpositions.csv
+step5_lpp_zpositions1_config: '{"lpp_zpositions": {"lipid_sel": "(resname DPPC and element P)", "steps": 1, "height_sel": "(resname DPPC and element P)", "ignore_no_box": true}}'
+step6_lpp_zpositions2_input_top_path:
+  class: File
+  path: structure.pdb
+  format: https://edamontology.org/format_1476
+step6_lpp_zpositions2_output_positions_path: zpositions_around.csv
+step6_lpp_zpositions2_config: '{"lpp_zpositions": {"lipid_sel": "(resname DPPC and element P)", "steps": 1, "height_sel": "(resname DPPC and element P) and (cyzone 50 70 -50 protein)", "ignore_no_box": true}}'
+step7_gorder_aa_input_traj_path:
+  class: File
+  path: trajectory.xtc
+  format: https://edamontology.org/format_3875
+step7_gorder_aa_input_top_path:
+  class: File
+  path: topology.tpr
+  format: https://edamontology.org/format_2333
+step7_gorder_aa_output_order_path: order.csv
+step7_gorder_aa_config: '{"gorder_aa": {"handle_pbc": false}}'
+step8_fatslim_apl_input_top_path:
+  class: File
+  path: structure.pdb
+  format: https://edamontology.org/format_1476
+step8_fatslim_apl_output_csv_path: apl.csv
+step8_fatslim_apl_config: '{"fatslim_apl": {"lipid_selection": "(resname DPPC and element P)", "protein_selection": "protein and not element H", "ignore_no_box": true}}'
+step9_cpptraj_density_input_top_path:
+  class: File
+  path: structure.pdb
+  format: https://edamontology.org/format_1476
+step9_cpptraj_density_output_cpptraj_path: density.dat
+step9_cpptraj_density_config: '{"cpptraj_density": {"mask": ":DPP !:DPP :DPP@P8", "steps": 1}}'
+step10_mda_hole_input_top_path:
+  class: File
+  path: structure.pdb
+  format: https://edamontology.org/format_1476
+step10_mda_hole_output_hole_path: hole.vmd
+step10_mda_hole_output_csv_path: hole_profile.csv
+step10_mda_hole_config: '{"mda_hole": {"select": "protein", "steps": 20, "sample": 0.1}}'
+step11_lpp_flip_flop_input_top_path:
+  class: File
+  path: structure.pdb
+  format: https://edamontology.org/format_1476
+step11_lpp_flip_flop_output_flip_flop_path: flip_flop.csv
+step11_lpp_flip_flop_config: '{"lpp_flip_flop": {"lipid_sel": "(resname DPPC and element P)", "steps": 1, "frame_cutoff": 2}}'

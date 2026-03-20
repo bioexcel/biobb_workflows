@@ -2,7 +2,8 @@
 cwlVersion: v1.0
 class: Workflow
 label: Macromolecular Flexibility
-doc: This tutorial aims to illustrate the process of generating protein conformational ensembles from 3D structures and analysing its molecular flexibility, step by step.
+doc: |-
+  This tutorial aims to illustrate the process of generating protein conformational ensembles from 3D structures and analysing its molecular flexibility, step by step.
 inputs:
   step0_extract_atoms_input_structure_path:
     label: Input file

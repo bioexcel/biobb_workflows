@@ -2,7 +2,8 @@
 cwlVersion: v1.0
 class: Workflow
 label: Protein conformational transitions
-doc: This tutorial aims to illustrate the process of computing a conformational transition between two known structural conformations of a protein, step by step.
+doc: |-
+  This tutorial aims to illustrate the process of computing a conformational transition between two known structural conformations of a protein, step by step.
 inputs:
   step0_extract_chain_input_structure_path:
     label: Input file

@@ -394,7 +394,7 @@ outputs:
     doc: Path to the output processed trajectory.
     type: File
     outputSource: step3_cpptraj_mask/output_cpptraj_path
-
+  
   # INIT COMMENT IN CASE OF EXECUTION WITH MAC ARM
   step4_concoord_dist_out1:
     label: output_pdb_path
@@ -676,7 +676,7 @@ steps:
       output_cpptraj_path: step3_cpptraj_mask_output_cpptraj_path
     out:
     - output_cpptraj_path
-
+  
   # INIT COMMENT IN CASE OF EXECUTION WITH MAC ARM
   step4_concoord_dist:
     label: concoord_dist

@@ -1,0 +1,85 @@
+step1_gmx_image1_input_traj_path:
+  class: File
+  path: trj_in.xtc
+  format: https://edamontology.org/format_3875
+step1_gmx_image1_input_top_path:
+  class: File
+  path: str_in.pdb
+  format: https://edamontology.org/format_1476
+step1_gmx_image1_output_traj_path: trj_in_fit.xtc
+step1_gmx_image1_config: '{"properties": {"fit_selection": "Backbone", "output_selection": "System", "center": false, "fit": "rot+trans"}}'
+step2_mdfeaturizer1_input_topology_path:
+  class: File
+  path: str_in.pdb
+  format: https://edamontology.org/format_1476
+step2_mdfeaturizer1_output_dataset_pt_path: apo.pt
+step2_mdfeaturizer1_output_stats_pt_path: apo_stats.pt
+step2_mdfeaturizer1_config: '{"properties": {"cartesian": {"selection": "name CA"}, "disable_sandbox": true, "disable_logs": true}}'
+step3_build_model_output_model_pth_path: model.pth
+step3_build_model_config: '{"properties": {"model_type": "AutoEncoder", "n_cvs": 3, "encoder_layers": [933, 747, 561, 375, 189], "decoder_layers": [189, 375, 561, 747, 933], "options": {"norm_in": {"mode": "min_max"}, "encoder": {"activation": "relu", "batchnorm": true, "dropout": 0.0, "last_layer_activation": false}, "decoder": {"activation": "relu", "batchnorm": true, "dropout": 0.0, "last_layer_activation": "sigmoid"}, "optimizer": {"lr": 1e-05}}}}'
+step4_train_model_output_model_pth_path: apo_trained_model.pth
+step4_train_model_output_metrics_npz_path: model_training_metrics.npz
+step4_train_model_config: '{"properties": {"Dataset": {"batch_size": 128, "shuffle": true, "split": {"random_split": true, "train_prop": 0.9, "val_prop": 0.1}}, "Trainer": {"max_epochs": 100, "enable_checkpointing": false, "callbacks": {}}}}'
+step5_gmx_image2_input_traj_path:
+  class: File
+  path: test_trj_in.xtc
+  format: https://edamontology.org/format_3875
+step5_gmx_image2_input_top_path:
+  class: File
+  path: str_in.pdb
+  format: https://edamontology.org/format_1476
+step5_gmx_image2_output_traj_path: test_trj_in_fit.xtc
+step5_gmx_image2_config: '{"properties": {"fit_selection": "Backbone", "output_selection": "System", "center": false, "fit": "rot+trans"}}'
+step6_mdfeaturizer2_input_topology_path:
+  class: File
+  path: test_str_in.pdb
+  format: https://edamontology.org/format_1476
+step6_mdfeaturizer2_output_dataset_pt_path: holo.pt
+step6_mdfeaturizer2_output_stats_pt_path: holo_stats.pt
+step6_mdfeaturizer2_config: '{"properties": {"cartesian": {"selection": "name CA"}, "disable_sandbox": true}}'
+step7_evaluate_model_output_results_npz_path: apo_eval_results.npz
+step7_evaluate_model_config: '{"properties": {"Dataset": {"batch_size": 64}}}'
+step8_make_ndx1_input_structure_path:
+  class: File
+  path: str_in.pdb
+  format: https://edamontology.org/format_1476
+step8_make_ndx1_output_ndx_path: apo.ndx
+step8_make_ndx1_config: '{"properties": {"selection": "a CA"}}'
+step9_make_ndx2_input_structure_path:
+  class: File
+  path: test_str_in.pdb
+  format: https://edamontology.org/format_1476
+step9_make_ndx2_output_ndx_path: holo.ndx
+step9_make_ndx2_config: '{"properties": {"selection": "a CA"}}'
+step10_gmx_rmsf1_input_structure_path:
+  class: File
+  path: str_in.pdb
+  format: https://edamontology.org/format_1476
+step10_gmx_rmsf1_input_traj_path:
+  class: File
+  path: trj_in.xtc
+  format: https://edamontology.org/format_3875
+step10_gmx_rmsf1_output_xvg_path: apo_rmsf.xvg
+step10_gmx_rmsf1_config: '{"properties": {"xvg": "xmgr", "selection": "Protein"}}'
+step11_gmx_rmsf2_input_structure_path:
+  class: File
+  path: test_str_in.pdb
+  format: https://edamontology.org/format_1476
+step11_gmx_rmsf2_input_traj_path:
+  class: File
+  path: test_trj_in.xtc
+  format: https://edamontology.org/format_3875
+step11_gmx_rmsf2_output_xvg_path: holo_rmsf.xvg
+step11_gmx_rmsf2_config: '{"properties": {"xvg": "xmgr", "selection": "Protein"}}'
+step12_feat2traj_output_traj_path: holo_recon.xtc
+step12_feat2traj_output_top_path: holo_recon.pdb
+step13_gmx_rmsf3_output_xvg_path: holo_recon_rmsf.xvg
+step13_gmx_rmsf3_config: '{"properties": {"xvg": "xmgr", "selection": "Protein"}}'
+step14_make_plumed_input_reference_pdb_path:
+  class: File
+  path: str_in.pdb
+  format: https://edamontology.org/format_1476
+step14_make_plumed_output_model_ptc_path: plumed_model.ptc
+step14_make_plumed_output_plumed_dat_path: plumed.dat
+step14_make_plumed_output_features_dat_path: features.dat
+step14_make_plumed_config: '{"properties": {"additional_actions": [{"name": "ENERGY", "label": "ene"}], "fit_to_template": {"STRIDE": 1, "TYPE": "OPTIMAL"}, "group": {"label": "backbone", "selection": "backbone"}, "bias": [{"name": "METAD", "label": "bias", "params": {"ARG": "cv.*", "PACE": 500, "HEIGHT": 1.2, "SIGMA": 0.35, "FILE": "HILLS", "BIASFACTOR": 8}}], "prints": {"ARG": "cv.*,bias.*", "STRIDE": 1, "FILE": "COLVAR"}}}'
