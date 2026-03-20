@@ -1,4 +1,4 @@
-config: '{"xvg": "xmgr", "selection": "Protein-H"}'
+config: '{"properties": {"xvg": "xmgr", "selection": "Backbone"}}'
 input_index_path:
   class: File
   format: https://edamontology.org/format_2033

@@ -1,0 +1,16 @@
+config: '{"properties": {"simulation_type": "min_vacuo", "mdin": {"maxcyc": 500, "ntwx": 100, "ntpr": 5, "ntr": 1, "restraintmask": "\":*&!@H=\"", "restraint_wt": 50.0}}}'
+input_crd_path:
+  class: File
+  format: https://edamontology.org/format_3878
+  path: step2_leap_gen_top/output_crd_path
+input_ref_path:
+  class: File
+  format: https://edamontology.org/format_3878
+  path: step2_leap_gen_top/output_crd_path
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_3881
+  path: step2_leap_gen_top/output_top_path
+output_log_path: sander.h_min.log
+output_rst_path: sander.h_min.rst
+output_traj_path: sander.h_min.x

@@ -1,0 +1,5 @@
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_3881
+  path: step3_leap_add_ions/output_top_path
+output_top_path: structure.leap.4fs.top

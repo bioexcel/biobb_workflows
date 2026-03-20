@@ -1,0 +1,12 @@
+config: '{"properties": {"simulation_type": "free", "mdin": {"nstlim": 250000, "ntwx": 500}}}'
+input_crd_path:
+  class: File
+  format: https://edamontology.org/format_3886
+  path: step16_sander_mdrun_npt/output_rst_path
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_3881
+  path: step9_leap_add_ions/output_top_path
+output_log_path: sander.free.log
+output_rst_path: sander.free.rst
+output_traj_path: sander.free.netcdf

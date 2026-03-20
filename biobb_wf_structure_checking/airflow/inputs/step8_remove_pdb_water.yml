@@ -1,0 +1,5 @@
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step7_reduce_remove_hydrogens/output_path
+output_pdb_path: structure.water.pdb

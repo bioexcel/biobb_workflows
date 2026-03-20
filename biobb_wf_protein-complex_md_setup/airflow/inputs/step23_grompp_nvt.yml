@@ -1,5 +1,4 @@
-config: '{"mdp": {"nsteps": 50000, "tc-grps": "Protein_Other Water_and_ions", "Define":
-  "-DPOSRES -DPOSRES_LIGAND"}, "simulation_type": "nvt"}'
+config: '{"properties": {"mdp": {"nsteps": 50000, "tc-grps": "Protein_Other Water_and_ions", "Define": "-DPOSRES -DPOSRES_LIGAND"}, "simulation_type": "nvt"}}'
 input_gro_path:
   class: File
   format: https://edamontology.org/format_2033

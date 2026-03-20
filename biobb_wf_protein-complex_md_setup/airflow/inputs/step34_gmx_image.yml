@@ -1,5 +1,4 @@
-config: '{"center_selection": "Protein_Other", "output_selection": "System", "pbc":
-  "mol", "center": true}'
+config: '{"properties": {"center_selection": "Protein_Other", "output_selection": "System", "pbc": "mol", "center": true}}'
 input_index_path:
   class: File
   format: https://edamontology.org/format_2033

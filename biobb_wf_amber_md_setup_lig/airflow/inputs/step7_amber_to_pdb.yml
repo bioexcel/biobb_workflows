@@ -1,0 +1,9 @@
+input_crd_path:
+  class: File
+  format: https://edamontology.org/format_3886
+  path: step5_sander_mdrun_min/output_rst_path
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_3881
+  path: step2_leap_gen_top/output_top_path
+output_pdb_path: structure.ambpdb.pdb

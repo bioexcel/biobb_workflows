@@ -1,0 +1,16 @@
+config: '{"properties": {"simulation_type": "nvt", "mdin": {"nstlim": 25000, "ntwx": 100, "ntr": 1, "restraintmask": "\"!:WAT,Cl-,Na+ & !@H=\"", "restraint_wt": 5.0}}}'
+input_crd_path:
+  class: File
+  format: https://edamontology.org/format_3886
+  path: step12_sander_mdrun_warm/output_rst_path
+input_ref_path:
+  class: File
+  format: https://edamontology.org/format_3886
+  path: step12_sander_mdrun_warm/output_rst_path
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_3881
+  path: step9_leap_add_ions/output_top_path
+output_log_path: sander.nvt.log
+output_rst_path: sander.nvt.rst
+output_traj_path: sander.nvt.netcdf

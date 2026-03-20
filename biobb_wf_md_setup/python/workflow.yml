@@ -235,7 +235,7 @@ step21_gmx_rgyr:
     output_xvg_path: setup.rgyr.xvg
   properties:
     xvg: xmgr
-    selection: "Protein-H"
+    selection: "Backbone"
 
 step22_rmsd_first:
   tool: gmx_rms

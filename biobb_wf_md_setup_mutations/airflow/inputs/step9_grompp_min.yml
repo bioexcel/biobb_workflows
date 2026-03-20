@@ -1,4 +1,4 @@
-config: '{"mdp": {"nsteps": 5000, "emtol": 500}, "simulation_type": "minimization"}'
+config: '{"properties": {"mdp": {"nsteps": 5000, "emtol": 500}, "simulation_type": "minimization"}}'
 input_gro_path:
   class: File
   format: https://edamontology.org/format_2033

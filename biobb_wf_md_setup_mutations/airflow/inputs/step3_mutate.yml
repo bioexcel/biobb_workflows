@@ -3,4 +3,4 @@ input_pdb_path:
   format: https://edamontology.org/format_1476
   path: step2_fix_side_chain/output_pdb_path
 output_pdb_path: mutate.pdb
-config: '{"mutation_list": "MUTATION"}'
+config: '{"properties": {"mutation_list": "MUTATION"}}'

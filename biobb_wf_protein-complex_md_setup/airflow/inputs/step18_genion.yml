@@ -1,4 +1,4 @@
-config: '{"neutral": true, "concentration": 0.05}'
+config: '{"properties": {"neutral": true, "concentration": 0.05}}'
 input_top_zip_path:
   class: File
   format: https://edamontology.org/format_3987

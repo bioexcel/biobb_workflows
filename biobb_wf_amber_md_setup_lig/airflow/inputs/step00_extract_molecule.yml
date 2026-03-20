@@ -1,0 +1,5 @@
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step000_reduce_remove_hydrogens/output_path
+output_molecule_path: protein.pdb

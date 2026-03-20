@@ -1,0 +1,6 @@
+config: '{"properties": {"molecules": [{"name": "ZN"}]}}'
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step4_fix_ssbonds/output_pdb_path
+output_molecules_path: structure.metals.pdb

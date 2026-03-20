@@ -1,4 +1,4 @@
-config: '{"xvg": "xmgr", "terms": ["Potential", "Total-Energy"]}'
+config: '{"properties": {"xvg": "xmgr", "terms": ["Potential", "Total-Energy"]}}'
 input_energy_path:
   class: File
   format: https://edamontology.org/format_2330

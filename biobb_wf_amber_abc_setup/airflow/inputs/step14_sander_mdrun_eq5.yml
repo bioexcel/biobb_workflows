@@ -1,0 +1,21 @@
+config: '{"properties": {"mdin": {"maxcyc": 1000}}}'
+input_crd_path:
+  class: File
+  format: https://edamontology.org/format_3886
+  path: step12_sander_mdrun_eq4/output_rst_path
+input_mdin_path:
+  class: File
+  format: https://edamontology.org/format_2330
+  path: ABCix_config_files/step5.in
+input_ref_path:
+  class: File
+  format: https://edamontology.org/format_3886
+  path: step12_sander_mdrun_eq4/output_rst_path
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_3881
+  path: step5_parmed_hmassrepartition/output_top_path
+output_log_path: sander.eq5.log
+output_mdinfo_path: sander.eq5.mdinfo
+output_rst_path: sander.eq5.ncrst
+output_traj_path: sander.eq5.nc

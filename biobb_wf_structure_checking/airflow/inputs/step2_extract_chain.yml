@@ -1,0 +1,6 @@
+config: '{"properties": {"chains": ["A"]}}'
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step1_extract_model/output_structure_path
+output_structure_path: structure.chains.pdb

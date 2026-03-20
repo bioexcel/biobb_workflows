@@ -1,0 +1,9 @@
+input_structure1:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step0000_cat_pdb/output_structure_path
+input_structure2:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: heteroatoms.pdb
+output_structure_path: protein.hets.pdb

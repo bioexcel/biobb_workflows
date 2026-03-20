@@ -1,0 +1,6 @@
+config: '{"properties": {"terms": ["TEMP"]}}'
+input_log_path:
+  class: File
+  format: https://edamontology.org/format_2330
+  path: step12_sander_mdrun_warm/output_log_path
+output_dat_path: sander.md.temp.dat

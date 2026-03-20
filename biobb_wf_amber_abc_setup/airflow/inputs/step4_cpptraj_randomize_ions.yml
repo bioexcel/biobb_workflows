@@ -1,0 +1,11 @@
+config: '{"properties": {"distance": 6.0, "overlap": 4.0}}'
+input_crd_path:
+  class: File
+  format: https://edamontology.org/format_3878
+  path: step3_leap_add_ions/output_crd_path
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_3881
+  path: step3_leap_add_ions/output_top_path
+output_crd_path: structure.randIons.crd
+output_pdb_path: structure.randIons.pdb

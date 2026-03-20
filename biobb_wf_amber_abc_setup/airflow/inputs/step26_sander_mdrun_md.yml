@@ -1,0 +1,21 @@
+config: '{"properties": {"mdin": {"nstlim": 25000, "ntpr": 50, "ntwx": 50}}}'
+input_crd_path:
+  class: File
+  format: https://edamontology.org/format_3886
+  path: step24_sander_mdrun_eq10/output_rst_path
+input_mdin_path:
+  class: File
+  format: https://edamontology.org/format_2330
+  path: ABCix_config_files/md.in
+input_ref_path:
+  class: File
+  format: https://edamontology.org/format_3886
+  path: step24_sander_mdrun_eq10/output_rst_path
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_3881
+  path: step5_parmed_hmassrepartition/output_top_path
+output_log_path: sander.md.log
+output_mdinfo_path: sander.md.mdinfo
+output_rst_path: sander.md.ncrst
+output_traj_path: sander.md.netcdf

@@ -1,4 +1,4 @@
-config: '{"fit_selection": "Protein", "output_selection": "System", "fit": "rot+trans"}'
+config: '{"properties": {"fit_selection": "Protein", "output_selection": "System", "fit": "rot+trans"}}'
 input_index_path:
   class: File
   format: https://edamontology.org/format_2033

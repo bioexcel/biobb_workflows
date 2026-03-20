@@ -1,4 +1,4 @@
-config: '{"simulation_type": "minimization", "maxwarn": 1, "mdp": {"nsteps": 5000}}'
+config: '{"properties": {"simulation_type": "minimization", "maxwarn": 1, "mdp": {"nsteps": 5000}}}'
 input_gro_path:
   class: File
   format: https://edamontology.org/format_2033

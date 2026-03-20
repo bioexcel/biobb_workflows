@@ -1,4 +1,4 @@
-config: '{"selection": "\"Protein\"|\"Other\""}'
+config: '{"properties": {"selection": "\"Protein\"|\"Other\""}}'
 input_structure_path:
   class: File
   format: https://edamontology.org/format_2033

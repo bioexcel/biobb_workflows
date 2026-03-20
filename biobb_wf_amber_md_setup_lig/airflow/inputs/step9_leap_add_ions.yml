@@ -1,0 +1,16 @@
+config: '{"properties": {"forcefield": ["protein.ff14SB", "DNA.bsc1", "RNA.OL3", "gaff", "water.tip3p"], "neutralise": true, "positive_ions_type": "Na+", "negative_ions_type": "Cl-", "ionic_concentration": 150, "box_type": "truncated_octahedron"}}'
+input_frcmod_path:
+  class: File
+  format: https://edamontology.org/format_3987
+  path: input_frcmod.zip
+input_lib_path:
+  class: File
+  format: https://edamontology.org/format_3987
+  path: input_lib.zip
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step8_leap_solvate/output_pdb_path
+output_crd_path: structure.ions.crd
+output_pdb_path: structure.ions.pdb
+output_top_path: structure.ions.parmtop

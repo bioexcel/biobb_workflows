@@ -1,0 +1,8 @@
+config: '{"properties": {"forcefield": ["DNA.bsc1"], "water_type": "OPCBOX", "ions_type": "ionsjc_tip4pew", "box_type": "truncated_octahedron", "distance_to_molecule": 15, "neutralise": true, "iso": true, "closeness": 0.97, "positive_ions_type": "K+"}}'
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step1_leap_gen_top/output_pdb_path
+output_crd_path: structure.solv.crd
+output_pdb_path: structure.solv.pdb
+output_top_path: structure.solv.parmtop

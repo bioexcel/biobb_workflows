@@ -1,4 +1,4 @@
-config: '{"pbc": "mol", "selection": "System"}'
+config: '{"properties": {"pbc": "mol", "selection": "System"}}'
 input_index_path:
   class: File
   format: https://edamontology.org/format_2033

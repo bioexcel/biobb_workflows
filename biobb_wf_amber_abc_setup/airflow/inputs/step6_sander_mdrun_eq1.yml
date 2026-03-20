@@ -1,0 +1,21 @@
+config: '{"properties": {"mdin": {"maxcyc": 1000, "restraintmask": ":DA,DC,DG,DT,D=3,D=5&!@H="}}}'
+input_crd_path:
+  class: File
+  format: https://edamontology.org/format_3878
+  path: step4_cpptraj_randomize_ions/output_crd_path
+input_mdin_path:
+  class: File
+  format: https://edamontology.org/format_2330
+  path: ABCix_config_files/step1.in
+input_ref_path:
+  class: File
+  format: https://edamontology.org/format_3878
+  path: step4_cpptraj_randomize_ions/output_crd_path
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_3881
+  path: step5_parmed_hmassrepartition/output_top_path
+output_log_path: sander.eq1.log
+output_mdinfo_path: sander.eq1.mdinfo
+output_rst_path: sander.eq1.ncrst
+output_traj_path: sander.eq1.nc

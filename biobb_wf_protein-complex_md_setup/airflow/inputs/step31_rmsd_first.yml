@@ -1,4 +1,4 @@
-config: '{"selection": "Protein_Other"}'
+config: '{"properties": {"selection": "Protein_Other"}}'
 input_index_path:
   class: File
   format: https://edamontology.org/format_2033

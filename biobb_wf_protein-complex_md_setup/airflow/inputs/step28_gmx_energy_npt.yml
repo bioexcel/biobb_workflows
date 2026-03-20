@@ -1,4 +1,4 @@
-config: '{"terms": ["Pressure", "Density"]}'
+config: '{"properties": {"terms": ["Pressure", "Density"]}}'
 input_energy_path:
   class: File
   format: https://edamontology.org/format_2330

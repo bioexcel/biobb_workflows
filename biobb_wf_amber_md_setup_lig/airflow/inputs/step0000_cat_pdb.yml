@@ -1,0 +1,9 @@
+input_structure1:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step00_extract_molecule/output_molecule_path
+input_structure2:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: ions.pdb
+output_structure_path: protein.ions.pdb

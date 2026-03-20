@@ -1,0 +1,14 @@
+config: '{"properties": {"mask": "backbone", "reference": "experimental"}}'
+input_exp_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step1_leap_gen_top/output_pdb_path
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_3881
+  path: step3_leap_add_ions/output_top_path
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_3878
+  path: step26_sander_mdrun_md/output_traj_path
+output_cpptraj_path: setup.rms_exp.dat

@@ -1,0 +1,5 @@
+input_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step6_remove_molecules_ligands/output_molecules_path
+output_path: structure.hydrogens.pdb

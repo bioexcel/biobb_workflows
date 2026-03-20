@@ -1,4 +1,4 @@
-config: '{"selection": "Protein-H"}'
+config: '{"properties": {"selection": "Protein-H"}}'
 input_index_path:
   class: File
   format: https://edamontology.org/format_2033

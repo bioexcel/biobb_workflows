@@ -1,0 +1,6 @@
+config: '{"properties": {"terms": ["PRES", "DENSITY"]}}'
+input_log_path:
+  class: File
+  format: https://edamontology.org/format_2330
+  path: step20_sander_mdrun_eq8/output_log_path
+output_dat_path: sander.eq8.pressure_and_density.dat

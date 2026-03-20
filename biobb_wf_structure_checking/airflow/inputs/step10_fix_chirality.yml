@@ -1,0 +1,5 @@
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step9_fix_amides/output_pdb_path
+output_pdb_path: structure.chiral.pdb

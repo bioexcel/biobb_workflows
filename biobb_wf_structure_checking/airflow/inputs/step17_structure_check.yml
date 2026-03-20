@@ -1,0 +1,5 @@
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step16_fix_pdb/output_pdb_path
+output_summary_path: structure.report_final.json

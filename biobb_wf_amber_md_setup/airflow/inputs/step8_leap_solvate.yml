@@ -1,0 +1,8 @@
+config: '{"properties": {"forcefield": ["protein.ff14SB", "DNA.bsc1", "RNA.OL3", "water.tip3p"], "water_type": "TIP3PBOX", "distance_to_molecule": 9, "box_type": "truncated_octahedron"}}'
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step7_amber_to_pdb/output_pdb_path
+output_crd_path: structure.solv.crd
+output_pdb_path: structure.solv.pdb
+output_top_path: structure.solv.parmtop

@@ -1,4 +1,4 @@
-config: '{"terms": ["Temperature"]}'
+config: '{"properties": {"terms": ["Temperature"]}}'
 input_energy_path:
   class: File
   format: https://edamontology.org/format_2330

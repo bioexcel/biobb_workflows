@@ -1,4 +1,4 @@
-config: '{"distance_to_molecule": 0.8, "box_type": "octahedron"}'
+config: '{"properties": {"distance_to_molecule": 0.8, "box_type": "octahedron"}}'
 input_gro_path:
   class: File
   format: https://edamontology.org/format_1476

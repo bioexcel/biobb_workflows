@@ -1,5 +1,4 @@
-config: '{"mdp": {"nsteps": 50000, "tc-grps": "Protein Water_and_ions"}, "simulation_type":
-  "npt"}'
+config: '{"properties": {"mdp": {"nsteps": 50000, "tc-grps": "Protein Water_and_ions"}, "simulation_type": "npt"}}'
 input_cpt_path:
   class: File
   format: https://edamontology.org/format_2333

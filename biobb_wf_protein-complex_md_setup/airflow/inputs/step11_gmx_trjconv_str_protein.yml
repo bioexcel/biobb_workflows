@@ -1,4 +1,4 @@
-config: '{"selection": "System"}'
+config: '{"properties": {"selection": "System"}}'
 input_structure_path:
   class: File
   format: https://edamontology.org/format_2033

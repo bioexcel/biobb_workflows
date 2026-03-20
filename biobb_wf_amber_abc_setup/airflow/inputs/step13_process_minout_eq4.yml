@@ -1,0 +1,6 @@
+config: '{"properties": {"terms": ["ENERGY"]}}'
+input_log_path:
+  class: File
+  format: https://edamontology.org/format_2330
+  path: step12_sander_mdrun_eq4/output_log_path
+output_dat_path: sander.eq4.energy.dat

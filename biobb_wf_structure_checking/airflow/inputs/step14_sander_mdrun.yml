@@ -1,0 +1,12 @@
+config: '{"properties": {"simulation_type": "minimization", "mdin": {"ntb": 0, "cut": 12, "maxcyc": 500, "ncyc": 50, "ntwx": 50}}}'
+input_crd_path:
+  class: File
+  format: https://edamontology.org/format_3878
+  path: step13_leap_gen_top/output_crd_path
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_3881
+  path: step13_leap_gen_top/output_top_path
+output_log_path: structure.trj.log
+output_rst_path: structure.trj.rst
+output_traj_path: structure.trj.crd

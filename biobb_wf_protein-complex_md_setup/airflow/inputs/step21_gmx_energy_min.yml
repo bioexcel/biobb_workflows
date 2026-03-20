@@ -1,4 +1,4 @@
-config: '{"terms": ["Potential"]}'
+config: '{"properties": {"terms": ["Potential"]}}'
 input_energy_path:
   class: File
   format: https://edamontology.org/format_2330

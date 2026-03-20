@@ -1,0 +1,6 @@
+config: '{"properties": {"molecules": [{"name": "SO4"}, {"name": "AP5"}]}}'
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step5_remove_molecules_ions/output_molecules_path
+output_molecules_path: structure.ligands.pdb

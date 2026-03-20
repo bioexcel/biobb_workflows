@@ -1,4 +1,4 @@
-config: '{"force_field": "amber99sb", "water_type": "tip3p"}'
+config: '{"properties": {"force_field": "amber99sb", "water_type": "tip3p"}}'
 input_pdb_path:
   class: File
   format: https://edamontology.org/format_1476

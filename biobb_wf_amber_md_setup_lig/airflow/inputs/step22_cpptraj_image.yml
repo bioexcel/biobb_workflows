@@ -1,0 +1,10 @@
+config: '{"properties": {"mask": "all-atoms", "format": "xtc"}}'
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_3881
+  path: step9_leap_add_ions/output_top_path
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_3878
+  path: step18_sander_mdrun_md/output_traj_path
+output_cpptraj_path: setup.imaged_traj.xtc

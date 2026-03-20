@@ -1,4 +1,4 @@
-config: '{"posres_name": "POSRES_LIGAND"}'
+config: '{"properties": {"posres_name": "POSRES_LIGAND"}}'
 input_itp_path:
   class: File
   format: https://edamontology.org/format_3883
