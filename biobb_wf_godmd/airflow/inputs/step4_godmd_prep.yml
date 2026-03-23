@@ -1,0 +1,11 @@
+config: '{"properties": {"gapopen": "12.0", "gapextend": "2"}}'
+input_pdb_orig_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step2_remove_molecules/output_molecules_path
+input_pdb_target_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step1_extract_chain/output_structure_path
+output_aln_orig_path: origin.aln
+output_aln_target_path: target.aln

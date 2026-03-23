@@ -1,0 +1,6 @@
+config: '{"properties": {"molecules": [{"name": "AP5"}]}}'
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step0_extract_chain/output_structure_path
+output_molecules_path: origin.chains.nolig.pdb

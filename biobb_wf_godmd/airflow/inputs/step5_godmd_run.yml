@@ -1,0 +1,21 @@
+config: '{"properties": {"godmdin": {"temp": 400}}}'
+input_aln_orig_path:
+  class: File
+  format: https://edamontology.org/format_2330
+  path: step4_godmd_prep/output_aln_orig_path
+input_aln_target_path:
+  class: File
+  format: https://edamontology.org/format_2330
+  path: step4_godmd_prep/output_aln_target_path
+input_pdb_orig_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step2_remove_molecules/output_molecules_path
+input_pdb_target_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step1_extract_chain/output_structure_path
+output_ene_path: origin-target.godmd.ene.out
+output_log_path: origin-target.godmd.log
+output_pdb_path: origin-target.godmd.pdb
+output_trj_path: origin-target.godmd.mdcrd
