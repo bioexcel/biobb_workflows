@@ -1,0 +1,14 @@
+config: '{"properties": {"xvg": "xmgr", "selection": "Protein"}}'
+input_index_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: step9_make_ndx2/output_ndx_path
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step12_feat2traj/output_top_path
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_3875
+  path: step12_feat2traj/output_traj_path
+output_xvg_path: holo_recon_rmsf.xvg

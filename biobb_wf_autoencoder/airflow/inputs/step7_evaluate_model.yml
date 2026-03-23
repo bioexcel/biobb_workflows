@@ -1,0 +1,10 @@
+config: '{"properties": {"Dataset": {"batch_size": 64}}}'
+input_dataset_pt_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: step2_mdfeaturizer1/output_dataset_pt_path
+input_model_pth_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: step4_train_model/output_model_pth_path
+output_results_npz_path: apo_eval_results.npz

@@ -1,0 +1,6 @@
+config: '{"properties": {"selection": "a CA"}}'
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: test_str_in.pdb
+output_ndx_path: holo.ndx

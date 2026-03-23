@@ -12,7 +12,7 @@ baseCommand: make_plumed
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_pytorch:5.2.2--pyhad2cae4_0
+    dockerPull: quay.io/biocontainers/biobb_pytorch:5.2.3--pyha658751_0
 
 inputs:
   input_model_pth_path:

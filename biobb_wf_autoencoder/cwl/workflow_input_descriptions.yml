@@ -11,7 +11,7 @@ step1_gmx_image1_config: '{"properties": {"fit_selection": "Backbone", "output_s
 step2_mdfeaturizer1_input_topology_path:
   class: File
   path: str_in.pdb
-  format: https://edamontology.org/format_1476
+  format: https://edamontology.org/format_2333
 step2_mdfeaturizer1_output_dataset_pt_path: apo.pt
 step2_mdfeaturizer1_output_stats_pt_path: apo_stats.pt
 step2_mdfeaturizer1_config: '{"properties": {"cartesian": {"selection": "name CA"}, "disable_sandbox": true, "disable_logs": true}}'
@@ -33,7 +33,7 @@ step5_gmx_image2_config: '{"properties": {"fit_selection": "Backbone", "output_s
 step6_mdfeaturizer2_input_topology_path:
   class: File
   path: test_str_in.pdb
-  format: https://edamontology.org/format_1476
+  format: https://edamontology.org/format_2333
 step6_mdfeaturizer2_output_dataset_pt_path: holo.pt
 step6_mdfeaturizer2_output_stats_pt_path: holo_stats.pt
 step6_mdfeaturizer2_config: '{"properties": {"cartesian": {"selection": "name CA"}, "disable_sandbox": true}}'

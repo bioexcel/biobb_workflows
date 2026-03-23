@@ -1,0 +1,20 @@
+config: '{"properties": {"additional_actions": [{"name": "ENERGY", "label": "ene"}], "fit_to_template": {"STRIDE": 1, "TYPE": "OPTIMAL"}, "group": {"label": "backbone", "selection": "backbone"}, "bias": [{"name": "METAD", "label": "bias", "params": {"ARG": "cv.*", "PACE": 500, "HEIGHT": 1.2, "SIGMA": 0.35, "FILE": "HILLS", "BIASFACTOR": 8}}], "prints": {"ARG": "cv.*,bias.*", "STRIDE": 1, "FILE": "COLVAR"}}}'
+input_model_pth_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: step4_train_model/output_model_pth_path
+input_ndx_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: step8_make_ndx1/output_ndx_path
+input_reference_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: str_in.pdb
+input_stats_pt_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: step2_mdfeaturizer1/output_stats_pt_path
+output_features_dat_path: features.dat
+output_model_ptc_path: plumed_model.ptc
+output_plumed_dat_path: plumed.dat

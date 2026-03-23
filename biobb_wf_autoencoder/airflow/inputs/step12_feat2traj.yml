@@ -1,0 +1,10 @@
+input_results_npz_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: step7_evaluate_model/output_results_npz_path
+input_stats_pt_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: step6_mdfeaturizer2/output_stats_pt_path
+output_top_path: holo_recon.pdb
+output_traj_path: holo_recon.xtc

@@ -1,0 +1,11 @@
+config: '{"properties": {"cartesian": {"selection": "name CA"}, "disable_sandbox": true, "disable_logs": true}}'
+input_topology_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: str_in.pdb
+input_trajectory_path:
+  class: File
+  format: https://edamontology.org/format_3875
+  path: step1_gmx_image1/output_traj_path
+output_dataset_pt_path: apo.pt
+output_stats_pt_path: apo_stats.pt

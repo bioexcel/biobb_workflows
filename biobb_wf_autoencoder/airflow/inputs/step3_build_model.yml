@@ -1,0 +1,6 @@
+config: '{"properties": {"model_type": "AutoEncoder", "n_cvs": 3, "encoder_layers": [933, 747, 561, 375, 189], "decoder_layers": [189, 375, 561, 747, 933], "options": {"norm_in": {"mode": "min_max"}, "encoder": {"activation": "relu", "batchnorm": true, "dropout": 0.0, "last_layer_activation": false}, "decoder": {"activation": "relu", "batchnorm": true, "dropout": 0.0, "last_layer_activation": "sigmoid"}, "optimizer": {"lr": 1e-05}}}}'
+input_stats_pt_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: step2_mdfeaturizer1/output_stats_pt_path
+output_model_pth_path: model.pth
