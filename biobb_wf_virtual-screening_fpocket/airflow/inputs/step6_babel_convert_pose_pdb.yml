@@ -1,0 +1,6 @@
+config: '{"properties": {"input_format": "pdbqt", "output_format": "pdb", "binary_path": "obabel"}}'
+input_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step5_autodock_vina_run/output_pdbqt_path
+output_path: output_model.pdb

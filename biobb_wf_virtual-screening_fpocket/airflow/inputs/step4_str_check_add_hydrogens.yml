@@ -1,0 +1,6 @@
+config: '{"properties": {"charges": true, "mode": "auto"}}'
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: protein.pdb
+output_structure_path: prep_receptor.pdbqt

@@ -1,0 +1,7 @@
+config: '{"properties": {"pocket": 8}}'
+input_pockets_zip:
+  class: File
+  format: https://edamontology.org/format_3987
+  path: all_pockets.zip
+output_pocket_pdb: fpocket_cavity.pdb
+output_pocket_pqr: fpocket_pocket.pqr

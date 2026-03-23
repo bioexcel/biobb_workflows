@@ -1,0 +1,6 @@
+config: '{"properties": {"input_format": "pdb", "output_format": "pdbqt", "flex": false, "binary_path": "obabel"}}'
+input_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: ligand.pdb
+output_path: prep_ligand.pdbqt

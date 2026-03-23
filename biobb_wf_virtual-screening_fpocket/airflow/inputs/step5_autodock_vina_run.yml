@@ -1,0 +1,14 @@
+input_box_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step2_box/output_pdb_path
+input_ligand_pdbqt_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step3_babel_convert_prep_lig/output_path
+input_receptor_pdbqt_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step4_str_check_add_hydrogens/output_structure_path
+output_log_path: output_vina.log
+output_pdbqt_path: output_vina.pdbqt
