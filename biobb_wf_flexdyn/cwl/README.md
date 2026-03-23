@@ -33,6 +33,10 @@ After that, the only thing left is to run the workflow:
 
     cwltool workflow.cwl workflow_input_descriptions.yml
 
+Add the `--outdir` flag for indicate the directory where the outputs will be stored:
+
+    cwltool --outdir /path/to/outputs workflow.cwl workflow_input_descriptions.yml
+
 ## <a name="run-wf"></a>Run workflow with docker
 
 Instructions for executing the **CWL workflow** through **docker**.
@@ -77,4 +81,4 @@ Take into account that depending on the number of steps, the tools executed and 
 
 ## <a name="get-output"></a>Get output results
 
-Once the workflow is finished, you will have all the files generated in every step in the same folder.
+Once the workflow is finished, you will have all the files generated in every step in the same folder unless the `--outdir` flag has been added.
