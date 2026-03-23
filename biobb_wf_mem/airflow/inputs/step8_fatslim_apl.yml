@@ -1,0 +1,10 @@
+config: '{"properties": {"lipid_selection": "(resname DPPC and element P)", "protein_selection": "protein and not element H", "ignore_no_box": true}}'
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: structure.pdb
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_3875
+  path: step1_gmx_image1/output_traj_path
+output_csv_path: apl.csv

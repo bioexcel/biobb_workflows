@@ -26,18 +26,18 @@ inputs:
       Example file: https://github.com/bioexcel/biobb_mem/raw/main/biobb_mem/test/data/A01JD/A01JD.pdb
     type: File
     format:
-    - edam:3878
-    - edam:2033
-    - edam:3878
-    - edam:3816
-    - edam:1476
-    - edam:1476
-    - edam:3881
-    - edam:3882
-    - edam:3881
-    - edam:2333
-    - edam:2332
-    - edam:3887
+    - edam:format_3878
+    - edam:format_2033
+    - edam:format_3878
+    - edam:format_3816
+    - edam:format_1476
+    - edam:format_1476
+    - edam:format_3881
+    - edam:format_3882
+    - edam:format_3881
+    - edam:format_2333
+    - edam:format_2332
+    - edam:format_3887
     inputBinding:
       position: 1
       prefix: --input_top_path
@@ -52,22 +52,22 @@ inputs:
       Example file: https://github.com/bioexcel/biobb_mem/raw/main/biobb_mem/test/data/A01JD/A01JD.xtc
     type: File
     format:
-    - edam:2333
-    - edam:3878
-    - edam:3878
-    - edam:1476
-    - edam:2033
-    - edam:3878
-    - edam:3878
-    - edam:3816
-    - edam:3650
-    - edam:1476
-    - edam:1476
-    - edam:3886
-    - edam:3876
-    - edam:3910
-    - edam:3875
-    - edam:3887
+    - edam:format_2333
+    - edam:format_3878
+    - edam:format_3878
+    - edam:format_1476
+    - edam:format_2033
+    - edam:format_3878
+    - edam:format_3878
+    - edam:format_3816
+    - edam:format_3650
+    - edam:format_1476
+    - edam:format_1476
+    - edam:format_3886
+    - edam:format_3876
+    - edam:format_3910
+    - edam:format_3875
+    - edam:format_3887
     inputBinding:
       position: 2
       prefix: --input_traj_path

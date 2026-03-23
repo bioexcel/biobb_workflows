@@ -1,0 +1,10 @@
+config: '{"properties": {"mask": ":DPP !:DPP :DPP@P8", "steps": 1}}'
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: structure.pdb
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_3875
+  path: step2_gmx_image2/output_traj_path
+output_cpptraj_path: density.dat

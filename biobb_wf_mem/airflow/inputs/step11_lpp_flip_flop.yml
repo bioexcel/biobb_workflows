@@ -1,0 +1,14 @@
+config: '{"properties": {"lipid_sel": "(resname DPPC and element P)", "steps": 1, "frame_cutoff": 2}}'
+input_leaflets_path:
+  class: File
+  format: https://edamontology.org/format_3752
+  path: step4_lpp_assign_leaflets/output_leaflets_path
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: structure.pdb
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_3875
+  path: step2_gmx_image2/output_traj_path
+output_flip_flop_path: flip_flop.csv

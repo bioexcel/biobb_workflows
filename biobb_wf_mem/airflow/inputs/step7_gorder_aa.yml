@@ -1,0 +1,10 @@
+config: '{"properties": {"handle_pbc": false}}'
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: topology.tpr
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_3875
+  path: trajectory.xtc
+output_order_path: order.csv
