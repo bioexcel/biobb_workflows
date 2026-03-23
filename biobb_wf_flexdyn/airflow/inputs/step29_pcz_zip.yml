@@ -1,0 +1,10 @@
+config: '{"properties": {"variance": 90, "neigenv": 10}}'
+input_crd_path:
+  class: File
+  format: https://edamontology.org/format_3878
+  path: step28_cpptraj_rms/output_traj_path
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step3_cpptraj_mask/output_cpptraj_path
+output_pcz_path: structure_concat_ensemble.pcz

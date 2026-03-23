@@ -1,0 +1,6 @@
+config: '{"properties": {"selection": "3"}}'
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step3_cpptraj_mask/output_cpptraj_path
+output_ndx_path: structure_gmx_ndx.ndx

@@ -1,0 +1,6 @@
+config: '{"properties": {"eigenvector": 1}}'
+input_pcz_path:
+  class: File
+  format: https://edamontology.org/format_3874
+  path: step29_pcz_zip/output_pcz_path
+output_json_path: structure_pcz_evecs.json

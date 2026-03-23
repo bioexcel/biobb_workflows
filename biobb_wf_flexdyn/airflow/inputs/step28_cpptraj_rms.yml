@@ -1,0 +1,15 @@
+config: '{"properties": {"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}}'
+input_exp_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step3_cpptraj_mask/output_cpptraj_path
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step3_cpptraj_mask/output_cpptraj_path
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step27_gmx_cluster/output_pdb_path
+output_cpptraj_path: structure_meta_traj_rmsd.dat
+output_traj_path: structure_meta_traj_fitted.crd

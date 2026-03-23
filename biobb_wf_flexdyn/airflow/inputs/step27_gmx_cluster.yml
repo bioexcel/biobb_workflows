@@ -1,0 +1,14 @@
+config: '{"properties": {"fit_selection": "System", "output_selection": "System", "method": "linkage", "cutoff": 0.07}}'
+input_index_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: step26_make_ndx/output_ndx_path
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step3_cpptraj_mask/output_cpptraj_path
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step14_cpptraj_rms/output_traj_path
+output_pdb_path: structure_concat_cluster.pdb

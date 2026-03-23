@@ -1,0 +1,6 @@
+config: '{"properties": {"models": [1]}}'
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: structure.pdb
+output_structure_path: structure_model.pdb

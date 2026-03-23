@@ -1,0 +1,12 @@
+config: '{"properties": {"vdw": 4, "num_structs": 300, "env_vars_dict": {"CONCOORD_OVERWRITE": "1", "CONCOORDLIB": "/usr/local/share/concoord/lib"}}}'
+input_dat_path:
+  class: File
+  format: https://edamontology.org/format_1637
+  path: step4_concoord_dist/output_dat_path
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step4_concoord_dist/output_pdb_path
+output_bfactor_path: structure_disco_bfactor.pdb
+output_rmsd_path: structure_disco_rmsd.dat
+output_traj_path: structure_disco_traj.pdb

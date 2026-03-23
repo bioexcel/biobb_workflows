@@ -1,0 +1,14 @@
+config: '{"properties": {"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "reference": "experimental"}}'
+input_exp_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step1_extract_chain/output_structure_path
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step4_concoord_dist/output_pdb_path
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step5_concoord_disco/output_traj_path
+output_cpptraj_path: structure_concoord_rmsd.dat

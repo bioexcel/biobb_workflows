@@ -1,0 +1,6 @@
+config: '{"properties": {"cg": 2}}'
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step1_extract_chain/output_structure_path
+output_dat_path: structure_imode_evecs.dat

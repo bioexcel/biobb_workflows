@@ -1,0 +1,7 @@
+config: '{"properties": {"time": 30000, "wfreq": 100}}'
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step3_cpptraj_mask/output_cpptraj_path
+output_crd_path: structure_flexserv_bd_ensemble.mdcrd
+output_log_path: structure_flexserv_bd_ensemble.log

@@ -1,0 +1,10 @@
+config: '{"properties": {"mask": "c-alpha", "format": "trr"}}'
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step3_cpptraj_mask/output_cpptraj_path
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step18_nolb_nma/output_pdb_path
+output_cpptraj_path: structure_nolb_ensemble.trr

@@ -1,0 +1,10 @@
+config: '{"properties": {"mask": "c-alpha", "format": "trr"}}'
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step22_imod_imc/output_traj_path
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step22_imod_imc/output_traj_path
+output_cpptraj_path: structure_imods_ensemble.trr

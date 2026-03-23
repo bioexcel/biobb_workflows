@@ -1,0 +1,10 @@
+config: '{"properties": {"num_structs": 300, "num_modes": 10, "amplitude": 6.0}}'
+input_dat_path:
+  class: File
+  format: https://edamontology.org/format_1637
+  path: step21_imod_imode/output_dat_path
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step1_extract_chain/output_structure_path
+output_traj_path: structure_imc.pdb
