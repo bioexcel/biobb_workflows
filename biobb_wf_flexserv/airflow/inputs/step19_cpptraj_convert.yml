@@ -1,0 +1,10 @@
+config: '{"properties": {"start": 1, "end": -1, "steps": 1, "mask": "c-alpha", "format": "dcd"}}'
+input_top_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step0_extract_atoms/output_structure_path
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_3878
+  path: step18_pcz_animate/output_crd_path
+output_cpptraj_path: pcz_proj1.dcd

@@ -1,0 +1,5 @@
+input_pcz_path:
+  class: File
+  format: https://edamontology.org/format_3874
+  path: step8_pcz_zip/output_pcz_path
+output_crd_path: dmd_ensemble_uncompressed.crd

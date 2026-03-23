@@ -1,0 +1,6 @@
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step0_extract_atoms/output_structure_path
+output_crd_path: dmd_ensemble.mdcrd
+output_log_path: dmd_ensemble.log

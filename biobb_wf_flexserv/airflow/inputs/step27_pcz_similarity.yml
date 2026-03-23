@@ -1,0 +1,9 @@
+input_pcz_path1:
+  class: File
+  format: https://edamontology.org/format_3874
+  path: step8_pcz_zip/output_pcz_path
+input_pcz_path2:
+  class: File
+  format: https://edamontology.org/format_3874
+  path: Files/1a32.MoDEL.pcz
+output_json_path: simIndex_bd_report_dmd_vs_md.json

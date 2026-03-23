@@ -1,0 +1,10 @@
+config: '{"properties": {"variance": 90, "neigenv": 10, "gauss_rmsd": true}}'
+input_crd_path:
+  class: File
+  format: https://edamontology.org/format_3878
+  path: step3_dmd_run/output_crd_path
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step0_extract_atoms/output_structure_path
+output_pcz_path: dmd_ensemble.pcz
