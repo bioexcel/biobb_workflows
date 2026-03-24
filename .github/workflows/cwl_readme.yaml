@@ -24,6 +24,10 @@ jobs:
           cp common/cwl/README.md biobb_wf_amber_md_setup/cwl/README.md
           cp common/cwl/README.md biobb_wf_amber_md_setup_lig/cwl/README.md
           cp common/cwl/README.md biobb_wf_autoencoder/cwl/README.md
+          sed -i '37a\> \*\*IMPORTANT!\*\* Add the `--no-match-user` flag for avoiding the uid lookup issue:' biobb_wf_autoencoder/cwl/README.md
+          sed -i '38a\\' biobb_wf_autoencoder/cwl/README.md
+          sed -i '39a\    cwltool --outdir out --no-match-user workflow.cwl workflow_input_descriptions.yml' biobb_wf_autoencoder/cwl/README.md
+          sed -i '40a\\' biobb_wf_autoencoder/cwl/README.md
           cp common/cwl/README.md biobb_wf_flexdyn/cwl/README.md
           sed -i '13a\> \*\*IMPORTANT!\*\* The Concoord software doesn'\''t work with dockers on Mac ARM, so in case you are using this type of computer, please comment the steps 4 to 7 as indicated in both \*\*workflow.cwl\*\* and \*\*workflow_input_descriptions.yml\*\* files.' biobb_wf_flexdyn/cwl/README.md
           sed -i '14a\\' biobb_wf_flexdyn/cwl/README.md
