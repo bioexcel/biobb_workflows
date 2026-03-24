@@ -5,6 +5,6 @@ input_top_path:
   path: step3_cpptraj_mask/output_cpptraj_path
 input_traj_path:
   class: File
-  format: https://edamontology.org/format_1476
+  format: https://edamontology.org/format_3878
   path: step33_pcz_animate/output_crd_path
 output_cpptraj_path: structure_pcz_proj1.dcd
