@@ -53,6 +53,7 @@ inputs:
     - edam:format_2033
     - edam:format_1476
     - edam:format_3876
+    - edam:format_3878
     inputBinding:
       position: 2
       prefix: --input_traj_path

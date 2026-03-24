@@ -165,7 +165,7 @@ outputs:
     type: File?
     outputBinding:
       glob: $(inputs.output_traj_path)
-    format: edam:format_3910
+    format: edam:format_3878
 
 $namespaces:
   edam: https://edamontology.org/
