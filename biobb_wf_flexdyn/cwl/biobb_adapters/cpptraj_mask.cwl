@@ -81,7 +81,6 @@ inputs:
       Example file: https://github.com/bioexcel/biobb_analysis/raw/master/biobb_analysis/test/reference/ambertools/ref_cpptraj.mask.netcdf
     type: string
     format:
-    - edam:format_1476
     - edam:format_3878
     - edam:format_3878
     - edam:format_3650
@@ -89,6 +88,7 @@ inputs:
     - edam:format_3886
     - edam:format_2033
     - edam:format_3878
+    - edam:format_1476
     - edam:format_3816
     - edam:format_3885
     - edam:format_3910
@@ -115,7 +115,7 @@ outputs:
     type: File
     outputBinding:
       glob: $(inputs.output_cpptraj_path)
-    format: edam:format_3878
+    format: edam:format_1476
 
 $namespaces:
   edam: https://edamontology.org/
