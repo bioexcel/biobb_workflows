@@ -65,7 +65,7 @@ step19_gmx_trjconv_str_config: '{"properties": {"pbc": "mol", "selection": "Syst
 step19_gmx_trjconv_str_output_str_path: setup.top.pdb
 step20_gmx_energy_config: '{"properties": {"xvg": "xmgr", "terms": ["Potential", "Total-Energy"]}}'
 step20_gmx_energy_output_xvg_path: setup.energy.xvg
-step21_gmx_rgyr_config: '{"properties": {"xvg": "xmgr", "selection": "Protein-H"}}'
+step21_gmx_rgyr_config: '{"properties": {"xvg": "xmgr", "selection": "Backbone"}}'
 step21_gmx_rgyr_output_xvg_path: setup.rgyr.xvg
 step22_rmsd_first_config: '{"properties": {"selection": "Protein-H"}}'
 step22_rmsd_first_output_xvg_path: setup.rmsd_first.xvg
