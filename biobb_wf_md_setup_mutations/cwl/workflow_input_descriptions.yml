@@ -1,7 +1,7 @@
 mutations_list: 
-  - '{"mutation_list":"A:Gly4Lys"}'
-  - '{"mutation_list":"A:Leu8Met"}'
-  - '{"mutation_list":"A:Tyr20Gln"}'
+  - '{"properties": {"mutation_list":"A:Gly4Lys"}}'
+  - '{"properties": {"mutation_list":"A:Leu8Met"}}'
+  - '{"properties": {"mutation_list":"A:Tyr20Gln"}}'
 
 step0_reduce_remove_hydrogens_input_path:
   class: File
