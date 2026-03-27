@@ -9,9 +9,11 @@ Download and install workflow:
 
 WorkflowHub flavours:
 
-[![Jupyter - WorkflowHub](https://img.shields.io/badge/Jupyter-WorkflowHub-1f8787?logo=Jupyter&logoColor=ffffff)](https://workflowhub.eu/workflows/120)
-[![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/276)
-[![Docker - WorkflowHub](https://img.shields.io/badge/Docker-WorkflowHub-1f8787?logo=docker&logoColor=ffffff)](https://workflowhub.eu/workflows/826)
+[![CWL - WorkflowHub](https://img.shields.io/badge/CWL-WorkflowHub-1f8787?logo=Common+Workflow+Language&logoColor=ffffff)](https://workflowhub.eu/workflows/2144)
+[![Jupyter - WorkflowHub](https://img.shields.io/badge/Jupyter-WorkflowHub-1f8787?logo=Jupyter&logoColor=ffffff)](https://workflowhub.eu/workflows/2143)
+[![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/2145)
+[![Docker - WorkflowHub](https://img.shields.io/badge/Docker-WorkflowHub-1f8787?logo=docker&logoColor=ffffff)](https://workflowhub.eu/workflows/2146)
+[![Apache Airflow - WorkflowHub](https://img.shields.io/badge/Airflow-WorkflowHub-1f8787?logo=apache-airflow&logoColor=ffffff)](https://workflowhub.eu/workflows/2147)
 
 # AutoEncoders for Anomaly Detection tutorial using BioExcel Building Blocks (biobb)
 
