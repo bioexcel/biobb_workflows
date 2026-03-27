@@ -10,6 +10,8 @@ WorkflowHub flavours:
 
 [![CWL - WorkflowHub](https://img.shields.io/badge/CWL-WorkflowHub-1f8787?logo=Common+Workflow+Language&logoColor=ffffff)](https://workflowhub.eu/workflows/289)
 [![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/290)
+[![Docker - WorkflowHub](https://img.shields.io/badge/Docker-WorkflowHub-1f8787?logo=docker&logoColor=ffffff)](https://workflowhub.eu/workflows/2134)
+[![Apache Airflow - WorkflowHub](https://img.shields.io/badge/Airflow-WorkflowHub-1f8787?logo=apache-airflow&logoColor=ffffff)](https://workflowhub.eu/workflows/2142)
 
 # Mutations Protein MD Setup tutorial using BioExcel Building Blocks (biobb)
 
