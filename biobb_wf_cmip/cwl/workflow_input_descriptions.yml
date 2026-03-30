@@ -8,13 +8,13 @@ step1_cmip_titration_config: '{"properties": {"num_positive_ions": 5, "num_negat
 step2_cat_pdb_output_structure_path: structure.tit.pdb
 step3_cmip_run_pos_output_log_path: structure.mip_pos.log
 step3_cmip_run_pos_output_cube_path: structure.mip_pos.cube
-step3_cmip_run_pos_config: '{"properties": {"execution_type": "mip_pos", "params": {"perfill": 0.8}}}'
+step3_cmip_run_pos_config: '{"properties": {"execution_type": "mip_pos"}}'
 step4_cmip_run_neg_output_log_path: structure.mip_neg.log
 step4_cmip_run_neg_output_cube_path: structure.mip_neg.cube
-step4_cmip_run_neg_config: '{"properties": {"execution_type": "mip_neg", "params": {"perfill": 0.8}}}'
+step4_cmip_run_neg_config: '{"properties": {"execution_type": "mip_neg"}}'
 step5_cmip_run_neu_output_log_path: structure.mip_neutral.log
 step5_cmip_run_neu_output_cube_path: structure.mip_neutral.cube
-step5_cmip_run_neu_config: '{"properties": {"execution_type": "mip_neu", "params": {"perfill": 0.8}}}'
+step5_cmip_run_neu_config: '{"properties": {"execution_type": "mip_neu"}}'
 step6_remove_pdb_water_input_pdb_path:
   class: File
   path: complex.pdb
