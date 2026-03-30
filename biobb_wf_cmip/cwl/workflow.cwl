@@ -675,13 +675,36 @@ steps:
       output_pdb_path: step12_amber_to_pdb_output_pdb_path
     out:
     - output_pdb_path
+  step13_copy_topology:
+    label: copy_topology
+    doc: Copy topology file to writable location
+    run:
+      class: CommandLineTool
+      baseCommand: cp
+      arguments:
+        - $(inputs.input_file.path)
+        - $(runtime.outdir)/topology.top
+      inputs:
+        input_file:
+          type: File
+          inputBinding:
+            position: 1
+      outputs:
+        output_file:
+          type: File
+          outputBinding:
+            glob: topology.top
+    in:
+      input_file: step10_leap_gen_top/output_top_path
+    out:
+    - output_file
   step13_cmip_prepare_structure:
     label: cmip_prepare_structure
     doc: Creates a CMIP suitable PDB from an standar structure file
     run: biobb_adapters/cmip_prepare_structure.cwl
     in:
       input_pdb_path: step12_amber_to_pdb/output_pdb_path
-      input_topology_path: step10_leap_gen_top/output_top_path
+      input_topology_path: step13_copy_topology/output_file
       output_cmip_pdb_path: step13_cmip_prepare_structure_output_cmip_pdb_path
     out:
     - output_cmip_pdb_path
@@ -718,13 +741,37 @@ steps:
     out:
     - output_log_path
     - output_byat_path
+  step17_copy_topology:
+    label: copy_topology
+    doc: Copy topology file to writable location
+    run:
+      class: CommandLineTool
+      baseCommand: cp
+      arguments:
+        - $(inputs.input_file.path)
+        - $(runtime.outdir)/topology.top
+      inputs:
+        input_file:
+          type: File
+          inputBinding:
+            position: 1
+      outputs:
+        output_file:
+          type: File
+          outputBinding:
+            glob: topology.top
+    in:
+      input_file: step17_cmip_prepare_structure_input_topology_path
+    out:
+    - output_file
+
   step17_cmip_prepare_structure:
     label: cmip_prepare_structure
     doc: Creates a CMIP suitable PDB from an standar structure file
     run: biobb_adapters/cmip_prepare_structure.cwl
     in:
       input_pdb_path: step17_cmip_prepare_structure_input_pdb_path
-      input_topology_path: step17_cmip_prepare_structure_input_topology_path
+      input_topology_path: step17_copy_topology/output_file
       output_cmip_pdb_path: step17_cmip_prepare_structure_output_cmip_pdb_path
     out:
     - output_cmip_pdb_path
