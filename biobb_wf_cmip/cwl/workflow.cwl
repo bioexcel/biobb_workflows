@@ -3,6 +3,8 @@ cwlVersion: v1.0
 class: Workflow
 label: WORKFLOW TITLE
 doc: WORKFLOW DESCRIPTION
+$namespaces:
+  edam: https://edamontology.org/
 inputs:
   step0_cmip_prepare_pdb_input_pdb_path:
     label: Input file
@@ -694,8 +696,7 @@ steps:
       outputs:
         output_file:
           type: File
-          format:
-            - edam:format_3987
+          format: edam:format_3987
           outputBinding:
             glob: topology.top
     in:
@@ -764,8 +765,7 @@ steps:
       outputs:
         output_file:
           type: File
-          format:
-            - edam:format_3987
+          format: edam:format_3987
           outputBinding:
             glob: topology.top
     in:
