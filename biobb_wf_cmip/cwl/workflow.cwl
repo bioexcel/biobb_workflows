@@ -694,6 +694,8 @@ steps:
       outputs:
         output_file:
           type: File
+          format:
+            - edam:format_3987
           outputBinding:
             glob: topology.top
     in:
@@ -762,6 +764,8 @@ steps:
       outputs:
         output_file:
           type: File
+          format:
+            - edam:format_3987
           outputBinding:
             glob: topology.top
     in:
