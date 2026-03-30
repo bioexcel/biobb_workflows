@@ -8,7 +8,7 @@ step1_cmip_titration_config: '{"properties": {"num_positive_ions": 5, "num_negat
 step2_cat_pdb_output_structure_path: structure.tit.pdb
 step3_cmip_run_pos_output_log_path: structure.mip_pos.log
 step3_cmip_run_pos_output_cube_path: structure.mip_pos.cube
-step3_cmip_run_pos_config: '{"properties": {"execution_type": "mip_pos"}}'
+step3_cmip_run_pos_config: '{"properties": {"execution_type": "mip_pos", "remove_tmp": false}}'
 step4_cmip_run_neg_output_log_path: structure.mip_neg.log
 step4_cmip_run_neg_output_cube_path: structure.mip_neg.cube
 step4_cmip_run_neg_config: '{"properties": {"execution_type": "mip_neg"}}'
