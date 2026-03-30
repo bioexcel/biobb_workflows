@@ -681,14 +681,16 @@ steps:
     run:
       class: CommandLineTool
       baseCommand: cp
-      arguments:
-        - $(inputs.input_file.path)
-        - $(runtime.outdir)/topology.top
       inputs:
         input_file:
           type: File
           inputBinding:
             position: 1
+        output_filename:
+          type: string
+          default: "topology.top"
+          inputBinding:
+            position: 2
       outputs:
         output_file:
           type: File
@@ -747,14 +749,16 @@ steps:
     run:
       class: CommandLineTool
       baseCommand: cp
-      arguments:
-        - $(inputs.input_file.path)
-        - $(runtime.outdir)/topology.top
       inputs:
         input_file:
           type: File
           inputBinding:
             position: 1
+        output_filename:
+          type: string
+          default: "topology.top"
+          inputBinding:
+            position: 2
       outputs:
         output_file:
           type: File
