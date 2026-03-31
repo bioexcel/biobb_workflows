@@ -14,6 +14,14 @@ hints:
   DockerRequirement:
     dockerPull: quay.io/biocontainers/biobb_cmip:5.2.3--pyhdfd78af_0
 
+requirements:
+  InitialWorkDirRequirement:
+    listing:
+      - entry: $(inputs.input_topology_path)
+        writable: true
+  WorkReuse:
+    enableReuse: false
+
 inputs:
   input_pdb_path:
     label: Path to the input PDB file
