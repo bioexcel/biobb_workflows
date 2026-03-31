@@ -52,12 +52,11 @@ inputs:
       File type: output
       Accepted formats: pdb
       Example file: https://raw.githubusercontent.com/bioexcel/biobb_cmip/master/biobb_cmip/test/reference/cmip/1kim_neutral.pdb
-    type: string
+    type: string?
     format:
     - edam:format_1476
     inputBinding:
       prefix: --output_pdb_path
-    default: system.pdb
 
   output_grd_path:
     label: Path to the output grid file in GRD format
@@ -67,12 +66,11 @@ inputs:
       File type: output
       Accepted formats: grd
       Example file: null
-    type: string
+    type: string?
     format:
     - edam:format_2330
     inputBinding:
       prefix: --output_grd_path
-    default: system.grd
 
   output_cube_path:
     label: Path to the output grid file in cube format
@@ -82,12 +80,11 @@ inputs:
       File type: output
       Accepted formats: cube
       Example file: null
-    type: string
+    type: string?
     format:
     - edam:format_2330
     inputBinding:
       prefix: --output_cube_path
-    default: system.cube
 
   output_rst_path:
     label: Path to the output restart file
@@ -97,12 +94,11 @@ inputs:
       File type: output
       Accepted formats: txt
       Example file: null
-    type: string
+    type: string?
     format:
     - edam:format_2330
     inputBinding:
       prefix: --output_rst_path
-    default: system.txt
 
   input_rst_path:
     label: Path to the input restart file
@@ -126,13 +122,12 @@ inputs:
       File type: output
       Accepted formats: txt, out
       Example file: null
-    type: string
+    type: string?
     format:
     - edam:format_2330
     - edam:format_2330
     inputBinding:
       prefix: --output_byat_path
-    default: system.txt
 
   output_log_path:
     label: Path to the output CMIP log file LOG
@@ -186,12 +181,11 @@ inputs:
       File type: output
       Accepted formats: json
       Example file: null
-    type: string
+    type: string?
     format:
     - edam:format_3464
     inputBinding:
       prefix: --output_json_box_path
-    default: system.json
 
   output_json_external_box_path:
     label: Path to the output external CMIP box in JSON format
@@ -201,12 +195,11 @@ inputs:
       File type: output
       Accepted formats: json
       Example file: null
-    type: string
+    type: string?
     format:
     - edam:format_3464
     inputBinding:
       prefix: --output_json_external_box_path
-    default: system.json
 
   input_json_box_path:
     label: Path to the input CMIP box in JSON format
