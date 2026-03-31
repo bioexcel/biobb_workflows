@@ -14,6 +14,14 @@ hints:
   DockerRequirement:
     dockerPull: quay.io/biocontainers/biobb_cmip:5.2.3--pyhdfd78af_0
 
+# Enable when running on mac arm
+# requirements:
+#   EnvVarRequirement:
+#     envDef:
+#       KMP_AFFINITY: disabled
+#       OMP_NUM_THREADS: "1"
+#       GOMP_SPINCOUNT: "0"
+
 inputs:
   input_pdb_path:
     label: Path to the input PDB file

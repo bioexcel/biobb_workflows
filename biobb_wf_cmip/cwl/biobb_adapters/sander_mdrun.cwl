@@ -14,6 +14,13 @@ hints:
   DockerRequirement:
     dockerPull: quay.io/biocontainers/biobb_amber:5.2.1--py312hc5e4ab4_0
 
+# Enable when running on mac arm
+# requirements:
+#   EnvVarRequirement:
+#     envDef:
+#       KMP_AFFINITY: disabled
+#       OMP_NUM_THREADS: "1"
+
 inputs:
   input_top_path:
     label: Input topology file (AMBER ParmTop)
