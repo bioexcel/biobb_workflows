@@ -19,8 +19,6 @@ requirements:
     listing:
       - entry: $(inputs.input_topology_path)
         writable: true
-  WorkReuse:
-    enableReuse: false
 
 inputs:
   input_pdb_path:
