@@ -14,11 +14,11 @@ Below you can find the list of all the needed **files** for executing this workf
 * **inputs/:** the inputs folder contains the **input description** files (inputs, outputs and properties) for **each step** of the workflow. The **input files** for the workflow are in this folder as well.
 * **biobb_adapters/:** folder with the **CWL adapters** for each step of the workflow.
 
-Both folders and the python file must be located into a **biobb_wf_mem folder** where the other **Apache Airflow Dags** are located (usually the **dags/** folder).
+Both folders and the python file must be located into a **biobb_wf_flexdyn folder** where the other **Apache Airflow Dags** are located (usually the **dags/** folder).
 
 ### <a name="utils"></a>Utils
 
-* [**airflow_cwl_utils.py**](../../common/airflow/dags/airflow_cwl_utils.py): This file **generates the bash command** that will be executed for each step of the dag. It must be located into the main **dags/** folder, at the same level of the **biobb_wf_mem folder** created in the step before.
+* [**airflow_cwl_utils.py**](../../common/airflow/dags/airflow_cwl_utils.py): This file **generates the bash command** that will be executed for each step of the dag. It must be located into the main **dags/** folder, at the same level of the **biobb_wf_flexdyn folder** created in the step before.
 
 ### <a name="plugins"></a>Plugins
 
@@ -42,17 +42,17 @@ Below you can find the instructions for executing the workflow **via command lin
 
 2) Launch the workflow:
 
-        docker exec [CONTAINER ID] airflow dags trigger biobb_wf_mem
+        docker exec [CONTAINER ID] airflow dags trigger biobb_wf_flexdyn
 
     Get the **dag_run_id** given after launching the workflow if you need monitoring the workflow status. The format is **manual__** followed by the timestamp (ie manual__2026-02-27T08:38:49.075884+00:00)
 
 3) Monitor workflow status:
 
-        docker exec [CONTAINER ID] airflow tasks states-for-dag-run biobb_wf_mem [dag_run_id]
+        docker exec [CONTAINER ID] airflow tasks states-for-dag-run biobb_wf_flexdyn [dag_run_id]
 
 ### <a name="run-wf-i"></a>Run workflow via GUI
 
-Go to **Dags list** in the main menu. Search for the **biobb_wf_mem dag**, click it and, once inside the dag, click on **Execute button** at the top right.
+Go to **Dags list** in the main menu. Search for the **biobb_wf_flexdyn dag**, click it and, once inside the dag, click on **Execute button** at the top right.
 
 ## <a name="time"></a>Time of execution
 
@@ -60,4 +60,4 @@ Take into account that depending on the number of steps, the tools executed and 
 
 ## <a name="get-output"></a>Get output results
 
-Once the workflow is finished, you just should enter the new **dags/biobb_wf_mem/outputs/** folder and, inside it, you will find a folder for each step of the workflow with all the files generated in every step.
+Once the workflow is finished, you just should enter the new **dags/biobb_wf_flexdyn/outputs/** folder and, inside it, you will find a folder for each step of the workflow with all the files generated in every step.
