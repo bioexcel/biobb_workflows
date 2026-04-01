@@ -1,8 +1,9 @@
 #!/usr/bin/env cwl-runner
 cwlVersion: v1.0
 class: Workflow
-label: WORKFLOW TITLE
-doc: WORKFLOW DESCRIPTION
+label: Classical Molecular Interaction Potentials
+doc: |-
+  This tutorial aims to illustrate the process of computing classical molecular interaction potentials from protein structures, step by step.
 $namespaces:
   edam: https://edamontology.org/
 inputs:
