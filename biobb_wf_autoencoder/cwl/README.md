@@ -1,7 +1,5 @@
 # <a name="execute-wf"></a>Execute workflow through CWL script
 
-> NOTE: This workflow is under construction
-
 <div align="center"><img src="../../common/images/cwl.png" height="100" /></div>
 
 To execute the workflow through a CWL script, please follow the next steps:
