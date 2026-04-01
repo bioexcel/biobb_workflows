@@ -9,6 +9,7 @@ Download and install workflow:
 
 WorkflowHub flavours:
 
+[![CWL - WorkflowHub](https://img.shields.io/badge/CWL-WorkflowHub-1f8787?logo=Common+Workflow+Language&logoColor=ffffff)](https://workflowhub.eu/workflows/2156)
 [![Jupyter - WorkflowHub](https://img.shields.io/badge/Jupyter-WorkflowHub-1f8787?logo=Jupyter&logoColor=ffffff)](https://workflowhub.eu/workflows/773)
 [![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/774)
 [![Docker - WorkflowHub](https://img.shields.io/badge/Docker-WorkflowHub-1f8787?logo=docker&logoColor=ffffff)](https://workflowhub.eu/workflows/820)
@@ -29,6 +30,7 @@ The code wrapped is the ***Classical Molecular Interaction Potentials (CMIP)*** 
 
 ## Workflow Managers
 
+* [Common Workflow Language (CWL)](cwl)
 * [Jupyter Notebooks](https://github.com/bioexcel/biobb_wf_cmip) (this link switches to a different repository) 
 * [Pure Python](python)
 * [Docker](docker)
