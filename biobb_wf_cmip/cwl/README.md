@@ -35,10 +35,6 @@ Add the `--outdir` flag for indicate the directory where the outputs will be sto
 
     cwltool --outdir /path/to/outputs workflow.cwl workflow_input_descriptions.yml
 
-> **IMPORTANT!** Add the `--no-match-user` flag for avoiding the uid lookup issue:
-
-    cwltool --outdir out --no-match-user workflow.cwl workflow_input_descriptions.yml
-
 ## <a name="run-wf"></a>Run workflow with docker
 
 Instructions for executing the **CWL workflow** through **docker**.
