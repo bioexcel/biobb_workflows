@@ -1,0 +1,7 @@
+config: '{"properties": {"execution_type": "mip_neu"}}'
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step0_cmip_prepare_pdb/output_cmip_pdb_path
+output_cube_path: structure.mip_neutral.cube
+output_log_path: structure.mip_neutral.log

@@ -1,0 +1,11 @@
+config: '{"properties": {"execution_type": "pb_interaction_energy"}}'
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step15_cmip_ignore_residues/output_cmip_pdb_path
+input_probe_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step14_remove_ligand/output_structure_path
+output_byat_path: complex.EGFR.energies.byat.out
+output_log_path: complex.EGFR.energies.log

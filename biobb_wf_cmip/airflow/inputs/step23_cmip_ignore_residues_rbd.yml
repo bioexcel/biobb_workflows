@@ -1,0 +1,6 @@
+config: '{"properties": {"residue_list": "B:"}}'
+input_cmip_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step17_cmip_prepare_structure/output_cmip_pdb_path
+output_cmip_pdb_path: RBD-hACE2-ZN.RBD_ignored.cmip.pdb

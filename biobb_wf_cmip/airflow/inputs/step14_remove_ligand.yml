@@ -1,0 +1,6 @@
+config: '{"properties": {"ligand": "AQ4"}}'
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step13_cmip_prepare_structure/output_cmip_pdb_path
+output_structure_path: complex.noLIG.pdb

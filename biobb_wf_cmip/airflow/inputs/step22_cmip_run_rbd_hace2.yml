@@ -1,0 +1,7 @@
+config: '{"properties": {"execution_type": "check_only", "params": {"perfill": 0.8}}}'
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step17_cmip_prepare_structure/output_cmip_pdb_path
+output_json_box_path: complex.box.json
+output_log_path: complex.box.log

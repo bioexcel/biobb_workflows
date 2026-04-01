@@ -1,0 +1,21 @@
+config: '{"properties": {"execution_type": "pb_interaction_energy"}}'
+input_json_box_path:
+  class: File
+  format: https://edamontology.org/format_3464
+  path: step21_cmip_run_hace2/output_json_box_path
+input_json_external_box_path:
+  class: File
+  format: https://edamontology.org/format_3464
+  path: step22_cmip_run_rbd_hace2/output_json_box_path
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step25_cmip_ignore_residues_hace2/output_cmip_pdb_path
+input_probe_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step18_extract_chain_a/output_structure_path
+output_byat_path: hACE2.energies.byat.out
+output_json_box_path: hACE2.energies.box.output.json
+output_json_external_box_path: complex_2.energies.box.output.json
+output_log_path: hACE2.energies.log

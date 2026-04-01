@@ -1,0 +1,6 @@
+config: '{"properties": {"heteroatoms": [{"name": "AQ4"}]}}'
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step6_remove_pdb_water/output_pdb_path
+output_heteroatom_path: ligand.pdb

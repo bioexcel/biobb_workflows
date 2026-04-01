@@ -1,0 +1,16 @@
+config: '{"properties": {"forcefield": ["protein.ff14SB", "gaff2"]}}'
+input_frcmod_path:
+  class: File
+  format: https://edamontology.org/format_3888
+  path: step9_acpype_params_ac/output_path_frcmod
+input_lib_path:
+  class: File
+  format: https://edamontology.org/format_3889
+  path: step9_acpype_params_ac/output_path_lib
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step6_remove_pdb_water/output_pdb_path
+output_crd_path: structure.leap.crd
+output_pdb_path: structure.leap.pdb
+output_top_path: structure.leap.prmtop

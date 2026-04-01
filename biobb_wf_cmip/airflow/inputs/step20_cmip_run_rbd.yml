@@ -1,0 +1,7 @@
+config: '{"properties": {"execution_type": "check_only", "params": {"perfill": 0.8}}}'
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step19_extract_chain_b/output_structure_path
+output_json_box_path: RBD.box.json
+output_log_path: RBD.box.log

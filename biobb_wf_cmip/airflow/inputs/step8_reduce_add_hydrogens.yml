@@ -1,0 +1,5 @@
+input_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step7_extract_heteroatoms/output_heteroatom_path
+output_path: ligand.reduce.H.pdb

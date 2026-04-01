@@ -1,0 +1,9 @@
+input_pdb_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: Files/RBD-hACE2-ZN.pdb
+input_topology_path:
+  class: File
+  format: https://edamontology.org/format_3881
+  path: Files/RBD-hACE2-ZN.top
+output_cmip_pdb_path: RBD-hACE2-ZN.cmip.pdb

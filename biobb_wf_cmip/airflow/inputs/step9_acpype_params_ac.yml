@@ -1,0 +1,9 @@
+config: '{"properties": {"basename": "ligand.params", "charge": 0}}'
+input_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step8_reduce_add_hydrogens/output_path
+output_path_frcmod: ligand.params.frcmod
+output_path_inpcrd: ligand.params.inpcrd
+output_path_lib: ligand.params.lib
+output_path_prmtop: ligand.params.prmtop

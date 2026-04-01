@@ -1,0 +1,6 @@
+config: '{"properties": {"chains": ["B"], "permissive": true}}'
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_1476
+  path: step17_cmip_prepare_structure/output_cmip_pdb_path
+output_structure_path: RBD-hACE2-ZN.RBD.cmip.pdb
