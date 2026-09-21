@@ -30,6 +30,8 @@ jobs:
         uses: mamba-org/setup-micromamba@v2.0.0
         with:
           micromamba-version: '2.0.2-2'
+          # required by the action whenever create-args is set
+          environment-name: cwl
           create-args: >-
             cwltool
 
