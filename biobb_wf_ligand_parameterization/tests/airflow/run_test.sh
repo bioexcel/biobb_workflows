@@ -90,7 +90,19 @@ trap cleanup EXIT
 
 echo ">>> [1/6] airflow test image"
 if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
-  docker build -t "$IMAGE" -f "$SCRIPT_DIR/Dockerfile" "$SCRIPT_DIR"
+  # package downloads (conda/pip) occasionally fail transiently on GH
+  # runners — retry the build
+  BUILD_OK=0
+  for attempt in 1 2 3; do
+    if docker build -t "$IMAGE" -f "$SCRIPT_DIR/Dockerfile" "$SCRIPT_DIR"; then
+      BUILD_OK=1
+      break
+    fi
+    [[ "$attempt" -eq 3 ]] && break
+    echo "  build attempt $attempt/3 failed — retrying in 15 s (transient CDN error?)"
+    sleep 15
+  done
+  [[ "$BUILD_OK" -eq 1 ]] || { echo "ERROR: airflow image build failed after 3 attempts" >&2; exit 1; }
 fi
 
 echo ">>> [2/6] host scratch dir"

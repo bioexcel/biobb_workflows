@@ -139,8 +139,20 @@ if [[ "$DO_PULL" -eq 1 ]]; then
   IMAGE="ghcr.io/bioexcel/$WF_NAME:latest"
   docker pull "$IMAGE"
 elif [[ "$DO_BUILD" -eq 1 ]]; then
-  # shellcheck disable=SC2046
-  docker build ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} $(docker_build_args) -t "$IMAGE" "$DOCKER_DIR"
+  # conda repodata downloads from the CDN occasionally fail transiently on
+  # GH runners (5xx from the conda-forge/bioconda CDN) — retry the build
+  BUILD_OK=0
+  for attempt in 1 2 3; do
+    if # shellcheck disable=SC2046
+    docker build ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} $(docker_build_args) -t "$IMAGE" "$DOCKER_DIR"; then
+      BUILD_OK=1
+      break
+    fi
+    [[ "$attempt" -eq 3 ]] && break
+    echo "  build attempt $attempt/3 failed — retrying in 15 s (transient conda CDN error?)"
+    sleep 15
+  done
+  [[ "$BUILD_OK" -eq 1 ]] || { echo "ERROR: docker build failed after 3 attempts" >&2; exit 1; }
 fi
 docker image inspect "$IMAGE" >/dev/null 2>&1 || { echo "ERROR: image $IMAGE not found (use --build by default, or build it first)" >&2; exit 1; }
 
