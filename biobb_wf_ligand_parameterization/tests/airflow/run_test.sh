@@ -71,7 +71,8 @@ cleanup() {
   # below works (on GH runners the 'runner' user cannot delete root-owned
   # dirs). Reuses $IMAGE, so no extra pull.
   if [[ -n "$HOST_DIR" && -d "$HOST_DIR" ]]; then
-    docker run --rm -v "$HOST_DIR:$HOST_DIR" --entrypoint /usr/bin/chown "$IMAGE" \
+    # -u root: the image defaults to the 'airflow' user, which cannot chown
+    docker run --rm -u root -v "$HOST_DIR:$HOST_DIR" --entrypoint /usr/bin/chown "$IMAGE" \
       -R "$(id -u):$(id -g)" "$HOST_DIR" >/dev/null 2>&1 || true
   fi
   docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
@@ -113,6 +114,12 @@ rm -rf "$HOST_DIR/dags/$WF_NAME/outputs"   # never reuse stale outputs
 cp "$COMMON_AIRFLOW/dags/airflow_cwl_utils.py" "$HOST_DIR/dags/"
 cp "$COMMON_AIRFLOW/plugins/cwl_run.sh" "$COMMON_AIRFLOW/plugins/docker_wrapper.sh" "$HOST_DIR/plugins/"
 chmod +x "$HOST_DIR/plugins/"*.sh
+# mktemp creates $HOST_DIR 0700 owned by the host user, but the container
+# runs as the image's 'airflow' user (Dockerfile USER airflow) — a different
+# uid that cannot even list $HOST_DIR, so the dag-processor's recursive scan
+# finds 0 files and the DAG is never registered. Make the scratch
+# world-accessible (it is throwaway and removed in cleanup).
+chmod -R a+rwX "$HOST_DIR"
 adjust_runtime "$HOST_DIR/dags/$WF_NAME/inputs"
 
 echo ">>> [3/6] start airflow (standalone)"
