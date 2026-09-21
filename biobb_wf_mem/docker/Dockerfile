@@ -42,11 +42,11 @@ RUN conda config --set solver libmamba
 
 # Create new environment
 RUN conda env create -f /app/workflow.env.yml
-
 # Fix OpenMP issues when running amd64 image on ARM64 via QEMU emulation
 ENV KMP_DUPLICATE_LIB_OK=TRUE
 ENV OMP_NUM_THREADS=1
 ENV KMP_AFFINITY=disabled
+
 
 # Define an environment variable with default value
 ENV MODE=python

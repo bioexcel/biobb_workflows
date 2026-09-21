@@ -1,0 +1,39 @@
+name: Flavour e2e Test (reusable)
+
+# Runs one workflow's e2e test script: <wf>/tests/<flavour>/run_test.sh
+
+on:
+  workflow_call:
+    inputs:
+      wf_name:
+        required: true
+        type: string
+      flavour:
+        description: 'docker | cwl | airflow | jupyter'
+        required: true
+        type: string
+      runs_on:
+        required: false
+        type: string
+        default: 'ubuntu-latest'
+
+jobs:
+  flavour:
+    runs-on: ${{ inputs.runs_on }}
+    timeout-minutes: 720
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set up cwltool (cwl flavour only)
+        if: inputs.flavour == 'cwl'
+        uses: mamba-org/setup-micromamba@v2.0.0
+        with:
+          micromamba-version: '2.0.2-2'
+          create-args: >-
+            cwltool
+
+      - name: Run ${{ inputs.flavour }} e2e test for ${{ inputs.wf_name }}
+        shell: bash -l {0}
+        working-directory: ${{ inputs.wf_name }}/tests/${{ inputs.flavour }}
+        run: ./run_test.sh

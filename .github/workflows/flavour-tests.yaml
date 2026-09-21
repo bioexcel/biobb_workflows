@@ -1,0 +1,54 @@
+name: Flavour e2e Tests (manual)
+
+# Phase 1: run the local e2e test scripts (tests/<flavour>/run_test.sh) from CI,
+# on demand, workflow by workflow. Trigger it from the Actions tab:
+#   1. choose the flavour (docker / cwl / airflow / jupyter)
+#   2. leave wf_names empty to test EVERY workflow that has that test,
+#      or type one, e.g.  biobb_wf_ligand_parameterization
+#
+# Once a flavour proves reliable here, a push trigger can be added in phase 2.
+
+on:
+  workflow_dispatch:
+    inputs:
+      flavour:
+        description: 'Flavour to test'
+        required: true
+        default: 'docker'
+        type: choice
+        options:
+          - docker
+          - cwl
+          - airflow
+          - jupyter
+      wf_names:
+        description: 'Workflows to test, comma separated (empty = all that have this test)'
+        required: false
+        default: ''
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  detect:
+    name: Detect workflows to test
+    uses: ./.github/workflows/detect.yaml
+    with:
+      wf_names: ${{ github.event.inputs.wf_names || '' }}
+      all_on_paths: '^\.github/workflows/(detect|flavour-tests|flavour-test-reusable)\.yaml$'
+      require_path: "tests/${{ github.event.inputs.flavour }}/run_test.sh"
+
+  test:
+    name: ${{ matrix.wf }} (${{ inputs.flavour }})
+    needs: detect
+    if: needs.detect.result == 'success' && needs.detect.outputs.matrix != '[]'
+    uses: ./.github/workflows/flavour-test-reusable.yaml
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.detect.outputs.matrix) }}
+    with:
+      wf_name: ${{ matrix.wf }}
+      flavour: ${{ inputs.flavour }}

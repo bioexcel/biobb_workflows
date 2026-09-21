@@ -1,0 +1,111 @@
+name: Detect workflows to test
+
+# Reusable job that decides WHICH workflows a test run should cover, and emits
+# them as a JSON matrix:  [{"wf": "biobb_wf_x", "runs_on": "ubuntu-latest"}, ...]
+#
+# Selection rules:
+#   push                -> workflows whose folder changed in the push
+#                          (all of them if a CI file listed in all_on_paths changed)
+#   workflow_dispatch   -> the wf_names input (comma separated); empty = all
+#   schedule            -> all
+#
+# Inputs:
+#   wf_names      comma separated workflow folder names (dispatch only)
+#   all_on_paths  ERE; if any changed file matches, test ALL workflows
+#   require_path  only include workflows that have this path (e.g. tests/docker/run_test.sh)
+
+on:
+  workflow_call:
+    inputs:
+      wf_names:
+        required: false
+        type: string
+        default: ''
+      all_on_paths:
+        required: false
+        type: string
+        default: ''
+      require_path:
+        required: false
+        type: string
+        default: ''
+    outputs:
+      matrix:
+        description: 'JSON array of {wf, runs_on} objects'
+        value: ${{ jobs.detect.outputs.matrix }}
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.compute.outputs.matrix }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Compute workflow matrix
+        id: compute
+        env:
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+          SHA: ${{ github.sha }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          DISPATCHED: ${{ inputs.wf_names }}
+          ALL_ON_PATHS: ${{ inputs.all_on_paths }}
+          REQUIRE_PATH: ${{ inputs.require_path }}
+        run: |
+          python3 - <<'PY'
+          import json, os, re, subprocess, sys
+
+          event = os.environ.get("EVENT", "")
+          before = os.environ.get("BEFORE", "")
+          sha = os.environ.get("SHA", "")
+          default_branch = os.environ.get("DEFAULT_BRANCH") or "main"
+          dispatched = [w.strip() for w in os.environ.get("DISPATCHED", "").split(",") if w.strip()]
+          all_on = os.environ.get("ALL_ON_PATHS", "")
+          require_path = os.environ.get("REQUIRE_PATH", "")
+
+          all_wf = sorted(d for d in os.listdir(".")
+                          if d.startswith("biobb_wf_") and os.path.isdir(d))
+
+          def eligible(w):
+              return not require_path or os.path.exists(os.path.join(w, require_path))
+
+          def git_diff(a, b):
+              r = subprocess.run(["git", "diff", "--name-only", a, b],
+                                 capture_output=True, text=True)
+              return r.stdout.splitlines() if r.returncode == 0 else []
+
+          if event == "workflow_dispatch":
+              if dispatched:
+                  unknown = [w for w in dispatched if w not in all_wf]
+                  if unknown:
+                      print("::error::Unknown workflow folder(s): " + ", ".join(unknown))
+                      sys.exit(1)
+                  selected = [w for w in dispatched if eligible(w)]
+              else:
+                  selected = [w for w in all_wf if eligible(w)]
+          elif event == "schedule":
+              selected = [w for w in all_wf if eligible(w)]
+          else:  # push (and anything else)
+              if re.fullmatch(r"[0-9a-f]{40}", before) and before != sha:
+                  changed = git_diff(before, sha)
+              else:
+                  # new branch / first push: compare against the default branch
+                  changed = git_diff("origin/" + default_branch + "...HEAD")
+              if all_on and any(re.match(all_on, c) for c in changed):
+                  selected = [w for w in all_wf if eligible(w)]
+              else:
+                  folders = {c.split("/", 1)[0] for c in changed if c.startswith("biobb_wf_")}
+                  selected = sorted(w for w in folders & set(all_wf) if eligible(w))
+
+          matrix = [{"wf": w, "runs_on": "ubuntu-latest"} for w in selected]
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write("matrix=" + json.dumps(matrix) + "\n")
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:
+              f.write("### Workflows selected for testing\n\n```\n"
+                      + ("\n".join(selected) if selected else "(none)") + "\n```\n")
+          print("Selected workflows: " + (", ".join(selected) if selected else "(none)"))
+          PY

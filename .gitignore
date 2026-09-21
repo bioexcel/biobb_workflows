@@ -9,7 +9,12 @@ NOTES.md
 
 ######
 
-# biobb_wf_cmip/cwl/
+# biobb_wf_cmip/cwl/
 biobb_wf_cmip/galaxy/
 
 ######
+
+# local e2e test outputs (tests/docker, tests/cwl, tests/jupyter)
+biobb_wf_*/tests/docker/work/
+biobb_wf_*/tests/cwl/out/
+biobb_wf_*/tests/jupyter/work/

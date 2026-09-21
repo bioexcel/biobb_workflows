@@ -5,7 +5,7 @@ on:
     - cron: '0 0 * * 1' # Runs every Monday
   push:
     branches:
-      - master
+      - main
 
 jobs:
   sync:

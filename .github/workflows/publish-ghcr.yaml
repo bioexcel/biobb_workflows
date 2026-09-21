@@ -13,7 +13,13 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-      
+
+      # docker.yaml (which commits the per-workflow Dockerfiles) may run in
+      # parallel and not have landed yet — regenerate locally so the build
+      # always matches the current template.
+      - name: Sync per-workflow Dockerfiles from template (local only, not committed)
+        run: bash common/docker/sync_dockerfiles.sh
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:

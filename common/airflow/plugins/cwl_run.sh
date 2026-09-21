@@ -1,12 +1,14 @@
 #!/bin/bash
 set -euo pipefail
 
-# Use AIRFLOW_HOME env var (always set by Airflow), fallback to /opt/airflow
+# In production the files live under AIRFLOW_HOME; the e2e test instead
+# exports CWL_* pointing at a scratch dir mounted at the same path. Honour
+# pre-set CWL_* env vars, fall back to the production layout.
 AIRFLOW_HOME="${AIRFLOW_HOME:-/opt/airflow}"
-CWL_WORKFLOWS_BASE_DIR="${AIRFLOW_HOME}/dags"
-CWL_TMP_DIR="${AIRFLOW_HOME}/tmp"
-CWL_PLUGINS_DIR="${AIRFLOW_HOME}/plugins"
-CWL_DOCKER_WRAPPER="${CWL_PLUGINS_DIR}/docker_wrapper.sh"
+CWL_WORKFLOWS_BASE_DIR="${CWL_WORKFLOWS_BASE_DIR:-${AIRFLOW_HOME}/dags}"
+CWL_TMP_DIR="${CWL_TMP_DIR:-${AIRFLOW_HOME}/tmp}"
+CWL_PLUGINS_DIR="${CWL_PLUGINS_DIR:-${AIRFLOW_HOME}/plugins}"
+CWL_DOCKER_WRAPPER="${CWL_DOCKER_WRAPPER:-${CWL_PLUGINS_DIR}/docker_wrapper.sh}"
 
 INPUTS_FILE=$1
 OUTPUTS_BASE_DIR=$2
@@ -15,6 +17,7 @@ CWL_FILE=$4
 MANIFEST="${OUTDIR}/manifest.json"
 
 # Create a unique run folder
+mkdir -p "${CWL_TMP_DIR}"
 RUN_DIR=$(mktemp -d "${CWL_TMP_DIR}/run_XXXXXX")
 BASENAME=$(basename "${INPUTS_FILE}" .yml)
 RESOLVED_INPUTS="${RUN_DIR}/${BASENAME}_resolved.yml"

@@ -36,7 +36,7 @@ jobs:
           cp common/cwl/README.md biobb_wf_godmd/cwl/README.md
           cp common/cwl/README.md biobb_wf_ligand_parameterization/cwl/README.md
           cp common/cwl/README.md biobb_wf_md_setup/cwl/README.md
-          cp common/cwl/README.md biobb_wf_md_setup_mutations/cwl/README.mdd
+          cp common/cwl/README.md biobb_wf_md_setup_mutations/cwl/README.md
           cp common/cwl/README.md biobb_wf_mem/cwl/README.md
           cp common/cwl/README.md biobb_wf_protein-complex_md_setup/cwl/README.md
           cp common/cwl/README.md biobb_wf_structure_checking/cwl/README.md
