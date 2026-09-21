@@ -79,14 +79,14 @@ jobs:
               return r.stdout.splitlines() if r.returncode == 0 else []
 
           if event == "workflow_dispatch":
-               if dispatched:
-                   unknown = [w for w in dispatched if w not in all_wf]
-                   if unknown:
-                       msg = "::error::Unknown workflow folder(s): " + ", ".join(unknown)
-                       if all(not w.startswith("biobb_wf_") for w in unknown):
-                           msg += " -- wf_names expects workflow FOLDER names (biobb_wf_*), not flavours"
-                       print(msg)
-                       sys.exit(1)
+              if dispatched:
+                  unknown = [w for w in dispatched if w not in all_wf]
+                  if unknown:
+                      msg = "::error::Unknown workflow folder(s): " + ", ".join(unknown)
+                      if all(not w.startswith("biobb_wf_") for w in unknown):
+                          msg += " -- wf_names expects workflow FOLDER names (biobb_wf_*), not flavours"
+                      print(msg)
+                      sys.exit(1)
                   selected = [w for w in dispatched if eligible(w)]
               else:
                   selected = [w for w in all_wf if eligible(w)]
