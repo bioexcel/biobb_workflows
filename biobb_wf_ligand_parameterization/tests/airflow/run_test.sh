@@ -67,10 +67,21 @@ adjust_runtime() {
 
 cleanup() {
   local rc=$?
+  # Airflow ran as root inside: hand $HOST_DIR back to the host user so the rm
+  # below works (on GH runners the 'runner' user cannot delete root-owned
+  # dirs). Reuses $IMAGE, so no extra pull.
+  if [[ -n "$HOST_DIR" && -d "$HOST_DIR" ]]; then
+    docker run --rm -v "$HOST_DIR:$HOST_DIR" --entrypoint /usr/bin/chown "$IMAGE" \
+      -R "$(id -u):$(id -g)" "$HOST_DIR" >/dev/null 2>&1 || true
+  fi
   docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
-  if [[ "$KEEP" -ne 1 ]]; then
-    [[ -n "$HOST_DIR" ]] && rm -rf "$HOST_DIR"
-  else
+  if [[ "$KEEP" -ne 1 && -n "$HOST_DIR" ]]; then
+    # best effort: a cleanup glitch must never mask the test result (rc)
+    rm -rf "$HOST_DIR" 2>/dev/null || {
+      echo "WARNING: could not remove $HOST_DIR (left in place)"
+      command -v sudo >/dev/null 2>&1 && sudo rm -rf "$HOST_DIR" 2>/dev/null || true
+    }
+  elif [[ "$KEEP" -eq 1 ]]; then
     echo "Kept: scratch=$HOST_DIR image=$IMAGE"
   fi
   exit "$rc"

@@ -108,12 +108,25 @@ fi
 
 cleanup() {
   local rc=$?
+  # The container ran as root: hand the files back to the host user so the rm
+  # below works (on GH runners the 'runner' user cannot delete root-owned
+  # dirs). Reuses $IMAGE, so no extra pull.
+  if [[ -d "$WORK_DIR" ]]; then
+    # shellcheck disable=SC2046
+    docker run --rm ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
+      -v "$WORK_DIR:/w" --entrypoint /usr/bin/chown "$IMAGE" \
+      -R "$(id -u):$(id -g)" /w >/dev/null 2>&1 || true
+  fi
   docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
   # the image is kept on purpose (same tag as the docker test, overwritten on
   # next build) so both flavours share it and reruns are fast; remove it
   # manually with: docker rmi $IMAGE
   if [[ "$KEEP" -ne 1 ]]; then
-    rm -rf "$WORK_DIR"
+    # best effort: a cleanup glitch must never mask the test result (rc)
+    rm -rf "$WORK_DIR" 2>/dev/null || {
+      echo "WARNING: could not remove $WORK_DIR (left in place)"
+      command -v sudo >/dev/null 2>&1 && sudo rm -rf "$WORK_DIR" 2>/dev/null || true
+    }
   else
     echo "Kept: image=$IMAGE work=$WORK_DIR"
   fi

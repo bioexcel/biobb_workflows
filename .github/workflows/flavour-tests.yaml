@@ -35,7 +35,8 @@ concurrency:
 
 jobs:
   detect:
-    name: Detect workflows to test
+    # shows the flavour right in the job list (dispatch runs; 'auto' otherwise)
+    name: Detect workflows to test (${{ github.event.inputs.flavour || 'auto' }})
     uses: ./.github/workflows/detect.yaml
     with:
       wf_names: ${{ github.event.inputs.wf_names || '' }}
