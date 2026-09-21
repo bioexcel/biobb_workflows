@@ -22,13 +22,15 @@ on:
           - airflow
           - jupyter
       wf_names:
-        description: 'Workflows to test, comma separated (empty = all that have this test)'
+        description: 'Workflow FOLDERS to test, e.g. biobb_wf_ligand_parameterization,biobb_wf_cmip (empty = all that have this test)'
         required: false
         default: ''
         type: string
 
+# per flavour: the 4 flavours can run in parallel; only a re-dispatch of the
+# SAME flavour cancels the in-flight one (push/schedule have no flavour -> 'all')
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.event.inputs.flavour || 'all' }}
   cancel-in-progress: true
 
 jobs:
