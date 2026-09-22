@@ -60,6 +60,36 @@ The problems below are fixed by `detect.yaml` + a matrix of call jobs (details i
 A weekly full regression was added (`schedule`, Monday 04:00 UTC), and rapid re-pushes
 cancel the older run (`concurrency`).
 
+### 1.5 CI runtime reductions (per-wf, in `python-reusable.yaml`)
+
+Before the env setup, `python-reusable.yaml` seds `python/workflow.yml` for the
+workflows below so the full step-by-step test fits a 2 vCPU / 7 GiB `ubuntu-latest`
+runner (`mpi_np: 2` = the runner's 2 vCPU). The other workflows run unreduced. These
+are the **only** parameter changes CI applies — they are never committed to
+`workflow.yml`.
+
+| Workflow | Reduction |
+| --- | --- |
+| `biobb_wf_amber_abc_setup` | `mpi_np: 2`, `nstlim: 100`, `maxcyc: 50` |
+| `biobb_wf_amber_md_setup`, `biobb_wf_amber_md_setup_lig` | `mpi_np: 2`, `nstlim: 500`, `maxcyc: 100` |
+| `biobb_wf_pmx_tutorial` | `nsteps: 50` |
+| `biobb_wf_structure_checking` | `mpi_np: 2` |
+| `biobb_wf_md_setup`, `biobb_wf_md_setup_mutations`, `biobb_wf_protein-complex_md_setup` | `nsteps: 10` |
+
+Notes:
+
+- The `sed`s are global per file: **every** occurrence of the key gets the same value.
+- `biobb_wf_cmip` is deliberately **not** in the list: its MIP/sander step needs ~25 GiB,
+  no known reduction fits a 7 GiB runner (hence the disabled python test and the
+  `tests/docker/SKIP` in the publish chain).
+- When porting the e2e scripts (§2), each wf's `adjust_runtime()` hook must **mirror**
+  that wf's values from this table, or the e2e runs full-size steps. The cwl flavour's
+  config has quoted keys (`"nsteps":`), so its pattern differs — see the commented
+  examples in `biobb_wf_cmip/tests/*/run_test.sh`.
+- These values are what decide which wf fits which runner pool (§3.3): with reductions,
+  all CI-runnable wfs fit GH-hosted `ubuntu-latest`; a `bigmem` pool is only needed to
+  run heavy wfs *without* reductions (e.g. re-enable cmip).
+
 ## 2. Phase 1: e2e tests for the other flavours — first two workflows done
 
 Local test scripts, already wired to CI **manually** (the `Flavour e2e Tests (manual)`
