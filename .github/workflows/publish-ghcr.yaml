@@ -68,7 +68,8 @@ jobs:
       all_on_paths: '^common/docker/'
 
   # Maps the selection to (a) the publish matrix (wf + build args) and
-  # (b) the test matrix (only wfs that have a docker e2e script).
+  # (b) the test matrix (wfs that have a docker e2e script and no
+  #     tests/docker/SKIP opt-out file; a SKIP-ed wf publishes untested).
   select:
     needs: detect
     if: needs.detect.outputs.matrix != '[]'
@@ -116,11 +117,16 @@ jobs:
           if skipped:
               print("::warning::No GHCR image entry for: " + ", ".join(skipped))
 
-          test = [
-              {"wf": w, "runs_on": "ubuntu-latest"}
-              for w in wfs
-              if os.path.exists(os.path.join(w, "tests", "docker", "run_test.sh"))
-          ]
+          test = []
+          for w in wfs:
+              if not os.path.exists(os.path.join(w, "tests", "docker", "run_test.sh")):
+                  continue
+              skip = os.path.join(w, "tests", "docker", "SKIP")
+              if os.path.exists(skip):
+                  reason = open(skip).read().strip().splitlines()[0]
+                  print("::warning::docker e2e of " + w + " is opted out (tests/docker/SKIP): " + reason)
+                  continue
+              test.append({"wf": w, "runs_on": "ubuntu-latest"})
 
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               f.write("publish_matrix=" + json.dumps(publish) + "\n")

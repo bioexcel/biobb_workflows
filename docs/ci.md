@@ -17,7 +17,7 @@
 | File | Trigger | Runner | Purpose |
 | --- | --- | --- | --- |
 | `docker.yaml` | push to `common/docker/Dockerfile` or `common/docker/sync_dockerfiles.sh` + dispatch | `ubuntu-latest` | **Code generation**: runs `common/docker/sync_dockerfiles.sh` (regenerates all 19 per-wf Dockerfiles from the template with anchor-based patches, injecting per-wf `<wf>/docker/VERSION` labels — see §1.2), commits + pushes if anything changed (`github-actions[bot]`). Its bot push is ignored by the publish chain (no double chain) |
-| `publish-ghcr.yaml` | push to `common/docker/**` (all images) or `biobb_wf_X/docker/**` (X) + `workflow_dispatch` (inputs `wf`, `skip_tests`) | `ubuntu-latest` (per image) | **Test-gated chain**: `detect` → `select` (publish matrix + docker-e2e test matrix) → docker e2e (`flavour-test-reusable`, one job per wf) → `publish` — **only if every selected test passed** (skipped when none exists). One job per workflow, `fail-fast: false`. Each image is tagged with **its own** version (`<wf>/docker/VERSION` if present, else the template label) + `latest`. Test and publish jobs both run the sync script **locally first** (not committed), so they build identical Dockerfiles even if the docker.yaml bot commit is still in flight. See §1.2 |
+| `publish-ghcr.yaml` | push to `common/docker/**` (all images) or `biobb_wf_X/docker/**` (X) + `workflow_dispatch` (inputs `wf`, `skip_tests`) | `ubuntu-latest` (per image) | **Test-gated chain**: `detect` → `select` (publish matrix + docker-e2e test matrix) → docker e2e (`flavour-test-reusable`, one job per wf) → `publish` — **only if every selected test passed** (skipped when none exists). A wf opts out of its own gate with a `tests/docker/SKIP` file (first line = printed reason; it then publishes untested like a wf without an e2e — currently biobb_wf_cmip, OOM on the 7 GiB runner). One job per workflow, `fail-fast: false`. Each image is tagged with **its own** version (`<wf>/docker/VERSION` if present, else the template label) + `latest`. Test and publish jobs both run the sync script **locally first** (not committed), so they build identical Dockerfiles even if the docker.yaml bot commit is still in flight. See §1.2 |
 | `retag-ghcr.yaml` | `workflow_dispatch` (inputs: `wf`, `source` = tag or `sha256:` digest, `tag`) | `ubuntu-latest` | **Tag surgery without rebuilding**: pulls an existing image from GHCR (by digest or tag) and pushes it under a new tag. Use it to restore an overwritten version tag or assign a proper tag — the old digest of an overwritten tag is visible on the package *versions* page (`github.com/orgs/bioexcel/packages/container/<wf>/versions`) even though it has no tag |
 | `python_readme.yaml` | push to `common/python/README_*.md` + dispatch | `ubuntu-latest` | Regenerates `<wf>/python/README.md` (cp + `sed` placeholders), bot commit |
 | `docker_readme.yaml` | push to `common/docker/README_*.md` + dispatch | `ubuntu-latest` | Same for `docker/README.md` |
@@ -82,7 +82,9 @@ Rules this design gives:
   auto-triggering is phase 2 territory).
 - Run-level gate: if any selected docker e2e fails, that run publishes nothing (re-push or
   re-dispatch publishes the green ones). Workflows without a docker e2e script publish
-  without a gate (the select job prints a warning).
+  without a gate (the select job prints a warning). A wf can opt out of its own gate with
+  a `tests/docker/SKIP` file (first line = the printed reason; currently: biobb_wf_cmip —
+  OOM on the 7 GiB runner); it then publishes untested, like a wf without an e2e.
 - Overwrote a tag by mistake? The old image survives in the registry by digest (package
   versions page) — restore it with `retag-ghcr.yaml`.
 
@@ -170,12 +172,17 @@ one-line change there (see testing.md §runner plan).
   `python-tests.yaml.disabled`) — the owner decided the always-on runs weren't worth it;
   python is covered on demand via the manual Flavour e2e (`python` flavour →
   `python-reusable.yaml`, unchanged).
+- ~~One red docker e2e (biobb_wf_cmip — OOM on the 7 GiB runner) blocked every
+  all-workflows publish run forever~~ → per-wf opt-out file `tests/docker/SKIP`: the
+  select job drops the wf from the test matrix (prints the reason) and the wf publishes
+  untested, like any wf without a docker e2e.
 
 ### Still open
 
 1. **cmip python tests disabled in CI**: Fortran allocates ~25 GiB vs 7 GiB runner RAM
    (also `test_step24_cmip_run_prot_prot` is commented out in the test file). Needs a
-   bigger runner or a reduced run.
+   bigger runner or a reduced run. Its docker e2e hits the same wall and is opted out of
+   the publish gate via `biobb_wf_cmip/tests/docker/SKIP`.
 2. **`self-hosted`-only workflows** (cwl/galaxy README, stale bot) queue forever if the
    swarm stack is down (no `ubuntu-latest` fallback).
 3. **README sync workflows still use cp+sed** (line-number based) — same fragility as the
@@ -185,7 +192,8 @@ one-line change there (see testing.md §runner plan).
 5. **`NOTES.md` git-ignored** → critical re-sync knowledge for CWL/Airflow is lost for
    anyone else. Consider un-ignoring or moving to `docs/`.
 6. **Publish gate is run-level** → one failing docker e2e blocks every image of that run
-   (re-dispatch publishes the green ones). Per-workflow partial publishing would need
-   per-matrix-leg job outputs.
+   (re-dispatch publishes the green ones; the `tests/docker/SKIP` opt-out covers the
+   known-broken case). Per-workflow partial publishing would need per-matrix-leg job
+   outputs.
 7. **`biobb_wf_structure_checking` has no GHCR image entry** in the publish matrix (its
    docker e2e doesn't exist either) — decide whether it should be published.

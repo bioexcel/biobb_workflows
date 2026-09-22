@@ -123,7 +123,9 @@ Caveats baked into the design:
   unpushed `workflow.py` edits (documented in tests/README.md).
 - **Full cmip runs are long** (MIP grids + sander). The scripts support `EXTRA_*` env passthrough
   and a per-wf `adjust_runtime()` hook (no-op for cmip) so heavy workflows can sed-reduce
-  steps like the python CI does.
+  steps like the python CI does. The cmip docker e2e does not fit the 7 GiB GH-hosted
+  runner (same ~25 GiB allocation), so it is opted out of the publish chain's gate via
+  `biobb_wf_cmip/tests/docker/SKIP` (see ci.md §1.2).
 - **Airflow paths**: `CWL_WORKFLOWS_BASE_DIR` / `CWL_TMP_DIR` / `CWL_PLUGINS_DIR` env vars
   point at the host scratch path (shared verbatim with the host docker daemon) → the
   `docker_wrapper.sh` rewrites never fire on Linux.
