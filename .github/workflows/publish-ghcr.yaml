@@ -6,10 +6,85 @@ on:
       - main
     paths:
       - common/docker/Dockerfile
+  workflow_dispatch:
+    inputs:
+      wf:
+        description: 'Workflow image to build (all = every image)'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - biobb_wf_amber_abc_setup
+          - biobb_wf_amber_md_setup
+          - biobb_wf_amber_md_setup_lig
+          - biobb_wf_autoencoder
+          - biobb_wf_cmip
+          - biobb_wf_dna_helparms
+          - biobb_wf_flexdyn
+          - biobb_wf_flexserv
+          - biobb_wf_godmd
+          - biobb_wf_haddock
+          - biobb_wf_ligand_parameterization
+          - biobb_wf_md_setup
+          - biobb_wf_md_setup_mutations
+          - biobb_wf_mem
+          - biobb_wf_pmx_tutorial
+          - biobb_wf_protein_md_analysis
+          - biobb_wf_protein-complex_md_setup
+          - biobb_wf_virtual-screening_fpocket
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build_and_publish:
     runs-on: ubuntu-latest
+    # Push trigger (template change) => build all; manual dispatch => the
+    # selected workflow (or all)
+    if: ${{ inputs.wf == '' || inputs.wf == 'all' || matrix.wf == inputs.wf }}
+    strategy:
+      # one image failing (e.g. a bad tool version) must not stop the rest
+      fail-fast: false
+      matrix:
+        include:
+          - wf: biobb_wf_amber_abc_setup
+            args: --build-arg REPO=biobb_wf_amber --build-arg SUBREPO=abc_setup
+          - wf: biobb_wf_amber_md_setup
+            args: --build-arg REPO=biobb_wf_amber --build-arg SUBREPO=md_setup
+          - wf: biobb_wf_amber_md_setup_lig
+            args: --build-arg REPO=biobb_wf_amber --build-arg SUBREPO=md_setup_lig
+          - wf: biobb_wf_autoencoder
+            args: --build-arg REPO=biobb_wf_autoencoder
+          - wf: biobb_wf_cmip
+            args: --build-arg REPO=biobb_wf_cmip
+          - wf: biobb_wf_dna_helparms
+            args: --build-arg REPO=biobb_wf_dna_helparms
+          - wf: biobb_wf_flexdyn
+            args: --build-arg REPO=biobb_wf_flexdyn
+          - wf: biobb_wf_flexserv
+            args: --build-arg REPO=biobb_wf_flexserv
+          - wf: biobb_wf_godmd
+            args: --build-arg REPO=biobb_wf_godmd
+          - wf: biobb_wf_haddock
+            args: --build-arg REPO=biobb_wf_haddock
+          - wf: biobb_wf_ligand_parameterization
+            args: --build-arg REPO=biobb_wf_ligand_parameterization
+          - wf: biobb_wf_md_setup
+            args: --build-arg REPO=biobb_wf_md_setup
+          - wf: biobb_wf_md_setup_mutations
+            args: --build-arg REPO=biobb_wf_md_setup_mutations
+          - wf: biobb_wf_mem
+            args: --build-arg REPO=biobb_wf_mem
+          - wf: biobb_wf_pmx_tutorial
+            args: --build-arg REPO=biobb_wf_pmx_tutorial
+          - wf: biobb_wf_protein_md_analysis
+            args: --build-arg REPO=biobb_wf_protein_md_analysis
+          - wf: biobb_wf_protein-complex_md_setup
+            args: --build-arg REPO=biobb_wf_protein-complex_md_setup
+          - wf: biobb_wf_virtual-screening_fpocket
+            args: --build-arg REPO=biobb_wf_virtual-screening --build-arg SUBREPO=fpocket
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -33,192 +108,12 @@ jobs:
           VERSION=$(grep 'LABEL version=' common/docker/Dockerfile | cut -d '"' -f 2)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      - name: Build and push biobb_wf_amber_abc_setup image
+      - name: Build and push ${{ matrix.wf }} image
         run: |
-          cd biobb_wf_amber_abc_setup/docker
-          docker build --build-arg REPO=biobb_wf_amber --build-arg SUBREPO=abc_setup -t ghcr.io/bioexcel/biobb_wf_amber_abc_setup:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_amber_abc_setup:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_amber_abc_setup:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_amber_abc_setup:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_amber_abc_setup:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_amber_abc_setup:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_amber_md_setup image
-        run: |
-          cd biobb_wf_amber_md_setup/docker
-          docker build --build-arg REPO=biobb_wf_amber --build-arg SUBREPO=md_setup -t ghcr.io/bioexcel/biobb_wf_amber_md_setup:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_amber_md_setup:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_amber_md_setup:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_amber_md_setup:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_amber_md_setup:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_amber_md_setup:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_amber_md_setup_lig image
-        run: |
-          cd biobb_wf_amber_md_setup_lig/docker
-          docker build --build-arg REPO=biobb_wf_amber --build-arg SUBREPO=md_setup_lig -t ghcr.io/bioexcel/biobb_wf_amber_md_setup_lig:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_amber_md_setup_lig:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_amber_md_setup_lig:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_amber_md_setup_lig:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_amber_md_setup_lig:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_amber_md_setup_lig:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_autoencoder image
-        run: |
-          cd biobb_wf_autoencoder/docker
-          docker build --build-arg REPO=biobb_wf_autoencoder -t ghcr.io/bioexcel/biobb_wf_autoencoder:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_autoencoder:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_autoencoder:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_autoencoder:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_autoencoder:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_autoencoder:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_cmip image
-        run: |
-          cd biobb_wf_cmip/docker
-          docker build --build-arg REPO=biobb_wf_cmip -t ghcr.io/bioexcel/biobb_wf_cmip:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_cmip:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_cmip:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_cmip:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_cmip:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_cmip:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_dna_helparms image
-        run: |
-          cd biobb_wf_dna_helparms/docker
-          docker build --build-arg REPO=biobb_wf_dna_helparms -t ghcr.io/bioexcel/biobb_wf_dna_helparms:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_dna_helparms:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_dna_helparms:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_dna_helparms:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_dna_helparms:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_dna_helparms:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_flexdyn image
-        run: |
-          cd biobb_wf_flexdyn/docker
-          docker build --build-arg REPO=biobb_wf_flexdyn -t ghcr.io/bioexcel/biobb_wf_flexdyn:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_flexdyn:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_flexdyn:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_flexdyn:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_flexdyn:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_flexdyn:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_flexserv image
-        run: |
-          cd biobb_wf_flexserv/docker
-          docker build --build-arg REPO=biobb_wf_flexserv -t ghcr.io/bioexcel/biobb_wf_flexserv:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_flexserv:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_flexserv:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_flexserv:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_flexserv:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_flexserv:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_godmd image
-        run: |
-          cd biobb_wf_godmd/docker
-          docker build --build-arg REPO=biobb_wf_godmd -t ghcr.io/bioexcel/biobb_wf_godmd:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_godmd:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_godmd:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_godmd:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_godmd:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_godmd:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_haddock image
-        run: |
-          cd biobb_wf_haddock/docker
-          docker build --build-arg REPO=biobb_wf_haddock -t ghcr.io/bioexcel/biobb_wf_haddock:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_haddock:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_haddock:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_haddock:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_haddock:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_haddock:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_ligand_parameterization image
-        run: |
-          cd biobb_wf_ligand_parameterization/docker
-          docker build --build-arg REPO=biobb_wf_ligand_parameterization -t ghcr.io/bioexcel/biobb_wf_ligand_parameterization:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_ligand_parameterization:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_ligand_parameterization:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_ligand_parameterization:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_ligand_parameterization:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_ligand_parameterization:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_md_setup image
-        run: |
-          cd biobb_wf_md_setup/docker
-          docker build --build-arg REPO=biobb_wf_md_setup -t ghcr.io/bioexcel/biobb_wf_md_setup:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_md_setup:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_md_setup:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_md_setup:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_md_setup:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_md_setup:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_md_setup_mutations image
-        run: |
-          cd biobb_wf_md_setup_mutations/docker
-          docker build --build-arg REPO=biobb_wf_md_setup_mutations -t ghcr.io/bioexcel/biobb_wf_md_setup_mutations:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_md_setup_mutations:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_md_setup_mutations:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_md_setup_mutations:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_md_setup_mutations:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_md_setup_mutations:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_mem image
-        run: |
-          cd biobb_wf_mem/docker
-          docker build --build-arg REPO=biobb_wf_mem -t ghcr.io/bioexcel/biobb_wf_mem:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_mem:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_mem:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_mem:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_mem:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_mem:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_pmx_tutorial image
-        run: |
-          cd biobb_wf_pmx_tutorial/docker
-          docker build --build-arg REPO=biobb_wf_pmx_tutorial -t ghcr.io/bioexcel/biobb_wf_pmx_tutorial:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_pmx_tutorial:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_pmx_tutorial:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_pmx_tutorial:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_pmx_tutorial:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_pmx_tutorial:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_protein_md_analysis image
-        run: |
-          cd biobb_wf_protein_md_analysis/docker
-          docker build --build-arg REPO=biobb_wf_protein_md_analysis -t ghcr.io/bioexcel/biobb_wf_protein_md_analysis:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_protein_md_analysis:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_protein_md_analysis:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_protein_md_analysis:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_protein_md_analysis:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_protein_md_analysis:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_protein-complex_md_setup image
-        run: |
-          cd biobb_wf_protein-complex_md_setup/docker
-          docker build --build-arg REPO=biobb_wf_protein-complex_md_setup -t ghcr.io/bioexcel/biobb_wf_protein-complex_md_setup:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_protein-complex_md_setup:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_protein-complex_md_setup:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_protein-complex_md_setup:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_protein-complex_md_setup:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_protein-complex_md_setup:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_structure_checking image
-        run: |
-          cd biobb_wf_structure_checking/docker
-          docker build --build-arg REPO=biobb_wf_structure_checking -t ghcr.io/bioexcel/biobb_wf_structure_checking:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_structure_checking:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_structure_checking:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_structure_checking:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_structure_checking:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_structure_checking:latest
-          docker system prune -f
-
-      - name: Build and push biobb_wf_virtual-screening_fpocket image
-        run: |
-          cd biobb_wf_virtual-screening_fpocket/docker
-          docker build --build-arg REPO=biobb_wf_virtual-screening --build-arg SUBREPO=fpocket -t ghcr.io/bioexcel/biobb_wf_virtual-screening_fpocket:${{ env.VERSION }} -t ghcr.io/bioexcel/biobb_wf_virtual-screening_fpocket:latest .
-          docker push ghcr.io/bioexcel/biobb_wf_virtual-screening_fpocket:${{ env.VERSION }}
-          docker push ghcr.io/bioexcel/biobb_wf_virtual-screening_fpocket:latest
-          docker rmi ghcr.io/bioexcel/biobb_wf_virtual-screening_fpocket:${{ env.VERSION }}
-          docker rmi ghcr.io/bioexcel/biobb_wf_virtual-screening_fpocket:latest
+          cd ${{ matrix.wf }}/docker
+          docker build ${{ matrix.args }} -t ghcr.io/bioexcel/${{ matrix.wf }}:${{ env.VERSION }} -t ghcr.io/bioexcel/${{ matrix.wf }}:latest .
+          docker push ghcr.io/bioexcel/${{ matrix.wf }}:${{ env.VERSION }}
+          docker push ghcr.io/bioexcel/${{ matrix.wf }}:latest
+          docker rmi ghcr.io/bioexcel/${{ matrix.wf }}:${{ env.VERSION }}
+          docker rmi ghcr.io/bioexcel/${{ matrix.wf }}:latest
           docker system prune -f
