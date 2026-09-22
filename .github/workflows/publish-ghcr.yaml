@@ -39,52 +39,68 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build_and_publish:
+  # Filters the full image list down to the selected workflow (push trigger
+  # or 'all' => every image). A job-level 'if' cannot use the matrix context,
+  # so the selection happens here and feeds the build matrix dynamically.
+  select:
     runs-on: ubuntu-latest
-    # Push trigger (template change) => build all; manual dispatch => the
-    # selected workflow (or all)
-    if: ${{ inputs.wf == '' || inputs.wf == 'all' || matrix.wf == inputs.wf }}
+    outputs:
+      matrix: ${{ steps.select.outputs.matrix }}
+    steps:
+      - name: Select workflow images to build
+        id: select
+        env:
+          WF: ${{ inputs.wf }}
+        run: |
+          cat > images.json <<'EOF'
+          [
+            {"wf": "biobb_wf_amber_abc_setup", "args": "--build-arg REPO=biobb_wf_amber --build-arg SUBREPO=abc_setup"},
+            {"wf": "biobb_wf_amber_md_setup", "args": "--build-arg REPO=biobb_wf_amber --build-arg SUBREPO=md_setup"},
+            {"wf": "biobb_wf_amber_md_setup_lig", "args": "--build-arg REPO=biobb_wf_amber --build-arg SUBREPO=md_setup_lig"},
+            {"wf": "biobb_wf_autoencoder", "args": "--build-arg REPO=biobb_wf_autoencoder"},
+            {"wf": "biobb_wf_cmip", "args": "--build-arg REPO=biobb_wf_cmip"},
+            {"wf": "biobb_wf_dna_helparms", "args": "--build-arg REPO=biobb_wf_dna_helparms"},
+            {"wf": "biobb_wf_flexdyn", "args": "--build-arg REPO=biobb_wf_flexdyn"},
+            {"wf": "biobb_wf_flexserv", "args": "--build-arg REPO=biobb_wf_flexserv"},
+            {"wf": "biobb_wf_godmd", "args": "--build-arg REPO=biobb_wf_godmd"},
+            {"wf": "biobb_wf_haddock", "args": "--build-arg REPO=biobb_wf_haddock"},
+            {"wf": "biobb_wf_ligand_parameterization", "args": "--build-arg REPO=biobb_wf_ligand_parameterization"},
+            {"wf": "biobb_wf_md_setup", "args": "--build-arg REPO=biobb_wf_md_setup"},
+            {"wf": "biobb_wf_md_setup_mutations", "args": "--build-arg REPO=biobb_wf_md_setup_mutations"},
+            {"wf": "biobb_wf_mem", "args": "--build-arg REPO=biobb_wf_mem"},
+            {"wf": "biobb_wf_pmx_tutorial", "args": "--build-arg REPO=biobb_wf_pmx_tutorial"},
+            {"wf": "biobb_wf_protein_md_analysis", "args": "--build-arg REPO=biobb_wf_protein_md_analysis"},
+            {"wf": "biobb_wf_protein-complex_md_setup", "args": "--build-arg REPO=biobb_wf_protein-complex_md_setup"},
+            {"wf": "biobb_wf_virtual-screening_fpocket", "args": "--build-arg REPO=biobb_wf_virtual-screening --build-arg SUBREPO=fpocket"}
+          ]
+          EOF
+          if [ -z "$WF" ] || [ "$WF" = "all" ]; then
+            SEL="$(cat images.json)"
+          else
+            SEL="$(python3 -c '
+          import json, os
+          wf = os.environ["WF"]
+          data = json.load(open("images.json"))
+          sel = [e for e in data if e["wf"] == wf]
+          if not sel:
+              raise SystemExit(f"unknown workflow: {wf}")
+          print(json.dumps(sel))
+          ')"
+          fi
+          {
+            echo "matrix<<SELECTED_EOF"
+            echo "$SEL"
+            echo "SELECTED_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+  build_and_publish:
+    needs: select
+    runs-on: ubuntu-latest
     strategy:
       # one image failing (e.g. a bad tool version) must not stop the rest
       fail-fast: false
       matrix:
-        include:
-          - wf: biobb_wf_amber_abc_setup
-            args: --build-arg REPO=biobb_wf_amber --build-arg SUBREPO=abc_setup
-          - wf: biobb_wf_amber_md_setup
-            args: --build-arg REPO=biobb_wf_amber --build-arg SUBREPO=md_setup
-          - wf: biobb_wf_amber_md_setup_lig
-            args: --build-arg REPO=biobb_wf_amber --build-arg SUBREPO=md_setup_lig
-          - wf: biobb_wf_autoencoder
-            args: --build-arg REPO=biobb_wf_autoencoder
-          - wf: biobb_wf_cmip
-            args: --build-arg REPO=biobb_wf_cmip
-          - wf: biobb_wf_dna_helparms
-            args: --build-arg REPO=biobb_wf_dna_helparms
-          - wf: biobb_wf_flexdyn
-            args: --build-arg REPO=biobb_wf_flexdyn
-          - wf: biobb_wf_flexserv
-            args: --build-arg REPO=biobb_wf_flexserv
-          - wf: biobb_wf_godmd
-            args: --build-arg REPO=biobb_wf_godmd
-          - wf: biobb_wf_haddock
-            args: --build-arg REPO=biobb_wf_haddock
-          - wf: biobb_wf_ligand_parameterization
-            args: --build-arg REPO=biobb_wf_ligand_parameterization
-          - wf: biobb_wf_md_setup
-            args: --build-arg REPO=biobb_wf_md_setup
-          - wf: biobb_wf_md_setup_mutations
-            args: --build-arg REPO=biobb_wf_md_setup_mutations
-          - wf: biobb_wf_mem
-            args: --build-arg REPO=biobb_wf_mem
-          - wf: biobb_wf_pmx_tutorial
-            args: --build-arg REPO=biobb_wf_pmx_tutorial
-          - wf: biobb_wf_protein_md_analysis
-            args: --build-arg REPO=biobb_wf_protein_md_analysis
-          - wf: biobb_wf_protein-complex_md_setup
-            args: --build-arg REPO=biobb_wf_protein-complex_md_setup
-          - wf: biobb_wf_virtual-screening_fpocket
-            args: --build-arg REPO=biobb_wf_virtual-screening --build-arg SUBREPO=fpocket
+        include: ${{ fromJSON(needs.select.outputs.matrix) }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
