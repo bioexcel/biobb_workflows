@@ -7,7 +7,7 @@
 | File | Trigger | Runner | Purpose |
 | --- | --- | --- | --- |
 | `detect.yaml` | `workflow_call` (inputs: `wf_names`, `all_on_paths`, `require_path`, `flavour`) | `ubuntu-latest` | **Shared brain**: decides *which* workflows a test run must cover and emits a JSON matrix `[{wf, runs_on}]`. Rules: push → folders changed in the push (all, if a CI file matched by `all_on_paths` changed); manual → `wf_names` (empty = all); scheduled → all. `require_path` restricts to workflows that contain a given file (used by the flavour tests) |
-| `python-tests.yaml` | `push` + weekly `schedule` (Mon 04:00 UTC) + `workflow_dispatch` (input `wf_names`) | `ubuntu-latest` (per job) | The python step-by-step pytest pipeline: `detect` → one call of `python-reusable.yaml` per selected workflow. Skips pushes made by `github-actions[bot]` (the sync bot) |
+| ~~`python-tests.yaml`~~ — **disabled 2026-09-21** (renamed `python-tests.yaml.disabled`; re-enable by renaming back) | was: `push` + weekly `schedule` + `workflow_dispatch` (`wf_names`) | `ubuntu-latest` (per job) | The python step-by-step pytest pipeline: `detect` → one call of `python-reusable.yaml` per selected workflow. Python is now tested on demand via the manual Flavour e2e (`python` flavour, which delegates to `python-reusable.yaml`); `python-reusable.yaml` itself stays active for that |
 | `python-reusable.yaml` | `workflow_call` (`wf_name`, optional `runs_on`) | input-driven | Per-workflow python test: checkout → per-wf `sed` runtime reductions → micromamba env from `<wf>/python/workflow.env.yml` (+`pytest`, `imagehash`) → `pytest <wf>.py --config ../../python/workflow.yml --remove`. `timeout-minutes: 720` |
 | `flavour-tests.yaml` | `workflow_dispatch` only (inputs: `flavour` = docker/cwl/airflow/jupyter/python, `wf_names`) | `ubuntu-latest` (per job) | Phase-1 e2e tests for the other flavours: `detect` (only workflows that have `tests/<flavour>/run_test.sh`; for python, the `tests/python/` dir = every wf) → one call of `flavour-test-reusable.yaml` each. Manual on purpose — see phase 2 to add a push trigger. Concurrency group includes the flavour, so the 5 flavours can run in parallel |
 | `flavour-test-reusable.yaml` | `workflow_call` (`wf_name`, `flavour`, optional `runs_on`) | input-driven | Runs `<wf>/tests/<flavour>/run_test.sh` (installs `cwltool` via micromamba for the cwl flavour). `timeout-minutes: 720`. The **python** flavour has no script: the job delegates to `python-reusable.yaml` (the CI python pipeline, so manual and automatic runs can never drift) |
@@ -57,8 +57,10 @@ Bumping a tool version (e.g. `biobb_chemistry`) for **one** workflow, end to end
      `binder/environment.yml`. **Push the jupyter repo first** — the docker image (and the
      jupyter e2e test in CI) fetch `conda_env/environment.yml` from its `main` at build time.
    - Then commit in this repo, including the submodule pointer bump.
-2. **Test**: python tests auto-run on the push (no path filter); the docker/cwl/airflow/jupyter
-   e2e runs are triggered manually via "Flavour e2e Tests" (one run per flavour).
+2. **Test**: the docker/cwl/airflow/jupyter e2e runs are triggered manually via "Flavour e2e
+   Tests" (one run per flavour; `python` flavour included — the automatic python pipeline is
+   disabled, see the inventory). The docker e2e also runs automatically as the gate of the
+   publish chain (step 4) when `docker/` paths change.
 3. **Bump the image label** (so the new content gets a new tag and the old image keeps its
    tag): update `<wf>/docker/VERSION` (one line, e.g. `2026.2`; the file is absent for
    workflows that follow the shared template label). Steps 2–3 land in the same push.
@@ -164,6 +166,10 @@ one-line change there (see testing.md §runner plan).
   `detect → select → docker e2e → publish` (publish only when green). The per-wf version
   label moved from a central `LABEL_OVERRIDES` dict to a per-wf `<wf>/docker/VERSION`
   file, so a label bump is a per-wf path change and the chain stays per-workflow.
+- ~~Automatic python pipeline (`python-tests.yaml`)~~ → **disabled** (renamed
+  `python-tests.yaml.disabled`) — the owner decided the always-on runs weren't worth it;
+  python is covered on demand via the manual Flavour e2e (`python` flavour →
+  `python-reusable.yaml`, unchanged).
 
 ### Still open
 

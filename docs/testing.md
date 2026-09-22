@@ -21,7 +21,9 @@ Per workflow, `tests/python/` contains:
 
 CI invocation (see ci.md): micromamba env from `python/workflow.env.yml` (+ pytest,
 imagehash), then `pytest <wf>.py --config ../../python/workflow.yml --remove` from
-`tests/python/`.
+`tests/python/`. The automatic pipeline (`python-tests.yaml`) was **disabled 2026-09-21**;
+the same invocation runs on demand via the manual Flavour e2e (`python` flavour, which
+delegates to `python-reusable.yaml`).
 
 ### 1.2 Local run recipe
 
