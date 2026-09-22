@@ -11,10 +11,6 @@ on:
     paths:
       - 'biobb_wf_*/cwl/**'
       - 'biobb_wf_*/tests/cwl/**'
-      # a change to the pipeline itself tests everything
-      - .github/workflows/detect.yaml
-      - .github/workflows/cwl-tests.yaml
-      - .github/workflows/flavour-test-reusable.yaml
 
 # if you push twice quickly, cancel the older run
 concurrency:
@@ -27,7 +23,6 @@ jobs:
     uses: ./.github/workflows/detect.yaml
     if: github.actor != 'github-actions[bot]'
     with:
-      all_on_paths: '^\.github/workflows/(detect|cwl-tests|flavour-test-reusable)\.yaml$'
       flavour: cwl
 
   test:

@@ -16,10 +16,6 @@ on:
       - 'biobb_wf_*/tests/jupyter/**'
       - 'biobb_wf_*/jupyter'
       - 'biobb_wf_*/jupyter/**'
-      # a change to the pipeline itself tests everything
-      - .github/workflows/detect.yaml
-      - .github/workflows/jupyter-tests.yaml
-      - .github/workflows/flavour-test-reusable.yaml
 
 # if you push twice quickly, cancel the older run
 concurrency:
@@ -32,7 +28,6 @@ jobs:
     uses: ./.github/workflows/detect.yaml
     if: github.actor != 'github-actions[bot]'
     with:
-      all_on_paths: '^\.github/workflows/(detect|jupyter-tests|flavour-test-reusable)\.yaml$'
       flavour: jupyter
 
   test:

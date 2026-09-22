@@ -8,10 +8,6 @@ on:
     paths:
       - 'biobb_wf_*/python/**'
       - 'biobb_wf_*/tests/python/**'
-      # a change to the pipeline itself tests everything
-      - .github/workflows/detect.yaml
-      - .github/workflows/python-tests.yaml
-      - .github/workflows/python-reusable.yaml
   workflow_dispatch:
     inputs:
       wf_names:
@@ -33,7 +29,6 @@ jobs:
     if: github.actor != 'github-actions[bot]'
     with:
       wf_names: ${{ github.event.inputs.wf_names || '' }}
-      all_on_paths: '^\.github/workflows/(detect|python-tests|python-reusable)\.yaml$'
 
   test:
     name: ${{ matrix.wf }}
