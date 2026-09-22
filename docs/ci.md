@@ -9,15 +9,16 @@
 | `detect.yaml` | `workflow_call` (inputs: `wf_names`, `all_on_paths`, `require_path`) | `ubuntu-latest` | **Shared brain**: decides *which* workflows a test run must cover and emits a JSON matrix `[{wf, runs_on}]`. Rules: push → folders changed in the push (all, if a CI file matched by `all_on_paths` changed); manual → `wf_names` (empty = all); scheduled → all. `require_path` restricts to workflows that contain a given file (used by the flavour tests) |
 | `python-tests.yaml` | `push` + weekly `schedule` (Mon 04:00 UTC) + `workflow_dispatch` (input `wf_names`) | `ubuntu-latest` (per job) | The python step-by-step pytest pipeline: `detect` → one call of `python-reusable.yaml` per selected workflow. Skips pushes made by `github-actions[bot]` (the sync bot) |
 | `python-reusable.yaml` | `workflow_call` (`wf_name`, optional `runs_on`) | input-driven | Per-workflow python test: checkout → per-wf `sed` runtime reductions → micromamba env from `<wf>/python/workflow.env.yml` (+`pytest`, `imagehash`) → `pytest <wf>.py --config ../../python/workflow.yml --remove`. `timeout-minutes: 720` |
-| `flavour-tests.yaml` | `workflow_dispatch` only (inputs: `flavour` = docker/cwl/airflow, `wf_names`) | `ubuntu-latest` (per job) | Phase-1 e2e tests for the other flavours: `detect` (only workflows that have `tests/<flavour>/run_test.sh`) → one call of `flavour-test-reusable.yaml` each. Manual on purpose — see phase 2 to add a push trigger |
+| `flavour-tests.yaml` | `workflow_dispatch` only (inputs: `flavour` = docker/cwl/airflow/jupyter, `wf_names`) | `ubuntu-latest` (per job) | Phase-1 e2e tests for the other flavours: `detect` (only workflows that have `tests/<flavour>/run_test.sh`) → one call of `flavour-test-reusable.yaml` each. Manual on purpose — see phase 2 to add a push trigger. Concurrency group includes the flavour, so the 4 flavours can run in parallel |
 | `flavour-test-reusable.yaml` | `workflow_call` (`wf_name`, `flavour`, optional `runs_on`) | input-driven | Runs `<wf>/tests/<flavour>/run_test.sh` (installs `cwltool` via micromamba for the cwl flavour). `timeout-minutes: 720` |
 
 ### Code-generation & publishing workflows (they commit/publish, they do not test)
 
 | File | Trigger | Runner | Purpose |
 | --- | --- | --- | --- |
-| `docker.yaml` | push to `common/docker/Dockerfile` or `common/docker/sync_dockerfiles.sh` + dispatch | `ubuntu-latest` | **Code generation**: runs `common/docker/sync_dockerfiles.sh` (regenerates all 19 per-wf Dockerfiles from the template with anchor-based patches), commits + pushes if anything changed (`github-actions[bot]`) |
-| `publish-ghcr.yaml` | push to `main` touching `common/docker/Dockerfile` | `ubuntu-latest` | Builds + pushes all 19 images to GHCR. Runs the sync script **locally first** (not committed), so a build can never use stale per-wf Dockerfiles |
+| `docker.yaml` | push to `common/docker/Dockerfile` or `common/docker/sync_dockerfiles.sh` + dispatch | `ubuntu-latest` | **Code generation**: runs `common/docker/sync_dockerfiles.sh` (regenerates all 19 per-wf Dockerfiles from the template with anchor-based patches, keeping per-wf `LABEL version=` overrides — see §1.2), commits + pushes if anything changed (`github-actions[bot]`). A push of per-wf Dockerfiles triggers **no** publish |
+| `publish-ghcr.yaml` | push to `main` touching `common/docker/Dockerfile` (all images) + `workflow_dispatch` (input `wf`: one workflow or `all`) | `ubuntu-latest` (per image) | Builds + pushes GHCR images, **one job per workflow** (matrix filled by a `select` job from the `wf` input; `fail-fast: false`). Each image is tagged with **its own** `LABEL version=` from `<wf>/docker/Dockerfile` + `latest`. Runs the sync script **locally first** (not committed), so a build can never use stale per-wf Dockerfiles. See §1.2 for the update flow |
+| `retag-ghcr.yaml` | `workflow_dispatch` (inputs: `wf`, `source` = tag or `sha256:` digest, `tag`) | `ubuntu-latest` | **Tag surgery without rebuilding**: pulls an existing image from GHCR (by digest or tag) and pushes it under a new tag. Use it to restore an overwritten version tag or assign a proper tag — the old digest of an overwritten tag is visible on the package *versions* page (`github.com/orgs/bioexcel/packages/container/<wf>/versions`) even though it has no tag |
 | `python_readme.yaml` | push to `common/python/README_*.md` + dispatch | `ubuntu-latest` | Regenerates `<wf>/python/README.md` (cp + `sed` placeholders), bot commit |
 | `docker_readme.yaml` | push to `common/docker/README_*.md` + dispatch | `ubuntu-latest` | Same for `docker/README.md` |
 | `cwl_readme.yaml` | push to `common/cwl/README.md` + dispatch | **`self-hosted`** | Same for `cwl/README.md` |
@@ -44,6 +45,35 @@ for the bot commits via `peter-murray/workflow-application-token-action@v3`;
 Verified locally against real commit pairs: a cmip-only commit selects only cmip; a CI-file
 commit selects all 19; `require_path: tests/docker/run_test.sh` selects exactly the
 workflows that have a docker test.
+
+### 1.2 The per-workflow update flow (version bump → tests → image)
+
+Bumping a tool version (e.g. `biobb_chemistry`) for **one** workflow, end to end:
+
+1. **Update the pins** (the 5+2 places, see architecture.md):
+   - this repo: `<wf>/python/workflow.env.yml`, one `dockerPull:` line per adapter in
+     `<wf>/cwl/biobb_adapters/*.cwl` and `<wf>/airflow/biobb_adapters/*.cwl`
+   - jupyter repo (`bioexcel/<wf>`, the submodule): `conda_env/environment.yml` +
+     `binder/environment.yml`. **Push the jupyter repo first** — the docker image (and the
+     jupyter e2e test in CI) fetch `conda_env/environment.yml` from its `main` at build time.
+   - Then commit in this repo, including the submodule pointer bump.
+2. **Test**: python tests auto-run on the push (no path filter); the docker/cwl/airflow/jupyter
+   e2e runs are triggered manually via "Flavour e2e Tests" (one run per flavour).
+3. **Bump the image label** (so the new content gets a new tag and the old image keeps its
+   tag): set the value in `LABEL_OVERRIDES` in `common/docker/sync_dockerfiles.sh`, then push.
+   The `docker.yaml` bot re-generates `<wf>/docker/Dockerfile` with the new label and bot-commits
+   it; **no publish is triggered** (the publisher's push path is the template only).
+4. **Publish**: Actions → "Docker Image CI for GHCR" → Run workflow → `wf: <wf>` → one image
+   built + pushed as `<wf>:<new label>` + `<wf>:latest`. Other workflows' images/tags are
+   untouched.
+
+Rules this design gives:
+
+- Each image is versioned independently (its own `LABEL version=`); a template change still
+  rebuilds **all** images (shared base), re-pushing them under their own current labels.
+- Pushing per-wf Dockerfiles or any non-template path never triggers a publish.
+- Overwrote a tag by mistake? The old image survives in the registry by digest (package
+  versions page) — restore it with `retag-ghcr.yaml`.
 
 ## 2. Self-hosted runner infrastructure (`web_microservices/gh_runner`)
 
@@ -101,6 +131,20 @@ one-line change there (see testing.md §runner plan).
 - ~~`citation.yaml` watching `master`~~ → now `main`.
 - ~~`cwl_readme.yaml` typo (`README.mdd`)~~ → fixed.
 - ~~48 h timeout in the python test job~~ → 12 h.
+
+### Fixed 2026-09-21 (e2e + publishing round)
+
+- ~~GHCR publish was all-18-in-one-job, no manual trigger~~ → per-workflow matrix with a
+  manual `wf` selector (see §1.2); `fail-fast: false`.
+- ~~One shared image version label~~ → per-wf labels via `LABEL_OVERRIDES`
+  (`sync_dockerfiles.sh`); the publisher tags from each wf's own Dockerfile.
+- ~~No way to repair a GHCR tag without rebuilding~~ → `retag-ghcr.yaml`.
+- ~~`matrix` context in a job-level `if`~~ → rejected by the workflow validator
+  ("Unrecognized named-value: 'matrix'"); selection now happens in a `select` job whose
+  JSON output feeds the matrix via `fromJSON(needs.select.outputs.matrix)`.
+- Jupyter e2e flavour added to the manual Flavour e2e workflow (pilot workflow; see
+  testing.md §2). The flavour e2e scripts themselves fixed several CI-only bugs —
+  recorded in testing.md §2.1.
 
 ### Still open
 

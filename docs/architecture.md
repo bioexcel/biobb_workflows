@@ -143,7 +143,8 @@ execution substrate differs.
 - The per-workflow `docker/workflow.yml` is the python one with `/data/` absolute input paths
   (and, e.g., MPI props removed for cmip).
 - Published to GHCR: `ghcr.io/bioexcel/<wf>:<version>` + `:latest`
-  (version = `LABEL version=` in the common Dockerfile, currently `2026.1`).
+  (version = `LABEL version=` in `<wf>/docker/Dockerfile`; may differ per workflow via
+  `LABEL_OVERRIDES` in `common/docker/sync_dockerfiles.sh`).
 - Run: `docker run -v <inputs>:/data ghcr.io/bioexcel/<wf>`.
 
 ### 3.5 galaxy
@@ -165,7 +166,7 @@ CI *commits generated files back to the repo* (via a GitHub App token, actor
 
 | Template in `common/` | Generated artefacts | CI workflow |
 | --- | --- | --- |
-| `docker/Dockerfile` | `<wf>/docker/Dockerfile` (sed-patched per wf) | `docker.yaml` |
+| `docker/Dockerfile` | `<wf>/docker/Dockerfile` (anchor-patched per wf by `sync_dockerfiles.sh`, incl. label overrides) | `docker.yaml` |
 | `python/README_common.md`, `README_subrepo.md` | `<wf>/python/README.md` (placeholder `s/<repository>/.../`) | `python_readme.yaml` |
 | `docker/README_*.md` | `<wf>/docker/README.md` | `docker_readme.yaml` |
 | `cwl/README.md` | `<wf>/cwl/README.md` (few per-wf sed notes) | `cwl_readme.yaml` |

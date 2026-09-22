@@ -141,6 +141,33 @@ Caveats baked into the design:
 - **Killing an airflow e2e mid-run**: the trap removes the airflow container and scratch dir,
   but nested tool containers (random docker names, image `quay.io/biocontainers/*`) can be
   orphaned on the host daemon — check `docker ps` after a kill.
+- **Airflow cannot reach the host docker socket as the image user** (found 2026-09-21,
+  airflow e2e on GH Actions): the container runs as the image's `airflow` user (uid 50000),
+  but the CI runner's `/var/run/docker.sock` is `root:docker` mode `0660` → the nested
+  cwltool `docker run` dies with "permission denied while trying to connect to the docker
+  API". Locally it never reproduces (permissive Docker Desktop socket). **Fix: start the
+  container with `--group-add <GID>` where GID = the socket's owning group
+  (`stat -c %g`), applied only when the socket is not world-writable (mode & 002 == 0).**
+  Do NOT use the group *name* (`--group-add docker`): runners whose socket group is
+  unnamed (e.g. `root:root`) fail with "no matching entries in group file" — numeric GIDs
+  always resolve. And do NOT run the container with `-u root`: the airflow CLI is installed
+  in the `airflow` user's uv user-site, which root's python cannot see
+  (`ModuleNotFoundError: No module named 'airflow'`).
+- **Airflow dag-processor finds 0 DAG files** (found 2026-09-21): the host scratch dir is
+  `mktemp -d` (mode 0700, owned by the host uid) — the container user (uid 50000) cannot
+  even traverse it, so the recursive scan under `dag_discovery_safe_mode` registers nothing
+  (symptom: "Found 0 files for bundle dags-folder"). Fix: `chmod -R a+rwX` the scratch
+  before starting the container (it is throwaway, removed in cleanup).
+- **Cleanup of root-owned test output** (found 2026-09-21): nested tool containers run as
+  root on the host daemon and leave root-owned files in the host scratch/outputs → plain
+  `rm` fails with "Permission denied" at test end. Fix: best-effort `rm`, then a
+  `docker run -u root ... /usr/bin/chown -R <host uid>:<gid>` helper before removing.
+- **Transient conda CDN failures during `docker build`** (found 2026-09-21):
+  `conda env create` occasionally dies mid-repodata-download. Fix: the docker/jupyter build
+  steps retry the whole build up to 3 times before failing.
+- **Bash arithmetic: `(( a & b == 0 ))` is not what you think** (found 2026-09-21 while
+  writing the socket-mode check): in bash `==` binds TIGHTER than `&` (C precedence), so
+  the expression was `a & (b == 0)`. Parenthesize: `(( (a & b) == 0 ))`.
 
 ## 3. Phase 2 plan: scale to all workflows + wire into CI
 
