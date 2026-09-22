@@ -86,9 +86,13 @@ Triggering from CI (no push trigger yet — phase 2):
 
 ```
 GitHub → biobb_workflows → Actions → "Flavour e2e Tests (manual)" → Run workflow
-  flavour:  docker | cwl | airflow | jupyter
+  flavour:  docker | cwl | airflow | jupyter | python
   wf_names: biobb_wf_ligand_parameterization      (empty = every wf that has that test)
 ```
+
+The `python` option has no `run_test.sh`: it delegates to `python-reusable.yaml` (the
+same pipeline as the automatic python tests, incl. the per-wf runtime reductions), so a
+manual run is byte-for-byte what CI would do.
 
 Conventions (apply to every flavour script, every workflow):
 

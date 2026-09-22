@@ -2,7 +2,9 @@ name: Flavour e2e Tests (manual)
 
 # Phase 1: run the local e2e test scripts (tests/<flavour>/run_test.sh) from CI,
 # on demand, workflow by workflow. Trigger it from the Actions tab:
-#   1. choose the flavour (docker / cwl / airflow / jupyter)
+#   1. choose the flavour (docker / cwl / airflow / jupyter / python)
+#      — python does not have a run_test.sh: it reuses the CI python pipeline
+#        (python-reusable.yaml, incl. the per-wf runtime reductions)
 #   2. leave wf_names empty to test EVERY workflow that has that test,
 #      or type one, e.g.  biobb_wf_ligand_parameterization
 #
@@ -21,6 +23,7 @@ on:
           - cwl
           - airflow
           - jupyter
+          - python
       wf_names:
         description: 'Workflow FOLDERS to test, e.g. biobb_wf_ligand_parameterization,biobb_wf_cmip (empty = all that have this test)'
         required: false
@@ -41,7 +44,8 @@ jobs:
     with:
       wf_names: ${{ github.event.inputs.wf_names || '' }}
       all_on_paths: '^\.github/workflows/(detect|flavour-tests|flavour-test-reusable)\.yaml$'
-      require_path: "tests/${{ github.event.inputs.flavour }}/run_test.sh"
+      # python has no run_test.sh: every wf has the tests/python/ dir
+      require_path: ${{ github.event.inputs.flavour == 'python' && 'tests/python' || 'tests/' + github.event.inputs.flavour + '/run_test.sh' }}
 
   test:
     name: ${{ matrix.wf }} (${{ inputs.flavour }})

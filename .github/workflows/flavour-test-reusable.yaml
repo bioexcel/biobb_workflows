@@ -1,6 +1,10 @@
 name: Flavour e2e Test (reusable)
 
-# Runs one workflow's e2e test script: <wf>/tests/<flavour>/run_test.sh
+# Runs one workflow's e2e test:
+#   docker / cwl / airflow / jupyter -> <wf>/tests/<flavour>/run_test.sh
+#   python                           -> delegates to python-reusable.yaml (the
+#                                       CI python pipeline, incl. per-wf
+#                                       runtime reductions) — no drift
 
 on:
   workflow_call:
@@ -9,7 +13,7 @@ on:
         required: true
         type: string
       flavour:
-        description: 'docker | cwl | airflow | jupyter'
+        description: 'docker | cwl | airflow | jupyter | python'
         required: true
         type: string
       runs_on:
@@ -18,7 +22,17 @@ on:
         default: 'ubuntu-latest'
 
 jobs:
+  python:
+    name: ${{ inputs.wf_name }} (python)
+    if: inputs.flavour == 'python'
+    uses: ./.github/workflows/python-reusable.yaml
+    with:
+      wf_name: ${{ inputs.wf_name }}
+      runs_on: ${{ inputs.runs_on }}
+
   flavour:
+    name: ${{ inputs.wf_name }} (${{ inputs.flavour }})
+    if: inputs.flavour != 'python'
     runs-on: ${{ inputs.runs_on }}
     timeout-minutes: 720
     steps:
