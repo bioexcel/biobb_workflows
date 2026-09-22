@@ -125,13 +125,19 @@ chmod -R a+rwX "$HOST_DIR"
 adjust_runtime "$HOST_DIR/dags/$WF_NAME/inputs"
 
 echo ">>> [3/6] start airflow (standalone)"
-# --group-add docker: the task runners (image user 'airflow') must reach the
-# host docker socket (root:docker 0660 on CI) for the nested tool containers.
-# Linux only: on macOS the Docker Desktop socket is already permissive (and
-# the 'docker' group may not exist).
+# The task runners run as the image's 'airflow' user (uid 50000), which must
+# reach the host docker socket for the nested tool containers. If the socket
+# is not world-writable, join the container to the socket's owning group by
+# NUMERIC GID — the group may not have a resolvable name on the host
+# (e.g. root:root 0660), and a name lookup fails with "no matching entries in
+# group file". On macOS the Docker Desktop socket is already permissive.
 GROUP_FLAGS=()
-if [[ "$(uname)" == "Linux" ]] && getent group docker >/dev/null 2>&1; then
-  GROUP_FLAGS=(--group-add docker)
+if [[ "$(uname)" == "Linux" ]] && [[ -e /var/run/docker.sock ]]; then
+  SOCK_MODE="$(stat -c '%a' /var/run/docker.sock || true)"
+  SOCK_GID="$(stat -c '%g' /var/run/docker.sock || true)"
+  if [[ -n "$SOCK_MODE" && -n "$SOCK_GID" ]] && (( (8#$SOCK_MODE & 8#002) == 0 )); then
+    GROUP_FLAGS=(--group-add "$SOCK_GID")
+  fi
 fi
 # shellcheck disable=SC2086
 docker run -d --name "$CONTAINER" ${GROUP_FLAGS[@]+"${GROUP_FLAGS[@]}"} \
