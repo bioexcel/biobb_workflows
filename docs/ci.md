@@ -6,7 +6,7 @@
 
 | File | Trigger | Runner | Purpose |
 | --- | --- | --- | --- |
-| `detect.yaml` | `workflow_call` (inputs: `wf_names`, `all_on_paths`, `require_path`) | `ubuntu-latest` | **Shared brain**: decides *which* workflows a test run must cover and emits a JSON matrix `[{wf, runs_on}]`. Rules: push → folders changed in the push (all, if a CI file matched by `all_on_paths` changed); manual → `wf_names` (empty = all); scheduled → all. `require_path` restricts to workflows that contain a given file (used by the flavour tests) |
+| `detect.yaml` | `workflow_call` (inputs: `wf_names`, `all_on_paths`, `require_path`, `flavour`) | `ubuntu-latest` | **Shared brain**: decides *which* workflows a test run must cover and emits a JSON matrix `[{wf, runs_on}]`. Rules: push → folders changed in the push (all, if a CI file matched by `all_on_paths` changed); manual → `wf_names` (empty = all); scheduled → all. `require_path` restricts to workflows that contain a given file (used by the flavour tests) |
 | `python-tests.yaml` | `push` + weekly `schedule` (Mon 04:00 UTC) + `workflow_dispatch` (input `wf_names`) | `ubuntu-latest` (per job) | The python step-by-step pytest pipeline: `detect` → one call of `python-reusable.yaml` per selected workflow. Skips pushes made by `github-actions[bot]` (the sync bot) |
 | `python-reusable.yaml` | `workflow_call` (`wf_name`, optional `runs_on`) | input-driven | Per-workflow python test: checkout → per-wf `sed` runtime reductions → micromamba env from `<wf>/python/workflow.env.yml` (+`pytest`, `imagehash`) → `pytest <wf>.py --config ../../python/workflow.yml --remove`. `timeout-minutes: 720` |
 | `flavour-tests.yaml` | `workflow_dispatch` only (inputs: `flavour` = docker/cwl/airflow/jupyter/python, `wf_names`) | `ubuntu-latest` (per job) | Phase-1 e2e tests for the other flavours: `detect` (only workflows that have `tests/<flavour>/run_test.sh`; for python, the `tests/python/` dir = every wf) → one call of `flavour-test-reusable.yaml` each. Manual on purpose — see phase 2 to add a push trigger. Concurrency group includes the flavour, so the 5 flavours can run in parallel |
@@ -148,6 +148,9 @@ one-line change there (see testing.md §runner plan).
 - ~~Python tests only runnable via the automatic pipeline~~ → "Flavour e2e Tests"
   gained a `python` flavour that delegates to `python-reusable.yaml` (no duplication,
   no drift between manual and automatic runs).
+- ~~String concatenation in a workflow expression~~ → `${{ 'a' + x }}` is rejected by
+  the validator ("Unexpected symbol: '+'"); the flavour→`require_path` mapping now
+  happens in `detect.yaml` (plain python), via a new `flavour` input.
 
 ### Still open
 

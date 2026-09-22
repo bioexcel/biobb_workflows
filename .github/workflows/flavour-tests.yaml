@@ -44,8 +44,9 @@ jobs:
     with:
       wf_names: ${{ github.event.inputs.wf_names || '' }}
       all_on_paths: '^\.github/workflows/(detect|flavour-tests|flavour-test-reusable)\.yaml$'
-      # python has no run_test.sh: every wf has the tests/python/ dir
-      require_path: ${{ github.event.inputs.flavour == 'python' && 'tests/python' || 'tests/' + github.event.inputs.flavour + '/run_test.sh' }}
+      # flavour -> require_path mapping happens in detect (python: tests/python,
+      # other: tests/<flavour>/run_test.sh)
+      flavour: ${{ github.event.inputs.flavour || '' }}
 
   test:
     name: ${{ matrix.wf }} (${{ inputs.flavour }})

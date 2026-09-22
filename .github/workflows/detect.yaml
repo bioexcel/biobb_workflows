@@ -13,6 +13,9 @@ name: Detect workflows to test
 #   wf_names      comma separated workflow folder names (dispatch only)
 #   all_on_paths  ERE; if any changed file matches, test ALL workflows
 #   require_path  only include workflows that have this path (e.g. tests/docker/run_test.sh)
+#   flavour       test flavour; derives require_path:
+#                 python -> tests/python (the dir every wf has),
+#                 other  -> tests/<flavour>/run_test.sh
 
 on:
   workflow_call:
@@ -26,6 +29,10 @@ on:
         type: string
         default: ''
       require_path:
+        required: false
+        type: string
+        default: ''
+      flavour:
         required: false
         type: string
         default: ''
@@ -55,6 +62,7 @@ jobs:
           DISPATCHED: ${{ inputs.wf_names }}
           ALL_ON_PATHS: ${{ inputs.all_on_paths }}
           REQUIRE_PATH: ${{ inputs.require_path }}
+          FLAVOUR: ${{ inputs.flavour }}
         run: |
           python3 - <<'PY'
           import json, os, re, subprocess, sys
@@ -66,6 +74,12 @@ jobs:
           dispatched = [w.strip() for w in os.environ.get("DISPATCHED", "").split(",") if w.strip()]
           all_on = os.environ.get("ALL_ON_PATHS", "")
           require_path = os.environ.get("REQUIRE_PATH", "")
+          flavour = os.environ.get("FLAVOUR", "")
+          if flavour == "python":
+              # every wf has tests/python/ (no run_test.sh for this flavour)
+              require_path = "tests/python"
+          elif flavour:
+              require_path = f"tests/{flavour}/run_test.sh"
 
           all_wf = sorted(d for d in os.listdir(".")
                           if d.startswith("biobb_wf_") and os.path.isdir(d))
