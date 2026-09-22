@@ -56,6 +56,8 @@ require() {
 require docker
 docker info >/dev/null 2>&1 || { echo "ERROR: docker daemon not reachable" >&2; exit 1; }
 
+
+
 # ---------------- per-workflow hooks (edit when porting) ----------------
 adjust_runtime() {
   # $1 = <scratch>/dags/<wf>/inputs — per-step yml files. This wf is already
@@ -123,7 +125,16 @@ chmod -R a+rwX "$HOST_DIR"
 adjust_runtime "$HOST_DIR/dags/$WF_NAME/inputs"
 
 echo ">>> [3/6] start airflow (standalone)"
-docker run -d --name "$CONTAINER" \
+# --group-add docker: the task runners (image user 'airflow') must reach the
+# host docker socket (root:docker 0660 on CI) for the nested tool containers.
+# Linux only: on macOS the Docker Desktop socket is already permissive (and
+# the 'docker' group may not exist).
+GROUP_FLAGS=()
+if [[ "$(uname)" == "Linux" ]] && getent group docker >/dev/null 2>&1; then
+  GROUP_FLAGS=(--group-add docker)
+fi
+# shellcheck disable=SC2086
+docker run -d --name "$CONTAINER" ${GROUP_FLAGS[@]+"${GROUP_FLAGS[@]}"} \
   -v "$HOST_DIR:$HOST_DIR" \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e AIRFLOW__CORE__DAGS_FOLDER="$HOST_DIR/dags" \
