@@ -1,0 +1,49 @@
+name: Jupyter e2e Tests (auto)
+
+# Test-what-you-changed for the jupyter flavour: a push touching a workflow's
+# tests/jupyter/ or its jupyter/ submodule pointer runs that wf's jupyter e2e
+# (tests/jupyter/run_test.sh via flavour-test-reusable.yaml).
+# NOTE: the notebook/env CONTENT lives in the separate bioexcel/<wf> jupyter
+# repo — changes there do not trigger this workflow (cross-repo sync is a
+# separate plan; see ci.md). The e2e itself runs the notebook from that repo's
+# main.
+# Test-only — nothing is published from jupyter.
+# A wf opts out with tests/jupyter/SKIP (reason printed; see ci.md §1.2).
+
+on:
+  push:
+    paths:
+      - 'biobb_wf_*/tests/jupyter/**'
+      - 'biobb_wf_*/jupyter'
+      - 'biobb_wf_*/jupyter/**'
+      # a change to the pipeline itself tests everything
+      - .github/workflows/detect.yaml
+      - .github/workflows/jupyter-tests.yaml
+      - .github/workflows/flavour-test-reusable.yaml
+
+# if you push twice quickly, cancel the older run
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  detect:
+    name: Detect workflows to test (jupyter)
+    uses: ./.github/workflows/detect.yaml
+    if: github.actor != 'github-actions[bot]'
+    with:
+      all_on_paths: '^\.github/workflows/(detect|jupyter-tests|flavour-test-reusable)\.yaml$'
+      flavour: jupyter
+
+  test:
+    name: ${{ matrix.wf }} (jupyter)
+    needs: detect
+    if: needs.detect.result == 'success' && needs.detect.outputs.matrix != '[]'
+    uses: ./.github/workflows/flavour-test-reusable.yaml
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.detect.outputs.matrix) }}
+    with:
+      wf_name: ${{ matrix.wf }}
+      flavour: jupyter

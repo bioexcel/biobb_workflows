@@ -1,0 +1,7 @@
+Not runnable on the 7 GiB GH-hosted runner: the MIP step (cmip_run, AMBER sander)
+allocates ~25 GiB and OOMs — the same reason biobb_wf_cmip's docker e2e is opted
+out (tests/docker/SKIP).
+
+This file opts biobb_wf_cmip out of the automatic cwl e2e (cwl-tests.yaml, via the
+detect job). Delete this file to re-enable (once the e2e runs on a bigger runner or
+a reduced run is found).

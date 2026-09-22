@@ -7,9 +7,12 @@
 | File | Trigger | Runner | Purpose |
 | --- | --- | --- | --- |
 | `detect.yaml` | `workflow_call` (inputs: `wf_names`, `all_on_paths`, `require_path`, `flavour`) | `ubuntu-latest` | **Shared brain**: decides *which* workflows a test run must cover and emits a JSON matrix `[{wf, runs_on}]`. Rules: push → folders changed in the push (all, if a CI file matched by `all_on_paths` changed); manual → `wf_names` (empty = all); scheduled → all. `require_path` restricts to workflows that contain a given file (used by the flavour tests) |
-| ~~`python-tests.yaml`~~ — **disabled 2026-09-21** (renamed `python-tests.yaml.disabled`; re-enable by renaming back) | was: `push` + weekly `schedule` + `workflow_dispatch` (`wf_names`) | `ubuntu-latest` (per job) | The python step-by-step pytest pipeline: `detect` → one call of `python-reusable.yaml` per selected workflow. Python is now tested on demand via the manual Flavour e2e (`python` flavour, which delegates to `python-reusable.yaml`); `python-reusable.yaml` itself stays active for that |
+| `python-tests.yaml` | `push` (only `biobb_wf_*/python/**`, `biobb_wf_*/tests/python/**`, or the pipeline's own CI files → all wfs) + `workflow_dispatch` (`wf_names`) | `ubuntu-latest` (per job) | The python step-by-step pytest pipeline: `detect` → one call of `python-reusable.yaml` per selected workflow. The always-on push trigger and the weekly all-19 regression were removed 2026-09-22 ("test what you changed"); also available on demand via the manual Flavour e2e (`python` flavour, which delegates to `python-reusable.yaml`) |
+| `cwl-tests.yaml` | `push` (only `biobb_wf_*/cwl/**`, `biobb_wf_*/tests/cwl/**`, or the pipeline's own CI files → all wfs) | `ubuntu-latest` (per job) | Automatic cwl e2e ("test what you changed"): `detect` (flavour cwl → only wfs with `tests/cwl/run_test.sh` and no `tests/cwl/SKIP`) → `flavour-test-reusable`. Test-only |
+| `airflow-tests.yaml` | `push` (only `biobb_wf_*/airflow/**`, `biobb_wf_*/tests/airflow/**`, or the pipeline's own CI files → all wfs) | `ubuntu-latest` (per job) | Same for the airflow e2e (`tests/airflow/SKIP` opt-out). Test-only |
+| `jupyter-tests.yaml` | `push` (only `biobb_wf_*/tests/jupyter/**`, the `biobb_wf_*/jupyter` submodule pointer, or the pipeline's own CI files → all wfs) | `ubuntu-latest` (per job) | Same for the jupyter e2e (`tests/jupyter/SKIP` opt-out). Test-only. The notebook/env **content** lives in the separate `bioexcel/<wf>` jupyter repos — changes there don't trigger this workflow (cross-repo sync is a separate plan) |
 | `python-reusable.yaml` | `workflow_call` (`wf_name`, optional `runs_on`) | input-driven | Per-workflow python test: checkout → per-wf `sed` runtime reductions (values: testing.md §1.5) → micromamba env from `<wf>/python/workflow.env.yml` (+`pytest`, `imagehash`) → `pytest <wf>.py --config ../../python/workflow.yml --remove`. `timeout-minutes: 720` |
-| `flavour-tests.yaml` | `workflow_dispatch` only (inputs: `flavour` = docker/cwl/airflow/jupyter/python, `wf_names`) | `ubuntu-latest` (per job) | Phase-1 e2e tests for the other flavours: `detect` (only workflows that have `tests/<flavour>/run_test.sh`; for python, the `tests/python/` dir = every wf) → one call of `flavour-test-reusable.yaml` each. Manual on purpose — see phase 2 to add a push trigger. Concurrency group includes the flavour, so the 5 flavours can run in parallel |
+| `flavour-tests.yaml` | `workflow_dispatch` only (inputs: `flavour` = docker/cwl/airflow/jupyter/python, `wf_names`) | `ubuntu-latest` (per job) | Manual e2e runner for any flavour: `detect` (only workflows that have `tests/<flavour>/run_test.sh`; for python, the `tests/python/` dir = every wf) → one call of `flavour-test-reusable.yaml` each. The per-flavour **automatic** counterparts (`cwl-tests.yaml`, `airflow-tests.yaml`, `jupyter-tests.yaml`, and the test-gated publish chain for docker) run on path changes; this workflow is for ad-hoc subsets. Concurrency group includes the flavour, so the 5 flavours can run in parallel |
 | `flavour-test-reusable.yaml` | `workflow_call` (`wf_name`, `flavour`, optional `runs_on`) | input-driven | Runs `<wf>/tests/<flavour>/run_test.sh` (installs `cwltool` via micromamba for the cwl flavour). `timeout-minutes: 720`. The **python** flavour has no script: the job delegates to `python-reusable.yaml` (the CI python pipeline, so manual and automatic runs can never drift) |
 
 ### Code-generation & publishing workflows (they commit/publish, they do not test)
@@ -57,10 +60,11 @@ Bumping a tool version (e.g. `biobb_chemistry`) for **one** workflow, end to end
      `binder/environment.yml`. **Push the jupyter repo first** — the docker image (and the
      jupyter e2e test in CI) fetch `conda_env/environment.yml` from its `main` at build time.
    - Then commit in this repo, including the submodule pointer bump.
-2. **Test**: the docker/cwl/airflow/jupyter e2e runs are triggered manually via "Flavour e2e
-   Tests" (one run per flavour; `python` flavour included — the automatic python pipeline is
-   disabled, see the inventory). The docker e2e also runs automatically as the gate of the
-   publish chain (step 4) when `docker/` paths change.
+2. **Test (automatic, per changed path)**: a push runs each touched flavour's own tests —
+   `python/**` → python tests, `cwl/**` → cwl e2e, `airflow/**` → airflow e2e,
+   `tests/jupyter`/jupyter pointer → jupyter e2e, `docker/**` → docker e2e as the gate of
+   the publish chain (step 4). The manual "Flavour e2e Tests" workflow remains for ad-hoc
+   subsets. A wf opts out of a flavour's auto tests with `tests/<flavour>/SKIP`.
 3. **Bump the image label** (so the new content gets a new tag and the old image keeps its
    tag): update `<wf>/docker/VERSION` (one line, e.g. `2026.2`; the file is absent for
    workflows that follow the shared template label). Steps 2–3 land in the same push.
@@ -85,6 +89,10 @@ Rules this design gives:
   without a gate (the select job prints a warning). A wf can opt out of its own gate with
   a `tests/docker/SKIP` file (first line = the printed reason; currently: biobb_wf_cmip —
   OOM on the 7 GiB runner); it then publishes untested, like a wf without an e2e.
+- Per-flavour opt-out (all test workflows): a `tests/<flavour>/SKIP` file next to
+  `run_test.sh` excludes the wf from that flavour's selection — `detect` (and the publish
+  chain's select job) print the first line as the reason. The manual "Flavour e2e Tests"
+  honours the same file. Currently set for `biobb_wf_cmip` on docker/cwl/airflow.
 - Overwrote a tag by mistake? The old image survives in the registry by digest (package
   versions page) — restore it with `retag-ghcr.yaml`.
 
@@ -168,14 +176,19 @@ one-line change there (see testing.md §runner plan).
   `detect → select → docker e2e → publish` (publish only when green). The per-wf version
   label moved from a central `LABEL_OVERRIDES` dict to a per-wf `<wf>/docker/VERSION`
   file, so a label bump is a per-wf path change and the chain stays per-workflow.
-- ~~Automatic python pipeline (`python-tests.yaml`)~~ → **disabled** (renamed
-  `python-tests.yaml.disabled`) — the owner decided the always-on runs weren't worth it;
-  python is covered on demand via the manual Flavour e2e (`python` flavour →
-  `python-reusable.yaml`, unchanged).
+- ~~Python pipeline ran on EVERY push + a weekly all-19 regression~~ → "test what you
+  changed": `python-tests.yaml` fires only on `biobb_wf_*/python/**`,
+  `biobb_wf_*/tests/python/**` (or the pipeline's own CI files → all wfs); the weekly
+  regression was dropped. (The owner's 2026-09-21 request was about the *always-on*
+  behaviour, not about removing python coverage.)
+- ~~cwl/airflow/jupyter e2e were manual-only~~ → per-flavour auto workflows
+  (`cwl-tests.yaml`, `airflow-tests.yaml`, `jupyter-tests.yaml`): a push to a wf's
+  flavour paths runs that wf's e2e (test-only; selection via `detect`'s `flavour` input).
 - ~~One red docker e2e (biobb_wf_cmip — OOM on the 7 GiB runner) blocked every
-  all-workflows publish run forever~~ → per-wf opt-out file `tests/docker/SKIP`: the
-  select job drops the wf from the test matrix (prints the reason) and the wf publishes
-  untested, like any wf without a docker e2e.
+  all-workflows publish run forever~~ → per-wf opt-out file `tests/<flavour>/SKIP`: the
+  select job (publish chain) and `detect` (all test workflows) drop the wf from that
+  flavour's selection and print the reason; a SKIP-ed wf's image still publishes
+  untested. Currently set for `biobb_wf_cmip` on docker/cwl/airflow.
 
 ### Still open
 

@@ -1,0 +1,44 @@
+name: Airflow e2e Tests (auto)
+
+# Test-what-you-changed for the airflow flavour: a push touching a workflow's
+# airflow/ (DAGs, adapters, plugins) or its tests/airflow/ runs that wf's
+# airflow e2e (tests/airflow/run_test.sh via flavour-test-reusable.yaml).
+# Test-only — nothing is published from airflow.
+# A wf opts out with tests/airflow/SKIP (reason printed; see ci.md §1.2).
+
+on:
+  push:
+    paths:
+      - 'biobb_wf_*/airflow/**'
+      - 'biobb_wf_*/tests/airflow/**'
+      # a change to the pipeline itself tests everything
+      - .github/workflows/detect.yaml
+      - .github/workflows/airflow-tests.yaml
+      - .github/workflows/flavour-test-reusable.yaml
+
+# if you push twice quickly, cancel the older run
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  detect:
+    name: Detect workflows to test (airflow)
+    uses: ./.github/workflows/detect.yaml
+    if: github.actor != 'github-actions[bot]'
+    with:
+      all_on_paths: '^\.github/workflows/(detect|airflow-tests|flavour-test-reusable)\.yaml$'
+      flavour: airflow
+
+  test:
+    name: ${{ matrix.wf }} (airflow)
+    needs: detect
+    if: needs.detect.result == 'success' && needs.detect.outputs.matrix != '[]'
+    uses: ./.github/workflows/flavour-test-reusable.yaml
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.detect.outputs.matrix) }}
+    with:
+      wf_name: ${{ matrix.wf }}
+      flavour: airflow

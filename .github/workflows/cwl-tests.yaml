@@ -1,0 +1,44 @@
+name: CWL e2e Tests (auto)
+
+# Test-what-you-changed for the cwl flavour: a push touching a workflow's
+# cwl/ (adapters, workflow.cwl, inputs) or its tests/cwl/ runs that wf's cwl
+# e2e (tests/cwl/run_test.sh via flavour-test-reusable.yaml).
+# Test-only — nothing is published from cwl.
+# A wf opts out with tests/cwl/SKIP (reason printed; see ci.md §1.2).
+
+on:
+  push:
+    paths:
+      - 'biobb_wf_*/cwl/**'
+      - 'biobb_wf_*/tests/cwl/**'
+      # a change to the pipeline itself tests everything
+      - .github/workflows/detect.yaml
+      - .github/workflows/cwl-tests.yaml
+      - .github/workflows/flavour-test-reusable.yaml
+
+# if you push twice quickly, cancel the older run
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  detect:
+    name: Detect workflows to test (cwl)
+    uses: ./.github/workflows/detect.yaml
+    if: github.actor != 'github-actions[bot]'
+    with:
+      all_on_paths: '^\.github/workflows/(detect|cwl-tests|flavour-test-reusable)\.yaml$'
+      flavour: cwl
+
+  test:
+    name: ${{ matrix.wf }} (cwl)
+    needs: detect
+    if: needs.detect.result == 'success' && needs.detect.outputs.matrix != '[]'
+    uses: ./.github/workflows/flavour-test-reusable.yaml
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.detect.outputs.matrix) }}
+    with:
+      wf_name: ${{ matrix.wf }}
+      flavour: cwl

@@ -16,6 +16,10 @@ name: Detect workflows to test
 #   flavour       test flavour; derives require_path:
 #                 python -> tests/python (the dir every wf has),
 #                 other  -> tests/<flavour>/run_test.sh
+#
+# Opt-out: a tests/<flavour>/SKIP file next to run_test.sh excludes the wf from
+# that flavour's selection (first line = printed reason). Same convention as
+# the publish chain's tests/docker/SKIP.
 
 on:
   workflow_call:
@@ -85,7 +89,19 @@ jobs:
                           if d.startswith("biobb_wf_") and os.path.isdir(d))
 
           def eligible(w):
-              return not require_path or os.path.exists(os.path.join(w, require_path))
+              if not require_path:
+                  return True
+              base = os.path.join(w, require_path)
+              if not os.path.exists(base):
+                  return False
+              if os.path.basename(require_path) == "run_test.sh":
+                  skip = os.path.join(os.path.dirname(base), "SKIP")
+                  if os.path.exists(skip):
+                      reason = open(skip).read().strip().splitlines()[0]
+                      print("::warning::" + w + " opted out of " + require_path
+                            + " (SKIP file: " + reason + ")")
+                      return False
+              return True
 
           def git_diff(a, b):
               r = subprocess.run(["git", "diff", "--name-only", a, b],

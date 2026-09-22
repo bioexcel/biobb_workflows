@@ -21,9 +21,10 @@ Per workflow, `tests/python/` contains:
 
 CI invocation (see ci.md): micromamba env from `python/workflow.env.yml` (+ pytest,
 imagehash), then `pytest <wf>.py --config ../../python/workflow.yml --remove` from
-`tests/python/`. The automatic pipeline (`python-tests.yaml`) was **disabled 2026-09-21**;
-the same invocation runs on demand via the manual Flavour e2e (`python` flavour, which
-delegates to `python-reusable.yaml`).
+`tests/python/`. The automatic pipeline (`python-tests.yaml`) fires only on changes to
+`biobb_wf_*/python/**` or `biobb_wf_*/tests/python/**` (the always-on push trigger and
+the weekly regression were removed 2026-09-22); it also runs on demand via the manual
+Flavour e2e (`python` flavour, which delegates to `python-reusable.yaml`).
 
 ### 1.2 Local run recipe
 
@@ -92,8 +93,12 @@ Notes:
 
 ## 2. Phase 1: e2e tests for the other flavours — first two workflows done
 
-Local test scripts, already wired to CI **manually** (the `Flavour e2e Tests (manual)`
-workflow: Actions tab → choose flavour + `wf_names`). Done so far:
+Local test scripts, wired to CI **per changed path** (a push to a wf's `cwl/`,
+`airflow/`, `tests/jupyter/` or jupyter submodule pointer runs that wf's e2e via
+`cwl-tests.yaml` / `airflow-tests.yaml` / `jupyter-tests.yaml`; docker goes through the
+test-gated publish chain) and **manually** (the `Flavour e2e Tests (manual)` workflow:
+Actions tab → choose flavour + `wf_names`) for ad-hoc subsets. A wf opts out of a
+flavour's auto tests with `tests/<flavour>/SKIP`. Done so far:
 `biobb_wf_ligand_parameterization` (the pilot — small and fast) and `biobb_wf_cmip`
 (heavier, kept for later iterations). Layout, designed to be copyable to the other
 workflows:

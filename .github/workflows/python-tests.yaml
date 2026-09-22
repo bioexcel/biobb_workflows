@@ -2,9 +2,16 @@ name: Python workflow Tests
 
 on:
   push:
-  # weekly full regression (Monday 04:00 UTC)
-  schedule:
-    - cron: '0 4 * * 1'
+    # test-what-you-changed: only the python flavour's own paths trigger it
+    # (the always-on push trigger and the weekly full regression were removed
+    # 2026-09-22 — see ci.md)
+    paths:
+      - 'biobb_wf_*/python/**'
+      - 'biobb_wf_*/tests/python/**'
+      # a change to the pipeline itself tests everything
+      - .github/workflows/detect.yaml
+      - .github/workflows/python-tests.yaml
+      - .github/workflows/python-reusable.yaml
   workflow_dispatch:
     inputs:
       wf_names:
