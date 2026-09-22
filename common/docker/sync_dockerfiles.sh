@@ -91,6 +91,14 @@ PATCHES = {
 }
 
 
+# Per-workflow version labels: the generated file keeps its own
+# LABEL version= instead of the template's, so each workflow's image can be
+# versioned independently (bump the value when that workflow's image content
+# changes; the publish workflow tags with the per-workflow label).
+LABEL_OVERRIDES = {
+    "biobb_wf_ligand_parameterization": 'LABEL version="2026.2"',
+}
+
 ENV_YML_LINE = "RUN wget https://raw.githubusercontent.com/bioexcel/$REPOSITORY/main/conda_env/environment.yml -O /app/workflow.env.yml"
 NOTEBOOK_WGET_LINE = "    wget https://raw.githubusercontent.com/bioexcel/$REPOSITORY/main/$REPOSITORY/notebooks/$REPOSITORY.ipynb -O /app/notebook.ipynb; \\"
 
@@ -142,6 +150,13 @@ for wf in workflows:
         PATCHES.get(wf, []),
         REPLACEMENTS.get(wf, []),
     )
+    if wf in LABEL_OVERRIDES:
+        for i, line in enumerate(out):
+            if line.startswith("LABEL version="):
+                out[i] = LABEL_OVERRIDES[wf]
+                break
+        else:
+            raise SystemExit(f"ERROR: no LABEL version= line found for {wf}")
     target = (
         os.path.join(dest_root, wf, "docker", "Dockerfile")
         if dest_root else os.path.join(wf, "docker", "Dockerfile")

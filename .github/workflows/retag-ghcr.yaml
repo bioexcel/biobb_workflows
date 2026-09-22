@@ -1,0 +1,54 @@
+name: GHCR retag (tag surgery)
+
+# Re-points a tag at an existing image in ghcr.io without rebuilding
+# (restoring an overwritten tag, assigning a proper version tag, ...).
+# The source must already exist in the registry (by digest or by tag).
+
+on:
+  workflow_dispatch:
+    inputs:
+      wf:
+        description: 'Workflow image (e.g. biobb_wf_ligand_parameterization)'
+        required: true
+        default: 'biobb_wf_ligand_parameterization'
+        type: string
+      source:
+        description: 'Existing tag or sha256 digest to copy from (e.g. latest or sha256:abc...)'
+        required: true
+        default: 'latest'
+        type: string
+      tag:
+        description: 'Tag to point at that image (e.g. 2026.1)'
+        required: true
+        default: ''
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  retag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GH_PAT }}
+
+      - name: Pull source and push it under the new tag
+        env:
+          WF: ${{ inputs.wf }}
+          SOURCE: ${{ inputs.source }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          REPO="ghcr.io/bioexcel/$WF"
+          case "$SOURCE" in
+            sha256:*) SRC="$REPO@$SOURCE" ;;
+            *)        SRC="$REPO:$SOURCE" ;;
+          esac
+          docker pull "$SRC"
+          docker tag "$SRC" "$REPO:$TAG"
+          docker push "$REPO:$TAG"

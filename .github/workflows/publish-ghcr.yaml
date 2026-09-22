@@ -118,10 +118,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GH_PAT }}
 
-      - name: Extract version from Dockerfile
+      - name: Extract version from the workflow's own Dockerfile
         id: extract_version
+        # Per-workflow label (may differ from the template via LABEL_OVERRIDES
+        # in sync_dockerfiles.sh), so each image is versioned independently
         run: |
-          VERSION=$(grep 'LABEL version=' common/docker/Dockerfile | cut -d '"' -f 2)
+          VERSION=$(grep 'LABEL version=' ${{ matrix.wf }}/docker/Dockerfile | cut -d '"' -f 2)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Build and push ${{ matrix.wf }} image
