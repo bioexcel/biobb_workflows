@@ -1,11 +1,22 @@
 name: Docker Image CI for GHCR
 
+# Test-gated, per-workflow image publishing:
+#   push touching common/docker/**            -> all workflows
+#   push touching biobb_wf_X/docker/**        -> workflow X
+#   workflow_dispatch (wf input)              -> the chosen workflow (or all)
+#
+# Chain: detect -> select -> docker e2e test(s) -> publish (only if every
+# selected test passed; skipped when no test exists for the selection).
+# Each image is tagged with its own version: <wf>/docker/VERSION if present,
+# else the template's LABEL version=.
+
 on:
   push:
     branches:
       - main
     paths:
-      - common/docker/Dockerfile
+      - common/docker/**
+      - 'biobb_wf_*/docker/**'
   workflow_dispatch:
     inputs:
       wf:
@@ -33,24 +44,43 @@ on:
           - biobb_wf_protein_md_analysis
           - biobb_wf_protein-complex_md_setup
           - biobb_wf_virtual-screening_fpocket
+      skip_tests:
+        description: 'Skip the docker e2e tests (rebuild only — not recommended)'
+        required: false
+        default: false
+        type: boolean
 
+# a re-dispatch / new push of the same ref cancels the in-flight run
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  # Filters the full image list down to the selected workflow (push trigger
-  # or 'all' => every image). A job-level 'if' cannot use the matrix context,
-  # so the selection happens here and feeds the build matrix dynamically.
+  detect:
+    name: Detect workflows to publish
+    # the bot that commits the regenerated per-wf Dockerfiles (docker.yaml) is
+    # the follow-up of the same change — do not start a second chain for it
+    if: github.actor != 'github-actions[bot]'
+    uses: ./.github/workflows/detect.yaml
+    with:
+      wf_names: ${{ github.event.inputs.wf || '' }}
+      # any change under common/docker (template, sync script) affects every image
+      all_on_paths: '^common/docker/'
+
+  # Maps the selection to (a) the publish matrix (wf + build args) and
+  # (b) the test matrix (only wfs that have a docker e2e script).
   select:
+    needs: detect
+    if: needs.detect.outputs.matrix != '[]'
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.select.outputs.matrix }}
+      publish_matrix: ${{ steps.select.outputs.publish_matrix }}
+      test_matrix: ${{ steps.select.outputs.test_matrix }}
     steps:
-      - name: Select workflow images to build
-        id: select
+      - uses: actions/checkout@v3
+      - id: select
         env:
-          WF: ${{ inputs.wf }}
+          SELECTED: ${{ needs.detect.outputs.matrix }}
         run: |
           cat > images.json <<'EOF'
           [
@@ -74,33 +104,63 @@ jobs:
             {"wf": "biobb_wf_virtual-screening_fpocket", "args": "--build-arg REPO=biobb_wf_virtual-screening --build-arg SUBREPO=fpocket"}
           ]
           EOF
-          if [ -z "$WF" ] || [ "$WF" = "all" ]; then
-            SEL="$(cat images.json)"
-          else
-            SEL="$(python3 -c '
+          python3 - <<'PY'
           import json, os
-          wf = os.environ["WF"]
-          data = json.load(open("images.json"))
-          sel = [e for e in data if e["wf"] == wf]
-          if not sel:
-              raise SystemExit(f"unknown workflow: {wf}")
-          print(json.dumps(sel))
-          ')"
-          fi
-          {
-            echo "matrix<<SELECTED_EOF"
-            echo "$SEL"
-            echo "SELECTED_EOF"
-          } >> "$GITHUB_OUTPUT"
 
-  build_and_publish:
-    needs: select
-    runs-on: ubuntu-latest
+          selected = json.loads(os.environ.get("SELECTED") or "[]")
+          wfs = [e["wf"] for e in selected]
+          known = {e["wf"]: e for e in json.load(open("images.json"))}
+
+          publish = [known[w] for w in wfs if w in known]
+          skipped = [w for w in wfs if w not in known]
+          if skipped:
+              print("::warning::No GHCR image entry for: " + ", ".join(skipped))
+
+          test = [
+              {"wf": w, "runs_on": "ubuntu-latest"}
+              for w in wfs
+              if os.path.exists(os.path.join(w, "tests", "docker", "run_test.sh"))
+          ]
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write("publish_matrix=" + json.dumps(publish) + "\n")
+              f.write("test_matrix=" + json.dumps(test) + "\n")
+          print(f"publish: {[e['wf'] for e in publish] or '(none)'}")
+          print(f"test:    {[e['wf'] for e in test] or '(none)'}")
+          PY
+
+  # docker e2e for every selected workflow that has the script
+  test:
+    needs: [detect, select]
+    if: needs.select.outputs.test_matrix != '[]' && inputs.skip_tests != true
+    name: docker e2e ${{ matrix.wf }}
+    uses: ./.github/workflows/flavour-test-reusable.yaml
     strategy:
-      # one image failing (e.g. a bad tool version) must not stop the rest
       fail-fast: false
       matrix:
-        include: ${{ fromJSON(needs.select.outputs.matrix) }}
+        include: ${{ fromJSON(needs.select.outputs.test_matrix) }}
+    with:
+      wf_name: ${{ matrix.wf }}
+      flavour: docker
+      runs_on: ${{ matrix.runs_on }}
+
+  publish:
+    needs: [detect, select, test]
+    # run-level gate: publish only if every selected docker e2e passed (or
+    # none ran). One red test => nothing is published in this run.
+    if: >-
+      always()
+      && needs.select.result == 'success'
+      && needs.select.outputs.publish_matrix != '[]'
+      && (inputs.skip_tests == true
+          || needs.test.result == 'success'
+          || needs.test.result == 'skipped')
+    name: publish ${{ matrix.wf }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.select.outputs.publish_matrix) }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -118,12 +178,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GH_PAT }}
 
-      - name: Extract version from the workflow's own Dockerfile
+      - name: Extract version (per-workflow VERSION file, else template label)
         id: extract_version
-        # Per-workflow label (may differ from the template via LABEL_OVERRIDES
-        # in sync_dockerfiles.sh), so each image is versioned independently
         run: |
-          VERSION=$(grep 'LABEL version=' ${{ matrix.wf }}/docker/Dockerfile | cut -d '"' -f 2)
+          VERSION_FILE="${{ matrix.wf }}/docker/VERSION"
+          if [[ -f "$VERSION_FILE" ]]; then
+            VERSION="$(tr -d '[:space:]' < "$VERSION_FILE")"
+          else
+            VERSION="$(grep 'LABEL version=' ${{ matrix.wf }}/docker/Dockerfile | cut -d '"' -f 2)"
+          fi
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
       - name: Build and push ${{ matrix.wf }} image

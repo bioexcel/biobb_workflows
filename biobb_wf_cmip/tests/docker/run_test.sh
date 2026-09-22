@@ -57,6 +57,12 @@ if [[ ! -f "$DOCKER_DIR/Dockerfile" ]]; then
   exit 1
 fi
 
+# Keep the per-wf Dockerfile in sync with the common template (LOCAL ONLY,
+# never committed): in the chained CI (test -> publish) the bot commit that
+# regenerates these files may land between this job and the publish job, so
+# build exactly what the publish job will build.
+bash "$REPO_ROOT/common/docker/sync_dockerfiles.sh" >/dev/null
+
 # ---------------- per-workflow hooks (edit when porting) ----------------
 docker_build_args() {
   # plain repo: no SUBREPO. Subrepo workflows add e.g.:

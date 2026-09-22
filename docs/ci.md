@@ -16,8 +16,8 @@
 
 | File | Trigger | Runner | Purpose |
 | --- | --- | --- | --- |
-| `docker.yaml` | push to `common/docker/Dockerfile` or `common/docker/sync_dockerfiles.sh` + dispatch | `ubuntu-latest` | **Code generation**: runs `common/docker/sync_dockerfiles.sh` (regenerates all 19 per-wf Dockerfiles from the template with anchor-based patches, keeping per-wf `LABEL version=` overrides — see §1.2), commits + pushes if anything changed (`github-actions[bot]`). A push of per-wf Dockerfiles triggers **no** publish |
-| `publish-ghcr.yaml` | push to `main` touching `common/docker/Dockerfile` (all images) + `workflow_dispatch` (input `wf`: one workflow or `all`) | `ubuntu-latest` (per image) | Builds + pushes GHCR images, **one job per workflow** (matrix filled by a `select` job from the `wf` input; `fail-fast: false`). Each image is tagged with **its own** `LABEL version=` from `<wf>/docker/Dockerfile` + `latest`. Runs the sync script **locally first** (not committed), so a build can never use stale per-wf Dockerfiles. See §1.2 for the update flow |
+| `docker.yaml` | push to `common/docker/Dockerfile` or `common/docker/sync_dockerfiles.sh` + dispatch | `ubuntu-latest` | **Code generation**: runs `common/docker/sync_dockerfiles.sh` (regenerates all 19 per-wf Dockerfiles from the template with anchor-based patches, injecting per-wf `<wf>/docker/VERSION` labels — see §1.2), commits + pushes if anything changed (`github-actions[bot]`). Its bot push is ignored by the publish chain (no double chain) |
+| `publish-ghcr.yaml` | push to `common/docker/**` (all images) or `biobb_wf_X/docker/**` (X) + `workflow_dispatch` (inputs `wf`, `skip_tests`) | `ubuntu-latest` (per image) | **Test-gated chain**: `detect` → `select` (publish matrix + docker-e2e test matrix) → docker e2e (`flavour-test-reusable`, one job per wf) → `publish` — **only if every selected test passed** (skipped when none exists). One job per workflow, `fail-fast: false`. Each image is tagged with **its own** version (`<wf>/docker/VERSION` if present, else the template label) + `latest`. Test and publish jobs both run the sync script **locally first** (not committed), so they build identical Dockerfiles even if the docker.yaml bot commit is still in flight. See §1.2 |
 | `retag-ghcr.yaml` | `workflow_dispatch` (inputs: `wf`, `source` = tag or `sha256:` digest, `tag`) | `ubuntu-latest` | **Tag surgery without rebuilding**: pulls an existing image from GHCR (by digest or tag) and pushes it under a new tag. Use it to restore an overwritten version tag or assign a proper tag — the old digest of an overwritten tag is visible on the package *versions* page (`github.com/orgs/bioexcel/packages/container/<wf>/versions`) even though it has no tag |
 | `python_readme.yaml` | push to `common/python/README_*.md` + dispatch | `ubuntu-latest` | Regenerates `<wf>/python/README.md` (cp + `sed` placeholders), bot commit |
 | `docker_readme.yaml` | push to `common/docker/README_*.md` + dispatch | `ubuntu-latest` | Same for `docker/README.md` |
@@ -60,18 +60,27 @@ Bumping a tool version (e.g. `biobb_chemistry`) for **one** workflow, end to end
 2. **Test**: python tests auto-run on the push (no path filter); the docker/cwl/airflow/jupyter
    e2e runs are triggered manually via "Flavour e2e Tests" (one run per flavour).
 3. **Bump the image label** (so the new content gets a new tag and the old image keeps its
-   tag): set the value in `LABEL_OVERRIDES` in `common/docker/sync_dockerfiles.sh`, then push.
-   The `docker.yaml` bot re-generates `<wf>/docker/Dockerfile` with the new label and bot-commits
-   it; **no publish is triggered** (the publisher's push path is the template only).
-4. **Publish**: Actions → "Docker Image CI for GHCR" → Run workflow → `wf: <wf>` → one image
-   built + pushed as `<wf>:<new label>` + `<wf>:latest`. Other workflows' images/tags are
-   untouched.
+   tag): update `<wf>/docker/VERSION` (one line, e.g. `2026.2`; the file is absent for
+   workflows that follow the shared template label). Steps 2–3 land in the same push.
+4. **Test + publish (automatic)**: the push touches `biobb_wf_X/docker/**` → `detect`
+   selects X → the docker e2e runs → the image is built + pushed as `<wf>:<label>` +
+   `<wf>:latest` **only if the test is green**. Other workflows' images/tags are untouched.
+   Manual rebuild: Actions → "Docker Image CI for GHCR" → `wf: <wf>` (the docker e2e runs
+   too; `skip_tests` bypasses it — not recommended).
 
 Rules this design gives:
 
-- Each image is versioned independently (its own `LABEL version=`); a template change still
-  rebuilds **all** images (shared base), re-pushing them under their own current labels.
-- Pushing per-wf Dockerfiles or any non-template path never triggers a publish.
+- Each image is versioned independently (`<wf>/docker/VERSION` or the template label); a
+  template change (`common/docker/**`) still tests + rebuilds **all** images, each under
+  its own current label.
+- The chain fires only on `common/docker/**` or `biobb_wf_*/docker/**` changes (or manual
+  dispatch) — e.g. a cwl/airflow adapter (`dockerPull`) change never rebuilds the image.
+  Jupyter-repo content (conda env, notebook) is fetched from `main` at build time, so a
+  jupyter-repo push does NOT trigger the chain — dispatch the build manually (cross-repo
+  auto-triggering is phase 2 territory).
+- Run-level gate: if any selected docker e2e fails, that run publishes nothing (re-push or
+  re-dispatch publishes the green ones). Workflows without a docker e2e script publish
+  without a gate (the select job prints a warning).
 - Overwrote a tag by mistake? The old image survives in the registry by digest (package
   versions page) — restore it with `retag-ghcr.yaml`.
 
@@ -151,6 +160,10 @@ one-line change there (see testing.md §runner plan).
 - ~~String concatenation in a workflow expression~~ → `${{ 'a' + x }}` is rejected by
   the validator ("Unexpected symbol: '+'"); the flavour→`require_path` mapping now
   happens in `detect.yaml` (plain python), via a new `flavour` input.
+- ~~GHCR publishing was manual-dispatch only, untested~~ → push-triggered chain
+  `detect → select → docker e2e → publish` (publish only when green). The per-wf version
+  label moved from a central `LABEL_OVERRIDES` dict to a per-wf `<wf>/docker/VERSION`
+  file, so a label bump is a per-wf path change and the chain stays per-workflow.
 
 ### Still open
 
@@ -165,3 +178,8 @@ one-line change there (see testing.md §runner plan).
    testing an unpushed local change via `docker build` silently tests the published state.
 5. **`NOTES.md` git-ignored** → critical re-sync knowledge for CWL/Airflow is lost for
    anyone else. Consider un-ignoring or moving to `docs/`.
+6. **Publish gate is run-level** → one failing docker e2e blocks every image of that run
+   (re-dispatch publishes the green ones). Per-workflow partial publishing would need
+   per-matrix-leg job outputs.
+7. **`biobb_wf_structure_checking` has no GHCR image entry** in the publish matrix (its
+   docker e2e doesn't exist either) — decide whether it should be published.

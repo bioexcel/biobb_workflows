@@ -143,8 +143,9 @@ execution substrate differs.
 - The per-workflow `docker/workflow.yml` is the python one with `/data/` absolute input paths
   (and, e.g., MPI props removed for cmip).
 - Published to GHCR: `ghcr.io/bioexcel/<wf>:<version>` + `:latest`
-  (version = `LABEL version=` in `<wf>/docker/Dockerfile`; may differ per workflow via
-  `LABEL_OVERRIDES` in `common/docker/sync_dockerfiles.sh`).
+  (version = `<wf>/docker/VERSION` if present — one line, e.g. `2026.2` — else the
+  template's `LABEL version=`; `sync_dockerfiles.sh` injects the same value into the
+  Dockerfile LABEL).
 - Run: `docker run -v <inputs>:/data ghcr.io/bioexcel/<wf>`.
 
 ### 3.5 galaxy
