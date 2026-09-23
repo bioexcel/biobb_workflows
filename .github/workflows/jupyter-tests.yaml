@@ -11,6 +11,14 @@ name: Jupyter e2e Tests (auto)
 # A wf opts out with tests/jupyter/SKIP (reason printed; see ci.md §1.2).
 
 on:
+  # called by the hourly jupyter probe (jupyter-sync.yaml) when a jupyter repo advanced
+  workflow_call:
+    inputs:
+      wf_names:
+        description: 'Workflows to test, comma separated (empty = all that have this test)'
+        required: false
+        default: ''
+        type: string
   push:
     paths:
       - 'biobb_wf_*/tests/jupyter/**'
@@ -28,6 +36,7 @@ jobs:
     uses: ./.github/workflows/detect.yaml
     if: github.actor != 'github-actions[bot]'
     with:
+      wf_names: ${{ inputs.wf_names }}
       flavour: jupyter
 
   test:

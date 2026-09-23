@@ -26,6 +26,15 @@ on:
       # the image bakes these in from main at build time (common/docker/Dockerfile)
       - 'biobb_wf_*/python/workflow.py'
       - 'biobb_wf_*/python/workflow.env.yml'
+  # called by the hourly jupyter probe (jupyter-sync.yaml) when a jupyter repo's
+  # conda env changed: rebuild + publish exactly those images
+  workflow_call:
+    inputs:
+      wf_names:
+        description: 'Workflows to build, comma separated (empty or all = every image)'
+        required: false
+        default: ''
+        type: string
   workflow_dispatch:
     inputs:
       wf:
@@ -72,7 +81,8 @@ jobs:
     if: github.actor != 'github-actions[bot]'
     uses: ./.github/workflows/detect.yaml
     with:
-      wf_names: ${{ github.event.inputs.wf || '' }}
+      # a call (probe) or a dispatch selects explicitly; a push selects by path
+      wf_names: ${{ inputs.wf_names || github.event.inputs.wf || '' }}
       # any change under common/docker (template, sync script) affects every image
       all_on_paths: '^common/docker/'
 

@@ -6,7 +6,8 @@ name: Detect workflows to test
 # Selection rules:
 #   push                -> workflows whose folder changed in the push
 #                          (all of them if a CI file listed in all_on_paths changed)
-#   workflow_dispatch   -> the wf_names input (comma separated); empty = all
+#   workflow_dispatch /
+#   workflow_call       -> the wf_names input (comma separated); empty or "all" = all
 #   schedule            -> all
 #
 # Inputs:
@@ -108,7 +109,8 @@ jobs:
                                  capture_output=True, text=True)
               return r.stdout.splitlines() if r.returncode == 0 else []
 
-          if event == "workflow_dispatch":
+          if event in ("workflow_dispatch", "workflow_call"):
+              dispatched = [w for w in dispatched if w != "all"]
               if dispatched:
                   unknown = [w for w in dispatched if w not in all_wf]
                   if unknown:

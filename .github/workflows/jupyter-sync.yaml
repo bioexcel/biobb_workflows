@@ -1,0 +1,187 @@
+name: Jupyter repo probe (hourly)
+
+# The docker image fetches the jupyter repo's conda env + tutorial notebook from
+# main at build time, and the jupyter e2e runs that notebook — but a push to a
+# jupyter repo (separate bioexcel/<wf> repos) cannot trigger this repo's
+# workflows. This hourly probe closes the gap. For every jupyter submodule,
+# grouped by repo (the three amber sub-wfs share bioexcel/biobb_wf_amber):
+#
+#   1. ls-remote the repo's main and compare with the committed submodule pointer
+#   2. on advance, clone it and diff old..new, then:
+#        - pointer bump: ALWAYS (bot commit — keeps local checkouts current)
+#        - jupyter e2e:   ALWAYS (the repo the notebook lives in changed)
+#        - image rebuild + publish (the chain): ONLY if conda_env/environment.yml
+#          changed — that is what the image bakes in as its env; a notebook-only
+#          change does NOT rebuild the image (the image keeps its notebook until
+#          the next env change)
+#   3. clone/diff failure -> no bump, retry next hour (a failed analysis must not
+#      silently skip the env check)
+#
+# No secrets needed: public ls-remote / clone of public repos.
+
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  probe:
+    name: Probe jupyter repos
+    runs-on: ubuntu-latest
+    outputs:
+      bump_plan: ${{ steps.probe.outputs.bump_plan }}
+      e2e_wfs: ${{ steps.probe.outputs.e2e_wfs }}
+      chain_wfs: ${{ steps.probe.outputs.chain_wfs }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: probe
+        run: |
+          python3 - <<'PY'
+          import json, os, shutil, subprocess
+
+          def git(*args, cwd=None):
+              return subprocess.run(["git", *args], cwd=cwd,
+                                    capture_output=True, text=True)
+
+          # group the jupyter submodules by their repo URL (the amber sub-wfs
+          # all point at bioexcel/biobb_wf_amber). config --get-regexp keys
+          # differ by suffix (submodule.X.path / submodule.X.url), so strip it
+          r = git("config", "-f", ".gitmodules", "--get-regexp",
+                  r"submodule\..*\.path")
+          paths = {}
+          for line in r.stdout.splitlines():
+              key, val = line.split(" ", 1)
+              if val.endswith("/jupyter"):
+                  paths[key.rsplit(".", 1)[0]] = val
+          r = git("config", "-f", ".gitmodules", "--get-regexp",
+                  r"submodule\..*\.url")
+          urls = {}
+          for line in r.stdout.splitlines():
+              key, val = line.split(" ", 1)
+              urls[key.rsplit(".", 1)[0]] = val
+          groups = {}
+          for name, path in paths.items():
+              url = urls.get(name, "")
+              if url:
+                  groups.setdefault(url, []).append(path.rsplit("/jupyter", 1)[0])
+
+          bump_plan, e2e, chain = [], [], []
+          for url, wfs in sorted(groups.items()):
+              pointers = []
+              for w in wfs:
+                  r = git("ls-tree", "HEAD", w + "/jupyter")
+                  pointers.append(r.stdout.split()[2]
+                                  if r.returncode == 0 and r.stdout.strip() else "")
+              old = next((p for p in pointers if p), "")
+              if not old:
+                  print("::warning::no submodule pointer for "
+                        + ", ".join(wfs) + " (" + url + ")")
+                  continue
+              if len(set(pointers)) > 1:
+                  print("::warning::inconsistent pointers in " + ", ".join(wfs)
+                        + " — diffing against " + old[:7])
+              r = subprocess.run(["git", "ls-remote", url, "refs/heads/main"],
+                                 capture_output=True, text=True)
+              if r.returncode != 0 or not r.stdout.strip():
+                  print("::warning::ls-remote failed for " + url + ": "
+                        + r.stderr.strip())
+                  continue
+              new = r.stdout.split()[0]
+              if new == old:
+                  continue
+              print(url + " advanced " + old[:7] + ".." + new[:7]
+                    + " (" + ", ".join(wfs) + ")")
+              clone = "/tmp/jupyter_probe"
+              shutil.rmtree(clone, ignore_errors=True)
+              if git("clone", "--quiet", url, clone).returncode != 0:
+                  print("::warning::clone failed for " + url
+                        + " — no bump, retrying next run")
+                  continue
+              r = git("diff", "--name-only", old + ".." + new, cwd=clone)
+              if r.returncode == 0:
+                  changed = r.stdout.split()
+                  env_changed = "conda_env/environment.yml" in changed
+                  print("changed: " + (", ".join(changed) or "(none)"))
+              else:
+                  # old pointer unreachable (force-push on the jupyter repo):
+                  # assume the env may have changed — a rebuild is always safe
+                  changed = []
+                  env_changed = True
+                  print("::warning::cannot diff " + old[:7] + ".." + new[:7]
+                        + " (old pointer unreachable?) — assuming env changed")
+              print("conda_env/environment.yml changed: " + str(env_changed))
+              for w in wfs:
+                  bump_plan.append({"wf": w, "path": w + "/jupyter", "sha": new})
+                  e2e.append(w)
+              if env_changed:
+                  chain.extend(wfs)
+              else:
+                  print("no image rebuild for " + ", ".join(wfs)
+                        + " (env file unchanged — the image keeps its notebook "
+                        + "until the next env change)")
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write("bump_plan=" + json.dumps(bump_plan) + "\n")
+              f.write("e2e_wfs=" + ",".join(sorted(set(e2e))) + "\n")
+              f.write("chain_wfs=" + ",".join(sorted(set(chain))) + "\n")
+          print("bump:  " + str([e["wf"] for e in bump_plan] or "(none)"))
+          print("e2e:   " + (", ".join(sorted(set(e2e))) or "(none)"))
+          print("chain: " + (", ".join(sorted(set(chain))) or "(none)"))
+          PY
+
+  commit-pointers:
+    name: Bump jupyter submodule pointers
+    needs: probe
+    if: needs.probe.outputs.bump_plan != '[]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: peter-murray/workflow-application-token-action@v3
+        id: generate_token
+        with:
+          application_id: ${{ vars.GHAPUSH }}
+          application_private_key: ${{ secrets.GHAPUSH }}
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
+      - name: Stage and commit the new pointers
+        env:
+          BUMP_PLAN: ${{ needs.probe.outputs.bump_plan }}
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          python3 - <<'PY'
+          import json, os, subprocess
+          for e in json.loads(os.environ["BUMP_PLAN"]):
+              subprocess.run(["git", "update-index", "--cacheinfo",
+                              "160000," + e["sha"] + "," + e["path"]],
+                             check=True)
+          PY
+          if git diff --cached --quiet; then
+            echo "Pointers already up to date"
+          else
+            git commit -m "chore: sync jupyter submodule pointers (hourly probe)" \
+              && git push
+          fi
+
+  # the bot push of the pointer bump is ignored by every test workflow
+  # (github-actions[bot] guard), so these calls are the only e2e runs
+  jupyter-e2e:
+    name: jupyter e2e (${{ needs.probe.outputs.e2e_wfs }})
+    needs: probe
+    if: needs.probe.outputs.e2e_wfs != ''
+    uses: ./.github/workflows/jupyter-tests.yaml
+    with:
+      wf_names: ${{ needs.probe.outputs.e2e_wfs }}
+
+  publish:
+    name: "rebuild + publish (env changed: ${{ needs.probe.outputs.chain_wfs }})"
+    needs: probe
+    if: needs.probe.outputs.chain_wfs != ''
+    uses: ./.github/workflows/publish-ghcr.yaml
+    with:
+      wf_names: ${{ needs.probe.outputs.chain_wfs }}
