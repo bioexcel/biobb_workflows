@@ -3,7 +3,7 @@ name: Jupyter repo probe (hourly)
 # The docker image fetches the jupyter repo's conda env + tutorial notebook from
 # main at build time, and the jupyter e2e runs that notebook — but a push to a
 # jupyter repo (separate bioexcel/<wf> repos) cannot trigger this repo's
-# workflows. This hourly probe closes the gap. For every jupyter submodule,
+# workflows. This probe closes the gap. For every jupyter submodule,
 # grouped by repo (the three amber sub-wfs share bioexcel/biobb_wf_amber):
 #
 #   1. ls-remote the repo's main and compare with the committed submodule pointer
@@ -15,14 +15,24 @@ name: Jupyter repo probe (hourly)
 #          tutorial notebook changed. The chain runs ONLY AFTER the jupyter e2e
 #          passed, so a broken notebook can never be published (the chain's own
 #          docker e2e runs workflow.py, not the notebook).
-#   3. clone/diff failure -> no bump, retry next hour (a failed analysis must not
-#      silently skip the env check)
+#   3. clone/diff failure -> no bump, retry on the next run (a failed analysis
+#      must not silently skip the env check)
+#
+# Triggers: hourly cron AND every push to main — this repo's `schedule`
+# triggers have never fired (zero schedule runs in 90 days, including the
+# citation weekly that has existed since 2024), so the push trigger is the
+# effective one. The probe is a ~30 s no-op when nothing advanced (a few
+# git ls-remote calls), so a run per push is nearly free. No loop: the
+# probe's own bot pointer-bump push re-triggers it, finds pointer == remote
+# and exits. `concurrency` (cancel-in-progress) collapses overlapping runs.
 #
 # No secrets needed: public ls-remote / clone of public repos.
 
 on:
   schedule:
     - cron: '17 * * * *'
+  push:
+    branches: [main]
   workflow_dispatch:
 
 concurrency:
