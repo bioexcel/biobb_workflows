@@ -9,11 +9,12 @@ name: Jupyter repo probe (hourly)
 #   1. ls-remote the repo's main and compare with the committed submodule pointer
 #   2. on advance, clone it and diff old..new, then:
 #        - pointer bump: ALWAYS (bot commit — keeps local checkouts current)
-#        - jupyter e2e:   ALWAYS (the repo the notebook lives in changed)
-#        - image rebuild + publish (the chain): ONLY if conda_env/environment.yml
-#          changed — that is what the image bakes in as its env; a notebook-only
-#          change does NOT rebuild the image (the image keeps its notebook until
-#          the next env change)
+#        - jupyter e2e:  ALWAYS (the repo the notebook lives in changed)
+#        - image rebuild + publish (the chain): if conda_env/environment.yml
+#          changed (all wfs sharing the repo — they share the env) OR that wf's
+#          tutorial notebook changed. The chain runs ONLY AFTER the jupyter e2e
+#          passed, so a broken notebook can never be published (the chain's own
+#          docker e2e runs workflow.py, not the notebook).
 #   3. clone/diff failure -> no bump, retry next hour (a failed analysis must not
 #      silently skip the env check)
 #
@@ -72,6 +73,9 @@ jobs:
 
           bump_plan, e2e, chain = [], [], []
           for url, wfs in sorted(groups.items()):
+              repo = url.rstrip("/").rsplit("/", 1)[-1]
+              if repo.endswith(".git"):
+                  repo = repo[:-4]
               pointers = []
               for w in wfs:
                   r = git("ls-tree", "HEAD", w + "/jupyter")
@@ -104,26 +108,39 @@ jobs:
                   continue
               r = git("diff", "--name-only", old + ".." + new, cwd=clone)
               if r.returncode == 0:
-                  changed = r.stdout.split()
+                  changed = set(r.stdout.split())
                   env_changed = "conda_env/environment.yml" in changed
-                  print("changed: " + (", ".join(changed) or "(none)"))
+                  print("changed: " + (", ".join(sorted(changed)) or "(none)"))
               else:
                   # old pointer unreachable (force-push on the jupyter repo):
                   # assume the env may have changed — a rebuild is always safe
-                  changed = []
+                  changed = set()
                   env_changed = True
                   print("::warning::cannot diff " + old[:7] + ".." + new[:7]
                         + " (old pointer unreachable?) — assuming env changed")
-              print("conda_env/environment.yml changed: " + str(env_changed))
+
+              # the tutorial notebook the image bakes in (common/docker/Dockerfile):
+              # plain wf:  <repo>/notebooks/<repo>.ipynb
+              # sub wf:    <repo>/notebooks/<sub>/<repo>_<sub>.ipynb  (sub = wf minus
+              #             the "<repo>_" prefix, e.g. the amber sub-wfs)
+              def notebook_of(w):
+                  if w == repo:
+                      return repo + "/notebooks/" + w + ".ipynb"
+                  if w.startswith(repo + "_"):
+                      return repo + "/notebooks/" + w[len(repo) + 1:] + "/" + w + ".ipynb"
+                  return ""
+
               for w in wfs:
                   bump_plan.append({"wf": w, "path": w + "/jupyter", "sha": new})
                   e2e.append(w)
-              if env_changed:
-                  chain.extend(wfs)
-              else:
-                  print("no image rebuild for " + ", ".join(wfs)
-                        + " (env file unchanged — the image keeps its notebook "
-                        + "until the next env change)")
+                  nb = notebook_of(w)
+                  nb_changed = bool(nb) and nb in changed
+                  if env_changed or nb_changed:
+                      chain.append(w)
+                      why = "rebuild: env changed" if env_changed else "rebuild: notebook changed"
+                  else:
+                      why = "no rebuild (env and notebook unchanged)"
+                  print(w + ": " + why + (" [notebook " + nb + "]" if nb else " [no notebook]"))
 
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               f.write("bump_plan=" + json.dumps(bump_plan) + "\n")
@@ -254,10 +271,14 @@ jobs:
     with:
       wf_names: ${{ needs.probe.outputs.e2e_wfs }}
 
+  # after the e2e: a broken notebook can never reach the image
   publish:
-    name: "rebuild + publish (env changed: ${{ needs.probe.outputs.chain_wfs }})"
-    needs: probe
-    if: needs.probe.outputs.chain_wfs != ''
+    name: "rebuild + publish (env/notebook changed: ${{ needs.probe.outputs.chain_wfs }})"
+    needs: [probe, jupyter-e2e]
+    if: >-
+      needs.probe.outputs.chain_wfs != ''
+      && (needs.jupyter-e2e.result == 'success'
+          || needs.jupyter-e2e.result == 'skipped')
     uses: ./.github/workflows/publish-ghcr.yaml
     with:
       wf_names: ${{ needs.probe.outputs.chain_wfs }}

@@ -21,7 +21,7 @@
 | --- | --- | --- | --- |
 | `docker.yaml` | push to `common/docker/Dockerfile` or `common/docker/sync_dockerfiles.sh` + dispatch | `ubuntu-latest` | **Code generation**: runs `common/docker/sync_dockerfiles.sh` (regenerates all 19 per-wf Dockerfiles from the template with anchor-based patches, injecting per-wf `<wf>/docker/VERSION` labels — see §1.2), commits + pushes if anything changed (`github-actions[bot]`). Its bot push is ignored by the publish chain (no double chain) |
 | `publish-ghcr.yaml` | push to `common/docker/**` (all images), `biobb_wf_X/docker/**` (X), or `biobb_wf_X/python/workflow.py` / `workflow.env.yml` (X — the image bakes these in from `main` at build time) + `workflow_dispatch` (inputs `wf`, `skip_tests`) + `workflow_call` (`wf_names`, from the hourly probe when a jupyter repo's conda env changed) | `ubuntu-latest` (per image) | **Test-gated chain**: `detect` → `select` (publish matrix + docker-e2e test matrix) → docker e2e (`flavour-test-reusable`, one job per wf) → `publish` — **only if every selected test passed** (skipped when none exists). A wf opts out of its own gate with a `tests/docker/SKIP` file (first line = printed reason; it then publishes untested like a wf without an e2e — currently biobb_wf_cmip, OOM on the 7 GiB runner). One job per workflow, `fail-fast: false`. Each image is tagged with **its own** version (`<wf>/docker/VERSION` if present, else the template label) + `latest`. Test and publish jobs both run the sync script **locally first** (not committed), so they build identical Dockerfiles even if the docker.yaml bot commit is still in flight. See §1.2 |
-| `jupyter-sync.yaml` | `schedule` (hourly, :17) + `workflow_dispatch` | `ubuntu-latest` | **Cross-repo bridge** (the image + jupyter e2e consume `bioexcel/<wf>` main, which can't trigger this repo): for each jupyter submodule, grouped by repo (the three amber sub-wfs share `biobb_wf_amber`), `ls-remote main` vs the committed pointer; on advance, clone + diff `old..new`, then — bot-commit the pointer bump (always, keeps local checkouts current), run the jupyter e2e (always), and run the publish chain **only if `conda_env/environment.yml` changed** (a notebook-only change does not rebuild the image — it keeps its notebook until the next env change). Clone/diff failure → no bump, retry next hour. No secrets (public ls-remote/clone) |
+| `jupyter-sync.yaml` | `schedule` (hourly, :17) + `workflow_dispatch` | `ubuntu-latest` | **Cross-repo bridge** (the image + jupyter e2e consume `bioexcel/<wf>` main, which can't trigger this repo): for each jupyter submodule, grouped by repo (the three amber sub-wfs share `biobb_wf_amber`), `ls-remote main` vs the committed pointer; on advance, clone + diff `old..new`, then — bot-commit the pointer bump (always, keeps local checkouts current), run the jupyter e2e (always), and run the publish chain **if `conda_env/environment.yml` or the wf's tutorial notebook changed** (after the jupyter e2e passed — a broken notebook can never reach the image). Clone/diff failure → no bump, retry next hour. No secrets (public ls-remote/clone) |
 | `retag-ghcr.yaml` | `workflow_dispatch` (inputs: `wf`, `source` = tag or `sha256:` digest, `tag`) | `ubuntu-latest` | **Tag surgery without rebuilding**: pulls an existing image from GHCR (by digest or tag) and pushes it under a new tag. Use it to restore an overwritten version tag or assign a proper tag — the old digest of an overwritten tag is visible on the package *versions* page (`github.com/orgs/bioexcel/packages/container/<wf>/versions`) even though it has no tag |
 | `python_readme.yaml` | push to `common/python/README_*.md` + dispatch | `ubuntu-latest` | Regenerates `<wf>/python/README.md` (cp + `sed` placeholders), bot commit |
 | `docker_readme.yaml` | push to `common/docker/README_*.md` + dispatch | `ubuntu-latest` | Same for `docker/README.md` |
@@ -121,7 +121,7 @@ can never be published. Single-side changes:
 | --- | --- | --- |
 | jupyter env (`conda_env/environment.yml`) | the probe rebuilds (env gate): new env + old `workflow.py` | no — if the old code doesn't run on the new env, the docker e2e fails and the old image stays |
 | `python/workflow.py` (or the no-jupyter wfs' own env) | the chain rebuilds: new code + old env (jupyter main) | no — same gate; the image lags until the env catch-up push |
-| tutorial notebook | nothing (env-only rebuild rule); the jupyter e2e still proves the new trio works | no — the image ships the old tutorial until the next env change |
+| tutorial notebook | the probe rebuilds: new notebook + current env + code | no — the chain runs only after the jupyter e2e passed, so a broken notebook can never be published |
 | this repo's `python/workflow.env.yml` (the 17 jupyter wfs) | content no-op: their image env comes from the jupyter repo | no |
 | both sides (version-bump flow) | two rebuilds, each testing its concrete intermediate | no — every published state was tested |
 
@@ -230,8 +230,9 @@ one-line change there (see testing.md §runner plan).
   notebook at build time, the jupyter e2e runs their notebook, but a push to
   `bioexcel/<wf>` can't trigger this repo) → hourly probe `jupyter-sync.yaml`:
   `ls-remote main` vs the committed submodule pointer → on advance, bot-commit the
-  pointer bump + run the jupyter e2e + run the publish chain **only if
-  `conda_env/environment.yml` changed**. Bonus fix: `detect` now handles
+  pointer bump + run the jupyter e2e + run the publish chain **if
+  `conda_env/environment.yml` or the wf's tutorial notebook changed (after the
+  jupyter e2e passed)**. Bonus fix: `detect` now handles
   `workflow_call` and the `wf_names=all` value (the dispatch `all` option was silently
   rejected before).
 - ~~cwl/airflow/jupyter e2e were manual-only~~ → per-flavour auto workflows
