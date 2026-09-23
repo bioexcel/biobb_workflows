@@ -134,6 +134,82 @@ jobs:
           print("chain: " + (", ".join(sorted(set(chain))) or "(none)"))
           PY
 
+      # runs every hour, change or not: the python flavour env (this repo) and the
+      # image env (jupyter repo) are supposed to pin the same biobb_* versions —
+      # nothing else checks that, so warn on drift ("bumped one side, forgot the
+      # other"). Non-biobb packages (jupyter stack, ...) are ignored on purpose.
+      - name: Check biobb_* pin drift (this repo env vs jupyter repo env)
+        run: |
+          python3 - <<'PY'
+          import os, re, subprocess, urllib.request
+
+          def pins(lines):
+              d = {}
+              for line in lines:
+                  m = re.match(r"\s*-\s*(biobb_[a-z_]+)\s*=\s*=?([A-Za-z0-9._\-+]+)", line)
+                  if m:
+                      d[m.group(1)] = m.group(2)
+              return d
+
+          def cfg(regexp):
+              r = subprocess.run(["git", "config", "-f", ".gitmodules",
+                                  "--get-regexp", regexp],
+                                 capture_output=True, text=True)
+              return [l.split(" ", 1) for l in r.stdout.splitlines()]
+
+          urls = {k.rsplit(".", 1)[0]: v
+                  for k, v in cfg(r"submodule\..*\.url")}
+          pairs = set()
+          for k, v in cfg(r"submodule\..*\.path"):
+              if v.endswith("/jupyter"):
+                  url = urls.get(k.rsplit(".", 1)[0], "")
+                  if url:
+                      repo = url.rsplit("/", 1)[-1]
+                      if repo.endswith(".git"):
+                          repo = repo[:-4]
+                      pairs.add((v.rsplit("/jupyter", 1)[0], repo))
+
+          bad = 0
+          for wf, repo in sorted(pairs):
+              try:
+                  local = open(os.path.join(wf, "python", "workflow.env.yml")).read()
+              except FileNotFoundError:
+                  print("::warning::" + wf + ": no python/workflow.env.yml — skipping")
+                  bad += 1
+                  continue
+              raw = ("https://raw.githubusercontent.com/bioexcel/" + repo +
+                     "/main/conda_env/environment.yml")
+              try:
+                  remote = urllib.request.urlopen(raw, timeout=30).read().decode()
+              except Exception as e:
+                  print("::warning::" + wf + ": could not fetch " + raw + " (" + str(e) + ")")
+                  bad += 1
+                  continue
+              a, b = pins(local.splitlines()), pins(remote.splitlines())
+              mismatch, only_here, only_jupyter = [], [], []
+              for pkg in sorted(set(a) | set(b)):
+                  if pkg in a and pkg in b:
+                      if a[pkg] != b[pkg]:
+                          mismatch.append(pkg + ": " + a[pkg] + " vs " + b[pkg])
+                  elif pkg in a:
+                      only_here.append(pkg + " " + a[pkg])
+                  else:
+                      only_jupyter.append(pkg + " " + b[pkg])
+              if mismatch:
+                  print("::warning::" + wf + " — biobb_* version drift (this repo vs "
+                        + repo + "): " + "; ".join(mismatch))
+                  bad += 1
+              extras = []
+              if only_here:
+                  extras.append("only in this repo: " + ", ".join(only_here))
+              if only_jupyter:
+                  extras.append("only in jupyter env: " + ", ".join(only_jupyter))
+              if extras:
+                  print(wf + " — " + " | ".join(extras))
+          print("drift check done: " + str(len(pairs)) + " jupyter repos, "
+                + str(bad) + " warning(s)")
+          PY
+
   commit-pointers:
     name: Bump jupyter submodule pointers
     needs: probe

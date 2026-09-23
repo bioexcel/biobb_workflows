@@ -107,6 +107,29 @@ Rules this design gives:
 - Overwrote a tag by mistake? The old image survives in the registry by digest (package
   versions page) — restore it with `retag-ghcr.yaml`.
 
+### Image consistency: the "last green trio" rule
+
+An image bakes in three moving parts: the conda env + tutorial notebook (from the
+jupyter repo `bioexcel/<wf>` main) and `python/workflow.py` (from this repo's main;
+the two wfs without a jupyter repo instead bake their own `python/workflow.env.yml`
+and no notebook). A **published image is always the last *green* combination of the
+three**: the docker e2e runs `workflow.py` inside the very image it built, and the
+jupyter e2e runs the notebook inside a freshly built image — so a broken combination
+can never be published. Single-side changes:
+
+| You change only... | What happens | Broken image? |
+| --- | --- | --- |
+| jupyter env (`conda_env/environment.yml`) | the probe rebuilds (env gate): new env + old `workflow.py` | no — if the old code doesn't run on the new env, the docker e2e fails and the old image stays |
+| `python/workflow.py` (or the no-jupyter wfs' own env) | the chain rebuilds: new code + old env (jupyter main) | no — same gate; the image lags until the env catch-up push |
+| tutorial notebook | nothing (env-only rebuild rule); the jupyter e2e still proves the new trio works | no — the image ships the old tutorial until the next env change |
+| this repo's `python/workflow.env.yml` (the 17 jupyter wfs) | content no-op: their image env comes from the jupyter repo | no |
+| both sides (version-bump flow) | two rebuilds, each testing its concrete intermediate | no — every published state was tested |
+
+The one thing no gate checks: that the two env files pin the same `biobb_*`
+versions. The hourly probe (`jupyter-sync.yaml`) now warns on `biobb_*` pin drift
+between `python/workflow.env.yml` (this repo) and `conda_env/environment.yml`
+(jupyter repo).
+
 ## 2. Self-hosted runner infrastructure (`web_microservices/gh_runner`)
 
 Deployment: **Docker Swarm stack on a remote Linux server**, service `gh_runner_biobb`:
