@@ -3,9 +3,7 @@ name: Sync Citation.cff
 on:
   schedule:
     - cron: '0 0 * * 1' # Runs every Monday
-  push:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   sync:
