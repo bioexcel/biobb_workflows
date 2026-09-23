@@ -66,7 +66,7 @@ jobs:
         uses: mamba-org/setup-micromamba@v2.0.0
         with:
           generate-run-shell: true
-          micromamba-version: '2.0.2-2'
+          micromamba-version: '2.9.0-0'
           post-cleanup: 'all'
           init-shell: bash
           environment-file: ${{ inputs.wf_name }}/python/workflow.env.yml
