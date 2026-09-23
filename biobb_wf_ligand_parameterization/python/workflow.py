@@ -40,3 +40,4 @@ if __name__ == '__main__':
     parser.add_argument('--system', required=False)
     args = parser.parse_args()
     main(args.config, args.system)
+
