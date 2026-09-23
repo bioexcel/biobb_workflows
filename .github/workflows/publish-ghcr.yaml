@@ -3,6 +3,12 @@ name: Docker Image CI for GHCR
 # Test-gated, per-workflow image publishing:
 #   push touching common/docker/**            -> all workflows
 #   push touching biobb_wf_X/docker/**        -> workflow X
+#   push touching biobb_wf_X/python/workflow.py or workflow.env.yml
+#                                               -> workflow X (the image bakes both
+#                                                  in from main at build time — every
+#                                                  wf gets workflow.py; the two wfs
+#                                                  without a jupyter repo also their
+#                                                  workflow.env.yml)
 #   workflow_dispatch (wf input)              -> the chosen workflow (or all)
 #
 # Chain: detect -> select -> docker e2e test(s) -> publish (only if every
@@ -17,6 +23,9 @@ on:
     paths:
       - common/docker/**
       - 'biobb_wf_*/docker/**'
+      # the image bakes these in from main at build time (common/docker/Dockerfile)
+      - 'biobb_wf_*/python/workflow.py'
+      - 'biobb_wf_*/python/workflow.env.yml'
   workflow_dispatch:
     inputs:
       wf:
