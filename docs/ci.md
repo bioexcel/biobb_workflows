@@ -243,6 +243,10 @@ one-line change there (see testing.md §runner plan).
   select job (publish chain) and `detect` (all test workflows) drop the wf from that
   flavour's selection and print the reason; a SKIP-ed wf's image still publishes
   untested. Currently set for `biobb_wf_cmip` on docker/cwl/airflow.
+- ~~`biobb_wf_structure_checking` had no GHCR image entry~~ → it was in the old
+  all-in-one publisher but dropped when the per-workflow matrix was written (`d236d3c`);
+  re-added to the chain's image list (it now builds/publishes like the other 18 —
+  untested until its docker e2e script exists).
 
 ### Still open
 
@@ -262,5 +266,4 @@ one-line change there (see testing.md §runner plan).
    (re-dispatch publishes the green ones; the `tests/docker/SKIP` opt-out covers the
    known-broken case). Per-workflow partial publishing would need per-matrix-leg job
    outputs.
-7. **`biobb_wf_structure_checking` has no GHCR image entry** in the publish matrix (its
-   docker e2e doesn't exist either) — decide whether it should be published.
+

@@ -121,6 +121,7 @@ jobs:
             {"wf": "biobb_wf_pmx_tutorial", "args": "--build-arg REPO=biobb_wf_pmx_tutorial"},
             {"wf": "biobb_wf_protein_md_analysis", "args": "--build-arg REPO=biobb_wf_protein_md_analysis"},
             {"wf": "biobb_wf_protein-complex_md_setup", "args": "--build-arg REPO=biobb_wf_protein-complex_md_setup"},
+            {"wf": "biobb_wf_structure_checking", "args": "--build-arg REPO=biobb_wf_structure_checking"},
             {"wf": "biobb_wf_virtual-screening_fpocket", "args": "--build-arg REPO=biobb_wf_virtual-screening --build-arg SUBREPO=fpocket"}
           ]
           EOF
