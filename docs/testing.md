@@ -19,8 +19,9 @@ Per workflow, `tests/python/` contains:
 - `reference/` — golden outputs for `compare_size` (tolerance = N bytes difference).
 - Raw inputs (pdb/top/nc/xtc/zip), copied per flavour.
 
-CI invocation (see ci.md): micromamba env from `python/workflow.env.yml` (+ pytest,
-imagehash), then `pytest <wf>.py --config ../../python/workflow.yml --remove` from
+CI invocation (see ci.md): conda 26.7.1 env (libmamba solver — see ci.md for why not
+micromamba) from `python/workflow.env.yml` (+ pytest, imagehash), then
+`pytest <wf>.py --config ../../python/workflow.yml --remove` from
 `tests/python/`. The automatic pipeline (`python-tests.yaml`) fires only on changes to
 `biobb_wf_*/python/**` or `biobb_wf_*/tests/python/**` (the always-on push trigger and
 the weekly regression were removed 2026-09-22); it also runs on demand via the manual
@@ -29,9 +30,11 @@ Flavour e2e (`python` flavour, which delegates to `python-reusable.yaml`).
 ### 1.2 Local run recipe
 
 ```console
+# conda 26.7.1 + libmamba, same as CI (ci.md) — micromamba's solver cannot
+# resolve the biobb 5.3.x MD dependency knot
 cd biobb_workflows/biobb_wf_cmip
-micromamba create -n wf_cmip -f python/workflow.env.yml -c conda-forge -c bioconda -c nodefaults
-micromamba run -n wf_cmip bash -lc \
+conda create -n wf_cmip -f python/workflow.env.yml pytest imagehash -y
+conda run -n wf_cmip bash -lc \
   "cd tests/python && pytest biobb_wf_cmip.py --config ../../python/workflow.yml --remove -v"
 ```
 

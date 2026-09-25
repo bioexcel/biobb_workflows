@@ -10,8 +10,8 @@
 | `python-tests.yaml` | `push` (only `biobb_wf_*/python/**`, `biobb_wf_*/tests/python/**`) + `workflow_dispatch` (`wf_names`) | `ubuntu-latest` (per job) | The python step-by-step pytest pipeline: `detect` → one call of `python-reusable.yaml` per selected workflow. The always-on push trigger and the weekly all-19 regression were removed 2026-09-22 ("test what you changed"); also available on demand via the manual Flavour e2e (`python` flavour, which delegates to `python-reusable.yaml`) |
 | `cwl-tests.yaml` | `push` (only `biobb_wf_*/cwl/**`, `biobb_wf_*/tests/cwl/**`) | `ubuntu-latest` (per job) | Automatic cwl e2e ("test what you changed"): `detect` (flavour cwl → only wfs with `tests/cwl/run_test.sh` and no `tests/cwl/SKIP`) → `flavour-test-reusable`. Test-only |
 | `airflow-tests.yaml` | `push` (only `biobb_wf_*/airflow/**`, `biobb_wf_*/tests/airflow/**`) | `ubuntu-latest` (per job) | Same for the airflow e2e (`tests/airflow/SKIP` opt-out). Test-only |
-| `jupyter-tests.yaml` | `push` (only `biobb_wf_*/tests/jupyter/**`, the `biobb_wf_*/jupyter` submodule pointer) + `workflow_call` (`wf_names`, from the hourly probe) | `ubuntu-latest` (per job) | Same for the jupyter e2e (`tests/jupyter/SKIP` opt-out). Test-only. The notebook/env **content** lives in the separate `bioexcel/<wf>` jupyter repos — a push there can't trigger this repo, so the hourly `jupyter-sync.yaml` probe calls this workflow when a jupyter repo advanced |
-| `python-reusable.yaml` | `workflow_call` (`wf_name`, optional `runs_on`) | input-driven | Per-workflow python test: checkout → per-wf `sed` runtime reductions (values: testing.md §1.5) → micromamba env from `<wf>/python/workflow.env.yml` (+`pytest`, `imagehash`) → `pytest <wf>.py --config ../../python/workflow.yml --remove`. `timeout-minutes: 720` |
+| `jupyter-tests.yaml` | `push` (only `biobb_wf_*/tests/jupyter/**`, the `biobb_wf_*/jupyter` submodule pointer) + `workflow_call` (`wf_names`, from the daily probe) | `ubuntu-latest` (per job) | Same for the jupyter e2e (`tests/jupyter/SKIP` opt-out). Test-only. The notebook/env **content** lives in the separate `bioexcel/<wf>` jupyter repos — a push there can't trigger this repo, so the daily `jupyter-sync.yaml` probe calls this workflow when a jupyter repo advanced |
+| `python-reusable.yaml` | `workflow_call` (`wf_name`, optional `runs_on`) | input-driven | Per-workflow python test: checkout → per-wf `sed` runtime reductions (values: testing.md §1.5) → **conda 26.7.1** env (libmamba solver; conda installed from the official Anaconda installer, the same conda the docker images use) from `<wf>/python/workflow.env.yml` (+`pytest`, `imagehash`) → `pytest <wf>.py --config ../../python/workflow.yml --remove`. `timeout-minutes: 720`. **Why conda, not micromamba:** micromamba 2.9.0's solver fails to resolve the biobb 5.3.x MD dependency knot (gromacs/libhwloc/libxml2/icu/zlib — the md_setup 2026-09-25 incident), while conda 26.7.1's libmamba solves it (proven by a controlled probe: same spec, same index, micromamba UNSAT / conda SAT). Do not "simplify" this back to micromamba. |
 | `flavour-tests.yaml` | `workflow_dispatch` only (inputs: `flavour` = docker/cwl/airflow/jupyter/python, `wf_names`) | `ubuntu-latest` (per job) | Manual e2e runner for any flavour: `detect` (only workflows that have `tests/<flavour>/run_test.sh`; for python, the `tests/python/` dir = every wf) → one call of `flavour-test-reusable.yaml` each. The per-flavour **automatic** counterparts (`cwl-tests.yaml`, `airflow-tests.yaml`, `jupyter-tests.yaml`, and the test-gated publish chain for docker) run on path changes; this workflow is for ad-hoc subsets. Concurrency group includes the flavour, so the 5 flavours can run in parallel |
 | `flavour-test-reusable.yaml` | `workflow_call` (`wf_name`, `flavour`, optional `runs_on`) | input-driven | Runs `<wf>/tests/<flavour>/run_test.sh` (installs `cwltool` via micromamba for the cwl flavour). `timeout-minutes: 720`. The **python** flavour has no script: the job delegates to `python-reusable.yaml` (the CI python pipeline, so manual and automatic runs can never drift) |
 
@@ -20,8 +20,8 @@
 | File | Trigger | Runner | Purpose |
 | --- | --- | --- | --- |
 | `docker.yaml` | push to `common/docker/Dockerfile` or `common/docker/sync_dockerfiles.sh` + dispatch | `ubuntu-latest` | **Code generation**: runs `common/docker/sync_dockerfiles.sh` (regenerates all 19 per-wf Dockerfiles from the template with anchor-based patches, injecting per-wf `<wf>/docker/VERSION` labels — see §1.2), commits + pushes if anything changed (`github-actions[bot]`). Its bot push is ignored by the publish chain (no double chain) |
-| `publish-ghcr.yaml` | push to `common/docker/**` (all images), `biobb_wf_X/docker/**` (X), or `biobb_wf_X/python/workflow.py` / `workflow.env.yml` (X — the image bakes these in from `main` at build time) + `workflow_dispatch` (inputs `wf`, `skip_tests`) + `workflow_call` (`wf_names`, from the hourly probe when a jupyter repo's conda env changed) | `ubuntu-latest` (per image) | **Test-gated chain**: `detect` → `select` (publish matrix + docker-e2e test matrix) → docker e2e (`flavour-test-reusable`, one job per wf) → `publish` — **only if every selected test passed** (skipped when none exists). A wf opts out of its own gate with a `tests/docker/SKIP` file (first line = printed reason; it then publishes untested like a wf without an e2e — currently biobb_wf_cmip, OOM on the 7 GiB runner). One job per workflow, `fail-fast: false`. Each image is tagged with **its own** version (`<wf>/docker/VERSION` if present, else the template label) + `latest`. Test and publish jobs both run the sync script **locally first** (not committed), so they build identical Dockerfiles even if the docker.yaml bot commit is still in flight. See §1.2 |
-| `jupyter-sync.yaml` | `schedule` (hourly, :17) + **push to `main`** + `workflow_dispatch` (the push trigger is the effective one — see the dead-`schedule` note below) | `ubuntu-latest` | **Cross-repo bridge** (the image + jupyter e2e consume `bioexcel/<wf>` main, which can't trigger this repo): for each jupyter submodule, grouped by repo (the three amber sub-wfs share `biobb_wf_amber`), `ls-remote main` vs the committed pointer; on advance, clone + diff `old..new`, then — bot-commit the pointer bump (always, keeps local checkouts current), run the jupyter e2e (always), and run the publish chain **if `conda_env/environment.yml` or the wf's tutorial notebook changed** (after the jupyter e2e passed — a broken notebook can never reach the image). Clone/diff failure → no bump, retry next hour. No secrets (public ls-remote/clone) |
+| `publish-ghcr.yaml` | push to `common/docker/**` (all images), `biobb_wf_X/docker/**` (X), or `biobb_wf_X/python/workflow.py` / `workflow.env.yml` (X — the image bakes these in from `main` at build time) + `workflow_dispatch` (inputs `wf`, `skip_tests`) + `workflow_call` (`wf_names`, from the daily probe when a jupyter repo's conda env changed) | `ubuntu-latest` (per image) | **Test-gated chain**: `detect` → `select` (publish matrix + docker-e2e test matrix) → docker e2e (`flavour-test-reusable`, one job per wf) → `publish` — **only if every selected test passed** (skipped when none exists). A wf opts out of its own gate with a `tests/docker/SKIP` file (first line = printed reason; it then publishes untested like a wf without an e2e — currently biobb_wf_cmip, OOM on the 7 GiB runner). One job per workflow, `fail-fast: false`. Each image is tagged with **its own** version (`<wf>/docker/VERSION` if present, else the template label) + `latest`. Test and publish jobs both run the sync script **locally first** (not committed), so they build identical Dockerfiles even if the docker.yaml bot commit is still in flight. See §1.2 |
+| `jupyter-sync.yaml` | `schedule` (daily, 14:00) + **push to `main`** + `workflow_dispatch` (the push trigger is a safety net — see the `schedule` note in §2) | `ubuntu-latest` | **Cross-repo bridge** (the image + jupyter e2e consume `bioexcel/<wf>` main, which can't trigger this repo): for each jupyter submodule, grouped by repo (the three amber sub-wfs share `biobb_wf_amber`), `ls-remote main` vs the committed pointer; on advance, clone + diff `old..new`, then — bot-commit the pointer bump (always, keeps local checkouts current), run the jupyter e2e (always), and run the publish chain **if `conda_env/environment.yml` or the wf's tutorial notebook changed** (after the jupyter e2e passed — a broken notebook can never reach the image). Clone/diff failure → no bump, retry the next day. No secrets (public ls-remote/clone) |
 | `retag-ghcr.yaml` | `workflow_dispatch` (inputs: `wf`, `source` = tag or `sha256:` digest, `tag`) | `ubuntu-latest` | **Tag surgery without rebuilding**: pulls an existing image from GHCR (by digest or tag) and pushes it under a new tag. Use it to restore an overwritten version tag or assign a proper tag — the old digest of an overwritten tag is visible on the package *versions* page (`github.com/orgs/bioexcel/packages/container/<wf>/versions`) even though it has no tag |
 | `python_readme.yaml` | push to `common/python/README_*.md` + dispatch | `ubuntu-latest` | Regenerates `<wf>/python/README.md` (cp + `sed` placeholders), bot commit |
 | `docker_readme.yaml` | push to `common/docker/README_*.md` + dispatch | `ubuntu-latest` | Same for `docker/README.md` |
@@ -92,7 +92,7 @@ Rules this design gives:
   cwl/airflow adapter (`dockerPull`) change never rebuilds the image, and neither does a
   `workflow.yml`/`README.md`/`tests/**` change. Jupyter-repo content (conda env,
   notebook) is fetched from `main` at build time, and a jupyter-repo push cannot trigger
-  this repo — the hourly `jupyter-sync.yaml` probe covers it: pointer bump + jupyter
+  this repo — the daily `jupyter-sync.yaml` probe covers it: pointer bump + jupyter
   e2e on any jupyter-repo advance, image rebuild only when `conda_env/environment.yml`
   changed.
 - Run-level gate: if any selected docker e2e fails, that run publishes nothing (re-push or
@@ -126,7 +126,7 @@ can never be published. Single-side changes:
 | both sides (version-bump flow) | two rebuilds, each testing its concrete intermediate | no — every published state was tested |
 
 The one thing no gate checks: that the two env files pin the same `biobb_*`
-versions. The hourly probe (`jupyter-sync.yaml`) now warns on `biobb_*` pin drift
+versions. The daily probe (`jupyter-sync.yaml`) now warns on `biobb_*` pin drift
 between `python/workflow.env.yml` (this repo) and `conda_env/environment.yml`
 (jupyter repo).
 
@@ -228,7 +228,7 @@ one-line change there (see testing.md §runner plan).
   jupyter-repo push).
 - ~~Jupyter-repo changes were invisible to CI~~ (the image bakes in their conda env +
   notebook at build time, the jupyter e2e runs their notebook, but a push to
-  `bioexcel/<wf>` can't trigger this repo) → hourly probe `jupyter-sync.yaml`:
+  `bioexcel/<wf>` can't trigger this repo) → daily probe `jupyter-sync.yaml`:
   `ls-remote main` vs the committed submodule pointer → on advance, bot-commit the
   pointer bump + run the jupyter e2e + run the publish chain **if
   `conda_env/environment.yml` or the wf's tutorial notebook changed (after the
@@ -266,11 +266,14 @@ one-line change there (see testing.md §runner plan).
    (re-dispatch publishes the green ones; the `tests/docker/SKIP` opt-out covers the
    known-broken case). Per-workflow partial publishing would need per-matrix-leg job
    outputs.
-7. **`schedule` triggers never fire in this repo** (verified 2026-09-23: zero
-   `schedule` runs in the 90-day retention window — including the citation weekly
-   cron that has existed since 2024-05-28; no repo settings toggle exists, all
-   documented preconditions are met). Workaround: `jupyter-sync.yaml` also runs on
-   **push to `main`** (it is a ~30 s no-op when nothing advanced, and its own bot
-   bump re-triggering it is a no-op — no loop). The citation weekly is still
+7. **`schedule` triggers looked dead in this repo, then started firing** (as of
+   2026-09-23: zero `schedule` runs in the 90-day retention window — including the
+   citation weekly cron that has existed since 2024-05-28; no repo settings toggle
+   exists, all documented preconditions are met). On the same day, a `schedule` run
+   of `jupyter-sync.yaml` fired at 14:15 (delayed 14:00 tick) — likely re-armed by
+   that day's edit to the workflow file, or scheduler backlog. Treat `schedule` as
+   best-effort: `jupyter-sync.yaml` also runs on **push to `main`** (a ~30 s no-op
+   when nothing advanced, and its own bot bump re-triggering it is a no-op — no
+   loop), and that push trigger is the reliable path. The citation weekly is still
    cron-only — run it by hand via `workflow_dispatch` if a sync is needed.
 
