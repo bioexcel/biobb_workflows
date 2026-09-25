@@ -2,15 +2,14 @@
 #
 # Run the flavour e2e tests for this workflow, in sequence.
 #
-# biobb_wf_haddock has only the jupyter flavour e2e:
-#   - docker:  opted out via tests/docker/SKIP (stale docker/workflow.yml —
-#             see that file)
-#   - cwl / airflow: the workflow has no cwl/ or airflow/ adapters in this
-#             repo
+# biobb_wf_haddock has the docker and jupyter flavour e2e tests; cwl and
+# airflow are not available (the workflow has no cwl/ or airflow/ adapters in
+# this repo).
 #
 # Usage:
-#   ./run_all.sh            # jupyter
-#   KEEP=1 ./run_all.sh     # keep scratch dirs / images for inspection
+#   ./run_all.sh                 # docker, jupyter
+#   ./run_all.sh docker          # selected flavours
+#   KEEP=1 ./run_all.sh docker   # keep scratch dirs / images for inspection
 #
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
@@ -18,15 +17,14 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 if [[ $# -gt 0 ]]; then
   FLAVOURS=("$@")
 else
-  FLAVOURS=(jupyter)
+  FLAVOURS=(docker jupyter)
 fi
 
 RESULTS=()
 for fl in "${FLAVOURS[@]}"; do
   case "$fl" in
-    jupyter) ;;
-    docker)  echo "ERROR: docker e2e is opted out (tests/docker/SKIP) — see that file" >&2; exit 2 ;;
-    *) echo "ERROR: unknown flavour '$fl' (biobb_wf_haddock has: jupyter)" >&2; exit 2 ;;
+    docker|jupyter) ;;
+    *) echo "ERROR: unknown flavour '$fl' (biobb_wf_haddock has: docker, jupyter)" >&2; exit 2 ;;
   esac
   echo
   echo "================ FLAVOUR: $fl ================"

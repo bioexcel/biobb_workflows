@@ -94,9 +94,13 @@ if [[ ! -f "$DOCKER_DIR/Dockerfile" ]]; then
   exit 1
 fi
 
-# Keep the per-wf Dockerfile in sync with the common template (LOCAL ONLY,
-# never committed) — see the docker flavour test.
-bash "$REPO_ROOT/common/docker/sync_dockerfiles.sh" >/dev/null
+# Regenerate the per-wf Dockerfile from the common template — into a TEMP
+# DIR, not in place (see tests/docker/run_test.sh for why): the in-place
+# mode rewrites EVERY workflow's Dockerfile and would dirty this working
+# tree whenever another workflow's committed file is stale.
+SYNC_DIR="$(mktemp -d)"
+bash "$REPO_ROOT/common/docker/sync_dockerfiles.sh" "$SYNC_DIR" >/dev/null
+SYNCED_DF="$SYNC_DIR/$WF_NAME/docker/Dockerfile"
 
 # ---------------- per-workflow hooks (edit when porting) ----------------
 docker_build_args() {
@@ -137,6 +141,7 @@ fi
 
 cleanup() {
   local rc=$?
+  rm -rf "${SYNC_DIR:-}" 2>/dev/null || true
   # The container ran as root: hand the files back to the host user so the rm
   # below works (on GH runners the 'runner' user cannot delete root-owned
   # dirs). Reuses $IMAGE, so no extra pull.
@@ -173,7 +178,7 @@ elif [[ "$DO_BUILD" -eq 1 ]]; then
   BUILD_OK=0
   for attempt in 1 2 3; do
     if # shellcheck disable=SC2046
-    docker build ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} $(docker_build_args) -t "$IMAGE" "$DOCKER_DIR"; then
+    docker build ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} $(docker_build_args) -f "$SYNCED_DF" -t "$IMAGE" "$DOCKER_DIR"; then
       BUILD_OK=1
       break
     fi
