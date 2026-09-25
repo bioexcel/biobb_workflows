@@ -143,7 +143,7 @@ path = sys.argv[1]
 with open(path) as f:
     nb = json.load(f)
 
- sub = [
+sub = [
     (re.compile(r"('mpi_np':\s*)\d+"), r"\g<1>2"),
     (re.compile(r"('maxcyc'\s*:\s*)\d+"), r"\g<1>50"),
     (re.compile(r"('nstlim'\s*:\s*)\d+"), r"\g<1>100"),
