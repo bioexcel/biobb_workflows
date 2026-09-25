@@ -62,28 +62,24 @@ jobs:
           rm -rf $HOME/.bash_profile $HOME/.conda $HOME/micromamba $HOME/micromamba-bin 2>/dev/null
           touch $HOME/.bash_profile
 
-      - name: setup-micromamba
-        uses: mamba-org/setup-micromamba@v2.0.0
+      - name: setup-miniconda
+        uses: mamba-org/setup-miniconda@v3
         with:
-          generate-run-shell: true
-          micromamba-version: '2.9.0-0'
-          post-cleanup: 'all'
-          init-shell: bash
-          environment-file: ${{ inputs.wf_name }}/python/workflow.env.yml
-          create-args: >-
-            pytest
-            imagehash
+          conda-version: '26.7.1'
+
+      - name: Create environment (same solver as the docker images)
+        run: |
+          conda config --set solver libmamba
+          conda create -y -n biobb_env -f ${{ inputs.wf_name }}/python/workflow.env.yml pytest imagehash
 
       - name: List installed package versions
-        shell: bash -l {0}
-        run: micromamba list
+        run: conda run -n biobb_env conda list
 
       - name: Run tests
-        shell: bash -l {0}
         run: |
           export PYTHONPATH=.:./biobb_common:$PYTHONPATH
 
           cd ${{ inputs.wf_name }}/tests/python
 
           # Production one
-          pytest ${{ inputs.wf_name }}.py --config ../../python/workflow.yml --remove
+          conda run -n biobb_env pytest ${{ inputs.wf_name }}.py --config ../../python/workflow.yml --remove
