@@ -53,3 +53,27 @@ jobs:
         shell: bash -l {0}
         working-directory: ${{ inputs.wf_name }}/tests/${{ inputs.flavour }}
         run: ./run_test.sh
+
+      # On failure, tar the test work dir (recorded by run_test.sh in
+      # .e2e_workdir) and upload it: the sander/cwl/airflow logs behind a
+      # failing step live there and are gone otherwise.
+      - name: Tar e2e workdir on failure
+        if: failure()
+        shell: bash -l {0}
+        run: |
+          MARKER="${{ inputs.wf_name }}/tests/${{ inputs.flavour }}/.e2e_workdir"
+          [[ -f "$MARKER" ]] || exit 0
+          WD="$(cat "$MARKER")"
+          [[ -d "$WD" ]] || exit 0
+          # skip unreasonably large work dirs (keep the runner usable)
+          [[ "$(du -sb "$WD" | cut -f1)" -lt 1073741824 ]] || exit 0
+          tar -czf "$RUNNER_TEMP/e2e_workdir.tar.gz" \
+            -C "$(dirname "$WD")" "$(basename "$WD")" || true
+
+      - name: Upload e2e workdir on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-workdir-${{ inputs.wf_name }}-${{ inputs.flavour }}
+          path: ${{ runner.temp }}/e2e_workdir.tar.gz
+          if-no-files-found: ignore

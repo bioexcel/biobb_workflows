@@ -18,14 +18,27 @@
 # is self-contained: the PDB and the ABCix_config_files/ mdin set are
 # committed next to it, so no network access is needed at run time.
 #
-# Runtime reduction: the notebook ships with nstlim/maxcyc already relaxed to
-# 500 and mpi_np 4. adjust_runtime shortens it further to the values the CI
-# python flavour uses (.github/workflows/python-reusable.yaml): mpi_np -> 2
-# (the GH runner has 2 vCPUs — mpirun cannot schedule 4 ranks there),
-# nstlim -> 100, maxcyc -> 50 — local COPY only, the notebook in the jupyter
-# repo is never touched. The notebook is JSON: the parameter lines are JSON
-# strings inside code cells, not bare code lines, so a raw text sed never
-# matches — adjust_runtime parses and re-dumps the notebook instead.
+ # Runtime reduction: the notebook ships with nstlim/maxcyc already relaxed to
+ # 500 and mpi_np 4. adjust_runtime shortens it further to the values the CI
+ # python flavour uses (.github/workflows/python-reusable.yaml): mpi_np -> 2
+ # (the GH runner has 2 vCPUs — mpirun cannot schedule 4 ranks there),
+ # nstlim -> 100, maxcyc -> 50 — local COPY only, the notebook in the jupyter
+ # repo is never touched. The notebook is JSON: the parameter lines are JSON
+ # strings inside code cells, not bare code lines, so a raw text sed never
+ # matches — adjust_runtime parses and re-dumps the notebook instead.
+ #
+ # It also downgrades the process_mdout cells' terms ['PRES','DENSITY'] to
+ # ['PRES']: biobb_amber's multi-term mode merges the two per-term summary
+ # files line-by-line and crashes with KeyError: 'PRES' on the reduced
+ # 100-step sander logs (a log line that matches /NSTEP/ but fails the perl's
+ # full parse leaves the time undef; the DENSITY value then lands in a file
+ # line with no time, which the python merge misreads as a TIME key absent
+ # from summary.PRES). Single terms take the plain-copy path instead. This is
+ # an upstream biobb_amber/AMBER issue, not a workflow one.
+ #
+ # On failure the script records $WORK_DIR in .e2e_workdir next to itself;
+ # flavour-test-reusable.yaml tars it and uploads it as a GitHub Actions
+ # artefact so the sander logs behind a cell error can be inspected.
 #
 # The sander cells run `mpirun -n 2 sander.MPI` and the container runs as
 # root: Open MPI refuses to run as root unless told to, so the run passes
@@ -130,12 +143,20 @@ path = sys.argv[1]
 with open(path) as f:
     nb = json.load(f)
 
-sub = [
+ sub = [
     (re.compile(r"('mpi_np':\s*)\d+"), r"\g<1>2"),
     (re.compile(r"('maxcyc'\s*:\s*)\d+"), r"\g<1>50"),
     (re.compile(r"('nstlim'\s*:\s*)\d+"), r"\g<1>100"),
+    # The process_mdout cells request ['PRES','DENSITY']; biobb_amber's
+    # multi-term mode merges summary.PRES + summary.DENSITY line-by-line and
+    # raises KeyError: 'PRES' on the reduced (100-step) sander logs — one of
+    # the log's /NSTEP/ lines fails the perl's full parse (undef time -> the
+    # DENSITY value is misread as a TIME key the PRES file lacks). Single
+    # terms bypass the merge (plain file copy). Upstream issue: biobb_amber
+    # process_mdout + AMBER process_mdout.perl.
+    (re.compile(r"(\"terms\"\s*:\s*\[)'PRES',\s*'DENSITY'(\])"), r"\g<1>'PRES'\g<2>"),
 ]
-counts = [0, 0, 0]
+counts = [0, 0, 0, 0]
 for cell in nb["cells"]:
     if cell.get("cell_type") != "code":
         continue
@@ -149,7 +170,8 @@ for cell in nb["cells"]:
 with open(path, "w") as f:
     json.dump(nb, f, indent=1)
 print(f"  reduced sander params to CI values: mpi_np={counts[0]} call(s) -> 2, "
-      f"maxcyc={counts[1]} -> 50, nstlim={counts[2]} -> 100")
+      f"maxcyc={counts[1]} -> 50, nstlim={counts[2]} -> 100, "
+      f"terms['PRES','DENSITY'] -> ['PRES'] in {counts[3]} cell(s)")
 PY
 }
 
@@ -192,7 +214,9 @@ cleanup() {
   # the image is kept on purpose (same tag as the docker test, overwritten on
   # next build) so both flavours share it and reruns are fast; remove it
   # manually with: docker rmi $IMAGE
-  if [[ "$KEEP" -ne 1 ]]; then
+  # On GH runners the work dir is kept on purpose (ephemeral disk): the
+  # on-failure artefact step of flavour-test-reusable.yaml tars it.
+  if [[ "$KEEP" -ne 1 && -z "${GITHUB_ACTIONS:-}" ]]; then
     # best effort: a cleanup glitch must never mask the test result (rc)
     rm -rf "$WORK_DIR" 2>/dev/null || {
       echo "WARNING: could not remove $WORK_DIR (left in place)"
@@ -250,6 +274,9 @@ cp "$NOTEBOOK_SRC" "$WORK_DIR/notebook.ipynb"
 cp "$NB_DIR/CGCGAATTCGCG.pdb" "$WORK_DIR/CGCGAATTCGCG.pdb"
 cp -r "$NB_DIR/ABCix_config_files" "$WORK_DIR/ABCix_config_files"
 adjust_runtime "$WORK_DIR/notebook.ipynb"
+# record the work dir for the on-failure artefact (flavour-test-reusable.yaml
+# tars + uploads it when this job fails)
+echo "$WORK_DIR" > "$SCRIPT_DIR/.e2e_workdir"
 
 echo ">>> [4/5] execute notebook in container (jupyter nbconvert --execute)"
 set +e
