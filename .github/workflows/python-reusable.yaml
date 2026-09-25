@@ -72,7 +72,7 @@ jobs:
           environment-file: ${{ inputs.wf_name }}/python/workflow.env.yml
           create-args: >-
             pytest
-            imagehash
+      #     imagehash
 
       - name: List installed package versions
         shell: bash -l {0}
