@@ -18,15 +18,20 @@ name: Jupyter repo probe (daily)
 #   3. clone/diff failure -> no bump, retry on the next run (a failed analysis
 #      must not silently skip the env check)
 #
-# Triggers: daily cron AND every push to main. Early on the `schedule`
-# triggers looked dead (zero schedule runs in 90 days, including the citation
-# weekly that has existed since 2024), but a schedule run DID fire on
-# 2026-09-23 at 14:15 (delayed 14:00 tick), so the cron is alive; the push
-# trigger stays as a safety net anyway. The probe is a ~30 s no-op when
-# nothing advanced (a few git ls-remote calls), so a run per push is nearly
-# free. No loop: the probe's own bot pointer-bump push re-triggers it, finds
-# pointer == remote and exits. `concurrency` (cancel-in-progress) collapses
-# overlapping runs.
+# Triggers: daily cron AND pushes to main touching a workflow's `python/`
+# folder or its `jupyter` submodule pointer — the two sides that must stay in
+# sync (they pin the same biobb_* versions; that is the relationship this
+# probe guards). A cwl/airflow/docs push doesn't touch that relationship, so
+# it no longer triggers the probe: a jupyter-repo advance that doesn't
+# coincide with such a push is picked up by the daily cron instead (<= 24 h).
+# Early on the `schedule` triggers looked dead (zero schedule runs in 90
+# days), but a schedule run DID fire on 2026-09-23 at 14:15 (delayed 14:00
+# tick), so the cron is alive; the push trigger stays as a safety net. The
+# probe is a ~30 s no-op when nothing advanced (a few git ls-remote calls),
+# so a run per relevant push is nearly free. No loop: the probe's own bot
+# pointer-bump push re-triggers it (it touches a `jupyter` pointer path),
+# finds pointer == remote and exits. `concurrency` (cancel-in-progress)
+# collapses overlapping runs.
 #
 # No secrets needed: public ls-remote / clone of public repos.
 
@@ -35,6 +40,10 @@ on:
     - cron: '0 14 * * *'
   push:
     branches: [main]
+    paths:
+      - 'biobb_wf_*/python/**'
+      - 'biobb_wf_*/jupyter'
+      - 'biobb_wf_*/jupyter/**'
   workflow_dispatch:
 
 concurrency:
