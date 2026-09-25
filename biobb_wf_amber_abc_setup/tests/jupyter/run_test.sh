@@ -27,14 +27,16 @@
  # strings inside code cells, not bare code lines, so a raw text sed never
  # matches — adjust_runtime parses and re-dumps the notebook instead.
  #
- # It also downgrades the process_mdout cells' terms ['PRES','DENSITY'] to
- # ['PRES']: biobb_amber's multi-term mode merges the two per-term summary
- # files line-by-line and crashes with KeyError: 'PRES' on the reduced
- # 100-step sander logs (a log line that matches /NSTEP/ but fails the perl's
- # full parse leaves the time undef; the DENSITY value then lands in a file
- # line with no time, which the python merge misreads as a TIME key absent
- # from summary.PRES). Single terms take the plain-copy path instead. This is
- # an upstream biobb_amber/AMBER issue, not a workflow one.
+ # It also inserts a tiny normalization cell before every process_mdout cell:
+ # AMBER 24.8 prints a wide negative pressure without the separating space
+ # (the step-0 block of a fresh-start run: 'PRESS =-13482.6'), which makes
+ # process_mdout.perl's regex fail on that line; the energy block then loses
+ # its TIME, and biobb_amber's multi-term process_mdout merge misreads the
+ # orphaned DENSITY value as a TIME key and crashes with KeyError: 'PRES'
+ # (verified on a real eq6 log). Only the fresh-start (irest=0) MD step can
+ # produce such a block — restart runs never print a step-0 block. The cell
+ # rewrites 'PRESS =-' to 'PRESS = -' in the sander log before the parse.
+ # Upstream issues: AMBER process_mdout.perl regex + biobb_amber merge.
  #
  # On failure the script records $WORK_DIR in .e2e_workdir next to itself;
  # flavour-test-reusable.yaml tars it and uploads it as a GitHub Actions
@@ -135,7 +137,9 @@ docker_build_args() {
 adjust_runtime() {
   # $1 = the local copy of the notebook. Shorten the sander runs to the CI
   # python values (mpi_np -> 2, nstlim -> 100, maxcyc -> 50 — see the
-  # header): 4 MPI ranks cannot be scheduled on a 2-vCPU GH runner.
+  # header): 4 MPI ranks cannot be scheduled on a 2-vCPU GH runner. Also
+  # insert a log-normalization cell before every process_mdout cell (see the
+  # header: AMBER's 'PRESS =-' line breaks the perl parser).
   python3 - "$1" <<'PY'
 import json, re, sys
 
@@ -147,31 +151,54 @@ sub = [
     (re.compile(r"('mpi_np':\s*)\d+"), r"\g<1>2"),
     (re.compile(r"('maxcyc'\s*:\s*)\d+"), r"\g<1>50"),
     (re.compile(r"('nstlim'\s*:\s*)\d+"), r"\g<1>100"),
-    # The process_mdout cells request ['PRES','DENSITY']; biobb_amber's
-    # multi-term mode merges summary.PRES + summary.DENSITY line-by-line and
-    # raises KeyError: 'PRES' on the reduced (100-step) sander logs — one of
-    # the log's /NSTEP/ lines fails the perl's full parse (undef time -> the
-    # DENSITY value is misread as a TIME key the PRES file lacks). Single
-    # terms bypass the merge (plain file copy). Upstream issue: biobb_amber
-    # process_mdout + AMBER process_mdout.perl.
-    (re.compile(r"(\"terms\"\s*:\s*\[)'PRES',\s*'DENSITY'(\])"), r"\g<1>'PRES'\g<2>"),
 ]
-counts = [0, 0, 0, 0]
+counts = [0, 0, 0]
+
+def norm_cell(log):
+    return {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# CI workaround (upstream AMBER + biobb_amber bug): AMBER 24.8 prints\n",
+            "# a wide negative pressure without the separating space (the step-0\n",
+            "# block of a fresh-start run: 'PRESS =-13482.6'). process_mdout.perl's\n",
+            "# regex then fails on that line, the energy block loses its TIME, and\n",
+            "# biobb_amber's multi-term process_mdout merge crashes with\n",
+            "# KeyError: 'PRES'. Normalize the log before it is parsed.\n",
+            "import re as _re\n",
+            f"_s = open('{log}').read()\n",
+            "_s2 = _re.sub(r'PRESS =(-\\d)', r'PRESS = \\1', _s)\n",
+            "if _s2 != _s:\n",
+            f"    open('{log}', 'w').write(_s2)\n",
+            f"    print('normalized PRESS spacing in {log}')\n",
+        ],
+    }
+
+norm_cells = 0
+new_cells = []
 for cell in nb["cells"]:
-    if cell.get("cell_type") != "code":
-        continue
-    src = cell.get("source", [])
-    for i, line in enumerate(src):
-        for k, (pat, rep) in enumerate(sub):
-            line, n = pat.subn(rep, line)
-            counts[k] += n
-        src[i] = line
+    if cell.get("cell_type") == "code":
+        src = cell.get("source", [])
+        joined = "".join(src)
+        for i, line in enumerate(src):
+            for k, (pat, rep) in enumerate(sub):
+                line, n = pat.subn(rep, line)
+                counts[k] += n
+            src[i] = line
+        m = re.search(r"process_mdout\(input_log_path=output_eq(\d+)_log_path", joined)
+        if m:
+            new_cells.append(norm_cell(f"sander.eq{m.group(1)}.log"))
+            norm_cells += 1
+    new_cells.append(cell)
+nb["cells"] = new_cells
 
 with open(path, "w") as f:
     json.dump(nb, f, indent=1)
 print(f"  reduced sander params to CI values: mpi_np={counts[0]} call(s) -> 2, "
-      f"maxcyc={counts[1]} -> 50, nstlim={counts[2]} -> 100, "
-      f"terms['PRES','DENSITY'] -> ['PRES'] in {counts[3]} cell(s)")
+      f"maxcyc={counts[1]} -> 50, nstlim={counts[2]} -> 100; "
+      f"inserted {norm_cells} log-normalization cell(s) before process_mdout")
 PY
 }
 
