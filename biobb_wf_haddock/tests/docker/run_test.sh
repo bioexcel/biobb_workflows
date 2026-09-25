@@ -57,14 +57,15 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# Final workflow outputs (last two docking steps in docker/workflow.yml)
+# Final workflow outputs (last two docking steps in docker/workflow.yml).
+# No contact-map zip: the contact_map step runs with postprocess=False
+# (default), so its output is the haddock_wf_data dir — the stage files in
+# 11_contactmap/ (cluster*.html) are the final artefacts, the same files the
+# CI python e2e asserts on.
 EXPECTED_OUTPUTS=(
   "11_caprieval4.zip"
-  "12_contact_map.zip"
+  "cluster*.html"
 )
-
-# BSD sed (macOS) needs an empty backup suffix, GNU sed (Linux) does not
-if sed --version >/dev/null 2>&1; then SED_INPLACE=(sed -i); else SED_INPLACE=(sed -i ''); fi
 
 DOCKER_DIR="$WF_DIR/docker"
 WORK_DIR="$SCRIPT_DIR/work"

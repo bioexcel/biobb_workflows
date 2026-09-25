@@ -65,18 +65,19 @@ NB_REPO_URL="${NB_REPO_URL:-https://github.com/bioexcel/$WF_NAME}"
 NOTEBOOK="biobb_wf_haddock/notebooks/biobb_wf_haddock.ipynb"
 
 # Final notebook outputs (the notebook writes them to
-# data/antibody/docking/step_outputs/<step>_<name>.zip, last two steps)
+# data/antibody/docking/step_outputs/<step>_<name>.zip / haddock_wf_data).
+# No contact-map zip: the contact_map step runs with postprocess=False
+# (default) — same as the CI python e2e — so the final artefacts are the
+# stage files in haddock_wf_data/11_contactmap/ (the notebook's own dropdown
+# cell globs cluster*.html there).
 # — workflow-specific line #2
 EXPECTED_OUTPUTS=(
   "11_caprieval4.zip"
-  "12_contact_map.zip"
+  "cluster*.html"
 )
 
 WORK_DIR="$SCRIPT_DIR/work"
 CONTAINER="biobb-jtest-${WF_NAME//\//-}-$$"
-
-# BSD sed (macOS) needs an empty backup suffix, GNU sed (Linux) does not
-if sed --version >/dev/null 2>&1; then SED_INPLACE=(sed -i); else SED_INPLACE=(sed -i ''); fi
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -112,9 +113,31 @@ docker_build_args() {
 adjust_runtime() {
   # $1 = the local copy of the notebook. Disables the four
   # open_results_mod(...) browser-open calls (IndexError headless — see the
-  # header). No sampling edit: the notebook already ships the reduced values
+  # header). The notebook is JSON: the call lines are JSON strings, not bare
+  # code lines, so a raw text sed never matches — parse and re-dump instead.
+  # No sampling edit: the notebook already ships the reduced values
   # (sampling 10 / select 8 / top_models 4), same as the CI python flavour.
-  "${SED_INPLACE[@]}" "s/^open_results_mod(/# open_results_mod (headless: no jupyter server, call skipped)/" "$1"
+  python3 - "$1" <<'PY'
+import json, sys
+
+path = sys.argv[1]
+with open(path) as f:
+    nb = json.load(f)
+
+patched = 0
+for cell in nb["cells"]:
+    if cell.get("cell_type") != "code":
+        continue
+    src = cell.get("source", [])
+    for i, line in enumerate(src):
+        if line.lstrip().startswith("open_results_mod("):
+            src[i] = "# " + line
+            patched += 1
+
+with open(path, "w") as f:
+    json.dump(nb, f, indent=1)
+print(f"  disabled {patched} open_results_mod call(s) (headless: no jupyter server)")
+PY
 }
 
 execute_notebook_cmd() {
@@ -131,6 +154,7 @@ require() {
   command -v "$1" >/dev/null 2>&1 || { echo "ERROR: '$1' not found on PATH" >&2; exit 1; }
 }
 require docker
+require python3
 docker info >/dev/null 2>&1 || { echo "ERROR: docker daemon not reachable" >&2; exit 1; }
 
 PLATFORM_FLAGS=()
