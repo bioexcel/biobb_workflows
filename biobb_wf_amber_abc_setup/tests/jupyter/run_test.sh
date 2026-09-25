@@ -27,6 +27,13 @@
 # strings inside code cells, not bare code lines, so a raw text sed never
 # matches — adjust_runtime parses and re-dumps the notebook instead.
 #
+# The sander cells run `mpirun -n 2 sander.MPI` and the container runs as
+# root: Open MPI refuses to run as root unless told to, so the run passes
+# OMPI_ALLOW_RUN_AS_ROOT=1 + OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1. Note the
+# biobb sander_mdrun tool swallows a failed sander command (it checks the
+# created files with raise_exception=False), so an mpirun failure would
+# surface later, in the next cell, as a missing sander.<step>.log.
+#
 # NOTE: the notebook stops after the production MD (no cpptraj RMSD/gyr/
 # image analysis cells), so the final artefacts are the sander.md outputs.
 #
@@ -249,6 +256,8 @@ set +e
 # shellcheck disable=SC2046
 docker run ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
   --name "$CONTAINER" \
+  -e OMPI_ALLOW_RUN_AS_ROOT=1 \
+  -e OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 \
   -v "$WORK_DIR:/data/wf_notebook" \
   "$IMAGE" \
   "$(execute_notebook_cmd)"

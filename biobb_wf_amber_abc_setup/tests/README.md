@@ -26,6 +26,10 @@ Notes specific to this workflow:
 - The jupyter notebook is self-contained: the PDB and the
   `ABCix_config_files/` mdin set are committed next to it (no network access
   needed at run time).
+- The jupyter test runs the container as root and passes
+  `OMPI_ALLOW_RUN_AS_ROOT=1` (+ `..._CONFIRM=1`): the sander cells use
+  `mpirun -n 2 sander.MPI`, and Open MPI refuses to run as root otherwise.
+  The `docker` flavour does not need it (serial sander, no MPI).
 
 Runtime on a native amd64 machine, with reduced sander steps and
 pre-pulled images: docker ~15–30 min, jupyter similar, cwl/airflow similar
