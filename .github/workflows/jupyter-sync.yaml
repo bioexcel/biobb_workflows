@@ -1,4 +1,4 @@
-name: Jupyter repo probe (hourly)
+name: Jupyter repo probe (daily)
 
 # The docker image fetches the jupyter repo's conda env + tutorial notebook from
 # main at build time, and the jupyter e2e runs that notebook — but a push to a
@@ -18,19 +18,21 @@ name: Jupyter repo probe (hourly)
 #   3. clone/diff failure -> no bump, retry on the next run (a failed analysis
 #      must not silently skip the env check)
 #
-# Triggers: hourly cron AND every push to main — this repo's `schedule`
-# triggers have never fired (zero schedule runs in 90 days, including the
-# citation weekly that has existed since 2024), so the push trigger is the
-# effective one. The probe is a ~30 s no-op when nothing advanced (a few
-# git ls-remote calls), so a run per push is nearly free. No loop: the
-# probe's own bot pointer-bump push re-triggers it, finds pointer == remote
-# and exits. `concurrency` (cancel-in-progress) collapses overlapping runs.
+# Triggers: daily cron AND every push to main. Early on the `schedule`
+# triggers looked dead (zero schedule runs in 90 days, including the citation
+# weekly that has existed since 2024), but a schedule run DID fire on
+# 2026-09-23 at 14:15 (delayed 14:00 tick), so the cron is alive; the push
+# trigger stays as a safety net anyway. The probe is a ~30 s no-op when
+# nothing advanced (a few git ls-remote calls), so a run per push is nearly
+# free. No loop: the probe's own bot pointer-bump push re-triggers it, finds
+# pointer == remote and exits. `concurrency` (cancel-in-progress) collapses
+# overlapping runs.
 #
 # No secrets needed: public ls-remote / clone of public repos.
 
 on:
   schedule:
-    - cron: '17 * * * *'
+    - cron: '0 14 * * *'
   push:
     branches: [main]
   workflow_dispatch:
@@ -161,7 +163,7 @@ jobs:
           print("chain: " + (", ".join(sorted(set(chain))) or "(none)"))
           PY
 
-      # runs every hour, change or not: the python flavour env (this repo) and the
+      # runs daily, change or not: the python flavour env (this repo) and the
       # image env (jupyter repo) are supposed to pin the same biobb_* versions —
       # nothing else checks that, so warn on drift ("bumped one side, forgot the
       # other"). Non-biobb packages (jupyter stack, ...) are ignored on purpose.
@@ -267,7 +269,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "Pointers already up to date"
           else
-            git commit -m "chore: sync jupyter submodule pointers (hourly probe)" \
+            git commit -m "chore: sync jupyter submodule pointers (daily probe)" \
               && git push
           fi
 
