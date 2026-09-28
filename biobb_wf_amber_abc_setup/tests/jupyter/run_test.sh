@@ -19,13 +19,15 @@
 # committed next to it, so no network access is needed at run time.
 #
  # Runtime reduction: the notebook ships with nstlim/maxcyc already relaxed to
- # 500 and mpi_np 4. adjust_runtime shortens it further to the values the CI
- # python flavour uses (.github/workflows/python-reusable.yaml): mpi_np -> 2
- # (the GH runner has 2 vCPUs — mpirun cannot schedule 4 ranks there),
- # nstlim -> 100, maxcyc -> 50 — local COPY only, the notebook in the jupyter
- # repo is never touched. The notebook is JSON: the parameter lines are JSON
- # strings inside code cells, not bare code lines, so a raw text sed never
- # matches — adjust_runtime parses and re-dumps the notebook instead.
+ # 500 and mpi_np 4. adjust_runtime switches the sander steps to serial (the
+ # 5.3.x image has no sander.MPI/mpirun — biobb_amber 5.3.1 resolves to the
+ # nompi ambertools build, and conda-forge ships no openmpi ambertools 25/26
+ # at all) and shortens the runs to the values the CI python flavour uses
+ # (.github/workflows/python-reusable.yaml): nstlim -> 100, maxcyc -> 50 —
+ # local COPY only, the notebook in the jupyter repo is never touched. The
+ # notebook is JSON: the parameter lines are JSON strings inside code cells,
+ # not bare code lines, so a raw text sed never matches — adjust_runtime
+ # parses and re-dumps the notebook instead.
  #
  # It also inserts a tiny normalization cell before every process_mdout cell:
  # AMBER 24.8 prints a wide negative pressure without the separating space
@@ -42,12 +44,14 @@
  # flavour-test-reusable.yaml tars it and uploads it as a GitHub Actions
  # artefact so the sander logs behind a cell error can be inspected.
 #
-# The sander cells run `mpirun -n 2 sander.MPI` and the container runs as
-# root: Open MPI refuses to run as root unless told to, so the run passes
-# OMPI_ALLOW_RUN_AS_ROOT=1 + OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1. Note the
-# biobb sander_mdrun tool swallows a failed sander command (it checks the
-# created files with raise_exception=False), so an mpirun failure would
-# surface later, in the next cell, as a missing sander.<step>.log.
+# If the image/notebook use MPI sander (e.g. a 5.2.x image) the sander cells
+# run `mpirun -n N sander.MPI` and the container runs as root: Open MPI
+# refuses to run as root unless told to, so the run passes
+# OMPI_ALLOW_RUN_AS_ROOT=1 + OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 (kept for that
+# case — with the 5.3.x serial sander they are inert). Note the biobb
+# sander_mdrun tool swallows a failed sander command (it checks the created
+# files with raise_exception=False), so a missing sander binary would surface
+# later, in the next cell, as a missing sander.<step>.log.
 #
 # NOTE: the notebook stops after the production MD (no cpptraj RMSD/gyr/
 # image analysis cells), so the final artefacts are the sander.md outputs.
@@ -136,10 +140,12 @@ docker_build_args() {
 
 adjust_runtime() {
   # $1 = the local copy of the notebook. Shorten the sander runs to the CI
-  # python values (mpi_np -> 2, nstlim -> 100, maxcyc -> 50 — see the
-  # header): 4 MPI ranks cannot be scheduled on a 2-vCPU GH runner. Also
-  # insert a log-normalization cell before every process_mdout cell (see the
-  # header: AMBER's 'PRESS =-' line breaks the perl parser).
+  # python values (nstlim -> 100, maxcyc -> 50 — see the header) and switch
+  # the sander steps from MPI to serial (strip binary_path sander.MPI /
+  # mpi_np / mpi_bin): the 5.3.x image has no sander.MPI or mpirun (see the
+  # header). Also insert a log-normalization cell before every
+  # process_mdout cell (see the header: AMBER's 'PRESS =-' line breaks the
+  # perl parser).
   python3 - "$1" <<'PY'
 import json, re, sys
 
@@ -148,11 +154,12 @@ with open(path) as f:
     nb = json.load(f)
 
 sub = [
-    (re.compile(r"('mpi_np':\s*)\d+"), r"\g<1>2"),
     (re.compile(r"('maxcyc'\s*:\s*)\d+"), r"\g<1>50"),
     (re.compile(r"('nstlim'\s*:\s*)\d+"), r"\g<1>100"),
 ]
-counts = [0, 0, 0]
+counts = [0, 0]
+mpi_strip = re.compile(r"^\s*(?:'binary_path'\s*:\s*'sander\.MPI'\s*,?|'mpi_np'\s*:\s*\d+\s*,?|'mpi_bin'\s*:.*$)")
+mpi_lines = 0
 
 def norm_cell(log):
     return {
@@ -182,11 +189,16 @@ for cell in nb["cells"]:
     if cell.get("cell_type") == "code":
         src = cell.get("source", [])
         joined = "".join(src)
-        for i, line in enumerate(src):
+        kept = []
+        for line in src:
+            if mpi_strip.match(line):
+                mpi_lines += 1
+                continue
             for k, (pat, rep) in enumerate(sub):
                 line, n = pat.subn(rep, line)
                 counts[k] += n
-            src[i] = line
+            kept.append(line)
+        cell["source"] = kept
         m = re.search(r"process_mdout\(input_log_path=output_eq(\d+)_log_path", joined)
         if m:
             new_cells.append(norm_cell(f"sander.eq{m.group(1)}.log"))
@@ -196,8 +208,8 @@ nb["cells"] = new_cells
 
 with open(path, "w") as f:
     json.dump(nb, f, indent=1)
-print(f"  reduced sander params to CI values: mpi_np={counts[0]} call(s) -> 2, "
-      f"maxcyc={counts[1]} -> 50, nstlim={counts[2]} -> 100; "
+print(f"  reduced sander params to CI values: maxcyc={counts[0]} -> 50, nstlim={counts[1]} -> 100; "
+      f"stripped {mpi_lines} MPI prop line(s) (serial sander); "
       f"inserted {norm_cells} log-normalization cell(s) before process_mdout")
 PY
 }
