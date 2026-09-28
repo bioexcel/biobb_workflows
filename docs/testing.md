@@ -214,10 +214,43 @@ Caveats baked into the design:
 - **Bash arithmetic: `(( a & b == 0 ))` is not what you think** (found 2026-09-21 while
   writing the socket-mode check): in bash `==` binds TIGHTER than `&` (C precedence), so
   the expression was `a & (b == 0)`. Parenthesize: `(( (a & b) == 0 ))`.
+- **cwltool runs tool containers as the invoking uid — breaks tools that call `getpass`**
+  (found 2026-09-28, autoencoder cwl e2e on GH Actions): bare `cwltool` matches the
+  container user to the invoking user (`--user 1001` on GH runners); that uid has no
+  `/etc/passwd` entry inside the tool image, so anything that resolves a username dies
+  before doing its job — torch does this on import (its inductor cache-dir lookup calls
+  `getpass.getuser()` → `OSError: No username set in the environment`), which kills the
+  `biobb_pytorch` steps while gromacs/amber steps in the same run pass. Symptom: the step's
+  outputs are null + `Did not find output file with glob pattern`, workflow aborts within
+  seconds; the traceback is only in `cwltool.log` (see next entry). **Fix: pass
+  `--no-match-user` to cwltool in the cwl e2e scripts** — tools run as the image's default
+  user, which is what the airflow flavour does anyway (its cwltool goes through
+  `--user-space-docker-cmd`, which never passes `--user`).
+- **On-failure artefacts only materialise if the script records its workdir** (found
+  2026-09-28): `flavour-test-reusable.yaml` tars + uploads, on failure, the dir recorded in
+  `tests/<flavour>/.e2e_workdir`. A script that never writes the marker loses the full log
+  (e.g. cwl's `cwltool.log`), leaving only the last 50 console lines — the first
+  autoencoder cwl failure was undiagnosable exactly like that. **Rule: e2e scripts write
+  `.e2e_workdir` pointing at their workdir and keep that dir on failure** (autoencoder's
+  docker/cwl/airflow/jupyter scripts all do this; before that only jupyter did).
+- **biobb 5.3.x: two image traps the amber workflows hit** (found 2026-09,
+  abc_setup/md_setup(_lig) 5.3.x port): (1) the `biobb_amber:5.3.1` env resolves to the
+  bare-ambertools build (no openmpi) → no `sander.MPI`/`mpirun`; the openmpi ambertools +
+  gromacs-2026 combination is UNSAT on conda-forge, so the amber wfs run **serial sander**
+  in CI (the `sander.MPI`/`mpi_np`/`mpi_bin` props are stripped per-wf in
+  `python-reusable.yaml`, and the jupyter e2e `adjust_runtime` strips them from the
+  notebook copy). (2) `biobb_analysis:5.3.0--gmx2026_2` (gromacs build) has **no cpptraj**;
+  cpptraj adapters must use `biobb_analysis:5.3.0--pyhdfd78af_1` (depends on
+  `ambertools >=23`).
 
 ## 3. Phase 2 plan: scale to all workflows + wire into CI
 
 ### 3.1 Port the phase-1 scripts to the other 18 workflows
+
+Progress (2026-09): done in all four flavours — `biobb_wf_amber_abc_setup`,
+`biobb_wf_amber_md_setup`, `biobb_wf_amber_md_setup_lig` (5.3.x baselines) and
+`biobb_wf_autoencoder` (5.2.x → 5.3.x). Next in the queue: flexserv, flexdyn, godmd,
+dna_helparms, virtual-screening_fpocket, structure_checking.
 
 Per-workflow checklist (10–30 min each):
 1. Copy `tests/{docker,cwl,airflow}` + adjust `WF_NAME`, `EXPECTED_OUTPUTS` (from the last

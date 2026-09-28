@@ -12,7 +12,7 @@ baseCommand: sander_mdrun
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_amber:5.2.1--py312hc5e4ab4_0
+    dockerPull: quay.io/biocontainers/biobb_amber:5.3.1--py312hc5e4ab4_0
 
 # Enable when running on mac arm
 # requirements:

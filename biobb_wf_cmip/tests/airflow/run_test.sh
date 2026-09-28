@@ -17,6 +17,14 @@
 # The nested tool containers (quay.io/biocontainers/*) run on the HOST daemon
 # via /var/run/docker.sock — same requirement as the cwl flavour.
 #
+# NOTE: the MIP steps (cmip_run, AMBER sander) allocate ~25 GiB of RAM — run
+# this on a machine with that much free memory. It is SKIPPED in CI for this
+# reason (tests/airflow/SKIP).
+#
+# On failure the scratch dir (DAG outputs + the failing task's log tail) is
+# kept and recorded in .e2e_workdir: flavour-test-reusable.yaml tars it and
+# uploads it as the `e2e-workdir-biobb_wf_cmip-airflow` GitHub artefact.
+#
 # Usage:
 #   ./run_test.sh [--keep]          keep scratch dir + airflow image
 #   TIMEOUT_MIN=720 ./run_test.sh   overall DAG timeout (default 720 min)
@@ -66,9 +74,27 @@ adjust_runtime() {
 
 cleanup() {
   local rc=$?
+  # Airflow ran as root inside: hand $HOST_DIR back to the host user so the rm
+  # below works (a non-root user cannot delete root-owned dirs). Reuses
+  # $IMAGE, so no extra pull.
+  if [[ -n "$HOST_DIR" && -d "$HOST_DIR" ]]; then
+    # -u root: the image defaults to the 'airflow' user, which cannot chown
+    docker run --rm -u root -v "$HOST_DIR:$HOST_DIR" --entrypoint /usr/bin/chown "$IMAGE" \
+      -R "$(id -u):$(id -g)" "$HOST_DIR" >/dev/null 2>&1 || true
+  fi
   docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
-  if [[ "$KEEP" -ne 1 ]]; then
-    [[ -n "$HOST_DIR" ]] && rm -rf "$HOST_DIR"
+  if [[ "$rc" -ne 0 ]]; then
+    # keep the scratch (DAG outputs + airflow task logs) and record it so the
+    # on-failure artefact step can tar + upload it
+    [[ -n "$HOST_DIR" ]] && echo "$HOST_DIR" > "$SCRIPT_DIR/.e2e_workdir"
+    echo "Kept (failed): scratch=$HOST_DIR image=$IMAGE"
+  elif [[ "$KEEP" -ne 1 && -n "$HOST_DIR" ]]; then
+    # best effort: a cleanup glitch must never mask the test result (rc)
+    rm -rf "$HOST_DIR" 2>/dev/null || {
+      echo "WARNING: could not remove $HOST_DIR (left in place)"
+      command -v sudo >/dev/null 2>&1 && sudo rm -rf "$HOST_DIR" 2>/dev/null || true
+    }
+    rm -f "$SCRIPT_DIR/.e2e_workdir"
   else
     echo "Kept: scratch=$HOST_DIR image=$IMAGE"
   fi
@@ -78,7 +104,19 @@ trap cleanup EXIT
 
 echo ">>> [1/6] airflow test image"
 if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
-  docker build -t "$IMAGE" -f "$SCRIPT_DIR/Dockerfile" "$SCRIPT_DIR"
+  # package downloads (conda/pip) occasionally fail transiently on GH
+  # runners — retry the build
+  BUILD_OK=0
+  for attempt in 1 2 3; do
+    if docker build -t "$IMAGE" -f "$SCRIPT_DIR/Dockerfile" "$SCRIPT_DIR"; then
+      BUILD_OK=1
+      break
+    fi
+    [[ "$attempt" -eq 3 ]] && break
+    echo "  build attempt $attempt/3 failed — retrying in 15 s (transient CDN error?)"
+    sleep 15
+  done
+  [[ "$BUILD_OK" -eq 1 ]] || { echo "ERROR: airflow image build failed after 3 attempts" >&2; exit 1; }
 fi
 
 echo ">>> [2/6] host scratch dir"
@@ -89,10 +127,31 @@ rm -rf "$HOST_DIR/dags/$WF_NAME/outputs"   # never reuse stale outputs
 cp "$COMMON_AIRFLOW/dags/airflow_cwl_utils.py" "$HOST_DIR/dags/"
 cp "$COMMON_AIRFLOW/plugins/cwl_run.sh" "$COMMON_AIRFLOW/plugins/docker_wrapper.sh" "$HOST_DIR/plugins/"
 chmod +x "$HOST_DIR/plugins/"*.sh
+# mktemp creates $HOST_DIR 0700 owned by the host user, but the container
+# runs as the image's 'airflow' user (Dockerfile USER airflow) — a different
+# uid that cannot even list $HOST_DIR, so the dag-processor's recursive scan
+# finds 0 files and the DAG is never registered. Make the scratch
+# world-accessible (it is throwaway and removed in cleanup).
+chmod -R a+rwX "$HOST_DIR"
 adjust_runtime "$HOST_DIR/dags/$WF_NAME/inputs"
 
 echo ">>> [3/6] start airflow (standalone)"
-docker run -d --name "$CONTAINER" \
+# The task runners run as the image's 'airflow' user (uid 50000), which must
+# reach the host docker socket for the nested tool containers. If the socket
+# is not world-writable, join the container to the socket's owning group by
+# NUMERIC GID — the group may not have a resolvable name on the host
+# (e.g. root:root 0660), and a name lookup fails with "no matching entries in
+# group file". On macOS the Docker Desktop socket is already permissive.
+GROUP_FLAGS=()
+if [[ "$(uname)" == "Linux" ]] && [[ -e /var/run/docker.sock ]]; then
+  SOCK_MODE="$(stat -c '%a' /var/run/docker.sock || true)"
+  SOCK_GID="$(stat -c '%g' /var/run/docker.sock || true)"
+  if [[ -n "$SOCK_MODE" && -n "$SOCK_GID" ]] && (( (8#$SOCK_MODE & 8#002) == 0 )); then
+    GROUP_FLAGS=(--group-add "$SOCK_GID")
+  fi
+fi
+# shellcheck disable=SC2086
+docker run -d --name "$CONTAINER" ${GROUP_FLAGS[@]+"${GROUP_FLAGS[@]}"} \
   -v "$HOST_DIR:$HOST_DIR" \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -e AIRFLOW__CORE__DAGS_FOLDER="$HOST_DIR/dags" \

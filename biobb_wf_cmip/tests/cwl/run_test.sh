@@ -5,11 +5,21 @@
 # Runs the CWL workflow with cwltool:
 #   cwltool --outdir <out> workflow.cwl workflow_input_descriptions.yml
 # The per-tool adapters carry DockerRequirements (quay.io/biocontainers/*),
-# so the docker daemon is required. First run pulls several GB of images
-# (they are cached in the daemon afterwards).
+# so the docker daemon is required. The tool images are pre-pulled before the
+# run (retries transient registry failures).
 #
-# Extra cwltool args (e.g. --no-match-user on Mac ARM):
-#   EXTRA_CWL_ARGS="--no-match-user" ./run_test.sh
+# --no-match-user is passed unconditionally (see the cwltool run below).
+# EXTRA_CWL_ARGS can add more cwltool args if ever needed:
+#   EXTRA_CWL_ARGS="--debug" ./run_test.sh
+#
+# NOTE: the MIP steps (cmip_run, AMBER sander) allocate ~25 GiB of RAM — run
+# this on a machine with that much free memory. It is SKIPPED in CI for this
+# reason (tests/cwl/SKIP).
+#
+# On failure the script keeps $OUT_DIR (with the full cwltool.log) and
+# records it in .e2e_workdir: flavour-test-reusable.yaml tars it and uploads
+# it as the `e2e-workdir-biobb_wf_cmip-cwl` GitHub artefact — the real tool
+# errors (container stderr, pull errors) are only in that log.
 #
 # Usage:
 #   ./run_test.sh [--keep]
@@ -70,37 +80,72 @@ restore_inputs() {
 cleanup() {
   local rc=$?
   restore_inputs
-  if [[ "$KEEP" -ne 1 ]]; then
-    rm -rf "$OUT_DIR"
+  if [[ "$rc" -eq 0 ]]; then
+    rm -f "$SCRIPT_DIR/.e2e_workdir"
+    if [[ "$KEEP" -ne 1 ]]; then
+      rm -rf "$OUT_DIR"
+    else
+      echo "Kept: out=$OUT_DIR"
+    fi
   else
-    echo "Kept: out=$OUT_DIR"
+    # keep the workdir (full cwltool.log) and record it so the on-failure
+    # artefact step (flavour-test-reusable.yaml) can tar + upload it
+    [[ -d "$OUT_DIR" ]] && echo "$OUT_DIR" > "$SCRIPT_DIR/.e2e_workdir"
+    echo "Kept (failed): out=$OUT_DIR (full log: $OUT_DIR/cwltool.log)"
   fi
   exit "$rc"
 }
 trap cleanup EXIT
 
-echo ">>> [1/3] prepare"
+echo ">>> [1/4] prepare"
 rm -rf "$OUT_DIR"
 mkdir -p "$OUT_DIR"
 cp "$CWL_DIR/workflow_input_descriptions.yml" "$OUT_DIR/input_descriptions.orig.yml"
 adjust_runtime "$CWL_DIR/workflow_input_descriptions.yml"
 
-echo ">>> [2/3] cwltool run"
+echo ">>> [2/4] pre-pull tool images (retries transient registry failures)"
+# A cold daemon must have every tool image before cwltool reaches the step
+# that needs it; one transient quay.io hiccup would otherwise kill the whole
+# run mid-workflow (and this run takes hours to that point).
+TOOL_IMAGES="$(grep -h 'dockerPull:' "$CWL_DIR/biobb_adapters"/*.cwl | awk '{print $2}' | sort -u)"
+for img in $TOOL_IMAGES; do
+  PULL_OK=0
+  for attempt in 1 2 3; do
+    if docker pull "$img" >/dev/null; then PULL_OK=1; break; fi
+    [[ "$attempt" -eq 3 ]] && break
+    echo "  pull $img attempt $attempt/3 failed — retrying in 15 s"
+    sleep 15
+  done
+  [[ "$PULL_OK" -eq 1 ]] || { echo "ERROR: docker pull failed for $img after 3 attempts" >&2; exit 1; }
+  echo "  ready: $img"
+done
+
+echo ">>> [3/4] cwltool run"
 set +e
+# --no-match-user: without it cwltool runs every tool container as the
+# invoking uid; that uid has no /etc/passwd entry inside the tool image, so
+# any tool that resolves the username (getpass.getuser()) dies before writing
+# its outputs. Running as the image's default user is exactly what the
+# airflow flavour does (its cwltool goes through --user-space-docker-cmd,
+# which passes no --user).
 # shellcheck disable=SC2086
-( cd "$CWL_DIR" && cwltool --outdir "$OUT_DIR" \
+( cd "$CWL_DIR" && cwltool --no-match-user --outdir "$OUT_DIR" \
     workflow.cwl workflow_input_descriptions.yml $EXTRA_CWL_ARGS ) \
   > "$OUT_DIR/cwltool.log" 2>&1
 RC=$?
 set -e
 
 if [[ "$RC" -ne 0 ]]; then
-  echo "FAIL: cwltool exited with code $RC — last 50 log lines:"
+  echo "FAIL: cwltool exited with code $RC"
+  echo "--- error/warning lines (cwltool.log) ---"
+  grep -E "ERROR|WARNING" "$OUT_DIR/cwltool.log" | head -40 || true
+  echo "--- last 50 log lines ---"
   tail -50 "$OUT_DIR/cwltool.log"
+  echo "(full log kept in $OUT_DIR/cwltool.log)"
   exit "$RC"
 fi
 
-echo ">>> [3/3] assert outputs (searched under $OUT_DIR)"
+echo ">>> [4/4] assert outputs (searched under $OUT_DIR)"
 FAIL=0
 for out in "${EXPECTED_OUTPUTS[@]}"; do
   found="$(find "$OUT_DIR" -type f -name "$out" 2>/dev/null | head -1)"

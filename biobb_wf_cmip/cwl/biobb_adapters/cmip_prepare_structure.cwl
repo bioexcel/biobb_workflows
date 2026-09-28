@@ -12,7 +12,7 @@ baseCommand: cmip_prepare_structure
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_cmip:5.2.3--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_cmip:5.3.0--pyhdfd78af_0
 
 requirements:
   InitialWorkDirRequirement:

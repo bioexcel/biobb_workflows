@@ -1,8 +1,19 @@
 # biobb_wf_cmip — tests
 
-Per-flavour end-to-end tests. `python/` is the step-by-step pytest suite (run
-in CI); `docker/`, `cwl/` and `airflow/` are local e2e scripts (phase 1, not
-wired to CI yet — see `docs/testing.md`).
+Per-flavour end-to-end tests. `python/` is the step-by-step pytest suite;
+`docker/`, `cwl/` and `airflow/` are local e2e scripts (see `docs/testing.md`).
+
+## Machine requirement: ~25 GiB of free RAM
+
+The MIP steps (`cmip_run`, AMBER sander) allocate ~25 GiB of RAM. These e2e
+scripts therefore **run only on a big machine** (the GH-hosted 7 GiB runner
+OOMs), and all three flavours are opted out of CI via the `tests/<flavour>/SKIP`
+files — delete a SKIP file to re-enable that flavour once the tests can run on
+a bigger runner. Run locally:
+
+```console
+./run_all.sh                 # docker, then cwl, then airflow (hours)
+```
 
 ## Running
 
@@ -23,8 +34,12 @@ All scripts exit non-zero on failure and print a `PASS:`/`FAIL:` line per check.
 | Flavour | Needs |
 | --- | --- |
 | docker | docker daemon. Image build pulls the conda env (~GB) and fetches env.yml/notebook/workflow.py from GitHub `main` at build time. |
-| cwl | docker daemon + `cwltool` on PATH (`micromamba create -n cwl -c conda-forge cwltool`). First run pulls `quay.io/biocontainers/*` tool images. |
+| cwl | docker daemon + `cwltool` on PATH (`micromamba create -n cwl -c conda-forge cwltool`). Pre-pulls the 4 `quay.io/biocontainers/*` tool images (several GB) with retries before the run. |
 | airflow | docker daemon. Builds `biobb-airflow-test:3.3.2` (apache/airflow 3.3.2 + cwltool + docker CLI) once. |
+
+On failure every script keeps its work dir (with the full log) and records it
+in `tests/<flavour>/.e2e_workdir` — in CI the on-failure step tars + uploads
+it as an artefact; locally, just inspect it.
 
 Apple Silicon: the docker/cwl scripts auto-add `--platform linux/amd64` and warn —
 runs are emulated (slow) and some Intel OpenMP binaries need the `KMP_*` workarounds
@@ -59,6 +74,6 @@ the per-workflow sections:
 
 - The **docker** image fetches `main` content at build time → it validates the published
   state, not unpushed `workflow.py`/env edits.
-- **cmip** is compute-heavy: a full run takes a long time (MIP grids + sander). There is no
-  `adjust_runtime()` reduction for it yet (the python CI disables cmip for the same reason).
-- The **airflow** test needs ~10 GiB+ of headroom on the host for parallel tool containers.
+- **cmip** is compute-heavy: a full run takes hours (MIP grids + sander) and needs the
+  ~25 GiB of RAM above. There is no `adjust_runtime()` reduction for it (the allocation is
+  intrinsic to the MIP grid), which is also why the python CI test is disabled for cmip.

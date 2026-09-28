@@ -11,6 +11,15 @@
 # python/workflow.py from GitHub *main* at build time — this test therefore
 # validates the published artefact + the local Dockerfile, not unpushed edits.
 #
+# NOTE: the MIP steps (cmip_run, AMBER sander) allocate ~25 GiB of RAM — run
+# this on a machine with that much free memory. It is SKIPPED in CI for this
+# reason (tests/docker/SKIP).
+#
+# On failure the script keeps the work dir + the container log
+# (work/docker.log) and records the work dir in .e2e_workdir:
+# flavour-test-reusable.yaml tars it and uploads it as the
+# `e2e-workdir-biobb_wf_cmip-docker` GitHub artefact.
+#
 # Usage:
 #   ./run_test.sh [--no-build] [--pull] [--image TAG] [--keep]
 #     --no-build   do not build the image (it must already exist locally)
@@ -57,11 +66,14 @@ if [[ ! -f "$DOCKER_DIR/Dockerfile" ]]; then
   exit 1
 fi
 
-# Keep the per-wf Dockerfile in sync with the common template (LOCAL ONLY,
-# never committed): in the chained CI (test -> publish) the bot commit that
-# regenerates these files may land between this job and the publish job, so
-# build exactly what the publish job will build.
-bash "$REPO_ROOT/common/docker/sync_dockerfiles.sh" >/dev/null
+# Regenerate the per-wf Dockerfile from the common template — into a TEMP
+# DIR, not in place: the in-place mode rewrites EVERY workflow's Dockerfile
+# and would dirty this working tree whenever another workflow's committed
+# file is stale. Same content the publish job builds locally before
+# publishing, so the test builds exactly what the publish job will build.
+SYNC_DIR="$(mktemp -d)"
+bash "$REPO_ROOT/common/docker/sync_dockerfiles.sh" "$SYNC_DIR" >/dev/null
+SYNCED_DF="$SYNC_DIR/$WF_NAME/docker/Dockerfile"
 
 # ---------------- per-workflow hooks (edit when porting) ----------------
 docker_build_args() {
@@ -98,11 +110,34 @@ fi
 
 cleanup() {
   local rc=$?
+  rm -rf "${SYNC_DIR:-}" 2>/dev/null || true
+  # The container ran as root: hand the files back to the host user so we can
+  # write into / remove $WORK_DIR (a non-root user cannot delete root-owned
+  # dirs). Reuses $IMAGE, so no extra pull.
+  if [[ -d "$WORK_DIR" ]]; then
+    # shellcheck disable=SC2046
+    docker run --rm ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
+      -v "$WORK_DIR:/w" --entrypoint /usr/bin/chown "$IMAGE" \
+      -R "$(id -u):$(id -g)" /w >/dev/null 2>&1 || true
+  fi
+  # On failure, keep the container log + workdir and record the workdir so
+  # the on-failure artefact step (flavour-test-reusable.yaml) can tar it
+  if [[ "$rc" -ne 0 && -n "${CONTAINER:-}" ]]; then
+    docker logs "$CONTAINER" > "$WORK_DIR/docker.log" 2>&1 || true
+    [[ -d "$WORK_DIR" ]] && echo "$WORK_DIR" > "$SCRIPT_DIR/.e2e_workdir"
+  fi
   docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
   # the image is kept on purpose (same tag, overwritten on next build) so
   # reruns are fast; remove it manually with: docker rmi $IMAGE
-  if [[ "$KEEP" -ne 1 ]]; then
-    rm -rf "$WORK_DIR"
+  if [[ "$rc" -ne 0 ]]; then
+    echo "Kept (failed): work=$WORK_DIR (container log: $WORK_DIR/docker.log)"
+  elif [[ "$KEEP" -ne 1 ]]; then
+    # best effort: a cleanup glitch must never mask the test result (rc)
+    rm -rf "$WORK_DIR" 2>/dev/null || {
+      echo "WARNING: could not remove $WORK_DIR (left in place)"
+      command -v sudo >/dev/null 2>&1 && sudo rm -rf "$WORK_DIR" 2>/dev/null || true
+    }
+    rm -f "$SCRIPT_DIR/.e2e_workdir"
   else
     echo "Kept: image=$IMAGE work=$WORK_DIR"
   fi
@@ -115,8 +150,20 @@ if [[ "$DO_PULL" -eq 1 ]]; then
   IMAGE="ghcr.io/bioexcel/$WF_NAME:latest"
   docker pull "$IMAGE"
 elif [[ "$DO_BUILD" -eq 1 ]]; then
-  # shellcheck disable=SC2046
-  docker build ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} $(docker_build_args) -t "$IMAGE" "$DOCKER_DIR"
+  # conda repodata downloads from the CDN occasionally fail transiently (5xx
+  # from the conda-forge/bioconda CDN) — retry the build
+  BUILD_OK=0
+  for attempt in 1 2 3; do
+    if # shellcheck disable=SC2046
+    docker build ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} $(docker_build_args) -f "$SYNCED_DF" -t "$IMAGE" "$DOCKER_DIR"; then
+      BUILD_OK=1
+      break
+    fi
+    [[ "$attempt" -eq 3 ]] && break
+    echo "  build attempt $attempt/3 failed — retrying in 15 s (transient conda CDN error?)"
+    sleep 15
+  done
+  [[ "$BUILD_OK" -eq 1 ]] || { echo "ERROR: docker build failed after 3 attempts" >&2; exit 1; }
 fi
 docker image inspect "$IMAGE" >/dev/null 2>&1 || { echo "ERROR: image $IMAGE not found (use --build by default, or build it first)" >&2; exit 1; }
 
