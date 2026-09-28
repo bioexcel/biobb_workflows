@@ -10,8 +10,9 @@
 # the input yml (str_in.pdb, test_str_in.pdb, trj_in.xtc, test_trj_in.xtc)
 # are picked up by cwltool (relative paths resolve against the yml's dir).
 #
-# Extra cwltool args (e.g. --no-match-user on Mac ARM):
-#   EXTRA_CWL_ARGS="--no-match-user" ./run_test.sh
+# --no-match-user is passed unconditionally (see the cwltool run below).
+# EXTRA_CWL_ARGS can add more cwltool args if ever needed:
+#   EXTRA_CWL_ARGS="--debug" ./run_test.sh
 #
 # Runtime: there is no MD to shorten (the GROMACS steps only image/fmt and
 # analyse the committed trajectories), so NO runtime reduction is applied —
@@ -103,8 +104,16 @@ echo ">>> [2/3] cwltool run"
 rm -rf "$OUT_DIR"
 mkdir -p "$OUT_DIR"
 set +e
+# --no-match-user: without it cwltool runs every tool container as the
+# invoking uid (1001 on GH runners); that uid has no /etc/passwd entry
+# inside the tool image, so any tool that calls getpass.getuser() — torch's
+# cache-dir lookup in biobb_pytorch's mdfeaturizer — dies with "OSError: No
+# username set in the environment" before writing its outputs. Running as
+# the image's default user is exactly what the airflow flavour does (its
+# cwltool goes through --user-space-docker-cmd, which passes no --user),
+# which is why only this flavour failed.
 # shellcheck disable=SC2086
-( cd "$CWL_DIR" && cwltool --outdir "$OUT_DIR" \
+( cd "$CWL_DIR" && cwltool --no-match-user --outdir "$OUT_DIR" \
     workflow.cwl workflow_input_descriptions.yml $EXTRA_CWL_ARGS ) \
   > "$OUT_DIR/cwltool.log" 2>&1
 RC=$?
