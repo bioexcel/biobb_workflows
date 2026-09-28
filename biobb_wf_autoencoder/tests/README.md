@@ -29,10 +29,9 @@ Notes specific to this workflow:
 - The `docker/`, `cwl/` and `airflow/` flavours run on the committed input
   pair (`str_in.pdb`/`trj_in.xtc` apo + `test_str_in.pdb`/`test_trj_in.xtc`
   holo) — no network needed.
-- Versions: these tests are written against the current 5.2.x stack
-  (`biobb_pytorch` 5.2.3, `biobb_analysis`/`biobb_gromacs` 5.2.1) and work
-  without any version change; the adapters keep their existing 5.2.x image
-  tags.
+- Versions: these tests run the 5.3.x stack (`biobb_pytorch` 5.3.0,
+  `biobb_analysis` 5.3.0 gmx build, `biobb_gromacs` 5.3.2); the cwl/airflow
+  adapters carry the matching 5.3.x image tags.
 
 Runtime on a native amd64 machine with pre-pulled images: docker ~10–20 min,
 jupyter similar, cwl/airflow similar (first run also pulls the per-tool
