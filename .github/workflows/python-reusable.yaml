@@ -39,6 +39,13 @@ jobs:
           sed -i "s/mpi_np: [0-9]*/mpi_np: 2/g" ${{ inputs.wf_name }}/python/workflow.yml
           sed -i "s/nstlim: [0-9]*/nstlim: 500/g" ${{ inputs.wf_name }}/python/workflow.yml
           sed -i "s/maxcyc: [0-9]*/maxcyc: 100/g" ${{ inputs.wf_name }}/python/workflow.yml
+          # biobb 5.3.x conda envs have no sander.MPI/mpirun (conda-forge
+          # ships no openmpi ambertools build >= 25, and the 24.8 one does not
+          # resolve alongside biobb_analysis 5.3.0's gromacs 2026 dep) — run
+          # the sander steps serially in CI only; workflow.yml stays MPI.
+          sed -i "/binary_path: sander.MPI/d" ${{ inputs.wf_name }}/python/workflow.yml
+          sed -i "/^[[:space:]]*mpi_np: [0-9]*$/d" ${{ inputs.wf_name }}/python/workflow.yml
+          sed -i "/^[[:space:]]*mpi_bin: mpirun$/d" ${{ inputs.wf_name }}/python/workflow.yml
 
       - name: Reduce MDRun steps for PMX workflow
         if: contains(inputs.wf_name, 'pmx')
