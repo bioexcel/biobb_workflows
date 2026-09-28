@@ -19,6 +19,11 @@
 # 128 on ~10k backbone frames), which the CI python flavour runs unreduced.
 # This workflow has no MPI anywhere.
 #
+# On failure the script keeps $OUT_DIR (with the full cwltool.log) and
+# records it in .e2e_workdir: flavour-test-reusable.yaml tars it and uploads
+# it as the `e2e-workdir-biobb_wf_autoencoder-cwl` GitHub artefact — the real
+# tool errors (container stderr, pull errors) are only in that log.
+#
 # Usage:
 #   ./run_test.sh [--keep]
 #
@@ -60,16 +65,41 @@ docker info >/dev/null 2>&1 || { echo "ERROR: docker daemon not reachable" >&2; 
 
 cleanup() {
   local rc=$?
-  if [[ "$KEEP" -ne 1 ]]; then
-    rm -rf "$OUT_DIR"
+  if [[ "$rc" -eq 0 ]]; then
+    rm -f "$SCRIPT_DIR/.e2e_workdir"
+    if [[ "$KEEP" -ne 1 ]]; then
+      rm -rf "$OUT_DIR"
+    else
+      echo "Kept: out=$OUT_DIR"
+    fi
   else
-    echo "Kept: out=$OUT_DIR"
+    # keep the workdir (full cwltool.log) and record it so the on-failure
+    # artefact step (flavour-test-reusable.yaml) can tar + upload it
+    [[ -d "$OUT_DIR" ]] && echo "$OUT_DIR" > "$SCRIPT_DIR/.e2e_workdir"
+    echo "Kept (failed): out=$OUT_DIR (full log: $OUT_DIR/cwltool.log)"
   fi
   exit "$rc"
 }
 trap cleanup EXIT
 
-echo ">>> [1/2] cwltool run"
+echo ">>> [1/3] pre-pull tool images (retries transient registry failures)"
+# This flavour runs on a cold runner: every tool image must be pulled before
+# cwltool reaches the step that needs it, and one transient quay.io hiccup
+# would otherwise kill the whole run mid-workflow.
+TOOL_IMAGES="$(grep -h 'dockerPull:' "$CWL_DIR/biobb_adapters"/*.cwl | awk '{print $2}' | sort -u)"
+for img in $TOOL_IMAGES; do
+  PULL_OK=0
+  for attempt in 1 2 3; do
+    if docker pull "$img" >/dev/null; then PULL_OK=1; break; fi
+    [[ "$attempt" -eq 3 ]] && break
+    echo "  pull $img attempt $attempt/3 failed — retrying in 15 s"
+    sleep 15
+  done
+  [[ "$PULL_OK" -eq 1 ]] || { echo "ERROR: docker pull failed for $img after 3 attempts" >&2; exit 1; }
+  echo "  ready: $img"
+done
+
+echo ">>> [2/3] cwltool run"
 rm -rf "$OUT_DIR"
 mkdir -p "$OUT_DIR"
 set +e
@@ -81,12 +111,16 @@ RC=$?
 set -e
 
 if [[ "$RC" -ne 0 ]]; then
-  echo "FAIL: cwltool exited with code $RC — last 50 log lines:"
+  echo "FAIL: cwltool exited with code $RC"
+  echo "--- error/warning lines (cwltool.log) ---"
+  grep -E "ERROR|WARNING" "$OUT_DIR/cwltool.log" | head -40 || true
+  echo "--- last 50 log lines ---"
   tail -50 "$OUT_DIR/cwltool.log"
+  echo "(full log kept in $OUT_DIR/cwltool.log — uploaded as the on-failure artefact)"
   exit "$RC"
 fi
 
-echo ">>> [2/2] assert outputs (searched under $OUT_DIR)"
+echo ">>> [3/3] assert outputs (searched under $OUT_DIR)"
 FAIL=0
 for out in "${EXPECTED_OUTPUTS[@]}"; do
   found="$(find "$OUT_DIR" -type f -name "$out" 2>/dev/null | head -1)"

@@ -31,6 +31,11 @@
 #     --image TAG  image tag to build/use (default: biobb_wf_autoencoder:test)
 #     --keep       keep image + work/ dir after the run
 #
+# On failure the work/ dir is kept (with the container's full log saved as
+# work/docker.log) and recorded in .e2e_workdir: flavour-test-reusable.yaml
+# tars it and uploads it as the `e2e-workdir-biobb_wf_autoencoder-docker`
+# GitHub artefact.
+#
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -114,25 +119,34 @@ fi
 cleanup() {
   local rc=$?
   rm -rf "${SYNC_DIR:-}" 2>/dev/null || true
-  # The container ran as root: hand the files back to the host user so the rm
-  # below works (on GH runners the 'runner' user cannot delete root-owned
-  # dirs). Reuses $IMAGE, so no extra pull.
+  # The container ran as root: hand the files back to the host user so we can
+  # write into / remove $WORK_DIR (on GH runners the 'runner' user cannot
+  # delete root-owned dirs). Reuses $IMAGE, so no extra pull.
   if [[ -d "$WORK_DIR" ]]; then
     # shellcheck disable=SC2046
     docker run --rm ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
       -v "$WORK_DIR:/w" --entrypoint /usr/bin/chown "$IMAGE" \
       -R "$(id -u):$(id -g)" /w >/dev/null 2>&1 || true
   fi
+  # On failure, keep the container log + workdir and record the workdir so
+  # the on-failure artefact step (flavour-test-reusable.yaml) can tar it
+  if [[ "$rc" -ne 0 && -n "${CONTAINER:-}" ]]; then
+    docker logs "$CONTAINER" > "$WORK_DIR/docker.log" 2>&1 || true
+    [[ -d "$WORK_DIR" ]] && echo "$WORK_DIR" > "$SCRIPT_DIR/.e2e_workdir"
+  fi
   docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
   # the image is kept on purpose (same tag as the jupyter test, overwritten on
   # next build) so both flavours share it and reruns are fast; remove it
   # manually with: docker rmi $IMAGE
-  if [[ "$KEEP" -ne 1 ]]; then
+  if [[ "$rc" -ne 0 ]]; then
+    echo "Kept (failed): work=$WORK_DIR (container log: $WORK_DIR/docker.log)"
+  elif [[ "$KEEP" -ne 1 ]]; then
     # best effort: a cleanup glitch must never mask the test result (rc)
     rm -rf "$WORK_DIR" 2>/dev/null || {
       echo "WARNING: could not remove $WORK_DIR (left in place)"
       command -v sudo >/dev/null 2>&1 && sudo rm -rf "$WORK_DIR" 2>/dev/null || true
     }
+    rm -f "$SCRIPT_DIR/.e2e_workdir"
   else
     echo "Kept: image=$IMAGE work=$WORK_DIR"
   fi

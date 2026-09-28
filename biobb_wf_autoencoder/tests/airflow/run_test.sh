@@ -27,6 +27,11 @@
 #   ./run_test.sh [--keep]          keep scratch dir + airflow image
 #   TIMEOUT_MIN=720 ./run_test.sh   overall DAG timeout (default 720 min)
 #
+# On failure the scratch dir (Airflow task logs incl. the failing tool's
+# container output) is kept and recorded in .e2e_workdir:
+# flavour-test-reusable.yaml tars it and uploads it as the
+# `e2e-workdir-biobb_wf_autoencoder-airflow` GitHub artefact.
+#
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -81,13 +86,19 @@ cleanup() {
       -R "$(id -u):$(id -g)" "$HOST_DIR" >/dev/null 2>&1 || true
   fi
   docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
-  if [[ "$KEEP" -ne 1 && -n "$HOST_DIR" ]]; then
+  if [[ "$rc" -ne 0 ]]; then
+    # keep the scratch (airflow task logs with the failing tool's output) and
+    # record it so the on-failure artefact step can tar + upload it
+    [[ -n "$HOST_DIR" ]] && echo "$HOST_DIR" > "$SCRIPT_DIR/.e2e_workdir"
+    echo "Kept (failed): scratch=$HOST_DIR image=$IMAGE"
+  elif [[ "$KEEP" -ne 1 && -n "$HOST_DIR" ]]; then
     # best effort: a cleanup glitch must never mask the test result (rc)
     rm -rf "$HOST_DIR" 2>/dev/null || {
       echo "WARNING: could not remove $HOST_DIR (left in place)"
       command -v sudo >/dev/null 2>&1 && sudo rm -rf "$HOST_DIR" 2>/dev/null || true
     }
-  elif [[ "$KEEP" -eq 1 ]]; then
+    rm -f "$SCRIPT_DIR/.e2e_workdir"
+  else
     echo "Kept: scratch=$HOST_DIR image=$IMAGE"
   fi
   exit "$rc"
