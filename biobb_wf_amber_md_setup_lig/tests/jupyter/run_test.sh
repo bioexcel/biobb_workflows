@@ -1,0 +1,390 @@
+#!/usr/bin/env bash
+#
+# biobb_wf_amber_md_setup_lig — jupyter flavour e2e test
+#
+# Executes the workflow's tutorial notebook headlessly *inside* the workflow's
+# docker image (the conda env in the image ships `jupyter` + `nglview`):
+#
+#   conda run -n biobb_wf_amber jupyter nbconvert --to notebook --execute notebook.ipynb
+#
+# (the env is named after the shared jupyter repo biobb_wf_amber, not after
+# this workflow — it is the md_setup_lig subrepo of it).
+#
+# `nbconvert --execute` aborts with a non-zero exit code on the first cell
+# that raises, so a clean run means every step worked: the 3htb protein-ligand
+# complex (ligand JZ4) is split and the ligand parameterized on the fly
+# (reduce/babel/acpype, GAFF — all local tools), then vacuum energy
+# minimization (x2), solvation + ionization (TIP3P, NaCl 150 mM), solvent
+# minimization, heat/NVT/NPT equilibration, a free production MD, and the
+# full cpptraj analysis (RMSD vs first/experimental, radius of gyration,
+# solute-imaged trajectory).
+#
+# NOTE: this notebook is NOT self-contained — its first step downloads PDB
+# 3htb from the RCSB at run time (biobb_io), so the container needs network
+# access (fine on the GH runner). Unlike the python/cwl/airflow flavours, the
+# ligand is NOT read from the committed input_lib.zip/input_frcmod.zip: the
+# notebook re-parameterizes it (acpype_params_ac), so no input files to ship.
+#
+ # Runtime reduction: the notebook ships with nstlim/maxcyc already relaxed
+ # (heat/free 2500, NVT/NPT 500, minimizations 300–500) and mpi_np 4.
+ # adjust_runtime switches the sander steps to serial (the 5.3.x image has no
+ # sander.MPI/mpirun — biobb_amber 5.3.1 resolves to the nompi ambertools
+ # build, and conda-forge ships no openmpi ambertools 25/26 at all) and
+ # shortens the runs to the values the CI python flavour uses
+ # (.github/workflows/python-reusable.yaml): nstlim -> 500, maxcyc -> 100 —
+ # local COPY only, the notebook in the jupyter repo is never touched. The
+ # notebook is JSON: the parameter lines are JSON strings inside code cells,
+ # not bare code lines, so a raw text sed never matches — adjust_runtime
+ # parses and re-dumps the notebook instead.
+ #
+ # It also inserts a tiny normalization cell before every process_mdout cell:
+ # AMBER 24.8 prints a wide negative pressure without the separating space
+ # (the step-0 block of a fresh-start run: 'PRESS =-13482.6'), which makes
+ # process_mdout.perl's regex fail on that line; the energy block then loses
+ # its TIME, and biobb_amber's multi-term process_mdout merge misreads the
+ # orphaned DENSITY value as a TIME key and crashes with KeyError: 'PRES'
+ # (verified on a real abc_setup log). Only the fresh-start (irest=0) MD step
+ # can produce such a block — restart runs never print a step-0 block. The
+ # cell rewrites 'PRESS =-' to 'PRESS = -' in the sander log before the parse.
+ # Upstream issues: AMBER process_mdout.perl regex + biobb_amber merge.
+ #
+ # On failure the script records $WORK_DIR in .e2e_workdir next to itself;
+ # flavour-test-reusable.yaml tars it and uploads it as a GitHub Actions
+ # artefact so the sander logs behind a cell error can be inspected.
+#
+# If the image/notebook use MPI sander (e.g. a 5.2.x image) the sander cells
+# run `mpirun -n N sander.MPI` and the container runs as root: Open MPI
+# refuses to run as root unless told to, so the run passes
+# OMPI_ALLOW_RUN_AS_ROOT=1 + OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 (kept for that
+# case — with the 5.3.x serial sander they are inert). Note the biobb
+# sander_mdrun tool swallows a failed sander command (it checks the created
+# files with raise_exception=False), so a missing sander binary would surface
+# later, in the next cell, as a missing sander.<step>.log.
+#
+# Notebook source (first hit wins):
+#   1. the git submodule <wf>/jupyter/, if checked out (local
+#      `git submodule update --init`, or actions/checkout with submodules: true)
+#   2. a fresh shallow clone of the notebook repo into the scratch dir —
+#      the shared amber repo https://github.com/bioexcel/biobb_wf_amber
+#      (override with NB_REPO_URL=<url>, e.g. to test a fork/branch)
+#
+# NOTE: the image build fetches environment.yml + workflow.py from GitHub
+# main at build time (published artefact), but the executed notebook is the
+# one from the submodule/clone above — NOT the copy baked into the image at
+# /app/notebook.ipynb — so this test validates the notebook you have
+# checked out.
+#
+# Usage:
+#   ./run_test.sh [--no-build] [--pull] [--image TAG] [--keep]
+#     --no-build   do not build the image (it must already exist locally)
+#     --pull       pull ghcr.io/bioexcel/biobb_wf_amber_md_setup_lig:latest instead of building
+#     --image TAG  image tag to build/use (default: biobb_wf_amber_md_setup_lig:test)
+#     --keep       keep image + work/ dir after the run
+#
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+WF_DIR="$(dirname "$(dirname "$SCRIPT_DIR")")"
+REPO_ROOT="$(dirname "$WF_DIR")"
+WF_NAME="biobb_wf_amber_md_setup_lig"
+
+# Subrepo: the conda env inside the image is named after the shared jupyter
+# repo, not after this workflow
+ENV_NAME="biobb_wf_amber"
+NB_REPO_URL="${NB_REPO_URL:-https://github.com/bioexcel/$ENV_NAME}"
+
+IMAGE="${WF_NAME}:test"
+DO_BUILD=1
+DO_PULL=0
+KEEP="${KEEP:-0}"
+
+# Notebook location inside the jupyter repo (subrepo layout:
+# <repo>/notebooks/<subrepo>/<repo>_<subrepo>.ipynb)
+NOTEBOOK="biobb_wf_amber/notebooks/md_setup_lig/biobb_wf_amber_md_setup_lig.ipynb"
+
+# Final notebook outputs: the free MD trajectory and the solute-imaged TRR
+# from the last cell's cpptraj_image (named after the PDB code: 3htb)
+EXPECTED_OUTPUTS=(
+  "sander.free.netcdf"
+  "3htb_imaged_traj.trr"
+)
+
+WORK_DIR="$SCRIPT_DIR/work"
+CONTAINER="biobb-jtest-${WF_NAME//\//-}-$$"
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --no-build) DO_BUILD=0; shift ;;
+    --pull)     DO_PULL=1; DO_BUILD=0; shift ;;
+    --image)    IMAGE="$2"; shift 2 ;;
+    --keep)     KEEP=1; shift ;;
+    *) echo "Unknown option: $1" >&2; exit 2 ;;
+  esac
+done
+
+DOCKER_DIR="$WF_DIR/docker"
+if [[ ! -f "$DOCKER_DIR/Dockerfile" ]]; then
+  echo "ERROR: $DOCKER_DIR/Dockerfile not found (wrong repo layout?)" >&2
+  exit 1
+fi
+
+# Regenerate the per-wf Dockerfile from the common template — into a TEMP
+# DIR, not in place (see tests/docker/run_test.sh for why): the in-place
+# mode rewrites EVERY workflow's Dockerfile and would dirty this working
+# tree whenever another workflow's committed file is stale.
+SYNC_DIR="$(mktemp -d)"
+bash "$REPO_ROOT/common/docker/sync_dockerfiles.sh" "$SYNC_DIR" >/dev/null
+SYNCED_DF="$SYNC_DIR/$WF_NAME/docker/Dockerfile"
+
+# ---------------- per-workflow hooks (edit when porting) ----------------
+docker_build_args() {
+  # subrepo workflow: the jupyter repo is shared (biobb_wf_amber), this is
+  # the md_setup_lig subrepo of it
+  echo "--build-arg REPO=biobb_wf_amber --build-arg SUBREPO=md_setup_lig"
+}
+
+adjust_runtime() {
+  # $1 = the local copy of the notebook. Shorten the sander runs to the CI
+  # python values (nstlim -> 500, maxcyc -> 100 — see the header) and switch
+  # the sander steps from MPI to serial (strip binary_path sander.MPI /
+  # mpi_np / mpi_bin): the 5.3.x image has no sander.MPI or mpirun (see the
+  # header). Also insert a log-normalization cell before every
+  # process_mdout cell (see the header: AMBER's 'PRESS =-' line breaks the
+  # perl parser) — the log file name is resolved from the variable the
+  # mdout cell passes in (output_<step>_log_path = 'sander.<step>.log').
+  python3 - "$1" <<'PY'
+import json, re, sys
+
+path = sys.argv[1]
+with open(path) as f:
+    nb = json.load(f)
+
+sub = [
+    (re.compile(r"('maxcyc'\s*:\s*)\d+"), r"\g<1>100"),
+    (re.compile(r"('nstlim'\s*:\s*)\d+"), r"\g<1>500"),
+]
+counts = [0, 0]
+mpi_strip = re.compile(r"^\s*(?:'binary_path'\s*:\s*'sander\.MPI'\s*,?|'mpi_np'\s*:\s*\d+\s*,?|'mpi_bin'\s*:.*$)")
+mpi_lines = 0
+
+# map each output_<step>_log_path variable to the sander log file it holds
+log_var_file = {}
+for cell in nb["cells"]:
+    if cell.get("cell_type") != "code":
+        continue
+    for m in re.finditer(r"^\s*output_(\w+)_log_path\s*=\s*['\"]([^'\"]+)['\"]",
+                         "".join(cell.get("source", [])), re.M):
+        log_var_file[m.group(1)] = m.group(2)
+
+def norm_cell(log):
+    return {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# CI workaround (upstream AMBER + biobb_amber bug): AMBER 24.8 prints\n",
+            "# a wide negative pressure without the separating space (the step-0\n",
+            "# block of a fresh-start run: 'PRESS =-13482.6'). process_mdout.perl's\n",
+            "# regex then fails on that line, the energy block loses its TIME, and\n",
+            "# biobb_amber's multi-term process_mdout merge crashes with\n",
+            "# KeyError: 'PRES'. Normalize the log before it is parsed.\n",
+            "import re as _re\n",
+            f"_s = open('{log}').read()\n",
+            "_s2 = _re.sub(r'PRESS =(-\\d)', r'PRESS = \\1', _s)\n",
+            "if _s2 != _s:\n",
+            f"    open('{log}', 'w').write(_s2)\n",
+            f"    print('normalized PRESS spacing in {log}')\n",
+        ],
+    }
+
+norm_cells = 0
+new_cells = []
+for cell in nb["cells"]:
+    if cell.get("cell_type") == "code":
+        src = cell.get("source", [])
+        joined = "".join(src)
+        kept = []
+        for line in src:
+            if mpi_strip.match(line):
+                mpi_lines += 1
+                continue
+            for k, (pat, rep) in enumerate(sub):
+                line, n = pat.subn(rep, line)
+                counts[k] += n
+            kept.append(line)
+        cell["source"] = kept
+        m = re.search(r"process_mdout\(input_log_path=output_(\w+)_log_path", joined)
+        if m and m.group(1) in log_var_file:
+            new_cells.append(norm_cell(log_var_file[m.group(1)]))
+            norm_cells += 1
+    new_cells.append(cell)
+nb["cells"] = new_cells
+
+with open(path, "w") as f:
+    json.dump(nb, f, indent=1)
+print(f"  reduced sander params to CI values: maxcyc={counts[0]} -> 100, nstlim={counts[1]} -> 500; "
+      f"stripped {mpi_lines} MPI prop line(s) (serial sander); "
+      f"inserted {norm_cells} log-normalization cell(s) before process_mdout")
+PY
+}
+
+execute_notebook_cmd() {
+  # Shell command run *inside* the container (the image ENTRYPOINT is
+  # ["bash","-c"]). The kernel cwd is /data/wf_notebook (the notebook's own
+  # dir), so the relative outputs (sander.*, structure.*, 1aki_*) land in
+  # the mounted work dir.
+  echo "cd /data/wf_notebook && conda run --no-capture-output -n $ENV_NAME \
+    jupyter nbconvert --to notebook --execute --output executed.ipynb notebook.ipynb"
+}
+# --------------------------------------------------------------------------
+
+require() {
+  command -v "$1" >/dev/null 2>&1 || { echo "ERROR: '$1' not found on PATH" >&2; exit 1; }
+}
+require docker
+require python3
+docker info >/dev/null 2>&1 || { echo "ERROR: docker daemon not reachable" >&2; exit 1; }
+
+PLATFORM_FLAGS=()
+if [[ "$(uname -m)" == "arm64" || "$(uname -m)" == "aarch64" ]]; then
+  PLATFORM_FLAGS=(--platform linux/amd64)
+  echo "WARNING: ARM host — amd64 image will run under QEMU emulation (very slow)."
+fi
+
+cleanup() {
+  local rc=$?
+  rm -rf "${SYNC_DIR:-}" 2>/dev/null || true
+  # The container ran as root: hand the files back to the host user so the rm
+  # below works (on GH runners the 'runner' user cannot delete root-owned
+  # dirs). Reuses $IMAGE, so no extra pull.
+  if [[ -d "$WORK_DIR" ]]; then
+    # shellcheck disable=SC2046
+    docker run --rm ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
+      -v "$WORK_DIR:/w" --entrypoint /usr/bin/chown "$IMAGE" \
+      -R "$(id -u):$(id -g)" /w >/dev/null 2>&1 || true
+  fi
+  docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
+  # the image is kept on purpose (same tag as the docker test, overwritten on
+  # next build) so both flavours share it and reruns are fast; remove it
+  # manually with: docker rmi $IMAGE
+  # On GH runners the work dir is kept on purpose (ephemeral disk): the
+  # on-failure artefact step of flavour-test-reusable.yaml tars it.
+  if [[ "$KEEP" -ne 1 && -z "${GITHUB_ACTIONS:-}" ]]; then
+    # best effort: a cleanup glitch must never mask the test result (rc)
+    rm -rf "$WORK_DIR" 2>/dev/null || {
+      echo "WARNING: could not remove $WORK_DIR (left in place)"
+      command -v sudo >/dev/null 2>&1 && sudo rm -rf "$WORK_DIR" 2>/dev/null || true
+    }
+  else
+    echo "Kept: image=$IMAGE work=$WORK_DIR"
+  fi
+  exit "$rc"
+}
+trap cleanup EXIT
+
+echo ">>> [1/5] build stage (image=$IMAGE)"
+if [[ "$DO_PULL" -eq 1 ]]; then
+  IMAGE="ghcr.io/bioexcel/$WF_NAME:latest"
+  docker pull "$IMAGE"
+elif [[ "$DO_BUILD" -eq 1 ]]; then
+  # conda repodata downloads from the CDN occasionally fail transiently on
+  # GH runners (5xx from the conda-forge/bioconda CDN) — retry the build
+  BUILD_OK=0
+  for attempt in 1 2 3; do
+    if # shellcheck disable=SC2046
+    docker build ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} $(docker_build_args) -f "$SYNCED_DF" -t "$IMAGE" "$DOCKER_DIR"; then
+      BUILD_OK=1
+      break
+    fi
+    [[ "$attempt" -eq 3 ]] && break
+    echo "  build attempt $attempt/3 failed — retrying in 15 s (transient conda CDN error?)"
+    sleep 15
+  done
+  [[ "$BUILD_OK" -eq 1 ]] || { echo "ERROR: docker build failed after 3 attempts" >&2; exit 1; }
+fi
+docker image inspect "$IMAGE" >/dev/null 2>&1 || { echo "ERROR: image $IMAGE not found (use --build by default, or build it first)" >&2; exit 1; }
+
+echo ">>> [2/5] locate notebook"
+rm -rf "$WORK_DIR"
+mkdir -p "$WORK_DIR"
+SUBMODULE_NB="$WF_DIR/jupyter/$NOTEBOOK"
+if [[ -f "$SUBMODULE_NB" ]]; then
+  NOTEBOOK_SRC="$SUBMODULE_NB"
+  echo "  using checked-out submodule: $SUBMODULE_NB"
+else
+  require git
+  echo "  submodule <wf>/jupyter/ not checked out — shallow-cloning $NB_REPO_URL"
+  git clone --quiet --depth 1 "$NB_REPO_URL" "$WORK_DIR/nb_repo"
+  NOTEBOOK_SRC="$WORK_DIR/nb_repo/$NOTEBOOK"
+fi
+[[ -f "$NOTEBOOK_SRC" ]] || { echo "ERROR: notebook not found: $NOTEBOOK_SRC" >&2; exit 1; }
+
+echo ">>> [3/5] prepare work dir"
+cp "$NOTEBOOK_SRC" "$WORK_DIR/notebook.ipynb"
+# no input files to ship: the notebook downloads the 3htb complex from the
+# RCSB at run time (needs network), parameterizes the ligand on the fly
+# (acpype) and generates the ions with leap_add_ions
+adjust_runtime "$WORK_DIR/notebook.ipynb"
+# record the work dir for the on-failure artefact (flavour-test-reusable.yaml
+# tars + uploads it when this job fails)
+echo "$WORK_DIR" > "$SCRIPT_DIR/.e2e_workdir"
+
+echo ">>> [4/5] execute notebook in container (jupyter nbconvert --execute)"
+set +e
+# shellcheck disable=SC2046
+docker run ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
+  --name "$CONTAINER" \
+  -e OMPI_ALLOW_RUN_AS_ROOT=1 \
+  -e OMPI_ALLOW_RUN_AS_ROOT_CONFIRM=1 \
+  -v "$WORK_DIR:/data/wf_notebook" \
+  "$IMAGE" \
+  "$(execute_notebook_cmd)"
+RC=$?
+set -e
+
+if [[ "$RC" -ne 0 ]]; then
+  echo "FAIL: nbconvert exited with code $RC — last 80 log lines:"
+  docker logs "$CONTAINER" 2>&1 | tail -80
+  exit "$RC"
+fi
+
+echo ">>> [5/5] assert outputs (searched under $WORK_DIR)"
+FAIL=0
+
+EXECUTED="$WORK_DIR/executed.ipynb"
+if [[ -s "$EXECUTED" ]]; then
+  echo "  PASS: executed.ipynb"
+else
+  echo "  FAIL: executed notebook missing or empty: $EXECUTED"
+  FAIL=1
+fi
+
+# belt-and-braces: --execute already aborts on a raising cell; make sure no
+# cell left an error output anyway (e.g. a kernel crash recorded by nbconvert)
+if [[ -s "$EXECUTED" ]] && grep -q '"output_type"[[:space:]]*:[[:space:]]*"error"' "$EXECUTED"; then
+  echo "  FAIL: executed notebook contains error outputs:"
+  grep -B2 -A10 '"output_type"[[:space:]]*:[[:space:]]*"error"' "$EXECUTED" | head -40
+  FAIL=1
+fi
+
+for out in "${EXPECTED_OUTPUTS[@]}"; do
+  found="$(find "$WORK_DIR" -type f -name "$out" 2>/dev/null | head -1)"
+  if [[ -n "$found" && -s "$found" ]]; then
+    echo "  PASS: $out  (in $(basename "$(dirname "$found")"))"
+  else
+    echo "  FAIL: not found (or empty): $out"
+    FAIL=1
+  fi
+done
+if [[ "$FAIL" -ne 0 ]]; then
+  echo "  (files actually present under $WORK_DIR:)"
+  find "$WORK_DIR" -maxdepth 3 -type f 2>/dev/null | sed 's/^/    /' | head -40
+fi
+
+if [[ "$FAIL" -eq 0 ]]; then
+  echo "PASS: $WF_NAME jupyter flavour e2e test"
+else
+  echo "FAIL: $WF_NAME jupyter flavour e2e test (see missing outputs above)"
+  exit 1
+fi
