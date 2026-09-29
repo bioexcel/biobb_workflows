@@ -13,7 +13,7 @@ baseCommand: cpptraj_convert
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_analysis:5.3.0--gmx2026_2
+    dockerPull: quay.io/biocontainers/biobb_analysis:5.3.0--pyhdfd78af_1
 
 inputs:
   input_top_path:
