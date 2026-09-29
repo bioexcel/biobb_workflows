@@ -9,6 +9,7 @@ step1_biobb_curves:
     input_top_path: /data/topology.top
     output_lis_path: curves.out.lis
     output_cda_path: curves.out.cda
+    output_zip_path: curves.out.zip
   properties:
     s1range: '1:12'
 
