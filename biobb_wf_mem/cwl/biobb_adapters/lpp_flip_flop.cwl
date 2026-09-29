@@ -13,7 +13,7 @@ baseCommand: lpp_flip_flop
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_mem:5.2.2--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_mem:5.3.0--pyhdfd78af_0
 
 inputs:
   input_top_path:
