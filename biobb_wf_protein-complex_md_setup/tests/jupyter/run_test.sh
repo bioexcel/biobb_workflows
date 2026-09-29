@@ -18,10 +18,15 @@
 # local input files to copy (the ligand is extracted from the downloaded
 # structure).
 #
-# Runtime: the notebook hard-codes its own nsteps (min 5000, nvt/npt 5000,
-# md 25000, production 500000). adjust_runtime below reduces them to 10 in
-# the local COPY only (same reduction as the CI python flavour) — the
-# notebook in the jupyter repo is never touched.
+# Runtime: the notebook hard-codes its own short nsteps (min/nvt/npt 5000,
+# free MD 25000). adjust_runtime below, on the local COPY only (the notebook
+# in the jupyter repo is never touched): (a) bumps min/nvt/npt to the
+# workflow's own 50000 — 5000-step NPT is not enough for the JZ4 ligand to
+# settle, and the short free MD then blows up the same way a blanket
+# nsteps 10 does in the other flavours (gmx mdrun segfault, exit -11, no
+# .gro); (b) reduces the free MD to 10 (same reduction as the CI python
+# flavour). The commented-out option lines in the free-MD grompp cell are
+# left as-is.
 #
 # Notebook source (first hit wins):
 #   1. the git submodule <wf>/jupyter/, if checked out (local
@@ -109,11 +114,15 @@ docker_build_args() {
 }
 
 adjust_runtime() {
-  # $1 = the local copy of the notebook. Reduce every nsteps to 10 (the same
-  # reduction the docker flavour / CI python flavour apply). The cells use
-  # 'nsteps':'5000'-style dict literals; the pattern also covers unquoted
-  # ints in case the notebook ever changes style.
-  "${SED_INPLACE[@]}" -E "s/('nsteps':[[:space:]]*)'?[0-9]+'?/\1'10'/g" "$1"
+  # $1 = the local copy of the notebook. The cells use 'nsteps':'5000'-style
+  # dict literals. (a) '5000' -> '50000': hits the genion/EM/NVT/NPT grompp
+  # cells (genion and EM are harmless — EM stops at emtol) and the
+  # commented-out option line in the free-MD cell; NVT/NPT thereby get the
+  # workflow's own equilibration values. (b) '25000' -> '10': the free MD,
+  # same reduction as the docker flavour / CI python flavour. The commented
+  # '500000' option is untouched.
+  "${SED_INPLACE[@]}" "s/'nsteps':'5000'/'nsteps':'50000'/g" "$1"
+  "${SED_INPLACE[@]}" "s/'nsteps':'25000'/'nsteps':'10'/g" "$1"
 }
 
 execute_notebook_cmd() {

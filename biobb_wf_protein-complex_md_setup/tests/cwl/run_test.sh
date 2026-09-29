@@ -11,9 +11,12 @@
 # The workflow is the full 34-step protein-ligand complex MD setup on 3HTB
 # (protein + JZ4 ligand): pdb2gmx, ligand itp, complex building, solvation,
 # ionization, minimization, NVT, NPT, short free MD, rmsd/rgyr, trajectory
-# imaging and the final production-MD grompp. adjust_runtime below reduces
-# every mdp nsteps to 10 — the same reduction the CI python flavour applies
-# (python-reusable.yaml).
+# imaging and the final production-MD grompp. Only the FREE MD nsteps
+# (250000 -> 10) is reduced — the same reduction the CI python flavour
+# applies (python-reusable.yaml). min/NVT/NPT keep the workflow's own values
+# (5000/50000/50000): a blanket nsteps 10 (as in biobb_wf_md_setup) makes
+# the NPT run on an un-equilibrated system, the pressure coupling blows it
+# up and gmx mdrun segfaults (exit -11) before writing its .gro.
 #
 # Extra cwltool args (e.g. --no-match-user on Mac ARM):
 #   EXTRA_CWL_ARGS="--no-match-user" ./run_test.sh
@@ -62,9 +65,10 @@ docker info >/dev/null 2>&1 || { echo "ERROR: docker daemon not reachable" >&2; 
 # ---------------- per-workflow hooks (edit when porting) ----------------
 adjust_runtime() {
   # $1 = workflow_input_descriptions.yml. The nsteps values live inside the
-  # JSON config strings, so the pattern is quoted here (same 10-step
-  # reduction as the CI python flavour).
-  "${SED_INPLACE[@]}" "s/\"nsteps\": [0-9]*/\"nsteps\": 10/g" "$1"
+  # JSON config strings, so the pattern is quoted. Only the free MD
+  # (250000) is reduced to 10 (same as the CI python flavour); min/NVT/NPT
+  # keep the workflow's own values (see the header for why).
+  "${SED_INPLACE[@]}" "s/\"nsteps\": 250000/\"nsteps\": 10/" "$1"
 }
 # --------------------------------------------------------------------------
 

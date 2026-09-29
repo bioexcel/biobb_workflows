@@ -18,9 +18,12 @@
 # via /var/run/docker.sock — same requirement as the cwl flavour.
 #
 # The DAG is the full 34-step protein-ligand complex MD setup on 3HTB
-# (protein + JZ4 ligand).
-# adjust_runtime below reduces every mdp nsteps to 10 — the same reduction
-# the CI python flavour applies (python-reusable.yaml).
+# (protein + JZ4 ligand). Only the FREE MD nsteps (250000 -> 10) is reduced
+# — the same reduction the CI python flavour applies (python-reusable.yaml);
+# min/NVT/NPT keep the workflow's own values (5000/50000/50000). A blanket
+# nsteps 10 (as in biobb_wf_md_setup) makes the NPT run on an
+# un-equilibrated system, the pressure coupling blows it up and gmx mdrun
+# segfaults (exit -11) before writing its .gro.
 #
 # Usage:
 #   ./run_test.sh [--keep]          keep scratch dir + airflow image
@@ -67,11 +70,12 @@ docker info >/dev/null 2>&1 || { echo "ERROR: docker daemon not reachable" >&2; 
 # ---------------- per-workflow hooks (edit when porting) ----------------
 adjust_runtime() {
   # $1 = <scratch>/dags/<wf>/inputs — per-step yml files. The nsteps values
-  # live inside the JSON config strings, so the pattern is quoted (same
-  # 10-step reduction as the CI python flavour).
+  # live inside the JSON config strings, so the pattern is quoted. Only the
+  # free MD (250000) is reduced to 10 (same as the CI python flavour);
+  # min/NVT/NPT keep the workflow's own values (see the header for why).
   local f
   for f in "$1"/*.yml; do
-    "${SED_INPLACE[@]}" "s/\"nsteps\": [0-9]*/\"nsteps\": 10/g" "$f"
+    "${SED_INPLACE[@]}" "s/\"nsteps\": 250000/\"nsteps\": 10/" "$f"
   done
 }
 # --------------------------------------------------------------------------

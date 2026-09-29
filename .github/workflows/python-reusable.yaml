@@ -58,9 +58,18 @@ jobs:
           sed -i "s/mpi_np: [0-9]*/mpi_np: 2/g" ${{ inputs.wf_name }}/python/workflow.yml
 
       - name: Reduce MDRun steps for GROMACS workflow
-        if: contains(inputs.wf_name, 'biobb_wf_md_setup') || contains(inputs.wf_name, 'biobb_wf_md_setup_mutations') || contains(inputs.wf_name, 'biobb_wf_protein-complex_md_setup')
+        if: contains(inputs.wf_name, 'biobb_wf_md_setup') || contains(inputs.wf_name, 'biobb_wf_md_setup_mutations')
         run: |
           sed -i "s/nsteps: [0-9]*/nsteps: 10/g" ${{ inputs.wf_name }}/python/workflow.yml
+
+      - name: Reduce free-MD steps for protein-complex workflow
+        if: inputs.wf_name == 'biobb_wf_protein-complex_md_setup'
+        run: |
+          # Only the free MD is reduced: with nsteps 10 the NPT runs on an
+          # un-equilibrated system, the pressure coupling blows it up and
+          # gmx mdrun segfaults (exit -11) before writing its .gro. min/
+          # NVT/NPT keep the workflow's own values (5000/50000/50000).
+          sed -i "s/nsteps: 250000/nsteps: 10/" ${{ inputs.wf_name }}/python/workflow.yml
 
       - run: echo "Repository -> ${{ github.repository }}"
       - run: echo "Branch -> ${{ github.ref }}"

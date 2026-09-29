@@ -78,7 +78,8 @@ are the **only** parameter changes CI applies — they are never committed to
 | `biobb_wf_amber_md_setup`, `biobb_wf_amber_md_setup_lig` | `mpi_np: 2`, `nstlim: 500`, `maxcyc: 100` |
 | `biobb_wf_pmx_tutorial` | `nsteps: 50` |
 | `biobb_wf_structure_checking` | `mpi_np: 2` |
-| `biobb_wf_md_setup`, `biobb_wf_md_setup_mutations`, `biobb_wf_protein-complex_md_setup` | `nsteps: 10` |
+| `biobb_wf_md_setup`, `biobb_wf_md_setup_mutations` | `nsteps: 10` |
+| `biobb_wf_protein-complex_md_setup` | free-MD `nsteps: 250000 → 10` only — min/NVT/NPT keep the workflow's own 5000/50000/50000 (a blanket `nsteps: 10` makes the NPT run on an un-equilibrated system: the pressure coupling blows it up and `gmx mdrun` segfaults, exit -11, before writing its `.gro`) |
 
 Notes:
 

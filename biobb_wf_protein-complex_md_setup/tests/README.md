@@ -11,11 +11,17 @@ solvate → genion → minimization → NVT → NPT → free MD → rmsd/rgyr �
 trajectory imaging, final output `gppmdsim.tpr` (step36 production-MD
 grompp).
 
-**Runtime reduction:** every e2e script reduces all `mdp nsteps` to `10` in
-the local copy it runs (the `adjust_runtime` hook) — the same reduction the
-CI python flavour applies in `python-reusable.yaml` — so the mdrun steps
-take seconds instead of days. The committed `workflow.yml` / CWL input /
-airflow inputs / notebook are never modified.
+**Runtime reduction:** every e2e script reduces the FREE MD `mdp nsteps`
+(250000, or 25000 in the notebook) to `10` in the local copy it runs (the
+`adjust_runtime` hook) — the same reduction the CI python flavour applies in
+`python-reusable.yaml` — while min/NVT/NPT keep the workflow's own values
+(5000/50000/50000). A blanket `nsteps: 10` (as in `biobb_wf_md_setup`) does
+NOT work here: the NPT would run on an un-equilibrated system, the pressure
+coupling blows it up and `gmx mdrun` segfaults (exit -11) before writing its
+`.gro`. The jupyter hook additionally bumps the notebook's short 5000-step
+min/NVT/NPT to the workflow's own 50000 (5000 is not enough for the JZ4
+ligand to settle). The committed `workflow.yml` / CWL input / airflow inputs
+/ notebook are never modified.
 
 Expect on the first run (containers are pulled/cached afterwards):
 

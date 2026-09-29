@@ -9,9 +9,12 @@
 # The workflow is the 34-step protein-ligand complex MD setup on 3HTB
 # (protein + JZ4 ligand): pdb2gmx, ligand itp generation, complex building,
 # solvation, ionization, energy minimization, NVT, NPT, short free MD, then
-# rmsd/rgyr analysis and trajectory imaging. adjust_runtime below reduces
-# every mdp nsteps to 10 — the same reduction the CI python flavour applies
-# (python-reusable.yaml) — so the mdrun steps take seconds instead of days.
+# rmsd/rgyr analysis and trajectory imaging. Only the FREE MD nsteps
+# (250000 -> 10) is reduced — the same reduction the CI python flavour
+# applies (python-reusable.yaml). min/NVT/NPT keep the workflow's own values
+# (5000/50000/50000): a blanket nsteps 10 (as in biobb_wf_md_setup) makes
+# the NPT run on an un-equilibrated system, the pressure coupling blows it
+# up and gmx mdrun segfaults (exit -11) before writing its .gro.
 # The workflow's final step (step36 production-MD grompp -> gppmdsim.tpr) is
 # not part of the pytest suite, which ends at step33 (gmx_rgyr).
 #
@@ -20,7 +23,7 @@
 #   tests/python/{biobb_wf_protein-complex_md_setup.py, conftest.py,
 #                 structure.pdb, ions.pdb, ligand.gro, ligand.itp,
 #                 reference/}
-#   python/workflow.yml          (nsteps reduced to 10)
+#   python/workflow.yml          (free-MD nsteps reduced to 10)
 # pytest is installed into the image env at run time (the env does not ship
 # it; it is the only package the suite needs on top of the env). The run is
 # invoked WITHOUT --remove so the final outputs stay on disk for the
@@ -197,9 +200,11 @@ cp "$WF_DIR/tests/python/ions.pdb"                 "$WORK_DIR/tests/python/"
 cp "$WF_DIR/tests/python/ligand.gro"               "$WORK_DIR/tests/python/"
 cp "$WF_DIR/tests/python/ligand.itp"               "$WORK_DIR/tests/python/"
 cp -R "$WF_DIR/tests/python/reference"             "$WORK_DIR/tests/python/"
-# the same config the CI python flavour uses, with the same nsteps reduction
+# the same config the CI python flavour uses, with the same reduction:
+# only the free MD (250000) -> 10; min/NVT/NPT keep the workflow's own
+# values (see the header — nsteps 10 everywhere segfaults the NPT mdrun)
 cp "$WF_DIR/python/workflow.yml" "$WORK_DIR/python/workflow.yml"
-"${SED_INPLACE[@]}" "s/nsteps: [0-9]*/nsteps: 10/g" "$WORK_DIR/python/workflow.yml"
+"${SED_INPLACE[@]}" "s/nsteps: 250000/nsteps: 10/" "$WORK_DIR/python/workflow.yml"
 
 echo ">>> [3/4] run the pytest suite in the container (env: $WF_NAME)"
 set +e
