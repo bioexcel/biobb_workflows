@@ -52,10 +52,17 @@ jobs:
         run: |
           sed -i "s/nsteps: [0-9]*/nsteps: 50/g" ${{ inputs.wf_name }}/python/workflow.yml
 
-      - name: Reduce MPI cores for Structure Checking workflow
+      - name: Run sander serially for Structure Checking workflow
         if: contains(inputs.wf_name, 'structure_checking')
         run: |
-          sed -i "s/mpi_np: [0-9]*/mpi_np: 2/g" ${{ inputs.wf_name }}/python/workflow.yml
+          # biobb 5.3.x conda envs resolve the unpinned ambertools dep to the
+          # latest build, which conda-forge ships nompi (no sander.MPI/mpirun
+          # — the MPI builds stopped at 24.8). Run the (already short,
+          # 500-cycle) sander minimization serially in CI only; workflow.yml
+          # stays MPI.
+          sed -i "/binary_path: sander.MPI/d" ${{ inputs.wf_name }}/python/workflow.yml
+          sed -i "/^[[:space:]]*mpi_np: [0-9]*$/d" ${{ inputs.wf_name }}/python/workflow.yml
+          sed -i "/^[[:space:]]*mpi_bin: mpirun$/d" ${{ inputs.wf_name }}/python/workflow.yml
 
       - name: Reduce MDRun steps for GROMACS workflow
         if: contains(inputs.wf_name, 'biobb_wf_md_setup') || contains(inputs.wf_name, 'biobb_wf_md_setup_mutations')
