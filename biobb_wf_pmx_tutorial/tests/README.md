@@ -59,9 +59,12 @@ then `pmx_analyse` (FDTI) over the collected dhdl files.
   execution.
 - **Inputs**: the workflow/notebook reference the state files with relative
   paths (`pmx_tutorial/state{A,B}.tpr|xtc`), so both e2e scripts copy the
-  committed `docker/pmx_tutorial/` files into the work dir. The `dhdlA.zip`/
-  `dhdlB.zip` committed next to them are tutorial reference inputs for a
-  standalone step11 run — the full workflow generates its own dhdl zips.
+  committed `docker/pmx_tutorial/` files into the work dir. The docker
+  workflow generates its own `dhdlA.zip`/`dhdlB.zip` (from the dhdl files of
+  its TI runs), but the **notebook's final pmx_analyse cell uses the
+  committed `pmx_tutorial/dhdl{A,B}.zip`** — per the notebook comment the
+  tutorial computes only one transition, so the FDTI analysis uses values
+  from a real snase run — hence the jupyter test copies those too.
 - **python 3.12 path**: `python/workflow.py` and the notebook hardcode the
   pmx force-field lib under `$CONDA_PREFIX/lib/python3.12/site-packages/pmx/
   data/mutff/` — the image env must resolve to python 3.12 (as the CI env

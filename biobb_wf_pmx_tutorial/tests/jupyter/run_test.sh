@@ -17,7 +17,11 @@
 # NOTE: the notebook reads its inputs (pmx_tutorial/state{A,B}.tpr,
 # pmx_tutorial/state{A,B}_1ns.xtc) from the kernel cwd — no download, no
 # variables.py — so the prepare step copies the committed input files from
-# <wf>/docker/pmx_tutorial/ into the work dir.
+# <wf>/docker/pmx_tutorial/ into the work dir. This includes the
+# pre-computed pmx_tutorial/dhdl{A,B}.zip: the final pmx_analyse cell uses
+# those (per the notebook comment the tutorial computes only one transition,
+# so the FDTI analysis uses values from a real snase run) instead of the dhdl
+# files the notebook's own TI runs just wrote.
 #
 # Runtime: the notebook processes ONE frame per state (cell 3). Like the
 # docker flavour (and the CI python flavour), adjust_runtime below reduces
@@ -217,9 +221,11 @@ fi
 echo ">>> [3/5] prepare work dir"
 cp "$NOTEBOOK_SRC" "$WORK_DIR/notebook.ipynb"
 # no variables.py for this workflow — but the notebook reads
-# <cwd>/pmx_tutorial/state{A,B}.tpr|xtc, so copy the committed inputs
+# <cwd>/pmx_tutorial/state{A,B}.tpr|xtc (MD inputs) and
+# <cwd>/pmx_tutorial/dhdl{A,B}.zip (pre-computed FDTI inputs for the final
+# pmx_analyse cell), so copy all the committed inputs
 mkdir -p "$WORK_DIR/pmx_tutorial"
-for f in stateA.tpr stateA_1ns.xtc stateB.tpr stateB_1ns.xtc; do
+for f in stateA.tpr stateA_1ns.xtc stateB.tpr stateB_1ns.xtc dhdlA.zip dhdlB.zip; do
   cp "$WF_DIR/docker/pmx_tutorial/$f" "$WORK_DIR/pmx_tutorial/$f"
 done
 adjust_runtime "$WORK_DIR/notebook.ipynb"
