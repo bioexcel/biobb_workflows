@@ -17,14 +17,16 @@
 #
 # Runtime: adjust_runtime below (a) reduces every mdp nsteps to 50 — the
 # same reduction the CI python flavour applies (python-reusable.yaml) — and
-# (b) caps the frame extraction by setting step0 skip: 50 (end stays 1000),
-# leaving ~4 frames per state. The unreduced workflow extracts ~100 frames
-# per state and would take hours.
-# NOTE on the cap: the committed 1 ns trajectories have ~200 frames at ~5 ps
-# spacing (the reference dhdl zips hold frame0-frame99 from the original
-# skip: 2 run), so capping by TIME (e.g. end: 3) is a trap — gmx trjconv
-# -b 1 -e 3 matches no frame at all and exits 1, which silently produced an
-# empty zip and no final outputs. Capping by skip is spacing-agnostic.
+# (b) caps the frame extraction by setting step0 skip to ~N/4 (end stays
+# 1000), leaving ~4 frames per state.
+# NOTE on the cap: the frame cap is CALIBRATED at run time (count_traj_frames
+# below runs gmx trjconv in the image and counts the actual frames). Fixed
+# caps are traps here: the committed 1 ns trajectories are SHORT (fewer than
+# 50 frames — the reference dhdl zips holding 100 frames come from the
+# original, longer tutorial trajectories). Both a time cap (end: 3 matches no
+# frame) and a fixed skip (skip: 50 is bigger than the trajectory) made
+# gmx trjconv exit 1 with an empty zip, which workflow.py did not check and
+# which silently produced no final outputs.
 #
 # NOTE: the Dockerfile fetches conda_env/environment.yml, the notebook and
 # python/workflow.py from GitHub *main* at build time — this test therefore
@@ -107,21 +109,35 @@ extra_data_mounts() {
   :
 }
 
+count_traj_frames() {
+  # Count the frames of the stateA trajectory by running gmx trjconv (the
+  # same binary the workflow uses) in a disposable container of $IMAGE and
+  # counting the written pdb files. The empty-line answer to the group
+  # prompt selects the default (protein) group, keeping the files small.
+  local cmd
+  cmd='rm -rf /tmp/pf && mkdir -p /tmp/pf && printf "\n" | gmx trjconv -f /data/wf_python/pmx_tutorial/stateA_1ns.xtc -s /data/wf_python/pmx_tutorial/stateA.tpr -b 0 -e 100000 -o /tmp/pf/f%5d.pdb >/dev/null 2>&1; ls /tmp/pf/f*.pdb 2>/dev/null | wc -l'
+  # shellcheck disable=SC2046
+  docker run --rm ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
+    -v "$WORK_DIR:/data/wf_python" \
+    "$IMAGE" \
+    "conda run --no-capture-output -n $WF_NAME bash -c '$cmd'"
+}
+
 adjust_runtime() {
   # $1 = local workflow.yml used for the run.
+  # $2 = calibrated step0 skip (frame cap, computed in the prepare step)
   # (a) same MD run reduction as the CI python flavour (python-reusable.yaml)
   "${SED_INPLACE[@]}" "s/nsteps: [0-9]*/nsteps: 50/g" "$1"
-  # (b) frame cap: the unreduced step0 extracts ~100 frames per state from
-  # the 1 ns trajectories (end: 1000, skip: 2). skip: 50 leaves ~4 frames —
-  # a spacing-agnostic cap (the frames are ~5 ps apart, so a time-based cap
-  # like end: 3 would match nothing: gmx trjconv -b 1 -e 3 exits 1). Scoped
-  # to the step0 block so no other property is touched. awk (not sed)
-  # because BSD sed (macOS) rejects the range+{...} block form that GNU sed
-  # accepts.
-  awk '
+  # (b) frame cap: the unreduced step0 extracts every other frame of the 1 ns
+  # trajectories (end: 1000, skip: 2). skip: $2 leaves ~4 frames — calibrated
+  # to the actual trajectory length (see count_traj_frames; fixed caps fail
+  # because the committed trajs are short). Scoped to the step0 block so no
+  # other property is touched. awk (not sed) because BSD sed (macOS) rejects
+  # the range+{...} block form that GNU sed accepts.
+  awk -v skip="$2" '
     /^step0_trjconv:/ {inblk=1}
     /^step1_pmx_mutate:/ {inblk=0}
-    inblk && /^    skip: [0-9]+/ {sub(/skip: [0-9]+/, "skip: 50")}
+    inblk && /^    skip: [0-9]+/ {sub(/skip: [0-9]+/, "skip: " skip)}
     {print}
   ' "$1" > "$1.tmp" && mv "$1.tmp" "$1"
 }
@@ -206,7 +222,19 @@ cp "$DOCKER_DIR/workflow.yml" "$WORK_DIR/workflow.yml"
 for f in stateA.tpr stateA_1ns.xtc stateB.tpr stateB_1ns.xtc; do
   cp "$DOCKER_DIR/pmx_tutorial/$f" "$WORK_DIR/pmx_tutorial/$f"
 done
-adjust_runtime "$WORK_DIR/workflow.yml"
+# Calibrate the frame cap to the actual trajectory length (see the header
+# NOTE — fixed caps silently produced empty frame zips on these trajs)
+N_FRAMES="$(count_traj_frames | tr -d '[:space:]')"
+echo "  stateA trajectory: $N_FRAMES frame(s)"
+if [[ "$N_FRAMES" =~ ^[0-9]+$ ]] && [[ "$N_FRAMES" -ge 2 ]]; then
+  FRAME_SKIP=$(( N_FRAMES / 4 ))
+  (( FRAME_SKIP < 1 )) && FRAME_SKIP=1
+  echo "  frame cap: step0 skip: $FRAME_SKIP (~$(( N_FRAMES / FRAME_SKIP )) frames per state)"
+else
+  echo "ERROR: could not count the stateA trajectory frames (preflight trjconv failed?) — aborting instead of running the workflow on an unknown frame cap" >&2
+  exit 1
+fi
+adjust_runtime "$WORK_DIR/workflow.yml" "$FRAME_SKIP"
 
 echo ">>> [3/4] run container (MODE=python)"
 set +e
