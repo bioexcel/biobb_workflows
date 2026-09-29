@@ -252,9 +252,9 @@ Progress (2026-09): done in all four flavours — `biobb_wf_amber_abc_setup`,
 `biobb_wf_autoencoder` (5.2.x → 5.3.x), `biobb_wf_md_setup`, `biobb_wf_godmd`
 and `biobb_wf_mem` (5.3.x). `biobb_wf_md_setup_mutations` is done in the
 three available flavours (5.3.x; no jupyter flavour — no notebook repo) and
-`biobb_wf_pmx_tutorial` in the two available ones (docker + jupyter, tests-
-only, still on the 5.2.x baseline; no cwl/airflow directories). Next in the
-queue: virtual-screening_fpocket, structure_checking, flexserv, flexdyn.
+`biobb_wf_pmx_tutorial` in the two available ones (docker + jupyter,
+5.3.x; no cwl/airflow directories). Next in the queue:
+virtual-screening_fpocket, structure_checking, flexserv, flexdyn.
 
 Per-workflow checklist (10–30 min each):
 1. Copy `tests/{docker,cwl,airflow}` + adjust `WF_NAME`, `EXPECTED_OUTPUTS` (from the last
