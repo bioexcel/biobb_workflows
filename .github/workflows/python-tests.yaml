@@ -29,6 +29,9 @@ jobs:
     if: github.actor != 'github-actions[bot]'
     with:
       wf_names: ${{ github.event.inputs.wf_names || '' }}
+      # without a flavour, require_path is empty and every wf is eligible
+      # (tests/<flavour>/SKIP is never consulted)
+      flavour: python
 
   test:
     name: ${{ matrix.wf }}
