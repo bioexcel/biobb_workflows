@@ -253,8 +253,9 @@ Progress (2026-09): done in all four flavours — `biobb_wf_amber_abc_setup`,
 and `biobb_wf_mem` (5.3.x). `biobb_wf_md_setup_mutations` is done in the
 three available flavours (5.3.x; no jupyter flavour — no notebook repo),
 `biobb_wf_pmx_tutorial` in the two available ones (docker + jupyter, 5.3.x;
-no cwl/airflow directories) and `biobb_wf_protein_md_analysis` in the one
-available one (docker, 5.3.x; no cwl/airflow/jupyter directories). Next in
+no cwl/airflow directories), `biobb_wf_protein_md_analysis` in the one
+available one (docker, 5.3.x; no cwl/airflow/jupyter directories) and
+`biobb_wf_protein-complex_md_setup` in all four flavours (5.3.x). Next in
 the queue: virtual-screening_fpocket, structure_checking, flexserv,
 flexdyn.
 
