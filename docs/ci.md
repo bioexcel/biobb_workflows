@@ -101,9 +101,10 @@ Rules this design gives:
   a `tests/docker/SKIP` file (first line = the printed reason; currently: biobb_wf_cmip —
   OOM on the 7 GiB runner); it then publishes untested, like a wf without an e2e.
 - Per-flavour opt-out (all test workflows): a `tests/<flavour>/SKIP` file next to
-  `run_test.sh` excludes the wf from that flavour's selection — `detect` (and the publish
-  chain's select job) print the first line as the reason. The manual "Flavour e2e Tests"
-  honours the same file. Currently set for `biobb_wf_cmip` on docker/cwl/airflow.
+  `run_test.sh` (for python, inside the `tests/python/` folder) excludes the wf from
+  that flavour's selection — `detect` (and the publish chain's select job) print the
+  first line as the reason. The manual "Flavour e2e Tests" honours the same file.
+  Currently set for `biobb_wf_cmip` on docker/cwl/airflow/python.
 - Overwrote a tag by mistake? The old image survives in the registry by digest (package
   versions page) — restore it with `retag-ghcr.yaml`.
 
@@ -252,8 +253,10 @@ one-line change there (see testing.md §runner plan).
 
 1. **cmip python tests disabled in CI**: Fortran allocates ~25 GiB vs 7 GiB runner RAM
    (also `test_step24_cmip_run_prot_prot` is commented out in the test file). Needs a
-   bigger runner or a reduced run. Its docker e2e hits the same wall and is opted out of
-   the publish gate via `biobb_wf_cmip/tests/docker/SKIP`.
+   bigger runner or a reduced run. Opted out via `biobb_wf_cmip/tests/python/SKIP`
+   (the 2026-09-22 test-what-you-changed refactor had silently lost the older
+   implicit disablement — a push to `python/workflow.env.yml` re-triggered the tests
+   on 2026-09-28). Its docker/cwl/airflow e2e hit the same wall via their SKIP files.
 2. **`self-hosted`-only workflows** (cwl/galaxy README, stale bot) queue forever if the
    swarm stack is down (no `ubuntu-latest` fallback).
 3. **README sync workflows still use cp+sed** (line-number based) — same fragility as the

@@ -95,13 +95,18 @@ jobs:
               base = os.path.join(w, require_path)
               if not os.path.exists(base):
                   return False
+              # a SKIP file next to the test opts the wf out of this flavour's
+              # selection (for python the folder IS the test, so the file lives
+              # inside it: tests/python/SKIP)
               if os.path.basename(require_path) == "run_test.sh":
                   skip = os.path.join(os.path.dirname(base), "SKIP")
-                  if os.path.exists(skip):
-                      reason = open(skip).read().strip().splitlines()[0]
-                      print("::warning::" + w + " opted out of " + require_path
-                            + " (SKIP file: " + reason + ")")
-                      return False
+              else:
+                  skip = os.path.join(base, "SKIP")
+              if os.path.exists(skip):
+                  reason = open(skip).read().strip().splitlines()[0]
+                  print("::warning::" + w + " opted out of " + require_path
+                        + " (SKIP file: " + reason + ")")
+                  return False
               return True
 
           def git_diff(a, b):

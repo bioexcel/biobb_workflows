@@ -1,0 +1,10 @@
+Not runnable on the 7 GiB GH-hosted runner: the MIP step (cmip_run, AMBER sander)
+allocates ~25 GiB, which fails on the 7 GiB runner (allocation error, not an OOM
+kill — the run "fails fast" on step1/step4/step11) — the same reason biobb_wf_cmip's
+docker/cwl/airflow e2e are opted out (their SKIP files). The 5.3.x env also has no
+sander.MPI/mpirun, so step11 (binary_path: sander.MPI in python/workflow.yml) fails
+on top of it.
+
+This file opts biobb_wf_cmip out of the automatic python tests (python-tests.yaml,
+via the detect job). Delete this file to re-enable (once the tests run on a bigger
+runner or a reduced run is found).
