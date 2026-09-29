@@ -17,9 +17,14 @@
 #
 # Runtime: adjust_runtime below (a) reduces every mdp nsteps to 50 — the
 # same reduction the CI python flavour applies (python-reusable.yaml) — and
-# (b) caps the frame extraction at 2 frames (step0 end: 3 with skip: 2),
-# matching the 2 frames the pytest suite runs. The unreduced workflow
-# extracts ~250 frames per state and would take hours.
+# (b) caps the frame extraction by setting step0 skip: 50 (end stays 1000),
+# leaving ~4 frames per state. The unreduced workflow extracts ~100 frames
+# per state and would take hours.
+# NOTE on the cap: the committed 1 ns trajectories have ~200 frames at ~5 ps
+# spacing (the reference dhdl zips hold frame0-frame99 from the original
+# skip: 2 run), so capping by TIME (e.g. end: 3) is a trap — gmx trjconv
+# -b 1 -e 3 matches no frame at all and exits 1, which silently produced an
+# empty zip and no final outputs. Capping by skip is spacing-agnostic.
 #
 # NOTE: the Dockerfile fetches conda_env/environment.yml, the notebook and
 # python/workflow.py from GitHub *main* at build time — this test therefore
@@ -106,15 +111,17 @@ adjust_runtime() {
   # $1 = local workflow.yml used for the run.
   # (a) same MD run reduction as the CI python flavour (python-reusable.yaml)
   "${SED_INPLACE[@]}" "s/nsteps: [0-9]*/nsteps: 50/g" "$1"
-  # (b) frame cap: the unreduced step0 extracts ~250 frames per state from
-  # the 1 ns trajectories (end: 1000, skip: 2); end: 3 leaves 2 frames
-  # (1 and 3) — the same number the pytest suite runs. Scoped to the step0
-  # block so no other property is touched. awk (not sed) because BSD sed
-  # (macOS) rejects the range+{...} block form that GNU sed accepts.
+  # (b) frame cap: the unreduced step0 extracts ~100 frames per state from
+  # the 1 ns trajectories (end: 1000, skip: 2). skip: 50 leaves ~4 frames —
+  # a spacing-agnostic cap (the frames are ~5 ps apart, so a time-based cap
+  # like end: 3 would match nothing: gmx trjconv -b 1 -e 3 exits 1). Scoped
+  # to the step0 block so no other property is touched. awk (not sed)
+  # because BSD sed (macOS) rejects the range+{...} block form that GNU sed
+  # accepts.
   awk '
     /^step0_trjconv:/ {inblk=1}
     /^step1_pmx_mutate:/ {inblk=0}
-    inblk && /^    end: [0-9]+/ {sub(/end: [0-9]+/, "end: 3")}
+    inblk && /^    skip: [0-9]+/ {sub(/skip: [0-9]+/, "skip: 50")}
     {print}
   ' "$1" > "$1.tmp" && mv "$1.tmp" "$1"
 }

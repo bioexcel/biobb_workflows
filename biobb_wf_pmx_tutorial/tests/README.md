@@ -47,12 +47,15 @@ then `pmx_analyse` (FDTI) over the collected dhdl files.
 
 ## Notes
 
-- **Runtime (docker)**: the unreduced workflow extracts ~250 frames per state
-  (step0 `end: 1000`, `skip: 2` over the 1 ns trajectories) and would take
-  hours. `adjust_runtime` in `docker/run_test.sh` (a) reduces every mdp
+- **Runtime (docker)**: the unreduced workflow extracts ~100 frames per
+  state (step0 `end: 1000`, `skip: 2` over the 1 ns trajectories) and would
+  take hours. `adjust_runtime` in `docker/run_test.sh` (a) reduces every mdp
   `nsteps` to 50 — the same reduction the CI python flavour applies
-  (`python-reusable.yaml`) — and (b) caps step0 at 2 frames (`end: 3`, the
-  same number the pytest suite runs).
+  (`python-reusable.yaml`) — and (b) sets step0 `skip: 50` (keeping
+  `end: 1000`), leaving ~4 frames per state. The cap is by skip, not by
+  time: the trajectory frames are ~5 ps apart (the reference dhdl zips hold
+  `frame0`–`frame99` from the original `skip: 2` run), so a time cap like
+  `end: 3` matches no frame and `gmx trjconv` exits 1 with an empty zip.
 - **Runtime (jupyter)**: the notebook processes ONE frame per state (cell 3);
   `adjust_runtime` in `jupyter/run_test.sh` reduces every mdp `nsteps` to 50
   (same value as the docker/CI flavours) in the local notebook copy before
