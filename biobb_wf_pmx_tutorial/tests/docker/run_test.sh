@@ -112,10 +112,15 @@ extra_data_mounts() {
 count_traj_frames() {
   # Count the frames of the stateA trajectory by running gmx trjconv (the
   # same binary the workflow uses) in a disposable container of $IMAGE and
-  # counting the written pdb files. The empty-line answer to the group
-  # prompt selects the default (protein) group, keeping the files small.
+  # counting the written pdb files. The flags mirror the set the workflow
+  # itself uses in step0 (proven to work on these trajs in the CI python
+  # flavour: -b 1 -e 1000 -dt 1) with skip 1 so EVERY frame is written; the
+  # group prompt gets "System" exactly like the workflow does. gmx stderr is
+  # captured and printed when the count comes out < 2, so a broken preflight
+  # fails with the actual gmx error, not just "0 frame(s)".
+  # First stdout line = the count; the rest is the diagnostic tail.
   local cmd
-  cmd='rm -rf /tmp/pf && mkdir -p /tmp/pf && printf "\n" | gmx trjconv -f /data/wf_python/pmx_tutorial/stateA_1ns.xtc -s /data/wf_python/pmx_tutorial/stateA.tpr -b 0 -e 100000 -o /tmp/pf/f%5d.pdb >/dev/null 2>&1; ls /tmp/pf/f*.pdb 2>/dev/null | wc -l'
+  cmd='rm -rf /tmp/pf && mkdir -p /tmp/pf && printf "System\n" | gmx trjconv -f /data/wf_python/pmx_tutorial/stateA_1ns.xtc -s /data/wf_python/pmx_tutorial/stateA.tpr -skip 1 -b 1 -dt 1 -e 1000 -o /tmp/pf/f%5d.pdb >/dev/null 2>/tmp/pf_err.log; n=$(ls /tmp/pf/f*.pdb 2>/dev/null | wc -l); echo "$n"; if [ "$n" -lt 2 ]; then echo "--- preflight gmx trjconv stderr (last 25 lines) ---"; tail -25 /tmp/pf_err.log; fi'
   # shellcheck disable=SC2046
   docker run --rm ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
     -v "$WORK_DIR:/data/wf_python" \
@@ -223,9 +228,13 @@ for f in stateA.tpr stateA_1ns.xtc stateB.tpr stateB_1ns.xtc; do
   cp "$DOCKER_DIR/pmx_tutorial/$f" "$WORK_DIR/pmx_tutorial/$f"
 done
 # Calibrate the frame cap to the actual trajectory length (see the header
-# NOTE — fixed caps silently produced empty frame zips on these trajs)
-N_FRAMES="$(count_traj_frames | tr -d '[:space:]')"
+# NOTE — fixed caps silently produced empty frame zips on these trajs).
+# First stdout line is the count; the remaining lines are the gmx-stderr
+# diagnostic tail (only present when the count is < 2).
+PREFLIGHT_OUT="$(count_traj_frames)"
+N_FRAMES="$(head -1 <<<"$PREFLIGHT_OUT" | tr -d '[:space:]')"
 echo "  stateA trajectory: $N_FRAMES frame(s)"
+tail -n +2 <<<"$PREFLIGHT_OUT"
 if [[ "$N_FRAMES" =~ ^[0-9]+$ ]] && [[ "$N_FRAMES" -ge 2 ]]; then
   FRAME_SKIP=$(( N_FRAMES / 4 ))
   (( FRAME_SKIP < 1 )) && FRAME_SKIP=1
