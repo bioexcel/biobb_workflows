@@ -213,17 +213,34 @@ cp -R "$WF_DIR/tests/python/reference"             "$WORK_DIR/tests/python/"
 cp "$WF_DIR/python/workflow.yml" "$WORK_DIR/python/workflow.yml"
 adjust_runtime "$WORK_DIR/python/workflow.yml"
 
-echo ">>> [3/4] run the pytest suite in the container (env: $WF_NAME)"
+# A stuck suite step would otherwise hold the lane for hours; the container
+# is removed by the cleanup trap if `timeout` kills the docker client.
+TEST_TIMEOUT_MIN="${TEST_TIMEOUT_MIN:-120}"
+echo ">>> [3/4] run the pytest suite in the container (env: $WF_NAME, timeout ${TEST_TIMEOUT_MIN} min)"
 set +e
 # shellcheck disable=SC2046
-docker run ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
-  --name "$CONTAINER" \
-  -v "$WORK_DIR:/data/wf_python" \
-  "$IMAGE" \
-  "$(run_cmd)"
+if command -v timeout >/dev/null 2>&1; then
+  timeout --kill-after=60 "${TEST_TIMEOUT_MIN}m" \
+    docker run ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
+    --name "$CONTAINER" \
+    -v "$WORK_DIR:/data/wf_python" \
+    "$IMAGE" \
+    "$(run_cmd)"
+else
+  docker run ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
+    --name "$CONTAINER" \
+    -v "$WORK_DIR:/data/wf_python" \
+    "$IMAGE" \
+    "$(run_cmd)"
+fi
 RC=$?
 set -e
 
+if [[ "$RC" -eq 124 || "$RC" -eq 137 ]]; then
+  echo "FAIL: suite HUNG (killed after ${TEST_TIMEOUT_MIN} min) — last 50 log lines (stuck step = last step in the log):"
+  docker logs "$CONTAINER" 2>&1 | tail -50
+  exit "$RC"
+fi
 if [[ "$RC" -ne 0 ]]; then
   echo "FAIL: pytest in container exited with code $RC — last 50 log lines:"
   docker logs "$CONTAINER" 2>&1 | tail -50

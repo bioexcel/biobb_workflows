@@ -91,15 +91,32 @@ mkdir -p "$OUT_DIR"
 cp "$CWL_DIR/workflow_input_descriptions.yml" "$OUT_DIR/input_descriptions.orig.yml"
 adjust_runtime "$CWL_DIR/workflow_input_descriptions.yml"
 
-echo ">>> [2/3] cwltool run"
+# cwltool has no per-step timeout: one stuck tool would hold the lane for
+# hours. Guard with GNU coreutils `timeout` (Linux runners); skipped where
+# unavailable (macOS). On a timeout the killed cwltool may leave the running
+# tool container orphaned (locally: check `docker ps -a`).
+CWL_TIMEOUT_MIN="${CWL_TIMEOUT_MIN:-180}"
+echo ">>> [2/3] cwltool run (timeout ${CWL_TIMEOUT_MIN} min)"
 set +e
 # shellcheck disable=SC2086
-( cd "$CWL_DIR" && cwltool --outdir "$OUT_DIR" \
-    workflow.cwl workflow_input_descriptions.yml $EXTRA_CWL_ARGS ) \
-  > "$OUT_DIR/cwltool.log" 2>&1
+if command -v timeout >/dev/null 2>&1; then
+  ( cd "$CWL_DIR" && timeout --kill-after=60 "${CWL_TIMEOUT_MIN}m" \
+      cwltool --outdir "$OUT_DIR" \
+      workflow.cwl workflow_input_descriptions.yml $EXTRA_CWL_ARGS ) \
+    > "$OUT_DIR/cwltool.log" 2>&1
+else
+  ( cd "$CWL_DIR" && cwltool --outdir "$OUT_DIR" \
+      workflow.cwl workflow_input_descriptions.yml $EXTRA_CWL_ARGS ) \
+    > "$OUT_DIR/cwltool.log" 2>&1
+fi
 RC=$?
 set -e
 
+if [[ "$RC" -eq 124 || "$RC" -eq 137 ]]; then
+  echo "FAIL: cwltool HUNG (killed after ${CWL_TIMEOUT_MIN} min) — last 50 log lines (stuck step = last step in the log):"
+  tail -50 "$OUT_DIR/cwltool.log"
+  exit "$RC"
+fi
 if [[ "$RC" -ne 0 ]]; then
   echo "FAIL: cwltool exited with code $RC — last 50 log lines:"
   tail -50 "$OUT_DIR/cwltool.log"

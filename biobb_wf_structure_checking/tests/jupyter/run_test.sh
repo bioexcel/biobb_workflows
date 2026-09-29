@@ -215,17 +215,34 @@ adjust_runtime "$WORK_DIR/notebook.ipynb"
 # tars + uploads it when this job fails)
 echo "$WORK_DIR" > "$SCRIPT_DIR/.e2e_workdir"
 
-echo ">>> [4/5] execute notebook in container (jupyter nbconvert --execute)"
+# A stuck notebook cell would otherwise hold the lane for hours; the
+# container is removed by the cleanup trap if `timeout` kills the client.
+TEST_TIMEOUT_MIN="${TEST_TIMEOUT_MIN:-120}"
+echo ">>> [4/5] execute notebook in container (jupyter nbconvert --execute, timeout ${TEST_TIMEOUT_MIN} min)"
 set +e
 # shellcheck disable=SC2046
-docker run ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
-  --name "$CONTAINER" \
-  -v "$WORK_DIR:/data/wf_notebook" \
-  "$IMAGE" \
-  "$(execute_notebook_cmd)"
+if command -v timeout >/dev/null 2>&1; then
+  timeout --kill-after=60 "${TEST_TIMEOUT_MIN}m" \
+    docker run ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
+    --name "$CONTAINER" \
+    -v "$WORK_DIR:/data/wf_notebook" \
+    "$IMAGE" \
+    "$(execute_notebook_cmd)"
+else
+  docker run ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
+    --name "$CONTAINER" \
+    -v "$WORK_DIR:/data/wf_notebook" \
+    "$IMAGE" \
+    "$(execute_notebook_cmd)"
+fi
 RC=$?
 set -e
 
+if [[ "$RC" -eq 124 || "$RC" -eq 137 ]]; then
+  echo "FAIL: nbconvert HUNG (killed after ${TEST_TIMEOUT_MIN} min) — last 80 log lines (stuck cell = last cell in the log):"
+  docker logs "$CONTAINER" 2>&1 | tail -80
+  exit "$RC"
+fi
 if [[ "$RC" -ne 0 ]]; then
   echo "FAIL: nbconvert exited with code $RC — last 80 log lines:"
   docker logs "$CONTAINER" 2>&1 | tail -80

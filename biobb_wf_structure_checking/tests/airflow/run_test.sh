@@ -24,7 +24,7 @@
 #
 # Usage:
 #   ./run_test.sh [--keep]          keep scratch dir + airflow image
-#   TIMEOUT_MIN=720 ./run_test.sh   overall DAG timeout (default 720 min)
+#   TIMEOUT_MIN=240 ./run_test.sh   overall DAG timeout (default 240 min)
 #
 set -euo pipefail
 
@@ -34,7 +34,10 @@ REPO_ROOT="$(dirname "$WF_DIR")"
 WF_NAME="biobb_wf_structure_checking"
 
 KEEP="${KEEP:-0}"
-TIMEOUT_MIN="${TIMEOUT_MIN:-720}"
+# Default 240 (not the 720 of the shared template): this 18-step DAG runs
+# well under an hour, and a stuck step should fail the lane in hours, not
+# half a day.
+TIMEOUT_MIN="${TIMEOUT_MIN:-240}"
 # Tag tracks the apache/airflow base version (see Dockerfile) so a base
 # upgrade always rebuilds the image instead of reusing a stale one.
 IMAGE="biobb-airflow-test:3.3.2"
