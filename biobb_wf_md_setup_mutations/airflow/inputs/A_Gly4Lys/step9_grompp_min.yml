@@ -1,0 +1,10 @@
+config: '{"properties": {"mdp": {"nsteps": 5000, "emtol": 500}, "simulation_type": "minimization"}}'
+input_gro_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: step8_genion_A_Gly4Lys/output_gro_path
+input_top_zip_path:
+  class: File
+  format: https://edamontology.org/format_3987
+  path: step8_genion_A_Gly4Lys/output_top_zip_path
+output_tpr_path: gppmin.tpr

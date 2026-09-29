@@ -12,7 +12,7 @@ baseCommand: fix_side_chain
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_model:5.2.1--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_model:5.3.0--pyhdfd78af_0
 
 inputs:
   input_pdb_path:

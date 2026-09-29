@@ -1,0 +1,14 @@
+config: '{"properties": {"xvg": "xmgr", "selection": "Backbone"}}'
+input_index_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: step100_make_ndx_A_Tyr20Gln/output_ndx_path
+input_structure_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: step15_grompp_md_A_Tyr20Gln/output_tpr_path
+input_traj_path:
+  class: File
+  format: https://edamontology.org/format_3875
+  path: step18_gmx_image2_A_Tyr20Gln/output_traj_path
+output_xvg_path: setup.rgyr.xvg

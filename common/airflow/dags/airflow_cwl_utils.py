@@ -54,13 +54,23 @@ def resolve_inputs(inputs_path, outputs_base_dir, resolved_path=None):
     return resolved_path
 
 
-def create_bash_command(wf_name, step, tool):
+def create_bash_command(wf_name, step, tool, mutation=None):
     workflows_dir = f"{WORKFLOWS_BASE_DIR}/{wf_name}"
     inputs_dir = f"{workflows_dir}/inputs"
     outputs_dir = f"{workflows_dir}/outputs"
-    outdir = f"{outputs_dir}/{step}"
-    inputs_file = f"{inputs_dir}/{step}.yml"
     cwl_file = f"{workflows_dir}/biobb_adapters/{tool}.cwl"
+
+    # With a mutation the step runs once per mutation: its inputs live in
+    # inputs/<mutation_tag>/ (the tag is the mutation with ':' -> '_') and its
+    # outputs go to outputs/<step>_<mutation_tag>. Cross-step references in
+    # those per-mutation inputs must point at the suffixed output folders.
+    if mutation:
+        mtag = mutation.replace(":", "_")
+        outdir = f"{outputs_dir}/{step}_{mtag}"
+        inputs_file = f"{inputs_dir}/{mtag}/{step}.yml"
+    else:
+        outdir = f"{outputs_dir}/{step}"
+        inputs_file = f"{inputs_dir}/{step}.yml"
 
     return (
         f"mkdir -p {outdir} && "

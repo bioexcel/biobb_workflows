@@ -1,0 +1,18 @@
+config: '{"properties": {"mdp": {"nsteps": 50000, "tc-grps": "Protein Water_and_ions"}, "simulation_type": "npt"}}'
+input_cpt_path:
+  class: File
+  format: https://edamontology.org/format_2333
+  path: step12_mdrun_nvt_A_Gly4Lys/output_cpt_path
+input_gro_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: step12_mdrun_nvt_A_Gly4Lys/output_gro_path
+input_ndx_path:
+  class: File
+  format: https://edamontology.org/format_2033
+  path: step100_make_ndx_A_Gly4Lys/output_ndx_path
+input_top_zip_path:
+  class: File
+  format: https://edamontology.org/format_3987
+  path: step8_genion_A_Gly4Lys/output_top_zip_path
+output_tpr_path: gppnpt.tpr
