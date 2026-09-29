@@ -10,7 +10,7 @@ in CI); `docker/` and `jupyter/` are local e2e scripts (see
 ```console
 cd biobb_workflows/biobb_wf_pmx_tutorial/tests
 
-./docker/run_test.sh            # build image + run MODE=python + assert outputs
+./docker/run_test.sh            # build image + run the pytest suite in it + assert outputs
 ./jupyter/run_test.sh           # execute the tutorial notebook in the image
 ./run_all.sh [docker jupyter]
 KEEP=1 ./docker/run_test.sh     # keep image/work dir for inspection
@@ -26,7 +26,7 @@ as an artefact; locally, just inspect it.
 
 | Flavour | Needs |
 | --- | --- |
-| docker | docker daemon. Image build pulls the conda env and fetches the notebook/env + `python/workflow.py` from GitHub `main` at build time. |
+| docker | docker daemon + network at test time (one `pip install pytest` into the image env). Image build pulls the conda env and fetches the notebook/env + `python/workflow.py` from GitHub `main` at build time. |
 | jupyter | docker daemon (same image as the docker flavour — both share `biobb_wf_pmx_tutorial:test`). The notebook env (from the jupyter repo) ships `jupyter` + `plotly`. |
 
 Apple Silicon: the scripts auto-add `--platform linux/amd64` and warn — runs
@@ -36,41 +36,42 @@ are emulated (slow).
 
 The workflow is the PMX alchemical-mutation tutorial (10Ala -> 10Ile,
 fast-growth TI): per state (stateA/stateB) and per extracted trajectory frame
-it runs the hybrid-topology protocol (pmx mutate, pdb2gmx, gentop, make_ndx,
-energy minimization for stateB, equilibration, thermodynamic integration),
-then `pmx_analyse` (FDTI) over the collected dhdl files.
+it runs the hybrid-topology protocol (trjconv, pmx mutate, pdb2gmx, gentop,
+make_ndx, energy minimization for stateB, equilibration, thermodynamic
+integration), then `pmx_analyse` (FDTI) over the collected dhdl files.
 
-- **docker**: container exit code 0 and the final outputs exist non-empty:
+- **docker**: the same pytest suite the CI python flavour runs, executed
+  inside the published image's conda env — pytest exit code 0 (every step's
+  own output checks pass) and the final outputs exist non-empty:
   `pmx.txt` + `pmx.plots.png` (step11_pmx_analyse).
 - **jupyter**: `nbconvert --execute` exits 0, `executed.ipynb` has no error
   cells, and `pmx.txt` + `pmx.plots.png` exist non-empty.
 
 ## Notes
 
-- **Runtime (docker)**: the unreduced workflow extracts every other frame
-  of the 1 ns trajectories (step0 `end: 1000`, `skip: 2`) and would take
-  hours. `adjust_runtime` in `docker/run_test.sh` (a) reduces every mdp
-  `nsteps` to 50 — the same reduction the CI python flavour applies
-  (`python-reusable.yaml`) — and (b) caps the frames via step0 `skip`,
-  **calibrated at run time**: `count_traj_frames` runs `gmx trjconv` in the
-  image to count the actual trajectory frames, then sets `skip ≈ N/4`
-  (~4 frames per state). The calibration is required because the committed
-  trajectories are short (< 50 frames): both a time cap (`end: 3` matches no
-  frame) and a fixed `skip: 50` (bigger than the trajectory) made
-  `gmx trjconv` exit 1 with an empty zip, which `workflow.py` does not
-  check and which silently skips all per-frame work.
+- **Runtime (docker)**: the docker lane runs the pytest suite, not
+  `workflow.py` — the script loops over ALL frames step0 extracts from the 1
+  ns trajectories (~25 per state, step0 `end: 1000`, `skip: 2`) and would
+  take far too long for CI, while the suite runs the identical protocol on
+  2 frames per state (what the python lane validates). The only reduction is
+  the same one the CI python flavour applies (`python-reusable.yaml` seds
+  every mdp `nsteps` in `python/workflow.yml` to 50). No frame cap, no
+  preflight. `workflow.py`'s full-frame orchestration is therefore not
+  exercised in CI (the notebook lane covers the protocol steps in the
+  image).
 - **Runtime (jupyter)**: the notebook processes ONE frame per state (cell 3);
   `adjust_runtime` in `jupyter/run_test.sh` reduces every mdp `nsteps` to 50
   (same value as the docker/CI flavours) in the local notebook copy before
   execution.
-- **Inputs**: the workflow/notebook reference the state files with relative
-  paths (`pmx_tutorial/state{A,B}.tpr|xtc`), so both e2e scripts copy the
-  committed `docker/pmx_tutorial/` files into the work dir. The docker
-  workflow generates its own `dhdlA.zip`/`dhdlB.zip` (from the dhdl files of
-  its TI runs), but the **notebook's final pmx_analyse cell uses the
-  committed `pmx_tutorial/dhdl{A,B}.zip`** — per the notebook comment the
-  tutorial computes only one transition, so the FDTI analysis uses values
-  from a real snase run — hence the jupyter test copies those too.
+- **Inputs**: the docker lane copies the suite's own committed inputs
+  (`tests/python/pmx_tutorial/state{A,B}.tpr|xtc`) into the work dir with
+  the same relative layout the CI python flavour uses (CWD = `tests/python`,
+  config at `../../python/workflow.yml`). The jupyter lane copies the
+  committed `docker/pmx_tutorial/` files — including
+  `dhdl{A,B}.zip`, because the **notebook's final pmx_analyse cell uses
+  those pre-computed zips** (per the notebook comment the tutorial computes
+  only one transition, so the FDTI analysis uses values from a real snase
+  run) instead of the dhdl files its own TI runs write.
 - **python 3.12 path**: `python/workflow.py` and the notebook hardcode the
   pmx force-field lib under `$CONDA_PREFIX/lib/python3.12/site-packages/pmx/
   data/mutff/` — the image env must resolve to python 3.12 (as the CI env
