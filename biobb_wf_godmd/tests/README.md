@@ -27,7 +27,7 @@ the on-failure step tars + uploads it as an artefact; locally, just inspect it.
 | Flavour | Needs |
 | --- | --- |
 | docker | docker daemon. Image build pulls the conda env and fetches env.yml/notebook/workflow.py from GitHub `main` at build time. |
-| cwl | docker daemon + `cwltool` (e.g. `micromamba create -n cwl -c conda-forge cwltool`). Tool images (quay.io/biocontainers/*, 5.2.1) are pre-pulled with retries. |
+| cwl | docker daemon + `cwltool` (e.g. `micromamba create -n cwl -c conda-forge cwltool`). Tool images (quay.io/biocontainers/*, 5.3.0) are pre-pulled with retries. |
 | airflow | docker daemon reachable from the container (`/var/run/docker.sock`) for the nested tool containers. Builds a throwaway `biobb-airflow-test:3.3.2` image. |
 | jupyter | docker daemon (same image as the docker flavour — built once, shared tag). **Network access** — the notebook fetches the 1ake/4ake PDBs from RCSB at runtime. |
 
