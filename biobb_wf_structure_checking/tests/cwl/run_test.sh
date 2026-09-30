@@ -95,22 +95,43 @@ adjust_runtime "$CWL_DIR/workflow_input_descriptions.yml"
 # hours. Guard with GNU coreutils `timeout` (Linux runners); skipped where
 # unavailable (macOS). On a timeout the killed cwltool may leave the running
 # tool container orphaned (locally: check `docker ps -a`).
-CWL_TIMEOUT_MIN="${CWL_TIMEOUT_MIN:-180}"
-echo ">>> [2/3] cwltool run (timeout ${CWL_TIMEOUT_MIN} min)"
-set +e
-# shellcheck disable=SC2086
-if command -v timeout >/dev/null 2>&1; then
-  ( cd "$CWL_DIR" && timeout --kill-after=60 "${CWL_TIMEOUT_MIN}m" \
-      cwltool --outdir "$OUT_DIR" \
-      workflow.cwl workflow_input_descriptions.yml $EXTRA_CWL_ARGS ) \
-    > "$OUT_DIR/cwltool.log" 2>&1
-else
-  ( cd "$CWL_DIR" && cwltool --outdir "$OUT_DIR" \
-      workflow.cwl workflow_input_descriptions.yml $EXTRA_CWL_ARGS ) \
-    > "$OUT_DIR/cwltool.log" 2>&1
-fi
-RC=$?
-set -e
+#
+# The workflow makes a few small network calls (structure_check resolves
+# ligand names via the BSC monomers API; fix_pdb fetches the forced UniProt
+# reference), all of which can fail transiently from CI. Retry the whole run
+# a few times before failing (a hang is NOT retried — it is not transient).
+CWL_TIMEOUT_MIN="${CWL_TIMEOUT_MIN:-60}"
+CWL_MAX_ATTEMPTS="${CWL_MAX_ATTEMPTS:-3}"
+echo ">>> [2/3] cwltool run (up to $CWL_MAX_ATTEMPTS attempts, ${CWL_TIMEOUT_MIN} min each)"
+RC=1
+for attempt in $(seq 1 "$CWL_MAX_ATTEMPTS"); do
+  set +e
+  # shellcheck disable=SC2086
+  if command -v timeout >/dev/null 2>&1; then
+    ( cd "$CWL_DIR" && timeout --kill-after=60 "${CWL_TIMEOUT_MIN}m" \
+        cwltool --outdir "$OUT_DIR" \
+        workflow.cwl workflow_input_descriptions.yml $EXTRA_CWL_ARGS ) \
+      > "$OUT_DIR/cwltool.log" 2>&1
+  else
+    ( cd "$CWL_DIR" && cwltool --outdir "$OUT_DIR" \
+        workflow.cwl workflow_input_descriptions.yml $EXTRA_CWL_ARGS ) \
+      > "$OUT_DIR/cwltool.log" 2>&1
+  fi
+  RC=$?
+  set -e
+  if [[ "$RC" -eq 0 ]]; then
+    break
+  fi
+  if [[ "$RC" -eq 124 || "$RC" -eq 137 ]]; then
+    break
+  fi
+  if [[ "$attempt" -lt "$CWL_MAX_ATTEMPTS" ]]; then
+    echo "  attempt $attempt/$CWL_MAX_ATTEMPTS failed (rc=$RC) — last 10 log lines:"
+    tail -10 "$OUT_DIR/cwltool.log" | sed 's/^/    /'
+    echo "  retrying in 30 s (transient network failure in a structure_check ligand-name lookup or the UniProt reference fetch?)"
+    sleep 30
+  fi
+done
 
 if [[ "$RC" -eq 124 || "$RC" -eq 137 ]]; then
   echo "FAIL: cwltool HUNG (killed after ${CWL_TIMEOUT_MIN} min) — last 50 log lines (stuck step = last step in the log):"
@@ -118,7 +139,7 @@ if [[ "$RC" -eq 124 || "$RC" -eq 137 ]]; then
   exit "$RC"
 fi
 if [[ "$RC" -ne 0 ]]; then
-  echo "FAIL: cwltool exited with code $RC — last 50 log lines:"
+  echo "FAIL: cwltool exited with code $RC after $CWL_MAX_ATTEMPTS attempt(s) — last 50 log lines:"
   tail -50 "$OUT_DIR/cwltool.log"
   exit "$RC"
 fi

@@ -1,5 +1,6 @@
 import pytest
 import glob
+import time
 from pathlib import Path
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
@@ -30,7 +31,19 @@ def step0_structure_check_init(config, system=None):
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    structure_check(**global_paths["step0_structure_check_init"], properties=global_prop["step0_structure_check_init"])
+    # biobb_structure_checking (<=3.16.2) fetches each metal/ligand residue
+    # name from the BSC monomers API (mdb-login.bsc.es) without a fallback:
+    # one failed lookup aborts the whole check. That endpoint is flaky from
+    # CI, so retry the step a few times before giving up.
+    rc = None
+    for attempt in range(3):
+        rc = structure_check(**global_paths["step0_structure_check_init"],
+                             properties=global_prop["step0_structure_check_init"])
+        if rc == 0:
+            break
+        print(f"step0: structure_check failed (rc={rc}, attempt {attempt + 1}/3) — retrying in 10 s (transient monomers API error?)")
+        time.sleep(10)
+    assert rc == 0
 
     assert fx.not_empty(global_paths["step0_structure_check_init"]["output_summary_path"])
 

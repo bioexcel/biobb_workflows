@@ -215,26 +215,50 @@ adjust_runtime "$WORK_DIR/python/workflow.yml"
 
 # A stuck suite step would otherwise hold the lane for hours; the container
 # is removed by the cleanup trap if `timeout` kills the docker client.
-TEST_TIMEOUT_MIN="${TEST_TIMEOUT_MIN:-120}"
-echo ">>> [3/4] run the pytest suite in the container (env: $WF_NAME, timeout ${TEST_TIMEOUT_MIN} min)"
-set +e
-# shellcheck disable=SC2046
-if command -v timeout >/dev/null 2>&1; then
-  timeout --kill-after=60 "${TEST_TIMEOUT_MIN}m" \
+#
+# The suite makes a few small network calls (structure_check resolves ligand
+# names via the BSC monomers API — with its own in-suite retry; fix_pdb
+# fetches the forced UniProt reference) that can fail transiently from CI.
+# Retry the whole run a few times before failing (a hang is NOT retried).
+# Thanks to biobb's restart check, a re-run skips the steps that already
+# produced their outputs, so a retry re-runs only the failed step onwards.
+TEST_TIMEOUT_MIN="${TEST_TIMEOUT_MIN:-60}"
+SUITE_MAX_ATTEMPTS="${SUITE_MAX_ATTEMPTS:-3}"
+echo ">>> [3/4] run the pytest suite in the container (env: $WF_NAME, up to $SUITE_MAX_ATTEMPTS attempts, ${TEST_TIMEOUT_MIN} min each)"
+RC=1
+for attempt in $(seq 1 "$SUITE_MAX_ATTEMPTS"); do
+  set +e
+  # shellcheck disable=SC2046
+  if command -v timeout >/dev/null 2>&1; then
+    timeout --kill-after=60 "${TEST_TIMEOUT_MIN}m" \
+      docker run ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
+      --name "$CONTAINER" \
+      -v "$WORK_DIR:/data/wf_python" \
+      "$IMAGE" \
+      "$(run_cmd)"
+  else
     docker run ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
-    --name "$CONTAINER" \
-    -v "$WORK_DIR:/data/wf_python" \
-    "$IMAGE" \
-    "$(run_cmd)"
-else
-  docker run ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
-    --name "$CONTAINER" \
-    -v "$WORK_DIR:/data/wf_python" \
-    "$IMAGE" \
-    "$(run_cmd)"
-fi
-RC=$?
-set -e
+      --name "$CONTAINER" \
+      -v "$WORK_DIR:/data/wf_python" \
+      "$IMAGE" \
+      "$(run_cmd)"
+  fi
+  RC=$?
+  set -e
+  if [[ "$RC" -eq 0 ]]; then
+    break
+  fi
+  if [[ "$RC" -eq 124 || "$RC" -eq 137 ]]; then
+    break
+  fi
+  if [[ "$attempt" -lt "$SUITE_MAX_ATTEMPTS" ]]; then
+    echo "  attempt $attempt/$SUITE_MAX_ATTEMPTS failed (rc=$RC) — last 20 log lines:"
+    docker logs "$CONTAINER" 2>&1 | tail -20 | sed 's/^/    /'
+    echo "  retrying in 30 s (transient network failure: structure_check ligand-name lookup or the UniProt reference fetch?)"
+    docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
+    sleep 30
+  fi
+done
 
 if [[ "$RC" -eq 124 || "$RC" -eq 137 ]]; then
   echo "FAIL: suite HUNG (killed after ${TEST_TIMEOUT_MIN} min) — last 50 log lines (stuck step = last step in the log):"
@@ -242,7 +266,7 @@ if [[ "$RC" -eq 124 || "$RC" -eq 137 ]]; then
   exit "$RC"
 fi
 if [[ "$RC" -ne 0 ]]; then
-  echo "FAIL: pytest in container exited with code $RC — last 50 log lines:"
+  echo "FAIL: pytest in container exited with code $RC after $SUITE_MAX_ATTEMPTS attempt(s) — last 50 log lines:"
   docker logs "$CONTAINER" 2>&1 | tail -50
   exit "$RC"
 fi

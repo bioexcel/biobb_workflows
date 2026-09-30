@@ -217,26 +217,50 @@ echo "$WORK_DIR" > "$SCRIPT_DIR/.e2e_workdir"
 
 # A stuck notebook cell would otherwise hold the lane for hours; the
 # container is removed by the cleanup trap if `timeout` kills the client.
-TEST_TIMEOUT_MIN="${TEST_TIMEOUT_MIN:-120}"
-echo ">>> [4/5] execute notebook in container (jupyter nbconvert --execute, timeout ${TEST_TIMEOUT_MIN} min)"
-set +e
-# shellcheck disable=SC2046
-if command -v timeout >/dev/null 2>&1; then
-  timeout --kill-after=60 "${TEST_TIMEOUT_MIN}m" \
+#
+# The notebook touches the network in a few places (it downloads the 1Z83
+# structure from RCSB; structure_check resolves ligand names via the BSC
+# monomers API; fix_pdb fetches the forced UniProt reference) and any of
+# those calls can fail transiently from CI — retry the whole run a few
+# times before failing (a hang is NOT retried — it is not transient).
+TEST_TIMEOUT_MIN="${TEST_TIMEOUT_MIN:-60}"
+NB_MAX_ATTEMPTS="${NB_MAX_ATTEMPTS:-3}"
+echo ">>> [4/5] execute notebook in container (jupyter nbconvert --execute, up to $NB_MAX_ATTEMPTS attempts, ${TEST_TIMEOUT_MIN} min each)"
+RC=1
+for attempt in $(seq 1 "$NB_MAX_ATTEMPTS"); do
+  set +e
+  # shellcheck disable=SC2046
+  if command -v timeout >/dev/null 2>&1; then
+    timeout --kill-after=60 "${TEST_TIMEOUT_MIN}m" \
+      docker run ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
+      --name "$CONTAINER" \
+      -v "$WORK_DIR:/data/wf_notebook" \
+      "$IMAGE" \
+      "$(execute_notebook_cmd)"
+  else
     docker run ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
-    --name "$CONTAINER" \
-    -v "$WORK_DIR:/data/wf_notebook" \
-    "$IMAGE" \
-    "$(execute_notebook_cmd)"
-else
-  docker run ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} \
-    --name "$CONTAINER" \
-    -v "$WORK_DIR:/data/wf_notebook" \
-    "$IMAGE" \
-    "$(execute_notebook_cmd)"
-fi
-RC=$?
-set -e
+      --name "$CONTAINER" \
+      -v "$WORK_DIR:/data/wf_notebook" \
+      "$IMAGE" \
+      "$(execute_notebook_cmd)"
+  fi
+  RC=$?
+  set -e
+  if [[ "$RC" -eq 0 ]]; then
+    break
+  fi
+  if [[ "$RC" -eq 124 || "$RC" -eq 137 ]]; then
+    break
+  fi
+  if [[ "$attempt" -lt "$NB_MAX_ATTEMPTS" ]]; then
+    echo "  attempt $attempt/$NB_MAX_ATTEMPTS failed (rc=$RC) — last 20 log lines:"
+    docker logs "$CONTAINER" 2>&1 | tail -20 | sed 's/^/    /'
+    echo "  retrying in 30 s (transient network failure: RCSB structure download, structure_check ligand-name lookup or the UniProt reference fetch?)"
+    docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
+    rm -f "$WORK_DIR/executed.ipynb"
+    sleep 30
+  fi
+done
 
 if [[ "$RC" -eq 124 || "$RC" -eq 137 ]]; then
   echo "FAIL: nbconvert HUNG (killed after ${TEST_TIMEOUT_MIN} min) — last 80 log lines (stuck cell = last cell in the log):"
@@ -244,7 +268,7 @@ if [[ "$RC" -eq 124 || "$RC" -eq 137 ]]; then
   exit "$RC"
 fi
 if [[ "$RC" -ne 0 ]]; then
-  echo "FAIL: nbconvert exited with code $RC — last 80 log lines:"
+  echo "FAIL: nbconvert exited with code $RC after $NB_MAX_ATTEMPTS attempt(s) — last 80 log lines:"
   docker logs "$CONTAINER" 2>&1 | tail -80
   exit "$RC"
 fi
