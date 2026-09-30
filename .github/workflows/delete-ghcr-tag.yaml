@@ -36,11 +36,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GH_PAT }}
 
-      - name: Install crane
+      - name: Install crane (from source)
         run: |
-          curl -fsSL https://github.com/google/go-containerregistry/releases/latest/download/crane-linux-amd64 -o crane
-          chmod +x crane
-          sudo mv crane /usr/local/bin/crane
+          go install github.com/google/go-containerregistry/cmd/crane@latest
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+          crane version
 
       - name: Delete the tag
         env:
