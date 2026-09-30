@@ -258,8 +258,9 @@ no cwl/airflow directories), `biobb_wf_protein_md_analysis` in the one
 available one (docker, 5.3.x; no cwl/airflow/jupyter directories),
 `biobb_wf_protein-complex_md_setup` and `biobb_wf_structure_checking` in
 all four flavours (5.3.x) and `biobb_wf_virtual-screening_fpocket` in all
-four flavours (5.2.x — e2e tests first, version bump pending). Next in the
-queue: flexserv, flexdyn.
+four flavours (5.2.x → 5.3.x; the jupyter env also bumped biobb_io to
+5.3.1 — 5.2.3 pins biobb_common 5.2.2 and would not resolve next to the
+5.3.0 packages). Next in the queue: flexserv, flexdyn.
 
 Per-workflow checklist (10–30 min each):
 1. Copy `tests/{docker,cwl,airflow}` + adjust `WF_NAME`, `EXPECTED_OUTPUTS` (from the last
