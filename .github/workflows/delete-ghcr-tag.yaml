@@ -1,0 +1,66 @@
+name: GHCR delete tag
+
+# Removes a SINGLE tag from a ghcr.io image WITHOUT deleting the underlying
+# image. Other tags pointing at the same digest (e.g. latest / 2026.1) are
+# untouched. Use to drop a stray or mislabelled tag after a retag (e.g. 2026.2).
+#
+# Do NOT use the package page's "Delete version" for this: that removes the
+# whole image digest and would take latest / 2026.1 with it.
+
+on:
+  workflow_dispatch:
+    inputs:
+      wf:
+        description: 'Workflow image (e.g. biobb_wf_flexdyn)'
+        required: true
+        default: 'biobb_wf_flexdyn'
+        type: string
+      tag:
+        description: 'Tag to delete (e.g. 2026.2). Never "latest".'
+        required: true
+        default: '2026.2'
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  delete:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GH_PAT }}
+
+      - name: Install crane
+        run: |
+          curl -fsSL https://github.com/google/go-containerregistry/releases/latest/download/crane-linux-amd64 -o crane
+          chmod +x crane
+          sudo mv crane /usr/local/bin/crane
+
+      - name: Delete the tag
+        env:
+          WF: ${{ inputs.wf }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          set -uo pipefail
+          : "${WF:?wf is required}"
+          : "${TAG:?tag is required}"
+          if [ "$TAG" = "latest" ]; then
+            echo "REFUSING to delete 'latest'"; exit 1
+          fi
+          # crane reads the ghcr.io credentials written by docker/login-action.
+          # Deleting by tag only removes that tag reference, not the image.
+          echo "Deleting ghcr.io/bioexcel/${WF}:${TAG}"
+          if crane delete "ghcr.io/bioexcel/${WF}:${TAG}"; then
+            echo "OK: deleted ${WF}:${TAG}"
+          else
+            echo "WARNING: crane delete failed (tag may not exist, or auth/permission issue)"
+          fi
+          echo
+          echo "Remaining tags for ${WF}:"
+          crane ls "ghcr.io/bioexcel/${WF}"
