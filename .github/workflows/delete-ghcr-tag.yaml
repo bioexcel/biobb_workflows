@@ -39,7 +39,9 @@ jobs:
       - name: Install crane (from source)
         run: |
           go install github.com/google/go-containerregistry/cmd/crane@latest
-          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+          CRANE_BIN="$(go env GOPATH)/bin"
+          export PATH="${CRANE_BIN}:$PATH"
+          echo "${CRANE_BIN}" >> "$GITHUB_PATH"
           crane version
 
       - name: Delete the tag
