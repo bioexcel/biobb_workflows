@@ -91,7 +91,7 @@ PATCHES = {
 }
 
 
-# Per-workflow version labels: <wf>/docker/VERSION (a single line, e.g. 2026.2)
+# Per-workflow version labels: <wf>/docker/VERSION (a single line, e.g. 2026.1)
 # overrides the template's LABEL version=, so each workflow's image can be
 # versioned independently. Bump the file when that workflow's image content
 # changes — the publish workflow tags with the same value.

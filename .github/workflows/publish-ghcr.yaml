@@ -79,7 +79,14 @@ jobs:
     name: Detect workflows to publish
     # the bot that commits the regenerated per-wf Dockerfiles (docker.yaml) is
     # the follow-up of the same change — do not start a second chain for it
-    if: github.actor != 'github-actions[bot]'
+    #
+    # TEMPORARY (2026.1 relabel): image publishing is disabled while the
+    # 2026.2 -> 2026.1 tag surgery + docker/VERSION relabel happens, so a push
+    # of the VERSION files does not rebuild/republish every image. Disabling
+    # detect cascades: select no-ops to empty matrices, so test + publish are
+    # skipped for every trigger (push / workflow_call / workflow_dispatch).
+    # RE-ENABLE: restore  if: github.actor != 'github-actions[bot]'
+    if: false
     uses: ./.github/workflows/detect.yaml
     with:
       # a call (probe) or a dispatch selects explicitly; a push selects by path

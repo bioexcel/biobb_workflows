@@ -70,7 +70,7 @@ Bumping a tool version (e.g. `biobb_chemistry`) for **one** workflow, end to end
    the publish chain (step 4). The manual "Flavour e2e Tests" workflow remains for ad-hoc
    subsets. A wf opts out of a flavour's auto tests with `tests/<flavour>/SKIP`.
 3. **Bump the image label** (so the new content gets a new tag and the old image keeps its
-   tag): update `<wf>/docker/VERSION` (one line, e.g. `2026.2`; the file is absent for
+    tag): update `<wf>/docker/VERSION` (one line, e.g. `2026.1`; the file is absent for
    workflows that follow the shared template label). Steps 2–3 land in the same push.
 4. **Test + publish (automatic)**: the push touches `biobb_wf_X/docker/**` — or the
    image-baked `biobb_wf_X/python/workflow.py` / `workflow.env.yml` (e.g. the env-pin bump

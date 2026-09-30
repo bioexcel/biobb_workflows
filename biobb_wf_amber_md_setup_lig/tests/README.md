@@ -47,7 +47,7 @@ Notes specific to this workflow:
   `python/workflow.yml` itself stays MPI.
 - The docker image env pins `mkl <2026` (mkl 2026.x dropped
   `libmkl_core.so.2`, which cpptraj needs — see `python/workflow.env.yml`),
-  and `docker/VERSION` (2026.2) carries the image version label.
+   and `docker/VERSION` (2026.1) carries the image version label.
 
 Runtime on a native amd64 machine, with reduced sander steps and
 pre-pulled images: docker ~15–30 min, jupyter similar, cwl/airflow similar
