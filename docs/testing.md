@@ -260,11 +260,13 @@ available one (docker, 5.3.x; no cwl/airflow/jupyter directories),
 all four flavours (5.3.x) and `biobb_wf_virtual-screening_fpocket` in all
 four flavours (5.2.x → 5.3.x; the jupyter env also bumped biobb_io to
 5.3.1 — 5.2.3 pins biobb_common 5.2.2 and would not resolve next to the
-5.3.0 packages) and `biobb_wf_flexserv` in all four flavours (5.2.x; also
-fixed the input dir committed as `FIles` in `python/`, `cwl/` and
+5.3.0 packages) and `biobb_wf_flexserv` in all four flavours (5.2.x → 5.3.x;
+also fixed the input dir committed as `FIles` in `python/`, `cwl/` and
 `airflow/inputs/` → `Files`: every config references
 `Files/1a32.MoDEL.pcz`, which would not resolve on case-sensitive
-filesystems). Next in the queue: flexdyn.
+filesystems; the envs pin `biobb_analysis==5.3.0=pyhdfd78af_1` because that
+is the only 5.3.0 build that ships cpptraj/ambertools and nothing else in the
+env provides it — the adapters use the same build). Next in the queue: flexdyn.
 
 Per-workflow checklist (10–30 min each):
 1. Copy `tests/{docker,cwl,airflow}` + adjust `WF_NAME`, `EXPECTED_OUTPUTS` (from the last
