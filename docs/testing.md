@@ -253,8 +253,9 @@ Progress (2026-09): done in all four flavours — `biobb_wf_amber_abc_setup`,
 `biobb_wf_autoencoder` (5.2.x → 5.3.x), `biobb_wf_md_setup`, `biobb_wf_godmd`
 and `biobb_wf_mem` (5.3.x). `biobb_wf_md_setup_mutations` is done in the
 three available flavours (5.3.x; no jupyter flavour — no notebook repo),
-`biobb_wf_pmx_tutorial` in the two available ones (docker + jupyter, 5.3.x;
-no cwl/airflow directories), `biobb_wf_protein_md_analysis` in the one
+`biobb_wf_pmx_tutorial`, `biobb_wf_dna_helparms` and `biobb_wf_haddock` in
+the two available ones (docker + jupyter, 5.3.x; no cwl/airflow
+directories), `biobb_wf_protein_md_analysis` in the one
 available one (docker, 5.3.x; no cwl/airflow/jupyter directories),
 `biobb_wf_protein-complex_md_setup` and `biobb_wf_structure_checking` in
 all four flavours (5.3.x) and `biobb_wf_virtual-screening_fpocket` in all
@@ -296,8 +297,9 @@ Per-workflow checklist (10–30 min each):
    `jupyter nbconvert --to notebook --execute`. **Pilot done (2026-09-17)**:
    `biobb_wf_ligand_parameterization/tests/jupyter/run_test.sh` (notebook from the
    `jupyter/` submodule or, when absent — the GH Actions case — a shallow clone of
-   `https://github.com/bioexcel/<WF>`; wired to the manual Flavour e2e workflow).
-   Port to the remaining 16 wfs = set `NOTEBOOK` + `EXPECTED_OUTPUTS`.
+    `https://github.com/bioexcel/<WF>`; wired to the manual Flavour e2e workflow).
+    All 17 jupyter wfs ported (2026-09); the per-wf port = set `NOTEBOOK` +
+    `EXPECTED_OUTPUTS`.
 
 ### 3.2 CI wiring (deploy when phase-1 scripts are green on the server)
 
