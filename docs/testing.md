@@ -77,7 +77,7 @@ are the **only** parameter changes CI applies — they are never committed to
 | `biobb_wf_amber_abc_setup` | `mpi_np: 2`, `nstlim: 100`, `maxcyc: 50` |
 | `biobb_wf_amber_md_setup`, `biobb_wf_amber_md_setup_lig` | `mpi_np: 2`, `nstlim: 500`, `maxcyc: 100` |
 | `biobb_wf_pmx_tutorial` | `nsteps: 50` |
-| `biobb_wf_structure_checking` | MPI sander lines stripped (`binary_path: sander.MPI`, `mpi_np`, `mpi_bin`) — the 5.3.x envs resolve the unpinned ambertools dep to the latest nompi build, which ships no `sander.MPI`/`mpirun`; the (short, 500-cycle) minimization runs serially, no step reduction |
+| `biobb_wf_structure_checking` | MPI sander lines stripped (`binary_path: sander.MPI`, `mpi_np`, `mpi_bin`) — the 5.3.x envs resolve the unpinned ambertools dep to the latest nompi build, which ships no `sander.MPI`/`mpirun`; the (short, 500-cycle) minimization runs serially, no step reduction. step16 `fix_pdb` gets `forced_uniprot_references: [P00568]` (human adenylate kinase 1 = 1Z83, committed in the workflow configs): without it the tool BLASTs the chain against NCBI, which is flaky in CI (hangs or times out in containers) |
 | `biobb_wf_md_setup`, `biobb_wf_md_setup_mutations` | `nsteps: 10` |
 | `biobb_wf_protein-complex_md_setup` | free-MD `nsteps: 250000 → 10` only — min/NVT/NPT keep the workflow's own 5000/50000/50000 (a blanket `nsteps: 10` makes the NPT run on an un-equilibrated system: the pressure coupling blows it up and `gmx mdrun` segfaults, exit -11, before writing its `.gro`) |
 

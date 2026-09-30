@@ -125,6 +125,10 @@ inputs:
     label: Output file
     doc: Structure PDB file.
     type: string
+  step16_fix_pdb_config:
+    label: Config file
+    doc: Configuration file for biobb_model.fix_pdb tool.
+    type: string
   step16_fix_pdb_output_pdb_path:
     label: Output file
     doc: Output PDB file path.
@@ -412,6 +416,7 @@ steps:
     doc: Renumerates residues in a PDB structure according to a reference sequence from UniProt
     run: biobb_adapters/fix_pdb.cwl
     in:
+      config: step16_fix_pdb_config
       input_pdb_path: step15_amber_to_pdb/output_pdb_path
       output_pdb_path: step16_fix_pdb_output_pdb_path
     out:

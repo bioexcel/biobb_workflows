@@ -133,6 +133,15 @@ step16_fix_pdb:
   paths:
     input_pdb_path: dependency/step15_amber_to_pdb/output_pdb_path
     output_pdb_path: structure.final.pdb
+  properties:
+    # fix_pdb renumbers chains against a UniProt reference sequence; without
+    # a forced reference it BLASTs the chain against NCBI (swissprot), a web
+    # service that is flaky in CI (hangs or times out in containers). 1Z83
+    # is human adenylate kinase 1 (P00568); the chain aligns to it
+    # (normalized score 4.96 >= 1), so the BLAST step is skipped and only a
+    # single UniProt fetch is needed.
+    forced_uniprot_references:
+      - P00568
 
 step17_structure_check:
   tool: structure_check

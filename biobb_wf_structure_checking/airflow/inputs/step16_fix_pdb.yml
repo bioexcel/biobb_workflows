@@ -1,3 +1,4 @@
+config: '{"properties": {"forced_uniprot_references": ["P00568"]}}'
 input_pdb_path:
   class: File
   format: https://edamontology.org/format_1476
