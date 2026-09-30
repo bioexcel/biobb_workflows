@@ -266,7 +266,17 @@ also fixed the input dir committed as `FIles` in `python/`, `cwl/` and
 `Files/1a32.MoDEL.pcz`, which would not resolve on case-sensitive
 filesystems; the envs pin `biobb_analysis==5.3.0=pyhdfd78af_1` because that
 is the only 5.3.0 build that ships cpptraj/ambertools and nothing else in the
-env provides it — the adapters use the same build). Next in the queue: flexdyn.
+env provides it — the adapters use the same build). `biobb_wf_flexdyn`
+(the last workflow in the campaign) has its four e2e scripts created on
+5.2.x (docker/cwl/airflow/jupyter); once the 5.2.x lanes are green, the
+5.3.x bump follows (as for flexserv, the envs must pin
+`biobb_analysis==5.3.0=pyhdfd78af_1` — the only 5.3.0 build with cpptraj,
+which flexdyn needs and nothing else in the env provides). Note: the
+committed cwl/airflow flavours of flexdyn have **no trjcat step** — step27
+(gmx_cluster) clusters the DMD fitted trajectory (step14) instead of the
+concatenated 5-method trajectory the python flavour builds (step25), and use
+`cutoff: 0.07` vs the python `0.12`; a pre-existing divergence the e2e does
+not change (each flavour validates its own pipeline).
 
 Per-workflow checklist (10–30 min each):
 1. Copy `tests/{docker,cwl,airflow}` + adjust `WF_NAME`, `EXPECTED_OUTPUTS` (from the last
