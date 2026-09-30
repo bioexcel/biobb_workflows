@@ -61,6 +61,7 @@ on:
           - biobb_wf_pmx_tutorial
           - biobb_wf_protein_md_analysis
           - biobb_wf_protein-complex_md_setup
+          - biobb_wf_structure_checking
           - biobb_wf_virtual-screening_fpocket
       skip_tests:
         description: 'Skip the docker e2e tests (rebuild only — not recommended)'
