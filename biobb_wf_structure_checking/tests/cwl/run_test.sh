@@ -76,10 +76,18 @@ restore_inputs() {
 cleanup() {
   local rc=$?
   restore_inputs
-  if [[ "$KEEP" -ne 1 ]]; then
-    rm -rf "$OUT_DIR"
+  if [[ "$rc" -eq 0 ]]; then
+    rm -f "$SCRIPT_DIR/.e2e_workdir"
+    if [[ "$KEEP" -ne 1 ]]; then
+      rm -rf "$OUT_DIR"
+    else
+      echo "Kept: out=$OUT_DIR"
+    fi
   else
-    echo "Kept: out=$OUT_DIR"
+    # keep the workdir (full cwltool.log) and record it so the on-failure
+    # artefact step (flavour-test-reusable.yaml) can tar + upload it
+    [[ -d "$OUT_DIR" ]] && echo "$OUT_DIR" > "$SCRIPT_DIR/.e2e_workdir"
+    echo "Kept (failed): out=$OUT_DIR (full log: $OUT_DIR/cwltool.log)"
   fi
   exit "$rc"
 }

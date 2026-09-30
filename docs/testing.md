@@ -255,10 +255,11 @@ and `biobb_wf_mem` (5.3.x). `biobb_wf_md_setup_mutations` is done in the
 three available flavours (5.3.x; no jupyter flavour — no notebook repo),
 `biobb_wf_pmx_tutorial` in the two available ones (docker + jupyter, 5.3.x;
 no cwl/airflow directories), `biobb_wf_protein_md_analysis` in the one
-available one (docker, 5.3.x; no cwl/airflow/jupyter directories) and
+available one (docker, 5.3.x; no cwl/airflow/jupyter directories),
 `biobb_wf_protein-complex_md_setup` and `biobb_wf_structure_checking` in
-all four flavours (5.3.x). Next in the queue: virtual-screening_fpocket,
-flexserv, flexdyn.
+all four flavours (5.3.x) and `biobb_wf_virtual-screening_fpocket` in all
+four flavours (5.2.x — e2e tests first, version bump pending). Next in the
+queue: flexserv, flexdyn.
 
 Per-workflow checklist (10–30 min each):
 1. Copy `tests/{docker,cwl,airflow}` + adjust `WF_NAME`, `EXPECTED_OUTPUTS` (from the last
