@@ -12,7 +12,7 @@ baseCommand: trjcat
 
 hints:
   DockerRequirement:
-    dockerPull: quay.io/biocontainers/biobb_gromacs:5.2.1--pyhdfd78af_0
+    dockerPull: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
 
 inputs:
   input_trj_zip_path:

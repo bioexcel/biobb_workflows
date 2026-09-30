@@ -267,11 +267,13 @@ also fixed the input dir committed as `FIles` in `python/`, `cwl/` and
 filesystems; the envs pin `biobb_analysis==5.3.0=pyhdfd78af_1` because that
 is the only 5.3.0 build that ships cpptraj/ambertools and nothing else in the
 env provides it — the adapters use the same build). `biobb_wf_flexdyn`
-(the last workflow in the campaign) has its four e2e scripts created on
-5.2.x (docker/cwl/airflow/jupyter); once the 5.2.x lanes are green, the
-5.3.x bump follows (as for flexserv, the envs must pin
+(the last workflow in the campaign) is done in all four flavours
+(5.2.x → 5.3.x; as for flexserv, the envs pin
 `biobb_analysis==5.3.0=pyhdfd78af_1` — the only 5.3.0 build with cpptraj,
-which flexdyn needs and nothing else in the env provides). Note: the
+which flexdyn needs and nothing else in the env provides; the gromacs
+binary for `gmx_cluster` comes from `biobb_gromacs==5.3.2`, whose
+cwl/airflow adapter uses the matching `biobb_analysis:5.3.0--gmx2026_2`
+gromacs build). Note: the
 committed cwl/airflow flavours of flexdyn have **no trjcat step** — step27
 (gmx_cluster) clusters the DMD fitted trajectory (step14) instead of the
 concatenated 5-method trajectory the python flavour builds (step25), and use
