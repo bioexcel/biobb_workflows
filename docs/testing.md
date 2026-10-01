@@ -102,7 +102,7 @@ Some workflows ship extra python configs — `workflow.docker.yml` and
 (+ `container_path: docker|singularity`). The python biobb code runs natively
 (pip-installed from `workflow.env.yml`, **no conda**); each step's executables
 (`gmx`, `reduce`, `babel`, `acpype`, ...) run inside the declared container.
-Today `biobb_wf_md_setup` and `biobb_wf_ligand_parameterization` have these.
+Today `biobb_wf_md_setup`, `biobb_wf_ligand_parameterization`, `biobb_wf_protein_md_analysis` and `biobb_wf_dna_helparms` have these.
 
 `tests/python/` adds, per such flavour:
 
@@ -113,7 +113,7 @@ Today `biobb_wf_md_setup` and `biobb_wf_ligand_parameterization` have these.
   only — a bare `pytest` collects nothing, since none of the files match `test_*.py`.
 - `run_container_test.sh <flavour> [wf_name]` — the local + CI entry point. It:
   1. creates a venv and `pip install`s the `biobb_*` packages from
-     `workflow.env.yml` (+ pytest, imagehash);
+      `workflow.env.yml` (+ pytest, imagehash, matplotlib);
    2. copies `workflow.<flavour>.yml` to a scratch file and seds `nsteps → 10`
       where present (MD workflows; a no-op otherwise; `FULL_STEPS=1` skips it);
     3. **docker**: checks the daemon, and injects `container_user_id: <uid>:<gid>` into
@@ -130,7 +130,12 @@ Today `biobb_wf_md_setup` and `biobb_wf_ligand_parameterization` have these.
        needed there;
   4. runs `pytest biobb_wf_<name>_<flavour>.py --config <scratch> --remove` from
      `tests/python/` (CWD — `file:` inputs + the work dir + `*.sif` land here), then
-     removes the venv / scratch / work dir / `*.sif` (`KEEP=1` to keep them).
+      removes the venv / scratch / work dir / `*.sif` (`KEEP=1` to keep them).
+
+`matplotlib` is in that install because the biobb plotting tools (e.g. `biobb_dna`'s
+`dna_averages`/correlation steps) render their `.jpg` plots from the **native** python:
+conda supplies matplotlib, but `pip install biobb_*` omits it, so without it those steps
+die with `ModuleNotFoundError: No module named 'matplotlib'`.
 
 CI wiring: `python-container-tests.yaml` uses the shared `detect.yaml` (as the cwl /
 airflow / jupyter e2e do) to test **only the workflow(s) changed in the push** — so

@@ -103,6 +103,9 @@ grep -E '^[[:space:]]*-[[:space:]]*biobb_[a-z0-9_]+==' "$ENV_FILE" \
   | sed -E 's/^[[:space:]]*-[[:space:]]*//' > "$REQS"
 echo "pytest" >> "$REQS"
 echo "imagehash" >> "$REQS"
+# biobb plotting tools write .jpg outputs with matplotlib; conda supplies it, but
+# pip-installing the biobb_* packages omits it, so add it to the test venv.
+echo "matplotlib" >> "$REQS"
 echo "==> pip installing:"; sed 's/^/    /' "$REQS"
 "$VENV/bin/pip" install -r "$REQS"
 # fail fast if any pip-installed biobb package is missing (import name == pip name)
