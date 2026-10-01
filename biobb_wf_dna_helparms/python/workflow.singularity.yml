@@ -9,6 +9,7 @@ step1_biobb_curves:
     input_top_path: file:topology.top
     output_lis_path: curves.out.lis
     output_cda_path: curves.out.cda
+    output_zip_path: curves.out.zip
   properties:
     s1range: '1:12'
     container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
@@ -27,6 +28,7 @@ step2_biobb_canal:
     histo: true
     container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
     container_path: singularity
+    container_working_dir: /data
 
 step4_dna_averages_base_pair_step:
   tool: dna_averages
