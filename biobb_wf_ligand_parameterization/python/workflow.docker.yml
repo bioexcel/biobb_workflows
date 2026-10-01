@@ -15,7 +15,6 @@ step2_babel_minimize:
     hydrogens: false
     container_image: quay.io/biocontainers/biobb_chemistry:5.3.0--pyhdfd78af_0
     container_path: docker
-    container_volume_path: /data
 
 step3_acpype_params_gmx:
   tool: acpype_params_gmx
@@ -29,4 +28,3 @@ step3_acpype_params_gmx:
     charge: -1
     container_image: quay.io/biocontainers/biobb_chemistry:5.3.0--pyhdfd78af_0
     container_path: docker
-    container_volume_path: /data

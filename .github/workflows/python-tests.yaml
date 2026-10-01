@@ -2,18 +2,20 @@ name: Python workflow Tests
 
 on:
   push:
-    # test-what-you-changed: only the python flavour's own paths trigger it
+    # test-what-you-changed: only the python (conda) flavour's own paths trigger it
     # (the always-on push trigger and the weekly full regression were removed
-    # 2026-09-22 — see ci.md)
+    # 2026-09-22 — see ci.md). GitHub allows only `paths` OR `paths-ignore` per event,
+    # so the docker/singularity python flavours (workflow.docker.yml /
+    # workflow.singularity.yml, exercised by python-container-tests.yaml) are excluded
+    # by listing the conda-relevant files: the three standard config names are fixed
+    # by biobb convention, and the step input data lives in tests/python/ (covered by
+    # that glob). A change to only the two container configs must not re-run the
+    # pure-python (conda) tests.
     paths:
-      - 'biobb_wf_*/python/**'
       - 'biobb_wf_*/tests/python/**'
-    # the docker/singularity python flavours are exercised by
-    # python-container-tests.yaml, not this (conda) pipeline — a change to only
-    # those configs must not re-run the pure-python (conda) tests
-    paths-ignore:
-      - 'biobb_wf_*/python/workflow.docker.yml'
-      - 'biobb_wf_*/python/workflow.singularity.yml'
+      - 'biobb_wf_*/python/workflow.yml'
+      - 'biobb_wf_*/python/workflow.env.yml'
+      - 'biobb_wf_*/python/workflow.py'
   workflow_dispatch:
     inputs:
       wf_names:

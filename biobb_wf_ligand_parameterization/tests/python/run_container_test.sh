@@ -56,6 +56,22 @@ if [ -z "${FULL_STEPS:-}" ] && grep -qE '^[[:space:]]*nsteps:' "$CONFIG"; then
   echo "==> nsteps shortened to 10 (set FULL_STEPS=1 to run full lengths)"
 fi
 
+# --- docker: run the container as the invoking (host) user --------------------
+# biobb's docker run has no --user by default, so the container runs as the image
+# user and owns the output files it writes into the sandbox. biobb then
+# post-processes those files on the host (e.g. acpype's gro/itp/top via fileinput),
+# which fails with a PermissionError because the host user can't modify files it
+# doesn't own. Injecting container_user_id into global_properties (biobb merges it
+# into every step) makes it add `--user <uid>:<gid>`, so the container runs as the
+# host user — the same default singularity already uses.
+if [ "$VARIANT" = "docker" ]; then
+  _UGID="$(id -u):$(id -g)"
+  awk -v ins="  container_user_id: \"${_UGID}\"" \
+    '{ print } /^global_properties:/ && !done { print ins; done = 1 }' \
+    "$CONFIG" > "$CONFIG.tmp" && mv "$CONFIG.tmp" "$CONFIG"
+  echo "==> docker: injecting container_user_id ${_UGID} (run container as host user)"
+fi
+
 # --- venv + pip install the biobb packages from workflow.env.yml --------------
 if [ -n "${VENV_DIR:-}" ]; then
   VENV="$VENV_DIR"; VENV_OWNED=0

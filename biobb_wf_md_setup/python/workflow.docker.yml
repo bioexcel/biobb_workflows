@@ -11,7 +11,6 @@ step0_reduce_remove_hydrogens:
   properties:    
     container_image: quay.io/biocontainers/biobb_chemistry:5.3.0--pyhdfd78af_0
     container_path: docker
-    container_volume_path: /data
 
 step1_extract_molecule:
   tool: extract_molecule
@@ -21,7 +20,6 @@ step1_extract_molecule:
   properties:
     container_image: quay.io/biocontainers/biobb_structure_utils:5.3.0--pyhdfd78af_0
     container_path: docker
-    container_volume_path: /data
 
 step00_cat_pdb:
   tool: cat_pdb
@@ -32,7 +30,6 @@ step00_cat_pdb:
   properties:
     container_image: quay.io/biocontainers/biobb_structure_utils:5.3.0--pyhdfd78af_0
     container_path: docker
-    container_volume_path: /data
 
 step2_fix_side_chain:
   tool: fix_side_chain
@@ -42,7 +39,6 @@ step2_fix_side_chain:
   properties:
     container_image: quay.io/biocontainers/biobb_model:5.3.0--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step4_pdb2gmx:
   tool: pdb2gmx
@@ -55,7 +51,6 @@ step4_pdb2gmx:
     water_type: tip3p
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step5_editconf:
   tool: editconf
@@ -67,7 +62,6 @@ step5_editconf:
     box_type: octahedron
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step6_solvate:
   tool: solvate
@@ -79,7 +73,6 @@ step6_solvate:
   properties:
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step7_grompp_genion:
   tool: grompp
@@ -94,7 +87,6 @@ step7_grompp_genion:
       nsteps: 5000
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step8_genion:
   tool: genion
@@ -108,7 +100,6 @@ step8_genion:
     concentration: 0.05
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step9_grompp_min:
   tool: grompp
@@ -123,7 +114,6 @@ step9_grompp_min:
     simulation_type: minimization
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step10_mdrun_min:
   tool: mdrun
@@ -136,7 +126,6 @@ step10_mdrun_min:
   properties:
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step100_make_ndx:
   tool: make_ndx
@@ -147,7 +136,6 @@ step100_make_ndx:
     selection: "System"
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data  
 
 step11_grompp_nvt:
   tool: grompp
@@ -165,7 +153,6 @@ step11_grompp_nvt:
     simulation_type: nvt
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step12_mdrun_nvt:
   tool: mdrun
@@ -179,7 +166,6 @@ step12_mdrun_nvt:
   properties:
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step13_grompp_npt:
   tool: grompp
@@ -196,7 +182,6 @@ step13_grompp_npt:
     simulation_type: npt
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step14_mdrun_npt:
   tool: mdrun
@@ -210,7 +195,6 @@ step14_mdrun_npt:
   properties:
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step15_grompp_md:
   tool: grompp
@@ -227,7 +211,6 @@ step15_grompp_md:
     simulation_type: free
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step16_mdrun_md:
   tool: mdrun
@@ -241,7 +224,6 @@ step16_mdrun_md:
   properties:
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step17_gmx_image1:
   tool: gmx_image
@@ -258,7 +240,6 @@ step17_gmx_image1:
     ur: compact
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step18_gmx_image2:
   tool: gmx_image
@@ -286,7 +267,6 @@ step19_gmx_trjconv_str:
     selection: System
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step20_gmx_energy:
   tool: gmx_energy
@@ -298,7 +278,6 @@ step20_gmx_energy:
     terms: [Potential,Total-Energy]
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step21_gmx_rgyr:
   tool: gmx_rgyr
@@ -312,7 +291,6 @@ step21_gmx_rgyr:
     selection: "Backbone"
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step22_rmsd_first:
   tool: gmx_rms
@@ -325,7 +303,6 @@ step22_rmsd_first:
     selection: "Protein-H"
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 step23_rmsd_exp:
   tool: gmx_rms
@@ -338,7 +315,6 @@ step23_rmsd_exp:
     selection: "Protein-H"
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
 # production MD
 step24_grompp_md:
@@ -358,5 +334,4 @@ step24_grompp_md:
     simulation_type: free
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0 
     container_path: docker
-    container_volume_path: /data
 
