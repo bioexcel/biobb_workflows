@@ -146,6 +146,17 @@ else
       done
 fi
 
+# --- ensure a host /data exists ------------------------------------------------
+# biobb_curves / biobb_canal chdir the host to container_working_dir (/data, the
+# container mount point) before launching. The real files live in biobb's sandbox
+# (tests/python/sandbox_<uuid>), mounted at /data only *inside* the container, so
+# the host has no /data and that chdir fails. Create an empty host /data so the
+# chdir succeeds; the container uses its own /data (the sandbox mount) for the work.
+if [ ! -d /data ]; then
+  sudo mkdir -p /data 2>/dev/null || mkdir -p /data 2>/dev/null || true
+  echo "==> host /data created (stub for the container chdir)"
+fi
+
 # --- run the step-by-step test (CWD = tests/python: file: inputs + work dir) --
 cd "$SCRIPT_DIR"
 echo "==> pytest $TEST_FILE --config $CONFIG --remove"
