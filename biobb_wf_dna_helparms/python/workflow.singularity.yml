@@ -26,6 +26,7 @@ step2_biobb_canal:
   properties:
     series: true
     histo: true
+    sequence: CGCGAATTCGCG
     container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
     container_path: singularity
     container_working_dir: /data
