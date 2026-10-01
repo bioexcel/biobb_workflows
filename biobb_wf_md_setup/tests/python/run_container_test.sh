@@ -133,17 +133,33 @@ else
   fi
   command -v singularity >/dev/null 2>&1 || { echo "ERROR: 'singularity' not available." >&2; exit 1; }
   echo "==> singularity: $(singularity --version 2>&1 | head -n1)"
-  # Pre-pull the UNIQUE images so each package is downloaded ONCE (a workflow may
-  # have many steps that all map to the same image). biobb re-issues
-  # 'singularity pull' per step (a URL never 'exists'), so those only stay cheap
-  # because they share this SINGULARITY_CACHE.
-  echo "==> pre-pulling unique singularity images into $SINGULARITY_CACHE"
-  grep -oE 'container_image:[[:space:]]*[^ ]+' "$CONFIG_SRC" \
-    | sed -E 's/^container_image:[[:space:]]*//' | sort -u \
-    | while read -r url; do
-        echo "   pull: $url"
-        ( cd "$SCRATCH" && singularity pull "$url" )
-      done
+  # Pre-pull each UNIQUE image to a local .sif (absolute path under $SCRATCH) and
+  # rewrite the scratch config's container_image to that local path. biobb's
+  # create_cmd_line re-issues 'singularity pull' for any container_image that is a
+  # URL (a URL never Path().exists()), naming the target with a ':' taken from the
+  # tag (e.g. biobb_dna:5.3.sif) which the registry rejects -> FileNotFoundError.
+  # Pointing container_image at a pre-fetched local .sif makes Path(...).exists()
+  # True, so biobb skips its own (failing) re-pull and execs the .sif directly.
+  echo "==> pre-pulling unique singularity images to local .sif + rewriting config"
+  "$VENV/bin/python" - "$CONFIG" "$SCRATCH" <<'PY'
+import os, re, subprocess, sys
+config, scratch = sys.argv[1], sys.argv[2]
+text = open(config).read()
+urls = sorted(set(re.findall(r'container_image:\s*(\S+)', text)))
+if not urls:
+    print("==> no container_image found; nothing to pre-pull")
+    raise SystemExit(0)
+for url in urls:
+    name = os.path.basename(url).replace(':', '_').replace('/', '_') + '.sif'
+    sif = os.path.join(scratch, name)
+    if not os.path.exists(sif):
+        print(f"   pull: {url} -> {sif}")
+        subprocess.run(['singularity', 'pull', '--name', name, url],
+                       cwd=scratch, check=True)
+    text = text.replace(f'container_image: {url}', f'container_image: {sif}')
+open(config, 'w').write(text)
+print(f"==> {len(urls)} unique image(s) -> local .sif; config rewritten")
+PY
 fi
 
 # --- ensure a host /data exists ------------------------------------------------

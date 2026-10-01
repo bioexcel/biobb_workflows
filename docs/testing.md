@@ -121,13 +121,17 @@ Today `biobb_wf_md_setup`, `biobb_wf_ligand_parameterization`, `biobb_wf_protein
        container as the host user; without it the container runs as the image user, owns
        the output files it writes into the sandbox, and biobb's host-side post-processing
        (e.g. acpype's gro/itp/top via fileinput) hits a `PermissionError`. Images are
-       pulled lazily per step and cached by docker. **singularity**: installs it if
-       missing, exports a persistent `SINGULARITY_CACHE`, and **pre-pulls the unique
-       images** so a workflow whose many steps map to one image (e.g. the ~22
-       `biobb_gromacs` steps in md_setup) downloads it once, not per step (biobb re-issues
-       `singularity pull` per step — a URL never "exists" — so those stay cheap only via
-       the shared cache); it already runs as the host user, so no `container_user_id` is
-       needed there;
+        pulled lazily per step and cached by docker. **singularity**: installs it if
+        missing (exporting a `SINGULARITY_CACHE` for download dedup), then for each
+        **unique** image pulls it to a local `.sif` under the scratch dir and rewrites the
+        scratch config's `container_image` from the registry URL to that **absolute local
+        path**. This is required because biobb's `create_cmd_line` re-issues its own
+        `singularity pull` for any `container_image` that is a URL (a URL never
+        `Path().exists()`), naming the target with a `:` taken from the tag (e.g.
+        `biobb_dna:5.3.sif`) which the registry rejects → `FileNotFoundError`; pointing
+        `container_image` at a pre-fetched local `.sif` makes `Path(...).exists()` True, so
+        biobb skips that failing re-pull and execs the `.sif` directly. It already runs as
+        the host user, so no `container_user_id` is needed there;
   4. runs `pytest biobb_wf_<name>_<flavour>.py --config <scratch> --remove` from
      `tests/python/` (CWD — `file:` inputs + the work dir + `*.sif` land here), then
       removes the venv / scratch / work dir / `*.sif` (`KEEP=1` to keep them).
