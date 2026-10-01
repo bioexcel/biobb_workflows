@@ -1,0 +1,82 @@
+global_properties:
+  working_dir_path: biobb_wf_protein_md_analysis
+  can_write_console_log: False
+  run_md: False
+
+step1_cpptraj_average:
+  tool: cpptraj_average
+  paths:
+    input_top_path: file:topology.pdb
+    input_traj_path: file:trajectory.nc
+    output_cpptraj_path: output.average.pdb
+  properties:
+    format: pdb
+    container_image: https://depot.galaxyproject.org/singularity/biobb_analysis:5.3.0--pyhdfd78af_1
+    container_path: singularity
+
+step2_cpptraj_rms_first:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: file:topology.pdb
+    input_traj_path: file:trajectory.nc
+    output_cpptraj_path: output.rmsf.dat
+  properties:
+    reference: first
+    container_image: https://depot.galaxyproject.org/singularity/biobb_analysis:5.3.0--pyhdfd78af_1
+    container_path: singularity
+
+step3_cpptraj_rms_average:
+  tool: cpptraj_rms
+  paths:
+    input_top_path: file:topology.pdb
+    input_traj_path: file:trajectory.nc
+    output_cpptraj_path: output.rmsav.dat
+  properties:
+    reference: average
+    container_image: https://depot.galaxyproject.org/singularity/biobb_analysis:5.3.0--pyhdfd78af_1
+    container_path: singularity
+
+step4_cpptraj_bfactor:
+  tool: cpptraj_bfactor
+  paths:
+    input_top_path: file:topology.pdb
+    input_traj_path: file:trajectory.nc
+    output_cpptraj_path: output.bfactor.dat
+  properties:
+    reference: first
+    container_image: https://depot.galaxyproject.org/singularity/biobb_analysis:5.3.0--pyhdfd78af_1
+    container_path: singularity
+
+step5_cpptraj_rgyr:
+  tool: cpptraj_rgyr
+  paths:
+    input_top_path: file:topology.pdb
+    input_traj_path: file:trajectory.nc
+    output_cpptraj_path: output.rgyr.dat
+  properties:
+    container_image: https://depot.galaxyproject.org/singularity/biobb_analysis:5.3.0--pyhdfd78af_1
+    container_path: singularity
+
+step6_cpptraj_convert:
+  tool: cpptraj_convert
+  paths:
+    input_top_path: file:topology.pdb
+    input_traj_path: file:trajectory.nc
+    output_cpptraj_path: output.traj.trr
+  properties:
+    format: trr
+    container_image: https://depot.galaxyproject.org/singularity/biobb_analysis:5.3.0--pyhdfd78af_1
+    container_path: singularity
+
+step7_gmx_cluster:
+  tool: gmx_cluster
+  paths:
+    input_structure_path: file:topology.pdb
+    input_traj_path: dependency/step6_cpptraj_convert/output_cpptraj_path
+    output_pdb_path: output.cluster.pdb
+    output_cluster_log_path: output.cluster.log
+  properties:
+    cutoff: 0.2
+    container_image: https://depot.galaxyproject.org/singularity/biobb_analysis:5.3.0--pyhdfd78af_1
+    container_path: singularity
+
