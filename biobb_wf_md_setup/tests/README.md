@@ -54,6 +54,31 @@ Useful options (same for all four):
 Each script prints `PASS:`/`FAIL:` lines and a final `PASS`/`FAIL` summary, and exits
 with a non-zero code on failure (so scripts/CI can detect it).
 
+## Python container flavours (docker / singularity)
+
+In addition to the standard conda-based `python/workflow.yml`, this workflow ships
+`python/workflow.docker.yml` and `python/workflow.singularity.yml`: the same steps, but
+the biobb python code runs **pip-installed (no conda)** and every step's binaries
+(`gmx`, `reduce`, ...) run inside a docker / singularity container. The step-by-step
+pytest wrappers are `python/biobb_wf_md_setup_{docker,singularity}.py`; they reuse the
+standard step functions verbatim and differ only in the `--config`.
+
+Run them with the dedicated script (pip-installs the biobb packages from
+`python/workflow.env.yml`, shortens `nsteps → 10`, and — for singularity — pre-pulls the
+unique images so the ~22 gromacs steps download one image, not 22):
+
+```console
+cd biobb_workflows/biobb_wf_md_setup/tests/python
+
+./run_container_test.sh docker        # needs a running docker daemon
+./run_container_test.sh singularity   # linux only
+```
+
+Env: `FULL_STEPS=1` (skip the nsteps reduction), `KEEP=1` (keep venv/scratch/work dir),
+`VENV_DIR=<dir>` (reuse a venv). In CI these run in `python-container-tests.yaml` (one
+docker + one singularity job), triggered by changes to this workflow's `python/` or
+`tests/python/`.
+
 ## Known risk
 
 `step21` (gmx_rgyr) is commented out in the pytest suite, so the e2e flavours

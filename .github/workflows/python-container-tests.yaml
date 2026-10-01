@@ -1,0 +1,53 @@
+name: Python workflow Tests (container flavours)
+
+on:
+  push:
+    # Only biobb_wf_md_setup ships docker/singularity python workflows today.
+    # When another workflow gains workflow.docker.yml / workflow.singularity.yml,
+    # add its paths here (plus a matching job) or generalise into detect + matrix.
+    paths:
+      - 'biobb_wf_md_setup/python/**'
+      - 'biobb_wf_md_setup/tests/python/**'
+  workflow_dispatch:
+
+# if you push twice quickly, cancel the older run
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  docker:
+    name: md_setup (docker)
+    # the bot that syncs generated files (Dockerfiles, READMEs) is not a test trigger
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 720
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      # pip-installs the biobb packages from workflow.env.yml into a venv and runs
+      # the step-by-step test against workflow.docker.yml (each step's binaries run
+      # in a quay.io/biocontainers image pulled by biobb per step).
+      - name: pip + docker
+        run: |
+          bash biobb_wf_md_setup/tests/python/run_container_test.sh docker biobb_wf_md_setup
+
+  singularity:
+    name: md_setup (singularity)
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 720
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      # Same as docker, but workflow.singularity.yml + a depot.galaxyproject.org
+      # singularity image. The script warms SINGULARITY_CACHE with the unique
+      # images first so the ~22 biobb_gromacs steps download one image, not 22.
+      #
+      # NOTE: biobb runs 'singularity exec' as the non-root CI user, so the runner
+      # must allow unprivileged user namespaces (GH ubuntu-latest does by default).
+      - name: pip + singularity
+        run: |
+          bash biobb_wf_md_setup/tests/python/run_container_test.sh singularity biobb_wf_md_setup
