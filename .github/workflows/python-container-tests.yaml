@@ -1,24 +1,28 @@
 name: Python workflow Tests (container flavours)
 
+# Test-what-you-changed for the docker / singularity python flavours: a push touching
+# a workflow's container configs (python/workflow.{docker,singularity}.yml), its
+# workflow.env.yml (the pip-installed biobb packages) or its tests/python/ (the
+# wrappers re-import the standard step functions) runs that wf's container tests
+# (tests/python/run_container_test.sh). detect.yaml narrows the run to only the
+# workflow(s) actually changed, so e.g. editing biobb_wf_ligand_parameterization does
+# not also run biobb_wf_md_setup. The plain workflow.yml / workflow.py are NOT
+# consumed by these flavours, so they are not triggers.
+
 on:
   push:
-    # Trigger only on the workflows that ship docker/singularity python workflows,
-    # and only on what these flavours actually consume: the two container configs,
-    # the env (pip-installed), and the python test files (the wrappers import the
-    # standard step functions). The plain workflow.yml / workflow.py are NOT used
-    # here, so changes to them must not fire this pipeline.
-    # When another workflow gains workflow.docker.yml / workflow.singularity.yml,
-    # add its paths here AND a matching entry to the matrix below.
     paths:
-      - 'biobb_wf_md_setup/python/workflow.docker.yml'
-      - 'biobb_wf_md_setup/python/workflow.singularity.yml'
-      - 'biobb_wf_md_setup/python/workflow.env.yml'
-      - 'biobb_wf_md_setup/tests/python/**'
-      - 'biobb_wf_ligand_parameterization/python/workflow.docker.yml'
-      - 'biobb_wf_ligand_parameterization/python/workflow.singularity.yml'
-      - 'biobb_wf_ligand_parameterization/python/workflow.env.yml'
-      - 'biobb_wf_ligand_parameterization/tests/python/**'
+      - 'biobb_wf_*/python/workflow.docker.yml'
+      - 'biobb_wf_*/python/workflow.singularity.yml'
+      - 'biobb_wf_*/python/workflow.env.yml'
+      - 'biobb_wf_*/tests/python/**'
   workflow_dispatch:
+    inputs:
+      wf_names:
+        description: 'Workflow folder(s) to test (comma separated); empty = all container workflows'
+        required: false
+        default: ''
+        type: string
 
 # if you push twice quickly, cancel the older run
 concurrency:
@@ -26,38 +30,53 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  container-test:
-    name: ${{ matrix.wf }} (${{ matrix.variant }})
-    # the bot that syncs generated files (Dockerfiles, READMEs) is not a test trigger
+  detect:
+    name: Detect workflows to test (container)
+    uses: ./.github/workflows/detect.yaml
     if: github.actor != 'github-actions[bot]'
-    runs-on: ubuntu-latest
+    with:
+      wf_names: ${{ inputs.wf_names }}
+      require_path: python/workflow.docker.yml
+
+  docker:
+    name: ${{ matrix.wf }} (docker)
+    needs: detect
+    if: needs.detect.result == 'success' && needs.detect.outputs.matrix != '[]'
+    runs-on: ${{ matrix.runs_on }}
     timeout-minutes: 720
     strategy:
-      # one job per (workflow, flavour); don't abort the others if one fails
       fail-fast: false
       matrix:
-        include:
-          - wf: biobb_wf_md_setup
-            variant: docker
-          - wf: biobb_wf_md_setup
-            variant: singularity
-          - wf: biobb_wf_ligand_parameterization
-            variant: docker
-          - wf: biobb_wf_ligand_parameterization
-            variant: singularity
+        include: ${{ fromJSON(needs.detect.outputs.matrix) }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
 
-      # pip-installs the biobb packages from workflow.env.yml into a venv and runs
-      # the step-by-step test against workflow.<variant>.yml (each step's binaries
-      # run in a container pulled by biobb per step). For singularity the script
-      # warms SINGULARITY_CACHE with the unique images first, so a package with many
-      # steps downloads one image, not one per step.
+      # pip-installs the biobb packages from workflow.env.yml and runs the
+      # step-by-step test against workflow.docker.yml (each step's binaries run in a
+      # quay.io/biocontainers image pulled by biobb per step).
+      - name: pip + docker
+        run: bash ${{ matrix.wf }}/tests/python/run_container_test.sh docker ${{ matrix.wf }}
+
+  singularity:
+    name: ${{ matrix.wf }} (singularity)
+    needs: detect
+    if: needs.detect.result == 'success' && needs.detect.outputs.matrix != '[]'
+    runs-on: ${{ matrix.runs_on }}
+    timeout-minutes: 720
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.detect.outputs.matrix) }}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      # Same as docker, but workflow.singularity.yml + a depot.galaxyproject.org
+      # image. The script warms SINGULARITY_CACHE with the unique images first so a
+      # package with many steps downloads one image, not one per step.
       #
-      # NOTE (singularity): biobb runs 'singularity exec' as the non-root CI user, so
-      # the runner must allow unprivileged user namespaces (GH ubuntu-latest does by
-      # default).
-      - name: pip + ${{ matrix.variant }}
-        run: |
-          bash ${{ matrix.wf }}/tests/python/run_container_test.sh ${{ matrix.variant }} ${{ matrix.wf }}
+      # NOTE: biobb runs 'singularity exec' as the non-root CI user, so the runner must
+      # allow unprivileged user namespaces (GH ubuntu-latest does by default).
+      - name: pip + singularity
+        run: bash ${{ matrix.wf }}/tests/python/run_container_test.sh singularity ${{ matrix.wf }}

@@ -126,14 +126,17 @@ Today `biobb_wf_md_setup` and `biobb_wf_ligand_parameterization` have these.
      `tests/python/` (CWD — `file:` inputs + the work dir + `*.sif` land here), then
      removes the venv / scratch / work dir / `*.sif` (`KEEP=1` to keep them).
 
-CI wiring: `python-container-tests.yaml` (a matrix of one job per
-`<workflow> × <flavour>`, `ubuntu-latest`, 720 min, bot guard, `fail-fast: false`) fires
-on pushes to the two container configs / `workflow.env.yml` / `tests/python/**` of any
-workflow that ships them (today `biobb_wf_md_setup` + `biobb_wf_ligand_parameterization`)
-and on manual dispatch. When another workflow gains these configs, add its paths and a
-matrix entry. The singularity jobs rely on the runner allowing unprivileged user
-namespaces (GH `ubuntu-latest` does by default), because biobb runs `singularity exec`
-as the non-root CI user.
+CI wiring: `python-container-tests.yaml` uses the shared `detect.yaml` (as the cwl /
+airflow / jupyter e2e do) to test **only the workflow(s) changed in the push** — so
+editing `biobb_wf_ligand_parameterization` does not also run `biobb_wf_md_setup`. A
+`docker` + a `singularity` job each fan out over the detected workflows (matrix,
+`ubuntu-latest`, 720 min, bot guard, `fail-fast: false`). It fires on pushes to any wf's
+`python/workflow.{docker,singularity}.yml`, `python/workflow.env.yml` or
+`tests/python/**` (detect narrows to the wf's that actually ship a container config) and
+on manual dispatch. A workflow opts in simply by having `python/workflow.docker.yml` —
+nothing else to wire up. The singularity jobs rely on the runner allowing unprivileged
+user namespaces (GH `ubuntu-latest` does by default), because biobb runs `singularity
+exec` as the non-root CI user.
 
 Local run (the script derives the workflow from its own location):
 
