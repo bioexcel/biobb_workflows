@@ -40,8 +40,6 @@ step4_dna_averages_base_pair_step:
   properties:
     helpar_name: helpar 
     sequence: CGCGAATTCGCG
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step5_dna_averages_base_pair:
   tool: dna_averages
@@ -52,8 +50,6 @@ step5_dna_averages_base_pair:
   properties:
     helpar_name: helpar 
     sequence: CGCGAATTCGCG
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step6_dna_averages_axis_base_pairs:
   tool: dna_averages
@@ -64,8 +60,6 @@ step6_dna_averages_axis_base_pairs:
   properties:
     helpar_name: helpar 
     sequence: CGCGAATTCGCG
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step7_dna_averages_grooves:
   tool: dna_averages
@@ -76,8 +70,6 @@ step7_dna_averages_grooves:
   properties:
     helpar_name: helpar 
     sequence: CGCGAATTCGCG
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step8_puckering:
   tool: puckering
@@ -88,8 +80,6 @@ step8_puckering:
     output_jpg_path: puckering.averages.jpg
   properties:
     sequence: CGCGAATTCGCG
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step9_canonicalag:
   tool: canonicalag
@@ -102,8 +92,6 @@ step9_canonicalag:
     output_jpg_path: alphagamma.averages.jpg
   properties:
     sequence: CGCGAATTCGCG
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step10_bipopulations:
   tool: bipopulations
@@ -116,8 +104,6 @@ step10_bipopulations:
     output_jpg_path: bIbII.averages.jpg
   properties:
     sequence: CGCGAATTCGCG
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step12_dna_timeseries_base_pair_step:
   tool: dna_timeseries
@@ -127,8 +113,6 @@ step12_dna_timeseries_base_pair_step:
   properties:
     helpar_name: helpar
     sequence: CGCGAATTCGCG
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step13_dna_timeseries_base_pair:
   tool: dna_timeseries
@@ -138,8 +122,6 @@ step13_dna_timeseries_base_pair:
   properties:
     helpar_name: helpar
     sequence: CGCGAATTCGCG
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step14_dna_timeseries_axis_base_pairs:
   tool: dna_timeseries
@@ -149,8 +131,6 @@ step14_dna_timeseries_axis_base_pairs:
   properties:
     helpar_name: helpar
     sequence: CGCGAATTCGCG
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step15_dna_timeseries_grooves:
   tool: dna_timeseries
@@ -160,8 +140,6 @@ step15_dna_timeseries_grooves:
   properties:
     helpar_name: helpar
     sequence: CGCGAATTCGCG
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step16_dna_timeseries_backbone_torsions:
   tool: dna_timeseries
@@ -171,8 +149,6 @@ step16_dna_timeseries_backbone_torsions:
   properties:
     helpar_name: helpar
     sequence: CGCGAATTCGCG
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step18_basepair_stiffness:
   tool: basepair_stiffness
@@ -185,9 +161,6 @@ step18_basepair_stiffness:
     input_filename_twist: series_twist.csv
     output_csv_path: stiffness_bps.csv
     output_jpg_path: stiffness_bps.jpg
-  properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step19_dna_bimodality:
   tool: dna_bimodality
@@ -197,8 +170,6 @@ step19_dna_bimodality:
     output_jpg_path: bimodality.jpg
   properties:
     max_iter: 500
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step20_intraseqcorr:
   tool: intraseqcorr
@@ -208,8 +179,6 @@ step20_intraseqcorr:
     output_jpg_path: intrabp_correlation.jpg
   properties:
     sequence: CGCGAATTCGCG
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step21_interseqcorr:
   tool: interseqcorr
@@ -219,8 +188,6 @@ step21_interseqcorr:
     output_jpg_path: interbp_correlation.jpg
   properties:
     sequence: CGCGAATTCGCG
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step22_intrahpcorr:
   tool: intrahpcorr
@@ -233,9 +200,6 @@ step22_intrahpcorr:
     input_filename_opening: series_opening.csv
     output_csv_path: helpar_bp_correlation.csv 
     output_jpg_path: helpar_bp_correlation.jpg 
-  properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step23_interhpcorr:
   tool: interhpcorr
@@ -248,9 +212,6 @@ step23_interhpcorr:
     input_filename_twist: series_twist.csv
     output_csv_path: helpar_bps_correlation.csv 
     output_jpg_path: helpar_bps_correlation.jpg 
-  properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step24_intrabpcorr:
   tool: intrabpcorr
@@ -265,8 +226,6 @@ step24_intrabpcorr:
     output_jpg_path: bp_correlation.jpg 
   properties:
     sequence: CGCGAATTCGCG
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step25_interbpcorr:
   tool: interbpcorr
@@ -281,6 +240,4 @@ step25_interbpcorr:
     output_jpg_path: bps_correlation.jpg 
   properties:
     sequence: CGCGAATTCGCG
-    container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
