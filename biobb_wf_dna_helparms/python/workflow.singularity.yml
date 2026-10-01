@@ -14,7 +14,7 @@ step1_biobb_curves:
     s1range: '1:12'
     container_image: https://depot.galaxyproject.org/singularity/biobb_dna:5.3.0--pyhdfd78af_0
     container_path: singularity
-    stdlib_path: .curvesplus
+    stdlib_path: .
     container_working_dir: /data
 
 step2_biobb_canal:
