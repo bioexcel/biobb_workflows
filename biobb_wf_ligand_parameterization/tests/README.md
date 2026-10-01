@@ -39,6 +39,33 @@ Useful options (same for all four):
 Each script prints `PASS:`/`FAIL:` lines and a final `PASS`/`FAIL` summary, and exits
 with a non-zero code on failure (so scripts/CI can detect it).
 
+## Python container flavours (docker / singularity)
+
+In addition to the standard conda-based `python/workflow.yml`, this workflow ships
+`python/workflow.docker.yml` and `python/workflow.singularity.yml`: the same 2 steps
+(babel minimisation + acpype parameterisation), but the biobb python code runs
+**pip-installed (no conda)** and each step's binary (`babel`, `acpype`) runs inside a
+docker / singularity container. The step-by-step pytest wrappers are
+`python/biobb_wf_ligand_parameterization_{docker,singularity}.py`; they reuse the
+standard step functions verbatim and differ only in the `--config`.
+
+Run them with the dedicated script (pip-installs the biobb packages from
+`python/workflow.env.yml`, and — for singularity — pre-pulls the unique image so the 2
+steps download it once, not per step):
+
+```console
+cd biobb_workflows/biobb_wf_ligand_parameterization/tests/python
+
+./run_container_test.sh docker        # needs a running docker daemon
+./run_container_test.sh singularity   # linux only
+```
+
+Env: `KEEP=1` (keep venv/scratch/work dir), `VENV_DIR=<dir>` (reuse a venv). No
+`nsteps` reduction applies (the workflow is already light). In CI these run in
+`python-container-tests.yaml` (a `<workflow> × <flavour>` matrix), triggered by changes
+to this workflow's `python/workflow.{docker,singularity}.yml`, `python/workflow.env.yml`
+or `tests/python/`.
+
 ### What you need installed
 
 | Test | Needs |

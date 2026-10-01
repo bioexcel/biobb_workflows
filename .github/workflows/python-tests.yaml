@@ -8,6 +8,12 @@ on:
     paths:
       - 'biobb_wf_*/python/**'
       - 'biobb_wf_*/tests/python/**'
+    # the docker/singularity python flavours are exercised by
+    # python-container-tests.yaml, not this (conda) pipeline — a change to only
+    # those configs must not re-run the pure-python (conda) tests
+    paths-ignore:
+      - 'biobb_wf_*/python/workflow.docker.yml'
+      - 'biobb_wf_*/python/workflow.singularity.yml'
   workflow_dispatch:
     inputs:
       wf_names:

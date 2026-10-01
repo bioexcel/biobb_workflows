@@ -101,8 +101,8 @@ Some workflows ship extra python configs — `workflow.docker.yml` and
 `workflow.singularity.yml` — where every step carries a `container_image`
 (+ `container_path: docker|singularity`). The python biobb code runs natively
 (pip-installed from `workflow.env.yml`, **no conda**); each step's executables
-(`gmx`, `reduce`, ...) run inside the declared container. Today only
-`biobb_wf_md_setup` has these.
+(`gmx`, `reduce`, `babel`, `acpype`, ...) run inside the declared container.
+Today `biobb_wf_md_setup` and `biobb_wf_ligand_parameterization` have these.
 
 `tests/python/` adds, per such flavour:
 
@@ -114,29 +114,32 @@ Some workflows ship extra python configs — `workflow.docker.yml` and
 - `run_container_test.sh <flavour> [wf_name]` — the local + CI entry point. It:
   1. creates a venv and `pip install`s the `biobb_*` packages from
      `workflow.env.yml` (+ pytest, imagehash);
-  2. copies `workflow.<flavour>.yml` to a scratch file and seds `nsteps → 10`
-     (same reduction as the python CI table above; `FULL_STEPS=1` skips it);
-  3. **docker**: checks the daemon — images are pulled lazily per step by biobb and
-     cached by docker; **singularity**: installs it if missing, exports a persistent
-     `SINGULARITY_CACHE`, and **pre-pulls the unique images** so the ~22
-     `biobb_gromacs` steps download one image, not 22 (biobb re-issues
-     `singularity pull` per step — a URL never "exists" — so those stay cheap only via
-     the shared cache);
+   2. copies `workflow.<flavour>.yml` to a scratch file and seds `nsteps → 10`
+      where present (MD workflows; a no-op otherwise; `FULL_STEPS=1` skips it);
+   3. **docker**: checks the daemon — images are pulled lazily per step by biobb and
+      cached by docker; **singularity**: installs it if missing, exports a persistent
+      `SINGULARITY_CACHE`, and **pre-pulls the unique images** so a workflow whose many
+      steps map to one image (e.g. the ~22 `biobb_gromacs` steps in md_setup) downloads
+      it once, not per step (biobb re-issues `singularity pull` per step — a URL never
+      "exists" — so those stay cheap only via the shared cache);
   4. runs `pytest biobb_wf_<name>_<flavour>.py --config <scratch> --remove` from
      `tests/python/` (CWD — `file:` inputs + the work dir + `*.sif` land here), then
      removes the venv / scratch / work dir / `*.sif` (`KEEP=1` to keep them).
 
-CI wiring: `python-container-tests.yaml` (one `docker` + one `singularity` job,
-`ubuntu-latest`, 720 min, bot guard) fires on pushes to `biobb_wf_md_setup/python/**`
-or `biobb_wf_md_setup/tests/python/**` and on manual dispatch. The singularity job
-relies on the runner allowing unprivileged user namespaces (GH `ubuntu-latest` does by
-default), because biobb runs `singularity exec` as the non-root CI user.
+CI wiring: `python-container-tests.yaml` (a matrix of one job per
+`<workflow> × <flavour>`, `ubuntu-latest`, 720 min, bot guard, `fail-fast: false`) fires
+on pushes to the two container configs / `workflow.env.yml` / `tests/python/**` of any
+workflow that ships them (today `biobb_wf_md_setup` + `biobb_wf_ligand_parameterization`)
+and on manual dispatch. When another workflow gains these configs, add its paths and a
+matrix entry. The singularity jobs rely on the runner allowing unprivileged user
+namespaces (GH `ubuntu-latest` does by default), because biobb runs `singularity exec`
+as the non-root CI user.
 
-Local run:
+Local run (the script derives the workflow from its own location):
 
 ```console
 biobb_wf_md_setup/tests/python/run_container_test.sh docker        # needs a running docker daemon
-biobb_wf_md_setup/tests/python/run_container_test.sh singularity   # linux only
+biobb_wf_ligand_parameterization/tests/python/run_container_test.sh singularity   # linux only
 ```
 
 ## 2. Phase 1: e2e tests for the other flavours — first two workflows done

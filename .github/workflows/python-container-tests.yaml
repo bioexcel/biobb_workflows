@@ -2,12 +2,22 @@ name: Python workflow Tests (container flavours)
 
 on:
   push:
-    # Only biobb_wf_md_setup ships docker/singularity python workflows today.
+    # Trigger only on the workflows that ship docker/singularity python workflows,
+    # and only on what these flavours actually consume: the two container configs,
+    # the env (pip-installed), and the python test files (the wrappers import the
+    # standard step functions). The plain workflow.yml / workflow.py are NOT used
+    # here, so changes to them must not fire this pipeline.
     # When another workflow gains workflow.docker.yml / workflow.singularity.yml,
-    # add its paths here (plus a matching job) or generalise into detect + matrix.
+    # add its paths here AND a matching entry to the matrix below.
     paths:
-      - 'biobb_wf_md_setup/python/**'
+      - 'biobb_wf_md_setup/python/workflow.docker.yml'
+      - 'biobb_wf_md_setup/python/workflow.singularity.yml'
+      - 'biobb_wf_md_setup/python/workflow.env.yml'
       - 'biobb_wf_md_setup/tests/python/**'
+      - 'biobb_wf_ligand_parameterization/python/workflow.docker.yml'
+      - 'biobb_wf_ligand_parameterization/python/workflow.singularity.yml'
+      - 'biobb_wf_ligand_parameterization/python/workflow.env.yml'
+      - 'biobb_wf_ligand_parameterization/tests/python/**'
   workflow_dispatch:
 
 # if you push twice quickly, cancel the older run
@@ -16,38 +26,38 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  docker:
-    name: md_setup (docker)
+  container-test:
+    name: ${{ matrix.wf }} (${{ matrix.variant }})
     # the bot that syncs generated files (Dockerfiles, READMEs) is not a test trigger
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 720
+    strategy:
+      # one job per (workflow, flavour); don't abort the others if one fails
+      fail-fast: false
+      matrix:
+        include:
+          - wf: biobb_wf_md_setup
+            variant: docker
+          - wf: biobb_wf_md_setup
+            variant: singularity
+          - wf: biobb_wf_ligand_parameterization
+            variant: docker
+          - wf: biobb_wf_ligand_parameterization
+            variant: singularity
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
 
       # pip-installs the biobb packages from workflow.env.yml into a venv and runs
-      # the step-by-step test against workflow.docker.yml (each step's binaries run
-      # in a quay.io/biocontainers image pulled by biobb per step).
-      - name: pip + docker
-        run: |
-          bash biobb_wf_md_setup/tests/python/run_container_test.sh docker biobb_wf_md_setup
-
-  singularity:
-    name: md_setup (singularity)
-    if: github.actor != 'github-actions[bot]'
-    runs-on: ubuntu-latest
-    timeout-minutes: 720
-    steps:
-      - name: Check out repository code
-        uses: actions/checkout@v4
-
-      # Same as docker, but workflow.singularity.yml + a depot.galaxyproject.org
-      # singularity image. The script warms SINGULARITY_CACHE with the unique
-      # images first so the ~22 biobb_gromacs steps download one image, not 22.
+      # the step-by-step test against workflow.<variant>.yml (each step's binaries
+      # run in a container pulled by biobb per step). For singularity the script
+      # warms SINGULARITY_CACHE with the unique images first, so a package with many
+      # steps downloads one image, not one per step.
       #
-      # NOTE: biobb runs 'singularity exec' as the non-root CI user, so the runner
-      # must allow unprivileged user namespaces (GH ubuntu-latest does by default).
-      - name: pip + singularity
+      # NOTE (singularity): biobb runs 'singularity exec' as the non-root CI user, so
+      # the runner must allow unprivileged user namespaces (GH ubuntu-latest does by
+      # default).
+      - name: pip + ${{ matrix.variant }}
         run: |
-          bash biobb_wf_md_setup/tests/python/run_container_test.sh singularity biobb_wf_md_setup
+          bash ${{ matrix.wf }}/tests/python/run_container_test.sh ${{ matrix.variant }} ${{ matrix.wf }}
