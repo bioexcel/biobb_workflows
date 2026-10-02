@@ -17,6 +17,8 @@ step1_extract_molecule:
   paths:
     input_structure_path: dependency/step0_reduce_remove_hydrogens/output_path
     output_molecule_path: protein.pdb
+  properties: 
+    binary_path: check_structure
 
 step00_cat_pdb:
   tool: cat_pdb

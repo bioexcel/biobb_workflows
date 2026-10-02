@@ -175,5 +175,10 @@ fi
 
 # --- run the step-by-step test (CWD = tests/python: file: inputs + work dir) --
 cd "$SCRIPT_DIR"
+# Host-mode tools that shell out to a pip-installed console_script (e.g.
+# extract_molecule -> check_structure from biobb_structure_checking) need the venv
+# bin dir on PATH: run_biobb() spawns a shell that inherits this environment, and
+# invoking "$VENV/bin/python" directly does not add "$VENV/bin" to PATH.
+export PATH="$VENV/bin:$PATH"
 echo "==> pytest $TEST_FILE --config $CONFIG --remove"
 "$VENV/bin/python" -m pytest "$TEST_FILE" --config "$CONFIG" --remove

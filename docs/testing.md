@@ -137,14 +137,26 @@ to the container's `/data`, which the native code then can't read. Today
         `container_image` at a pre-fetched local `.sif` makes `Path(...).exists()` True, so
         biobb skips that failing re-pull and execs the `.sif` directly. It already runs as
         the host user, so no `container_user_id` is needed there;
-  4. runs `pytest biobb_wf_<name>_<flavour>.py --config <scratch> --remove` from
-     `tests/python/` (CWD — `file:` inputs + the work dir + `*.sif` land here), then
-      removes the venv / scratch / work dir / `*.sif` (`KEEP=1` to keep them).
+   4. puts `$VENV/bin` on `PATH`, then runs `pytest biobb_wf_<name>_<flavour>.py
+      --config <scratch> --remove` from `tests/python/` (CWD — `file:` inputs + the work
+      dir + `*.sif` land here), then removes the venv / scratch / work dir / `*.sif`
+      (`KEEP=1` to keep them).
 
 `matplotlib` is in that install because the biobb plotting tools (e.g. `biobb_dna`'s
 `dna_averages`/correlation steps) render their `.jpg` plots from the **native** python:
 conda supplies matplotlib, but `pip install biobb_*` omits it, so without it those steps
 die with `ModuleNotFoundError: No module named 'matplotlib'`.
+
+Putting `$VENV/bin` on `PATH` (step 4) matters for host-mode steps that shell out to a
+**pip-installed console_script**: `biobb_structure_utils.extract_molecule` (step1 of
+`biobb_wf_md_setup`, a pure-Python tool with no container) runs `check_structure`, a
+console_script shipped by its `biobb_structure_checking` dependency, at
+`$VENV/bin/check_structure`. biobb's `cmd_wrapper` launches the command via a shell that
+inherits the process env, but invoking `$VENV/bin/python` directly does not put
+`$VENV/bin` on `PATH`, so without the export the shell reports `check_structure: command
+not found`. (Passing `binary_path:` to the step would also work, but `$VENV` is a
+`mktemp` dir, so the shared script sets `PATH` instead — one line that covers any such
+host-mode tool.)
 
 CI wiring: `python-container-tests.yaml` uses the shared `detect.yaml` (as the cwl /
 airflow / jupyter e2e do) to test **only the workflow(s) changed in the push** — so
