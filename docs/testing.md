@@ -107,7 +107,8 @@ analysis tools, `biobb_pytorch`'s MDAE torch tools) run natively on the host and
 **no** container properties: putting a container on one makes biobb remap its inputs
 to the container's `/data`, which the native code then can't read. Today
 `biobb_wf_md_setup`, `biobb_wf_ligand_parameterization`, `biobb_wf_protein_md_analysis`,
-`biobb_wf_dna_helparms`, `biobb_wf_autoencoder` and `biobb_wf_virtual-screening_fpocket` have these.
+`biobb_wf_dna_helparms`, `biobb_wf_autoencoder`, `biobb_wf_virtual-screening_fpocket`
+and `biobb_wf_structure_checking` have these.
 
 `tests/python/` adds, per such flavour:
 
