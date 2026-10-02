@@ -17,9 +17,6 @@ step1_extract_molecule:
   paths:
     input_structure_path: dependency/step0_reduce_remove_hydrogens/output_path
     output_molecule_path: protein.pdb
-  properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_structure_utils:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step00_cat_pdb:
   tool: cat_pdb
@@ -27,9 +24,6 @@ step00_cat_pdb:
     input_structure1: dependency/step1_extract_molecule/output_molecule_path
     input_structure2: file:ions.pdb
     output_structure_path: protein.ions.pdb
-  properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_structure_utils:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step2_fix_side_chain:
   tool: fix_side_chain
