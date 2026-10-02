@@ -105,6 +105,7 @@ step13_leap_gen_top:
     forcefield: [ protein.ff14SB ]
     container_image: quay.io/biocontainers/biobb_amber:5.3.1--py312hc5e4ab4_1
     container_path: docker
+    container_user_id: '525'
 
 step14_sander_mdrun:
   tool: sander_mdrun
@@ -128,6 +129,7 @@ step14_sander_mdrun:
       ntwx : 50
     container_image: quay.io/biocontainers/biobb_amber:5.3.1--py312hc5e4ab4_1
     container_path: docker
+    container_user_id: '525'
 
 step15_amber_to_pdb:
   tool: amber_to_pdb
@@ -138,6 +140,7 @@ step15_amber_to_pdb:
   properties:
     container_image: quay.io/biocontainers/biobb_amber:5.3.1--py312hc5e4ab4_1
     container_path: docker
+    container_user_id: '525'
 
 step16_fix_pdb:
   tool: fix_pdb

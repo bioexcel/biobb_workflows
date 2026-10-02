@@ -49,6 +49,18 @@ done
 SCRATCH="$(mktemp -d "${TMPDIR:-/tmp}/biobb_container_cfg.XXXXXX")"
 CONFIG="$SCRATCH/workflow.${VARIANT}.yml"
 cp "$CONFIG_SRC" "$CONFIG"
+
+adjust_runtime() {
+  # The test environment resolves ambertools to a nompi build. Run the short
+  # sander minimization serially by stripping MPI settings from the scratch config.
+  local SED_INPLACE
+  if sed --version >/dev/null 2>&1; then SED_INPLACE=(sed -i); else SED_INPLACE=(sed -i ''); fi
+  "${SED_INPLACE[@]}" "/binary_path: sander.MPI/d" "$1"
+  "${SED_INPLACE[@]}" "/^[[:space:]]*mpi_np: [0-9]*$/d" "$1"
+  "${SED_INPLACE[@]}" "/^[[:space:]]*mpi_bin: mpirun$/d" "$1"
+}
+adjust_runtime "$CONFIG"
+
 WORKDIR="$(sed -nE 's/^[[:space:]]*working_dir_path:[[:space:]]*//p' "$CONFIG" | head -n1)"
 if [ -z "${FULL_STEPS:-}" ] && grep -qE '^[[:space:]]*nsteps:' "$CONFIG"; then
   sed -i.bak -E 's/^([[:space:]]*nsteps:[[:space:]]*)[0-9]+/\110/' "$CONFIG"
