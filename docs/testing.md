@@ -98,11 +98,16 @@ Notes:
 ### 1.6 Container flavours (docker / singularity) — pip-installed biobb, no conda
 
 Some workflows ship extra python configs — `workflow.docker.yml` and
-`workflow.singularity.yml` — where every step carries a `container_image`
-(+ `container_path: docker|singularity`). The python biobb code runs natively
-(pip-installed from `workflow.env.yml`, **no conda**); each step's executables
-(`gmx`, `reduce`, `babel`, `acpype`, ...) run inside the declared container.
-Today `biobb_wf_md_setup`, `biobb_wf_ligand_parameterization`, `biobb_wf_protein_md_analysis` and `biobb_wf_dna_helparms` have these.
+`workflow.singularity.yml`. The python biobb code always runs natively (pip-installed
+from `workflow.env.yml`, **no conda**); a step's *executables* run inside a declared
+container **only when that step actually launches a binary** — that step carries a
+`container_image` + `container_path: docker|singularity` (e.g. `gmx`, `babel`,
+`acpype`, Curves+ `Cur+`/`Canal`). Steps that are pure-Python (e.g. `biobb_dna`'s
+analysis tools, `biobb_pytorch`'s MDAE torch tools) run natively on the host and carry
+**no** container properties: putting a container on one makes biobb remap its inputs
+to the container's `/data`, which the native code then can't read. Today
+`biobb_wf_md_setup`, `biobb_wf_ligand_parameterization`, `biobb_wf_protein_md_analysis`,
+`biobb_wf_dna_helparms` and `biobb_wf_autoencoder` have these.
 
 `tests/python/` adds, per such flavour:
 
