@@ -107,7 +107,7 @@ analysis tools, `biobb_pytorch`'s MDAE torch tools) run natively on the host and
 **no** container properties: putting a container on one makes biobb remap its inputs
 to the container's `/data`, which the native code then can't read. Today
 `biobb_wf_md_setup`, `biobb_wf_ligand_parameterization`, `biobb_wf_protein_md_analysis`,
-`biobb_wf_dna_helparms` and `biobb_wf_autoencoder` have these.
+`biobb_wf_dna_helparms`, `biobb_wf_autoencoder` and `biobb_wf_virtual-screening_fpocket` have these.
 
 `tests/python/` adds, per such flavour:
 
@@ -116,6 +116,9 @@ to the container's `/data`, which the native code then can't read. Today
   helpers are config-agnostic, so the *only* difference from the standard test is the
   `--config` (the `workflow.<flavour>.yml`). These are run by **explicit filename**
   only — a bare `pytest` collects nothing, since none of the files match `test_*.py`.
+  (For a workflow whose name contains a hyphen — e.g. `biobb_wf_virtual-screening_fpocket` —
+  the standard test file is not a valid Python identifier, so the wrapper loads it from its
+  file path with `importlib.util.spec_from_file_location` instead of a plain `import`.)
 - `run_container_test.sh <flavour> [wf_name]` — the local + CI entry point. It:
   1. creates a venv and `pip install`s the `biobb_*` packages from
       `workflow.env.yml` (+ pytest, imagehash, matplotlib);
