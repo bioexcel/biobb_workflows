@@ -46,8 +46,8 @@ step2_leap_gen_top:
   tool: leap_gen_top
   paths:
     input_pdb_path: dependency/step1_pdb4amber_run/output_pdb_path
-    input_lib_path: file:input_lib.zip
-    input_frcmod_path: file:input_frcmod.zip
+    input_lib_path: file:input_lib.lib
+    input_frcmod_path: file:input_frcmod.frcmod
     output_pdb_path: structure.leap.pdb
     output_top_path: structure.leap.top
     output_crd_path: structure.leap.crd
@@ -138,8 +138,8 @@ step8_leap_solvate:
   tool: leap_solvate
   paths:
     input_pdb_path: dependency/step7_amber_to_pdb/output_pdb_path
-    input_lib_path: file:input_lib.zip
-    input_frcmod_path: file:input_frcmod.zip
+    input_lib_path: file:input_lib.lib
+    input_frcmod_path: file:input_frcmod.frcmod
     output_pdb_path: structure.solv.pdb
     output_top_path: structure.solv.parmtop
     output_crd_path: structure.solv.crd
@@ -155,8 +155,8 @@ step9_leap_add_ions:
   tool: leap_add_ions
   paths:
     input_pdb_path: dependency/step8_leap_solvate/output_pdb_path
-    input_lib_path: file:input_lib.zip
-    input_frcmod_path: file:input_frcmod.zip
+    input_lib_path: file:input_lib.lib
+    input_frcmod_path: file:input_frcmod.frcmod
     output_pdb_path: structure.ions.pdb
     output_top_path: structure.ions.parmtop
     output_crd_path: structure.ions.crd
