@@ -17,8 +17,12 @@ step0_extract_molecule:
     input_structure_path: dependency/step00_reduce_remove_hydrogens/output_path
     output_molecule_path: protein.pdb
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_structure_utils:5.3.0--pyhdfd78af_0
-    container_path: singularity
+    # Runs on the host (no container). extract_molecule shells out to the
+    # check_structure binary (biobb_structure_checking, pip-installed in the venv)
+    # and its create_cmd_line uses host paths (io_dict) that are not reachable
+    # inside the container (only /data is mounted) -> run it natively, as in
+    # biobb_wf_godmd.
+    binary_path: check_structure
 
 step000_cat_pdb:
   tool: cat_pdb
@@ -26,9 +30,6 @@ step000_cat_pdb:
     input_structure1: dependency/step0_extract_molecule/output_molecule_path
     input_structure2: file:ions.pdb
     output_structure_path: protein.ions.pdb
-  properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_structure_utils:5.3.0--pyhdfd78af_0
-    container_path: singularity
 
 step1_pdb4amber_run:
   tool: pdb4amber_run
