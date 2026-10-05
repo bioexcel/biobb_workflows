@@ -1,3 +1,12 @@
+# HADDOCK3 engine steps (9-23) run on the HOST, not in a container.
+# The quay.io/biocontainers/biobb_haddock image ships only the biobb python
+# wrappers: its engine dep (haddock_biobb) pip-installs haddock3 in post-link ONLY
+# when gcc is present, and the Bioconda build env has no gcc, so the image has no
+# haddock3 / haddock3-restraints binary and container runs exit 127 (cmd not found).
+# Until the image is rebuilt with the engine, this flavour runs natively via the
+# pip-installed haddock3 (run_container_test.sh pip-installs biobb_haddock -> haddock3).
+# When the image is fixed, re-add container_image + container_path to steps 9-23.
+
 global_properties:
   working_dir_path: biobb_wf_haddock
   can_write_console_log: False
@@ -21,8 +30,6 @@ step9_haddock3_passive_from_active:
     output_actpass_path: antigen_actpass.txt
   properties:
     active_list: '72,73,74,75,81,83,84,89,90,92,94,96,97,98,115,116,117'
-    container_image: https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.0--pyh106432d_0
-    container_path: singularity
 
 step10_haddock3_actpass_to_ambig:
   tool: haddock3_actpass_to_ambig
@@ -33,17 +40,12 @@ step10_haddock3_actpass_to_ambig:
   properties:
     segid_one: A
     segid_two: B
-    container_image: https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.0--pyh106432d_0
-    container_path: singularity
 
 step11_haddock3_restrain_bodies:
   tool: haddock3_restrain_bodies
   paths:
     input_structure_path: antibody_clean.pdb
     output_tbl_path: antibody-unambig.tbl
-  properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.0--pyh106432d_0
-    container_path: singularity
 
 step12_topology:
   tool: topology
@@ -53,9 +55,6 @@ step12_topology:
     mol1_output_top_zip_path: 1_top_mol1.zip
     mol2_output_top_zip_path: 1_top_mol2.zip
     output_haddock_wf_data: haddock_wf_data
-  properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.0--pyh106432d_0
-    container_path: singularity
 
 step13_rigid_body:
   tool: rigid_body
@@ -68,8 +67,6 @@ step13_rigid_body:
     cfg:
       sampling: 10
       clean: False
-    container_image: https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.0--pyh106432d_0
-    container_path: singularity
 
 step14_capri_eval1:
   tool: capri_eval
@@ -78,9 +75,6 @@ step14_capri_eval1:
     output_haddock_wf_data: haddock_wf_data
     reference_pdb_path: complex_clean.pdb
     output_evaluation_zip_path: 3_caprieval.zip
-  properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.0--pyh106432d_0
-    container_path: singularity
 
 step15_sele_top:
   tool: sele_top
@@ -91,8 +85,6 @@ step15_sele_top:
   properties:
     cfg:
       select: 8
-    container_image: https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.0--pyh106432d_0
-    container_path: singularity
 
 step16_flex_ref:
   tool: flex_ref
@@ -106,8 +98,6 @@ step16_flex_ref:
     cfg:
       tolerance: 5
       clean: False
-    container_image: https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.0--pyh106432d_0
-    container_path: singularity
 
 step17_capri_eval2:
   tool: capri_eval
@@ -116,9 +106,6 @@ step17_capri_eval2:
     output_haddock_wf_data: haddock_wf_data
     reference_pdb_path: complex_clean.pdb
     output_evaluation_zip_path: 6_caprieval2.zip
-  properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.0--pyh106432d_0
-    container_path: singularity
 
 step18_em_ref:
   tool: em_ref
@@ -132,8 +119,6 @@ step18_em_ref:
     cfg:
       tolerance: 5
       clean: False
-    container_image: https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.0--pyh106432d_0
-    container_path: singularity
 
 step19_capri_eval3:
   tool: capri_eval
@@ -142,9 +127,6 @@ step19_capri_eval3:
     output_haddock_wf_data: haddock_wf_data
     reference_pdb_path: complex_clean.pdb
     output_evaluation_zip_path: 8_caprieval3.zip
-  properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.0--pyh106432d_0
-    container_path: singularity
 
 step20_clust_fcc:
   tool: clust_fcc
@@ -155,8 +137,6 @@ step20_clust_fcc:
   properties:
     cfg:
       plot_matrix: True
-    container_image: https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.0--pyh106432d_0
-    container_path: singularity
 
 step21_sele_top_clusts:
   tool: sele_top_clusts
@@ -168,8 +148,6 @@ step21_sele_top_clusts:
     cfg:
       top_models: 4
       clean: False
-    container_image: https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.0--pyh106432d_0
-    container_path: singularity
 
 step22_capri_eval4:
   tool: capri_eval
@@ -178,9 +156,6 @@ step22_capri_eval4:
     output_haddock_wf_data: haddock_wf_data
     reference_pdb_path: complex_clean.pdb
     output_evaluation_zip_path: 11_caprieval4.zip
-  properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.0--pyh106432d_0
-    container_path: singularity
 
 step23_contact_map:
   tool: contact_map
@@ -188,6 +163,3 @@ step23_contact_map:
     input_haddock_wf_data: dependency/step22_capri_eval4/output_haddock_wf_data
     output_haddock_wf_data: haddock_wf_data
     output_contact_map_zip_path: 12_contact_map.zip
-  properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.0--pyh106432d_0
-    container_path: singularity
