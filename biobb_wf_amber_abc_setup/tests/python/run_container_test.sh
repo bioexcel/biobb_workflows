@@ -186,15 +186,28 @@ print(f"==> {len(urls)} unique image(s) -> local .sif; config rewritten")
 PY
 fi
 
-# --- ensure a host /data exists ------------------------------------------------
-# Some biobb tools chdir the host to container_working_dir (/data, the container
-# mount point) before launching. The real files live in biobb's sandbox
-# (tests/python/sandbox_<uuid>), mounted at /data only *inside* the container, so
-# the host has no /data and that chdir fails. Create an empty host /data so the
-# chdir succeeds; the container uses its own /data (the sandbox mount) for the work.
+# --- ensure a host /data exists + stage the mdin files for the host-side read ---
+# Two host-side /data needs:
+#   1) Some biobb tools chdir the host to container_working_dir (/data, the
+#      container mount point) before launching. The real files live in biobb's
+#      sandbox (tests/python/sandbox_<uuid>), mounted at /data only *inside* the
+#      container, so the host has no /data and that chdir fails.
+#   2) sander_mdrun reads its input mdin on the HOST from the container volume
+#      path. biobb stages each input mdin to /data/<basename> inside the
+#      container, and create_mdin() opens exactly that path *on the host*. The
+#      sandbox is mounted at /data only inside the container, so that host read
+#      raises FileNotFoundError unless the mdin also exists in a host /data.
+# Create a host /data (for the chdir) and copy the mdin files into it (for the
+# sander host-side read). The container keeps using its own /data (sandbox mount).
 if [ ! -d /data ]; then
   sudo mkdir -p /data 2>/dev/null || mkdir -p /data 2>/dev/null || true
-  echo "==> host /data created (stub for the container chdir)"
+  echo "==> host /data created (stub for the container chdir + host-side mdin read)"
+fi
+if [ -d "$SCRIPT_DIR/ABCix_config_files" ] && ls "$SCRIPT_DIR"/ABCix_config_files/*.in >/dev/null 2>&1; then
+  cp -f "$SCRIPT_DIR"/ABCix_config_files/*.in /data/ 2>/dev/null \
+    || sudo cp -f "$SCRIPT_DIR"/ABCix_config_files/*.in /data/ 2>/dev/null \
+    || echo "WARN: could not stage mdin files into host /data (sander steps will fail)"
+  echo "==> staged mdin files into host /data (sander_mdrun host-side mdin read)"
 fi
 
 # --- run the step-by-step test (CWD = tests/python: file: inputs + work dir) --
