@@ -24,6 +24,7 @@ step0_extract_molecule:
     # Same pattern as biobb_wf_godmd.
     binary_path: check_structure
 
+
 step000_cat_pdb:
   tool: cat_pdb
   paths:
