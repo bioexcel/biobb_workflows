@@ -69,6 +69,7 @@ step3_sander_mdrun_minH:
   properties:
     container_image: quay.io/biocontainers/biobb_amber:5.3.1--py312hc5e4ab4_0
     container_path: docker
+    container_working_dir: /data
     binary_path: sander.MPI
     mpi_np: 4
     mpi_bin: mpirun
@@ -103,6 +104,7 @@ step5_sander_mdrun_min:
   properties:
     container_image: quay.io/biocontainers/biobb_amber:5.3.1--py312hc5e4ab4_0
     container_path: docker
+    container_working_dir: /data
     binary_path: sander.MPI
     mpi_np: 4
     mpi_bin: mpirun
@@ -187,6 +189,7 @@ step10_sander_mdrun_energy:
   properties:
     container_image: quay.io/biocontainers/biobb_amber:5.3.1--py312hc5e4ab4_0
     container_path: docker
+    container_working_dir: /data
     binary_path: sander.MPI
     mpi_np: 4
     mpi_bin: mpirun
@@ -220,6 +223,7 @@ step12_sander_mdrun_warm:
   properties:
     container_image: quay.io/biocontainers/biobb_amber:5.3.1--py312hc5e4ab4_0
     container_path: docker
+    container_working_dir: /data
     binary_path: sander.MPI
     mpi_np: 4
     mpi_bin: mpirun
@@ -253,6 +257,7 @@ step14_sander_mdrun_nvt:
   properties:
     container_image: quay.io/biocontainers/biobb_amber:5.3.1--py312hc5e4ab4_0
     container_path: docker
+    container_working_dir: /data
     binary_path: sander.MPI
     mpi_np: 4
     mpi_bin: mpirun
@@ -286,6 +291,7 @@ step16_sander_mdrun_npt:
   properties:
     container_image: quay.io/biocontainers/biobb_amber:5.3.1--py312hc5e4ab4_0
     container_path: docker
+    container_working_dir: /data
     binary_path: sander.MPI
     mpi_np: 4
     mpi_bin: mpirun
@@ -318,6 +324,7 @@ step18_sander_mdrun_md:
   properties:
     container_image: quay.io/biocontainers/biobb_amber:5.3.1--py312hc5e4ab4_0
     container_path: docker
+    container_working_dir: /data
     binary_path: sander.MPI
     mpi_np: 4
     mpi_bin: mpirun
