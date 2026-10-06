@@ -39,20 +39,20 @@ step1_pdb4amber_run:
     input_pdb_path: dependency/step0_cat_pdb/output_structure_path
     output_pdb_path: structure.pdb4amber.pdb
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
 
 step2_leap_gen_top:
   tool: leap_gen_top
   paths:
     input_pdb_path: dependency/step1_pdb4amber_run/output_pdb_path
-    input_lib_path: file:input_lib.lib
-    input_frcmod_path: file:input_frcmod.frcmod
+    input_lib_path: file:input_lib.zip
+    input_frcmod_path: file:input_frcmod.zip
     output_pdb_path: structure.leap.pdb
     output_top_path: structure.leap.top
     output_crd_path: structure.leap.crd
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
     forcefield: ["protein.ff14SB","DNA.bsc1","RNA.OL3","gaff","water.tip3p"]
 
@@ -66,7 +66,7 @@ step3_sander_mdrun_minH:
     output_rst_path: sander.h_min.rst
     output_log_path: sander.h_min.log
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
     binary_path: sander.MPI
     mpi_np: 4
@@ -86,7 +86,7 @@ step4_process_minout_minH:
     input_log_path: dependency/step3_sander_mdrun_minH/output_log_path
     output_dat_path: sander.h_min.energy.dat
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
     terms : [ENERGY]
 
@@ -100,7 +100,7 @@ step5_sander_mdrun_min:
     output_rst_path: sander.n_min.rst
     output_log_path: sander.n_min.log
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
     binary_path: sander.MPI
     mpi_np: 4
@@ -120,7 +120,7 @@ step6_process_minout_min:
     input_log_path: dependency/step5_sander_mdrun_min/output_log_path
     output_dat_path: sander.n_min.energy.dat
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
     terms : [ENERGY]
 
@@ -131,20 +131,20 @@ step7_amber_to_pdb:
     input_crd_path: dependency/step5_sander_mdrun_min/output_rst_path
     output_pdb_path: structure.ambpdb.pdb
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
 
 step8_leap_solvate:
   tool: leap_solvate
   paths:
     input_pdb_path: dependency/step7_amber_to_pdb/output_pdb_path
-    input_lib_path: file:input_lib.lib
-    input_frcmod_path: file:input_frcmod.frcmod
+    input_lib_path: file:input_lib.zip
+    input_frcmod_path: file:input_frcmod.zip
     output_pdb_path: structure.solv.pdb
     output_top_path: structure.solv.parmtop
     output_crd_path: structure.solv.crd
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
     forcefield: ["protein.ff14SB","DNA.bsc1","RNA.OL3","gaff","water.tip3p"]
     water_type: TIP3PBOX
@@ -155,13 +155,13 @@ step9_leap_add_ions:
   tool: leap_add_ions
   paths:
     input_pdb_path: dependency/step8_leap_solvate/output_pdb_path
-    input_lib_path: file:input_lib.lib
-    input_frcmod_path: file:input_frcmod.frcmod
+    input_lib_path: file:input_lib.zip
+    input_frcmod_path: file:input_frcmod.zip
     output_pdb_path: structure.ions.pdb
     output_top_path: structure.ions.parmtop
     output_crd_path: structure.ions.crd
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
     forcefield: ["protein.ff14SB","DNA.bsc1","RNA.OL3","gaff","water.tip3p"]
     neutralise: True
@@ -180,7 +180,7 @@ step10_sander_mdrun_energy:
     output_rst_path: sander.min.rst
     output_log_path: sander.min.log
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
     binary_path: sander.MPI
     mpi_np: 4
@@ -199,7 +199,7 @@ step11_process_minout_energy:
     input_log_path: dependency/step10_sander_mdrun_energy/output_log_path
     output_dat_path: sander.min.energy.dat
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
     terms : [ENERGY]
 
@@ -213,7 +213,7 @@ step12_sander_mdrun_warm:
     output_rst_path: sander.heat.rst
     output_log_path: sander.heat.log
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
     binary_path: sander.MPI
     mpi_np: 4
@@ -232,7 +232,7 @@ step13_process_mdout_warm:
     input_log_path: dependency/step12_sander_mdrun_warm/output_log_path
     output_dat_path: sander.md.temp.dat
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
     terms : [TEMP]
 
@@ -246,7 +246,7 @@ step14_sander_mdrun_nvt:
     output_rst_path: sander.nvt.rst
     output_log_path: sander.nvt.log
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
     binary_path: sander.MPI
     mpi_np: 4
@@ -265,7 +265,7 @@ step15_process_mdout_nvt:
     input_log_path: dependency/step14_sander_mdrun_nvt/output_log_path
     output_dat_path: sander.md.nvt.temp.dat
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
     terms : [TEMP]
 
@@ -279,7 +279,7 @@ step16_sander_mdrun_npt:
     output_rst_path: sander.npt.rst
     output_log_path: sander.npt.log
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
     binary_path: sander.MPI
     mpi_np: 4
@@ -298,7 +298,7 @@ step17_process_mdout_npt:
     input_log_path: dependency/step16_sander_mdrun_npt/output_log_path
     output_dat_path: sander.md.npt.dat
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
     terms : [PRES, DENSITY]
 
@@ -311,7 +311,7 @@ step18_sander_mdrun_md:
     output_rst_path: sander.free.rst
     output_log_path: sander.free.log
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
     binary_path: sander.MPI
     mpi_np: 4
