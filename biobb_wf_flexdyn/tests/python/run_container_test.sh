@@ -188,9 +188,9 @@ CONCOORD_PREFIX="$SCRATCH/concoord"
 if [ ! -f "$CONCOORD_PREFIX/share/concoord/lib/HBONDS.DAT" ]; then
   mkdir -p "$CONCOORD_PREFIX"
   echo "==> fetching concoord data files (bioconda $CONCOORD_TAR)"
-  curl -fsSL -o "$SCRATCH/$CONCOORD_TAR" "https://conda.anaconda.org/bioconda/$CONCOORD_TAR"
-  tar -xjf "$SCRATCH/$CONCOORD_TAR" -C "$CONCOORD_PREFIX"
-  rm -f "$SCRATCH/$CONCOORD_TAR"
+  curl -fsSL -o "$SCRATCH/concoord.tar.bz2" "https://conda.anaconda.org/bioconda/$CONCOORD_TAR"
+  tar -xjf "$SCRATCH/concoord.tar.bz2" -C "$CONCOORD_PREFIX"
+  rm -f "$SCRATCH/concoord.tar.bz2"
 fi
 export CONCOORDLIB="$CONCOORD_PREFIX/share/concoord/lib"
 # The test builds the container-side CONCOORDLIB from $CONDA_PREFIX (biobb passes
