@@ -29,12 +29,12 @@ False on the host), so the custom ``Protein_Other`` tc-group cannot resolve.
 post-processing steps (``gmx_rms``/``gmx_rgyr``/``gmx_image``/``gmx_trjconv_str``),
 which pass ``-n`` correctly.
 
-Note: the NPT / production-MD ``grompp`` steps override ``pcoupl: Berendsen``
-here (instead of the preset's ``Parrinello-Rahman, tau-p=1.0``). At the fast
-10-step test length this protein+ligand system is under-equilibrated, so the
-noisy Parrinello-Rahman coupling makes the NPT/MD ``mdrun`` blow up (LINCS
-deviation -> segfault, exit -11). The noiseless Berendsen coupling keeps the
-short run stable (physics is irrelevant for a 10-step pipeline test).
+Note: at a 10-step test length this protein+ligand system is under-relaxed, so
+the NPT ``mdrun`` blows up (LINCS constraint deviation on the water H-H bonds
+-> segfault, exit -11). This workflow's ``run_container_test.sh`` therefore
+shortens every ``nsteps:`` to 1000 (instead of 10): the extra minimization /
+NVT / NPT steps relax the structure before the production run. The mdp
+settings otherwise stay identical to the conda flavour.
 
 Run it with the dedicated script (pip-installs the biobb packages from
 ``workflow.env.yml`` and starts the test):

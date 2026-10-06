@@ -239,7 +239,6 @@ step26_grompp_npt:
       type: npt
       tc-grps: Protein non-Protein
       Define: -DPOSRES -DPOSRES_LIGAND
-      pcoupl: Berendsen
     simulation_type: npt
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
@@ -278,7 +277,6 @@ step29_grompp_md:
     mdp:
       nsteps: 250000
       tc-grps: Protein non-Protein
-      pcoupl: Berendsen
     simulation_type: free
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
@@ -380,7 +378,6 @@ step36_grompp_md:
       ref-t: 300 300
       nstxout: 100000
       nstxout-compressed: 500
-      pcoupl: Berendsen
     simulation_type: free
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker

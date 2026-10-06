@@ -51,9 +51,12 @@ CONFIG="$SCRATCH/workflow.${VARIANT}.yml"
 cp "$CONFIG_SRC" "$CONFIG"
 WORKDIR="$(sed -nE 's/^[[:space:]]*working_dir_path:[[:space:]]*//p' "$CONFIG" | head -n1)"
 if [ -z "${FULL_STEPS:-}" ] && grep -qE '^[[:space:]]*nsteps:' "$CONFIG"; then
-  sed -i.bak -E 's/^([[:space:]]*nsteps:[[:space:]]*)[0-9]+/\110/' "$CONFIG"
+  # This workflow's system needs a real (not 10-step) relaxation before NPT: at
+  # 10 steps the NPT mdrun blows up (LINCS on water H-H bonds -> segfault).
+  # 1000 steps (2 ps) per mdrun + converged minimizations is still fast.
+  sed -i.bak -E 's/^([[:space:]]*nsteps:[[:space:]]*)[0-9]+/\11000/' "$CONFIG"
   rm -f "$CONFIG.bak"
-  echo "==> nsteps shortened to 10 (set FULL_STEPS=1 to run full lengths)"
+  echo "==> nsteps shortened to 1000 (set FULL_STEPS=1 to run full lengths)"
 fi
 
 # --- docker: run the container as the invoking (host) user --------------------
