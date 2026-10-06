@@ -18,6 +18,11 @@ The workflow is mixed, and the config mirrors the split:
     tools: they run natively in the venv, with NO container properties (with
     ``container_path`` set, biobb would point their file paths at the container
     volume ``/data``, which does not exist on the host).
+  * ``gorder_aa`` needs the ``gorder`` package, which biobb_mem imports at
+    module level but does not declare as a pip dependency (and which is not on
+    PyPI): the ``run_container_test.sh`` script installs the conda-forge
+    ``pygorder`` payload (a prebuilt wheel for the venv's python ABI) into the
+    venv's site-packages.
   * ``mda_hole`` additionally shells out to the HOLE suite binaries (``hole``,
     ``sph_process``, ``sos_triangle``), which are conda-only: the
     ``run_container_test.sh`` script fetches + extracts the conda-forge

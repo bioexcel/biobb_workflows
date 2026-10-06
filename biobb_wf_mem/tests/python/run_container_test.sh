@@ -111,6 +111,69 @@ echo "==> pip installing:"; sed 's/^/    /' "$REQS"
 # fail fast if any pip-installed biobb package is missing (import name == pip name)
 "$VENV/bin/python" -c "import importlib; [importlib.import_module(l.split('==')[0].strip()) for l in open('$REQS') if l.startswith('biobb_')]; print('==> biobb import OK')"
 
+# --- gorder for the native step7_gorder_aa step --------------------------------
+# biobb_mem imports gorder at module level (biobb_mem/gorder/gorder_aa.py) but
+# does not declare it as a pip dependency, and it is not on PyPI (upstream:
+# github.com/Ladme/gorder; conda-forge package: pygorder). Install the
+# conda-forge pygorder payload (a prebuilt wheel with a small C extension) into
+# the venv's site-packages. The build is picked for this interpreter's ABI
+# (cpXY); its .so only links standard system libs (libc/libm/libgcc_s/
+# libpthread/libdl/librt), so no conda runtime is needed.
+if ! "$VENV/bin/python" -c "import gorder" >/dev/null 2>&1; then
+  echo "==> installing gorder (conda-forge pygorder) into the venv"
+  "$VENV/bin/python" - "$VENV" "$SCRATCH" <<'PY'
+import json, os, re, shutil, subprocess, sys, sysconfig, urllib.request, zipfile
+
+venv, scratch = sys.argv[1], sys.argv[2]
+ver = f"{sys.version_info.major}{sys.version_info.minor}"  # e.g. 312
+sp_dir = sysconfig.get_paths()["purelib"]                  # venv site-packages
+
+api = "https://api.anaconda.org/package/conda-forge/pygorder/files"
+with urllib.request.urlopen(api, timeout=60) as r:
+    files = json.load(r)
+
+def vkey(basename):
+    m = re.match(rf"linux-64/pygorder-(\d+(?:\.\d+)*)-py{ver}\w+_(\d+)\.conda$", basename)
+    if not m:
+        return (0,)
+    return tuple(int(x) for x in m.group(1).split(".")) + (int(m.group(2)),)
+
+cands = [f["basename"] for f in files
+         if f["basename"].startswith("linux-64/") and f["basename"].endswith(".conda")]
+pick = max(cands, key=lambda b: vkey(b))
+if vkey(pick) == (0,):
+    raise SystemExit(f"ERROR: no linux-64 cp{ver} pygorder build found")
+url = f"https://conda.anaconda.org/conda-forge/{pick}"
+dest = os.path.join(scratch, os.path.basename(pick))
+if not os.path.exists(dest):
+    print(f"   fetch: {url}")
+    subprocess.run(["curl", "-fsSL", "-o", dest, url], check=True)
+staging = os.path.join(scratch, "pygorder_pkg")
+os.makedirs(staging, exist_ok=True)
+with zipfile.ZipFile(dest) as z:
+    member = next(n for n in z.namelist() if n.startswith("pkg-") and n.endswith(".tar.zst"))
+    tarball = os.path.join(scratch, os.path.basename(member))
+    with z.open(member) as src, open(tarball, "wb") as out:
+        out.write(src.read())
+    subprocess.run(["tar", "--zstd", "-xf", tarball, "-C", staging], check=True)
+# payload layout: lib/pythonX.Y/site-packages/{gorder, gorder-*.dist-info}
+libdir = os.path.join(staging, "lib")
+payload_sp = os.path.join(
+    libdir,
+    next(d for d in os.listdir(libdir)
+         if d.startswith("python") and os.path.isdir(os.path.join(libdir, d, "site-packages"))),
+    "site-packages")
+for entry in os.listdir(payload_sp):
+    if entry == "gorder" or entry.startswith("gorder-"):
+        target = os.path.join(sp_dir, entry)
+        if os.path.exists(target):
+            shutil.rmtree(target)
+        shutil.copytree(os.path.join(payload_sp, entry), target)
+print("==> gorder installed into", sp_dir)
+PY
+  "$VENV/bin/python" -c "import gorder; print('==> gorder import OK')"
+fi
+
 # --- HOLE suite binaries for the native mda_hole step --------------------------
 # mda_hole (biobb_mem) is a pure-Python step: it runs natively in this venv and
 # shells out to the HOLE suite binaries (hole, sph_process, sos_triangle) via
