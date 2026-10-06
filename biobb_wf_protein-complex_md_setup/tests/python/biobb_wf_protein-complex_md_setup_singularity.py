@@ -29,6 +29,12 @@ False on the host), so the custom ``Protein_Other`` tc-group cannot resolve.
 post-processing steps (``gmx_rms``/``gmx_rgyr``/``gmx_image``/``gmx_trjconv_str``),
 which pass ``-n`` correctly.
 
+Note: the four ``mdrun`` steps set ``num_threads: 1`` (``-nt 1``). This
+protein+ligand system is borderline under the default OpenMP threads, where the
+parallel LINCS solver is non-deterministic - the run is stable under docker but
+segfaults (exit -11) under singularity. A single thread makes the dynamics
+deterministic so both runtimes give identical, stable results.
+
 Run it with the dedicated script (pip-installs the biobb packages from
 ``workflow.env.yml`` and starts the test):
 

@@ -169,6 +169,7 @@ step20_mdrun_min:
   properties:
     container_image: https://depot.galaxyproject.org/singularity/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: singularity
+    num_threads: 1
 step21_gmx_energy_min:
   tool: gmx_energy
   paths:
@@ -215,6 +216,7 @@ step24_mdrun_nvt:
   properties:
     container_image: https://depot.galaxyproject.org/singularity/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: singularity
+    num_threads: 1
 step25_gmx_energy_nvt:
   tool: gmx_energy
   paths:
@@ -254,6 +256,7 @@ step27_mdrun_npt:
   properties:
     container_image: https://depot.galaxyproject.org/singularity/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: singularity
+    num_threads: 1
 step28_gmx_energy_npt:
   tool: gmx_energy
   paths:
@@ -292,6 +295,7 @@ step30_mdrun_md:
   properties:
     container_image: https://depot.galaxyproject.org/singularity/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: singularity
+    num_threads: 1
 step34_gmx_image:
   tool: gmx_image
   paths:
