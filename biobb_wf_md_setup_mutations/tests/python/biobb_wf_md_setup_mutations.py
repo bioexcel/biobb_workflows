@@ -29,11 +29,9 @@ global_mutations = []
 
 
 def setup_globals(config, system=None):
-    global global_work_dir
     global global_mutations
 
     conf = settings.ConfReader(config, system)
-    global_work_dir = conf.get_working_dir_path()
     global_mutations = conf.properties['global_properties']['mutations']
 
 
@@ -50,6 +48,9 @@ def step0_reduce_remove_hydrogens(config, system=None):
 
     assert fx.not_empty(global_paths["step0_reduce_remove_hydrogens"]["output_path"])
     assert fx.equal(global_paths["step0_reduce_remove_hydrogens"]["output_path"], f'reference/step0_reduce_remove_hydrogens/{Path(global_paths["step0_reduce_remove_hydrogens"]["output_path"]).name}')
+
+    global global_work_dir
+    global_work_dir = conf.get_working_dir_path()
 
 
 def step1_extract_molecule(config, system=None):
