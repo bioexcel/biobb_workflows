@@ -169,7 +169,6 @@ step20_mdrun_min:
   properties:
     container_image: https://depot.galaxyproject.org/singularity/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: singularity
-    num_threads: 1
 step21_gmx_energy_min:
   tool: gmx_energy
   paths:
@@ -216,7 +215,6 @@ step24_mdrun_nvt:
   properties:
     container_image: https://depot.galaxyproject.org/singularity/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: singularity
-    num_threads: 1
 step25_gmx_energy_nvt:
   tool: gmx_energy
   paths:
@@ -241,6 +239,7 @@ step26_grompp_npt:
       type: npt
       tc-grps: Protein non-Protein
       Define: -DPOSRES -DPOSRES_LIGAND
+      pcoupl: Berendsen
     simulation_type: npt
     container_image: https://depot.galaxyproject.org/singularity/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: singularity
@@ -256,7 +255,6 @@ step27_mdrun_npt:
   properties:
     container_image: https://depot.galaxyproject.org/singularity/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: singularity
-    num_threads: 1
 step28_gmx_energy_npt:
   tool: gmx_energy
   paths:
@@ -280,6 +278,7 @@ step29_grompp_md:
     mdp:
       nsteps: 250000
       tc-grps: Protein non-Protein
+      pcoupl: Berendsen
     simulation_type: free
     container_image: https://depot.galaxyproject.org/singularity/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: singularity
@@ -295,7 +294,6 @@ step30_mdrun_md:
   properties:
     container_image: https://depot.galaxyproject.org/singularity/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: singularity
-    num_threads: 1
 step34_gmx_image:
   tool: gmx_image
   paths:
@@ -382,6 +380,7 @@ step36_grompp_md:
       ref-t: 300 300
       nstxout: 100000
       nstxout-compressed: 500
+      pcoupl: Berendsen
     simulation_type: free
     container_image: https://depot.galaxyproject.org/singularity/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: singularity

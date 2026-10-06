@@ -29,11 +29,12 @@ False on the host), so the custom ``Protein_Other`` tc-group cannot resolve.
 post-processing steps (``gmx_rms``/``gmx_rgyr``/``gmx_image``/``gmx_trjconv_str``),
 which pass ``-n`` correctly.
 
-Note: the four ``mdrun`` steps set ``num_threads: 1`` (``-nt 1``). This
-protein+ligand system is borderline under the default OpenMP threads, where the
-parallel LINCS solver is non-deterministic - the run is stable under docker but
-segfaults (exit -11) under singularity. A single thread makes the dynamics
-deterministic so both runtimes give identical, stable results.
+Note: the NPT / production-MD ``grompp`` steps override ``pcoupl: Berendsen``
+here (instead of the preset's ``Parrinello-Rahman, tau-p=1.0``). At the fast
+10-step test length this protein+ligand system is under-equilibrated, so the
+noisy Parrinello-Rahman coupling makes the NPT/MD ``mdrun`` blow up (LINCS
+deviation -> segfault, exit -11). The noiseless Berendsen coupling keeps the
+short run stable (physics is irrelevant for a 10-step pipeline test).
 
 Run it with the dedicated script (pip-installs the biobb packages from
 ``workflow.env.yml`` and starts the test):
