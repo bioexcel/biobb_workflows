@@ -8,7 +8,7 @@ step0_reduce_remove_hydrogens:
     input_path: file:structure.pdb
     output_path: structure.noH.pdb
   properties:
-    container_image: quay.io/biocontainers/biobb_chemistry:5.3.0
+    container_image: quay.io/biocontainers/biobb_chemistry:5.3.0--pyhdfd78af_0
     container_path: docker
 step2_extract_molecule:
   tool: extract_molecule
@@ -29,7 +29,7 @@ step4_fix_side_chain:
     input_pdb_path: dependency/step00_cat_pdb/output_structure_path
     output_pdb_path: fixsidechain.pdb
   properties:
-    container_image: quay.io/biocontainers/biobb_model:5.3.0
+    container_image: quay.io/biocontainers/biobb_model:5.3.0--pyhdfd78af_0
     container_path: docker
 step5_pdb2gmx:
   tool: pdb2gmx
@@ -40,7 +40,7 @@ step5_pdb2gmx:
   properties:
     force_field: amber99sb
     water_type: tip3p
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step9_make_ndx:
   tool: make_ndx
@@ -49,7 +49,7 @@ step9_make_ndx:
     output_ndx_path: ligand.index.ndx
   properties:
     selection: 0 & ! a H*
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step10_genrestr:
   tool: genrestr
@@ -60,7 +60,7 @@ step10_genrestr:
   properties:
     force_constants: 1000 1000 1000
     restrained_group: System
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step11_gmx_trjconv_str_protein:
   tool: gmx_trjconv_str
@@ -70,7 +70,7 @@ step11_gmx_trjconv_str_protein:
     output_str_path: protein_H.pdb
   properties:
     selection: System
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step12_gmx_trjconv_str_ligand:
   tool: gmx_trjconv_str
@@ -80,7 +80,7 @@ step12_gmx_trjconv_str_ligand:
     output_str_path: ligand_H.pdb
   properties:
     selection: System
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step13_cat_pdb_hydrogens:
   tool: cat_pdb
@@ -97,7 +97,7 @@ step14_append_ligand:
     output_top_zip_path: complex.top.zip
   properties:
     posres_name: POSRES_LIGAND
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step15_editconf:
   tool: editconf
@@ -107,7 +107,7 @@ step15_editconf:
   properties:
     distance_to_molecule: 0.8
     box_type: octahedron
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step16_solvate:
   tool: solvate
@@ -117,7 +117,7 @@ step16_solvate:
     input_top_zip_path: dependency/step14_append_ligand/output_top_zip_path
     output_top_zip_path: solvate_top.zip
   properties:
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step17_grompp_genion:
   tool: grompp
@@ -130,7 +130,7 @@ step17_grompp_genion:
     maxwarn: 1
     mdp:
       nsteps: 5000
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step18_genion:
   tool: genion
@@ -142,7 +142,7 @@ step18_genion:
   properties:
     neutral: true
     concentration: 0.05
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step19_grompp_min:
   tool: grompp
@@ -156,7 +156,7 @@ step19_grompp_min:
       emtol: 500
       emstep: 0.01
     simulation_type: minimization
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step20_mdrun_min:
   tool: mdrun
@@ -167,7 +167,7 @@ step20_mdrun_min:
     output_edr_path: complex.min.edr
     output_log_path: complex.min.log
   properties:
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step21_gmx_energy_min:
   tool: gmx_energy
@@ -177,7 +177,7 @@ step21_gmx_energy_min:
   properties:
     terms:
     - Potential
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step22_make_ndx:
   tool: make_ndx
@@ -186,7 +186,7 @@ step22_make_ndx:
     output_ndx_path: complex.index.ndx
   properties:
     selection: '"Protein"|"Other"'
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step23_grompp_nvt:
   tool: grompp
@@ -201,7 +201,7 @@ step23_grompp_nvt:
       tc-grps: Protein_Other Water_and_ions
       Define: -DPOSRES -DPOSRES_LIGAND
     simulation_type: nvt
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step24_mdrun_nvt:
   tool: mdrun
@@ -213,7 +213,7 @@ step24_mdrun_nvt:
     output_log_path: complex.nvt.log
     output_cpt_path: complex.nvt.cpt
   properties:
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step25_gmx_energy_nvt:
   tool: gmx_energy
@@ -223,7 +223,7 @@ step25_gmx_energy_nvt:
   properties:
     terms:
     - Temperature
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step26_grompp_npt:
   tool: grompp
@@ -240,7 +240,7 @@ step26_grompp_npt:
       tc-grps: Protein_Other Water_and_ions
       Define: -DPOSRES -DPOSRES_LIGAND
     simulation_type: npt
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step27_mdrun_npt:
   tool: mdrun
@@ -252,7 +252,7 @@ step27_mdrun_npt:
     output_log_path: complex.npt.log
     output_cpt_path: complex.npt.cpt
   properties:
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step28_gmx_energy_npt:
   tool: gmx_energy
@@ -263,7 +263,7 @@ step28_gmx_energy_npt:
     terms:
     - Pressure
     - Density
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step29_grompp_md:
   tool: grompp
@@ -278,7 +278,7 @@ step29_grompp_md:
       nsteps: 250000
       tc-grps: Protein_Other Water_and_ions
     simulation_type: free
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step30_mdrun_md:
   tool: mdrun
@@ -290,7 +290,7 @@ step30_mdrun_md:
     output_log_path: complex.md.log
     output_cpt_path: complex.md.cpt
   properties:
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step34_gmx_image:
   tool: gmx_image
@@ -304,7 +304,7 @@ step34_gmx_image:
     output_selection: System
     pbc: mol
     center: true
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step34b_gmx_image2:
   tool: gmx_image
@@ -317,7 +317,7 @@ step34b_gmx_image2:
     fit_selection: Protein_Other
     output_selection: System
     fit: rot+trans
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step35_gmx_trjconv_str:
   tool: gmx_trjconv_str
@@ -329,7 +329,7 @@ step35_gmx_trjconv_str:
   properties:
     pbc: mol
     selection: System
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step31_rmsd_first:
   tool: gmx_rms
@@ -340,7 +340,7 @@ step31_rmsd_first:
     output_xvg_path: complex.rmsd_first.xvg
   properties:
     selection: Protein_Other
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step32_rmsd_exp:
   tool: gmx_rms
@@ -351,7 +351,7 @@ step32_rmsd_exp:
     output_xvg_path: complex.rmsd_exp.xvg
   properties:
     selection: Protein_Other
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step33_gmx_rgyr:
   tool: gmx_rgyr
@@ -362,7 +362,7 @@ step33_gmx_rgyr:
     output_xvg_path: complex.rgyr.xvg
   properties:
     selection: Protein_Other
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
 step36_grompp_md:
   tool: grompp
@@ -379,5 +379,5 @@ step36_grompp_md:
       nstxout: 100000
       nstxout-compressed: 500
     simulation_type: free
-    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2
+    container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
