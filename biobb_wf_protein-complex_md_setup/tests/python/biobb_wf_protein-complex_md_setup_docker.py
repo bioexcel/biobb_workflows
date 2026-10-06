@@ -19,6 +19,16 @@ The workflow is mixed, and that config mirrors the split:
   * Every GROMACS step (``biobb_gromacs`` / ``biobb_analysis``) carries quay.io
     ``biobb_gromacs`` + ``container_path: docker``.
 
+Note: the three ``grompp`` production steps use ``tc-grps: Protein non-Protein``
+here (instead of the conda flavour's ``Protein_Other Water_and_ions``) to work
+around a biobb_gromacs container bug - in container mode ``grompp`` drops the
+``-n <index>`` flag (it guards it with ``Path(<container_volume>/...).exists()``,
+False on the host), so the custom ``Protein_Other`` tc-group cannot resolve.
+``non-Protein`` is a default group, so no index file is needed. The
+``Protein_Other`` index group is still built by ``make_ndx`` and used by the
+post-processing steps (``gmx_rms``/``gmx_rgyr``/``gmx_image``/``gmx_trjconv_str``),
+which pass ``-n`` correctly.
+
 Run it with the dedicated script (pip-installs the biobb packages from
 ``workflow.env.yml`` and starts the test):
 

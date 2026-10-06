@@ -198,7 +198,7 @@ step23_grompp_nvt:
   properties:
     mdp:
       nsteps: 50000
-      tc-grps: Protein_Other Water_and_ions
+      tc-grps: Protein non-Protein
       Define: -DPOSRES -DPOSRES_LIGAND
     simulation_type: nvt
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
@@ -237,7 +237,7 @@ step26_grompp_npt:
     mdp:
       nsteps: 50000
       type: npt
-      tc-grps: Protein_Other Water_and_ions
+      tc-grps: Protein non-Protein
       Define: -DPOSRES -DPOSRES_LIGAND
     simulation_type: npt
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
@@ -276,7 +276,7 @@ step29_grompp_md:
   properties:
     mdp:
       nsteps: 250000
-      tc-grps: Protein_Other Water_and_ions
+      tc-grps: Protein non-Protein
     simulation_type: free
     container_image: quay.io/biocontainers/biobb_gromacs:5.3.2--pyhdfd78af_0
     container_path: docker
