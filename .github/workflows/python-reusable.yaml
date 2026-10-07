@@ -19,6 +19,15 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
+      - name: GNU-style sed (macOS BSD sed needs a backup suffix for -i)
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p "$HOME/bin"
+          # translate the GNU 'sed -i SCRIPT' calls below to BSD 'sed -i "" SCRIPT'
+          printf '#!/bin/sh\nshift\nexec /usr/bin/sed -i "" "$@"\n' > "$HOME/bin/sed"
+          chmod +x "$HOME/bin/sed"
+          echo "$HOME/bin" >> "$GITHUB_PATH"
+
       - name: Adjust runtime for ABC workflow (serial sander + reduced steps)
         if: contains(inputs.wf_name, 'biobb_wf_amber_abc_setup')
         run: |
@@ -94,7 +103,13 @@ jobs:
 
       - name: Install conda 26.7.1 (same conda as the docker images)
         run: |
-          curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-py312_26.7.1-0-Linux-x86_64.sh -o /tmp/miniconda.sh
+          case "${{ runner.os }}-${{ runner.arch }}" in
+            Linux-X64)   conda_platform=Linux-x86_64 ;;
+            macOS-Arm64) conda_platform=MacOSX-arm64 ;;
+            macOS-X64)   conda_platform=MacOSX-x86_64 ;;
+            *) echo "Unsupported runner: ${{ runner.os }}/${{ runner.arch }}"; exit 1 ;;
+          esac
+          curl -fsSL "https://repo.anaconda.com/miniconda/Miniconda3-py312_26.7.1-0-${conda_platform}.sh" -o /tmp/miniconda.sh
           bash /tmp/miniconda.sh -b -p "$HOME/miniconda3"
 
       - name: Create environment (same solver as the docker images)

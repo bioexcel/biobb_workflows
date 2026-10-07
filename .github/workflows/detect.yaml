@@ -141,7 +141,13 @@ jobs:
                   folders = {c.split("/", 1)[0] for c in changed if c.startswith("biobb_wf_")}
                   selected = sorted(w for w in folders & set(all_wf) if eligible(w))
 
-          matrix = [{"wf": w, "runs_on": "ubuntu-latest"} for w in selected]
+          # the python flavour runs on both ubuntu-latest and macos-latest;
+          # container flavours (docker/singularity) stay ubuntu-only.
+          matrix = []
+          for w in selected:
+              matrix.append({"wf": w, "runs_on": "ubuntu-latest"})
+              if flavour == "python":
+                  matrix.append({"wf": w, "runs_on": "macos-latest"})
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               f.write("matrix=" + json.dumps(matrix) + "\n")
           with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:

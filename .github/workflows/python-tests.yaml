@@ -42,7 +42,7 @@ jobs:
       flavour: python
 
   test:
-    name: ${{ matrix.wf }}
+    name: ${{ matrix.wf }} (${{ matrix.runs_on }})
     needs: detect
     if: needs.detect.result == 'success' && needs.detect.outputs.matrix != '[]'
     uses: ./.github/workflows/python-reusable.yaml
