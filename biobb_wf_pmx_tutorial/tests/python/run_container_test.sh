@@ -116,7 +116,7 @@ echo "==> venv at $VENV ($("$PYBIN" -V 2>&1))"
 "$VENV/bin/pip" install --quiet --upgrade pip
 
 REQS="$SCRATCH/requirements.txt"
-grep -E '^[[:space:]]*-[[:space:]]*biobb_[a-z0-9_]+==' "$ENV_FILE" \
+grep -E '^[[:space:]]*-[[:space:]]*(biobb_[a-z0-9_]+|scipy)==' "$ENV_FILE" \
   | sed -E 's/^[[:space:]]*-[[:space:]]*//' \
   | sed -E 's/==([^=]+)=[A-Za-z0-9_]+$/==\1/' > "$REQS"
 # (the last sed strips conda build pins like '==5.3.0=pyhdfd78af_1', which
@@ -126,6 +126,12 @@ echo "imagehash" >> "$REQS"
 # biobb plotting tools write .jpg outputs with matplotlib; conda supplies it, but
 # pip-installing the biobb_* packages omits it, so add it to the test venv.
 echo "matplotlib" >> "$REQS"
+# Match the working conda env's numerical stack: workflow.env.yml pins
+# scipy==1.13 (now carried over above) but not numpy; pmx 5.2.2's BAR estimator
+# does float(scipy.optimize.fmin(...)) and fmin has always returned a (1,)
+# array, so numpy must stay < 2 (numpy >= 2 removed the ndim>0 -> scalar
+# conversion; scipy >= 1.18 would also force numpy >= 2).
+echo "numpy<2" >> "$REQS"
 echo "==> pip installing:"; sed 's/^/    /' "$REQS"
 "$VENV/bin/pip" install -r "$REQS"
 # fail fast if any pip-installed biobb package is missing (import name == pip name)
