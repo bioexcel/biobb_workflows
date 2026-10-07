@@ -103,22 +103,51 @@ jobs:
           rm -rf $HOME/.bash_profile $HOME/.conda $HOME/micromamba $HOME/micromamba-bin 2>/dev/null
           touch $HOME/.bash_profile
 
-      - name: Install conda 26.7.1 (same conda as the docker images)
+      - name: Check Rosetta 2 (macOS x86_64 conda needs it on ARM runners)
+        if: runner.os == 'macOS' && runner.arch == 'ARM64'
+        run: |
+          if ! arch -x86_64 /bin/echo "Rosetta 2 available"; then
+            echo "::error::Rosetta 2 not found; the x86_64 Miniconda cannot run on this runner"
+            exit 1
+          fi
+
+      # macOS gets the last x86_64 Miniconda build (25.7.0; Anaconda stopped
+      # macOS-Intel builds after it, 26.x is arm64-only). On ARM runners it
+      # runs under Rosetta 2, so envs resolve for osx-64, which has far
+      # broader bioconda coverage than osx-arm64.
+      - name: Install conda (26.7.1 on Linux like the docker images; 25.7.0 x86_64 on macOS)
         run: |
           case "${{ runner.os }}-${{ runner.arch }}" in
-            Linux-X64)    conda_platform=Linux-x86_64 ;;
-            Linux-ARM64)  conda_platform=Linux-aarch64 ;;
-            macOS-ARM64)  conda_platform=MacOSX-arm64 ;;
-            macOS-X64)    conda_platform=MacOSX-x86_64 ;;
+            Linux-X64)    conda_build=Miniconda3-py312_26.7.1-0-Linux-x86_64 ;;
+            Linux-ARM64)  conda_build=Miniconda3-py312_26.7.1-0-Linux-aarch64 ;;
+            macOS-ARM64)  conda_build=Miniconda3-py312_25.7.0-2-MacOSX-x86_64 ;;
+            macOS-X64)    conda_build=Miniconda3-py312_25.7.0-2-MacOSX-x86_64 ;;
             *) echo "Unsupported runner: ${{ runner.os }}/${{ runner.arch }}"; exit 1 ;;
           esac
-          curl -fsSL "https://repo.anaconda.com/miniconda/Miniconda3-py312_26.7.1-0-${conda_platform}.sh" -o /tmp/miniconda.sh
+          curl -fsSL "https://repo.anaconda.com/miniconda/${conda_build}.sh" -o /tmp/miniconda.sh
           bash /tmp/miniconda.sh -b -p "$HOME/miniconda3"
 
       - name: Create environment (same solver as the docker images)
+        if: runner.os == 'Linux'
         run: |
           "$HOME/miniconda3/bin/conda" config --set solver libmamba
           "$HOME/miniconda3/bin/conda" create -y -n biobb_env -f ${{ inputs.wf_name }}/python/workflow.env.yml pytest imagehash
+
+      - name: Create environment (macOS, conda 25.7.0 --file takes a plain spec list)
+        if: runner.os == 'macOS'
+        run: |
+          "$HOME/miniconda3/bin/conda" config --set solver libmamba
+          # conda 25.7.0 (last x86_64 macOS build) 'create' does not read
+          # env-format files: pull the deps out of the env file into a plain
+          # spec list (one spec per line, so 'mkl <2026' stays one spec) and
+          # add the test deps.
+          grep -E '^[[:space:]]*-[[:space:]]+' "${{ inputs.wf_name }}/python/workflow.env.yml" \
+            | sed -E 's/^[[:space:]]*-[[:space:]]+//' \
+            | grep -vE '^(conda-forge|bioconda|nodefaults)$' \
+            | grep -vE '^[a-z_]+:' > /tmp/wf_specs.txt
+          echo pytest >> /tmp/wf_specs.txt
+          echo imagehash >> /tmp/wf_specs.txt
+          "$HOME/miniconda3/bin/conda" create -y -n biobb_env --file /tmp/wf_specs.txt -c conda-forge -c bioconda
 
       - name: List installed package versions
         run: '"$HOME/miniconda3/bin/conda" run -n biobb_env conda list'
