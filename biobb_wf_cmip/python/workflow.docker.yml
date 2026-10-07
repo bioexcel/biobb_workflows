@@ -101,7 +101,7 @@ step10_leap_gen_top:
     forcefield:
     - protein.ff14SB
     - gaff2
-    container_image: quay.io/biocontainers/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: quay.io/biocontainers/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: docker
 step11_sander_mdrun:
   tool: sander_mdrun
@@ -119,7 +119,7 @@ step11_sander_mdrun:
       maxcyc: 500
       ncyc: 50
       ntwx: 50
-    container_image: quay.io/biocontainers/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: quay.io/biocontainers/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: docker
 step12_amber_to_pdb:
   tool: amber_to_pdb
@@ -128,7 +128,7 @@ step12_amber_to_pdb:
     input_crd_path: dependency/step11_sander_mdrun/output_rst_path
     output_pdb_path: structure.amber-min.pdb
   properties:
-    container_image: quay.io/biocontainers/biobb_amber:5.3.1--py312hc5e4ab4_0
+    container_image: quay.io/biocontainers/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: docker
 step13_cmip_prepare_structure:
   tool: cmip_prepare_structure
