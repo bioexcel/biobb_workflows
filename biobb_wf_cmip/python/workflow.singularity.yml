@@ -103,6 +103,7 @@ step10_leap_gen_top:
     - gaff2
     container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
+    container_working_dir: /data
 step11_sander_mdrun:
   tool: sander_mdrun
   paths:
@@ -121,6 +122,7 @@ step11_sander_mdrun:
       ntwx: 50
     container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
+    container_working_dir: /data
 step12_amber_to_pdb:
   tool: amber_to_pdb
   paths:
@@ -130,6 +132,7 @@ step12_amber_to_pdb:
   properties:
     container_image: https://depot.galaxyproject.org/singularity/biobb_amber:5.3.2--py312hc5e4ab4_0
     container_path: singularity
+    container_working_dir: /data
 step13_cmip_prepare_structure:
   tool: cmip_prepare_structure
   paths:
