@@ -104,9 +104,10 @@ jobs:
       - name: Install conda 26.7.1 (same conda as the docker images)
         run: |
           case "${{ runner.os }}-${{ runner.arch }}" in
-            Linux-X64)   conda_platform=Linux-x86_64 ;;
-            macOS-Arm64) conda_platform=MacOSX-arm64 ;;
-            macOS-X64)   conda_platform=MacOSX-x86_64 ;;
+            Linux-X64)    conda_platform=Linux-x86_64 ;;
+            Linux-ARM64)  conda_platform=Linux-aarch64 ;;
+            macOS-ARM64)  conda_platform=MacOSX-arm64 ;;
+            macOS-X64)    conda_platform=MacOSX-x86_64 ;;
             *) echo "Unsupported runner: ${{ runner.os }}/${{ runner.arch }}"; exit 1 ;;
           esac
           curl -fsSL "https://repo.anaconda.com/miniconda/Miniconda3-py312_26.7.1-0-${conda_platform}.sh" -o /tmp/miniconda.sh
