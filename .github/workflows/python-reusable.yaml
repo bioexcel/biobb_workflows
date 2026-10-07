@@ -23,8 +23,10 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           mkdir -p "$HOME/bin"
-          # translate the GNU 'sed -i SCRIPT' calls below to BSD 'sed -i "" SCRIPT'
-          printf '#!/bin/sh\nshift\nexec /usr/bin/sed -i "" "$@"\n' > "$HOME/bin/sed"
+          # translate GNU 'sed -i SCRIPT' calls to BSD 'sed -i "" SCRIPT';
+          # pass every other sed call through untouched (e.g. the miniconda
+          # installer runs plain 'sed SCRIPT' and would break otherwise)
+          printf '#!/bin/sh\nif [ "$1" = "-i" ]; then shift; exec /usr/bin/sed -i "" "$@"; fi\nexec /usr/bin/sed "$@"\n' > "$HOME/bin/sed"
           chmod +x "$HOME/bin/sed"
           echo "$HOME/bin" >> "$GITHUB_PATH"
 
