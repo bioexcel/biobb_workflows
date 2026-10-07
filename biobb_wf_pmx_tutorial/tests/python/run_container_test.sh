@@ -51,9 +51,23 @@ CONFIG="$SCRATCH/workflow.${VARIANT}.yml"
 cp "$CONFIG_SRC" "$CONFIG"
 WORKDIR="$(sed -nE 's/^[[:space:]]*working_dir_path:[[:space:]]*//p' "$CONFIG" | head -n1)"
 if [ -z "${FULL_STEPS:-}" ] && grep -qE '^[[:space:]]*nsteps:' "$CONFIG"; then
-  sed -i.bak -E 's/^([[:space:]]*nsteps:[[:space:]]*)[0-9]+/\110/' "$CONFIG"
-  rm -f "$CONFIG.bak"
-  echo "==> nsteps shortened to 10 (set FULL_STEPS=1 to run full lengths)"
+  # The FEP mdp (the one containing free_energy) keeps nsteps at 50: GROMACS
+  # samples dhdl every nstdhdl steps (default 50), so a shorter run writes zero
+  # dhdl data points and the final `pmx analyse` fails with "No valid dgdl file
+  # found." 50 matches the python-flavour CI reduction. The other MD steps go
+  # to 10.
+  awk '
+    NR == FNR { if ($0 ~ /free_energy:/) fe[FNR] = 1; next }
+    {
+      if ($0 ~ /^[[:space:]]*nsteps:[[:space:]]*[0-9]+/) {
+        v = 10
+        for (i = 1; i <= 6; i++) if ((FNR + i) in fe) { v = 50; break }
+        sub(/[0-9]+$/, v)
+      }
+      print
+    }
+  ' "$CONFIG" "$CONFIG" > "$CONFIG.new" && mv "$CONFIG.new" "$CONFIG"
+  echo "==> nsteps shortened (FEP kept at 50 for dhdl sampling; set FULL_STEPS=1 for full lengths)"
 fi
 
 # --- docker: run the container as the invoking (host) user --------------------

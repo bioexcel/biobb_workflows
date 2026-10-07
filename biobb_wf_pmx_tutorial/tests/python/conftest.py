@@ -30,10 +30,12 @@ def cleanup():
 # Container flavours: the gmx steps' GMXLIB env var is built by the step tests
 # from $CONDA_PREFIX (a host path) that does not exist inside the container,
 # so the custom PMX force field would not be found by the containerised
-# pdb2gmx / grompp. GROMACS also detects <name>.ff directories in the working
-# directory, so copy the FF dir the topology references into the sandbox (the
-# container CWD) right after staging: pdb2gmx gets its -ff lookup from the CWD
-# and grompp resolves the topology's #include "<ff>.ff/..." from it.
+# pdb2gmx / grompp. GROMACS detects <name>.ff directories in the working
+# directory, and openLibraryFile() (used for residuetypes.dat and friends)
+# searches the CWD first, so copy both the FF dir the topology references and
+# the mutff-level GROMACS data files into the sandbox (the container CWD)
+# right after staging: pdb2gmx gets its -ff lookup and residue-type DB from the
+# CWD and grompp resolves the topology's #include "<ff>.ff/..." from it.
 @pytest.fixture(scope="session", autouse=True)
 def _pmx_container_forcefield(request):
     config = request.config.getoption("--config") or ""
@@ -71,10 +73,27 @@ def _pmx_container_forcefield(request):
             orig_stage(self, *args, **kwargs)
             unique = (getattr(self, "stage_io_dict", None) or {}).get("unique_dir")
             if getattr(self, "container_path", None) and unique:
+                # FF dirs: pdb2gmx -ff lookup prefers the CWD, and grompp
+                # resolves the topology's #include "<ff>.ff/..." from it.
                 for ff_dir in _ff_dirs(self):
                     dst = Path(unique) / ff_dir.name
                     if not dst.exists():
                         shutil.copytree(ff_dir, dst)
+                # GROMACS library data files (residuetypes.dat with the hybrid
+                # *2A types, atommass.dat, elements.dat, ...) live at the
+                # mutff/ level, not inside the FF dir. openLibraryFile()
+                # searches the CWD first, so copy them into the sandbox;
+                # GMXLIB itself is a host path that does not exist inside the
+                # container.
+                gmx_lib = getattr(self, "gmx_lib", None)
+                if gmx_lib:
+                    mutff = Path(gmx_lib)
+                    if mutff.is_dir():
+                        for f in sorted(mutff.iterdir()):
+                            if f.is_file():
+                                dst = Path(unique) / f.name
+                                if not dst.exists():
+                                    shutil.copy2(f, dst)
 
         cls.stage_files = stage_files
 
