@@ -20,7 +20,9 @@ name: Detect workflows to test
 #
 # Opt-out: a tests/<flavour>/SKIP file next to run_test.sh excludes the wf from
 # that flavour's selection (first line = printed reason). Same convention as
-# the publish chain's tests/docker/SKIP.
+# the publish chain's tests/docker/SKIP. For the python flavour, a
+# tests/python/MACOS_SKIP file excludes the wf from the macOS lane only
+# (its env does not solve for osx-64).
 
 on:
   workflow_call:
@@ -147,7 +149,13 @@ jobs:
           for w in selected:
               matrix.append({"wf": w, "runs_on": "ubuntu-latest"})
               if flavour == "python":
-                  matrix.append({"wf": w, "runs_on": "macos-latest"})
+                  macos_skip = os.path.join(w, "tests/python/MACOS_SKIP")
+                  if os.path.exists(macos_skip):
+                      reason = open(macos_skip).read().strip().splitlines()[0]
+                      print("::warning::" + w + " opted out of macos-latest "
+                            + "(MACOS_SKIP file: " + reason + ")")
+                  else:
+                      matrix.append({"wf": w, "runs_on": "macos-latest"})
           with open(os.environ["GITHUB_OUTPUT"], "a") as f:
               f.write("matrix=" + json.dumps(matrix) + "\n")
           with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as f:

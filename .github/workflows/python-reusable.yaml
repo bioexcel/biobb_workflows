@@ -111,16 +111,18 @@ jobs:
             exit 1
           fi
 
-      # macOS gets the last x86_64 Miniconda build (25.7.0; Anaconda stopped
-      # macOS-Intel builds after it, 26.x is arm64-only). On ARM runners it
-      # runs under Rosetta 2, so envs resolve for osx-64, which has far
-      # broader bioconda coverage than osx-arm64.
-      - name: Install conda (26.7.1 on Linux like the docker images; 25.7.0 x86_64 on macOS)
+      # macOS ARM runners get the native arm64 conda (same 26.7.1 as the
+      # docker images) first. Some envs do not resolve for osx-arm64 (e.g.
+      # biobb_amber has no osx-arm64 build); the Create environment step then
+      # falls back to the last x86_64 Miniconda build (25.7.0 — Anaconda
+      # stopped macOS-Intel builds after it), which runs under Rosetta 2 and
+      # resolves for osx-64.
+      - name: Install conda (26.7.1 like the docker images; native arm64 on macOS ARM)
         run: |
           case "${{ runner.os }}-${{ runner.arch }}" in
             Linux-X64)    conda_build=Miniconda3-py312_26.7.1-0-Linux-x86_64 ;;
             Linux-ARM64)  conda_build=Miniconda3-py312_26.7.1-0-Linux-aarch64 ;;
-            macOS-ARM64)  conda_build=Miniconda3-py312_25.7.0-2-MacOSX-x86_64 ;;
+            macOS-ARM64)  conda_build=Miniconda3-py312_26.7.1-0-MacOSX-arm64 ;;
             macOS-X64)    conda_build=Miniconda3-py312_25.7.0-2-MacOSX-x86_64 ;;
             *) echo "Unsupported runner: ${{ runner.os }}/${{ runner.arch }}"; exit 1 ;;
           esac
@@ -133,10 +135,22 @@ jobs:
           "$HOME/miniconda3/bin/conda" config --set solver libmamba
           "$HOME/miniconda3/bin/conda" create -y -n biobb_env -f ${{ inputs.wf_name }}/python/workflow.env.yml pytest imagehash
 
-      - name: Create environment (macOS, conda 25.7.0 --file takes a plain spec list)
+      - name: Create environment (macOS, native arm64 with x86_64/Rosetta fallback)
         if: runner.os == 'macOS'
         run: |
           "$HOME/miniconda3/bin/conda" config --set solver libmamba
+          if [ "${{ runner.arch }}" = "ARM64" ]; then
+            # same create command as the ubuntu lane
+            if "$HOME/miniconda3/bin/conda" create -y -n biobb_env -f ${{ inputs.wf_name }}/python/workflow.env.yml pytest imagehash; then
+              echo "Environment resolved for osx-arm64"
+              exit 0
+            fi
+            echo "::warning::Environment does not resolve for osx-arm64; retrying with x86_64 (Rosetta, osx-64)"
+            rm -rf "$HOME/miniconda3"
+            curl -fsSL "https://repo.anaconda.com/miniconda/Miniconda3-py312_25.7.0-2-MacOSX-x86_64.sh" -o /tmp/miniconda.sh
+            bash /tmp/miniconda.sh -b -p "$HOME/miniconda3"
+            "$HOME/miniconda3/bin/conda" config --set solver libmamba
+          fi
           # conda 25.7.0 (last x86_64 macOS build) 'create' does not read
           # env-format files: pull the deps out of the env file into a plain
           # spec list (one spec per line, so 'mkl <2026' stays one spec) and

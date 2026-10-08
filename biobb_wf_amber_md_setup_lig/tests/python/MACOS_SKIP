@@ -1,0 +1,11 @@
+Env does not solve for macOS (no biobb_amber osx-arm64 build; osx-64 openmpi-ambertools conflict).
+
+The biobb_amber 5.3.x macOS x86_64 builds require an openmpi-ambertools
+build, whose old libboost/icu/zlib pins conflict with biobb_analysis 5.3.0's
+gromacs 2026 chain (no installable provider), and no osx-arm64 build of
+biobb_amber 5.3.x exists at all.
+
+Opts this workflow out of the macOS CI lane only (python-tests.yaml, via the
+detect job); the ubuntu-latest lane and all container flavours are unaffected.
+Delete this file once the osx-64 builds resolve (e.g. newer ambertools
+rebuilds on conda-forge/bioconda).
