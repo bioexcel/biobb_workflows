@@ -1,0 +1,13 @@
+CNS produces no models on macOS ARM (haddock3 2025.11.0 bundled arm64-darwin
+CNS binary runs but writes no rigidbody PDBs, so caprieval fails with
+"list index out of range" and all later steps fail; env itself solves).
+
+The haddock3 version is pinned by biobb_haddock 5.3.0 (haddock_biobb 2025.11),
+and the CNS binary ships inside the haddock3 PyPI package
+(haddock/cns/bin/arm64-darwin.bin). Upstream issue: needs reproducing locally
+to capture the CNS stderr (CI runs with --remove, no artifacts left).
+
+Opts this workflow out of the macOS CI lane only (python-tests.yaml, via the
+detect job); the ubuntu-latest lane and all container flavours are unaffected.
+Delete this file once CNS works on macOS (biobb_haddock bump to a haddock3
+release with a fixed arm64-darwin CNS build).

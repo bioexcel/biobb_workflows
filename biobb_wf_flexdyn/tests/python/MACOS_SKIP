@@ -1,0 +1,10 @@
+Env does not solve for macOS (ambertools unplaceable on osx-64; unsolvable on osx-arm64).
+
+biobb_analysis 5.3.0 requires ambertools >=23.0, which cannot be placed
+alongside biobb_flexserv + gromacs 2026 on osx-64, and the env does not
+resolve for osx-arm64 either.
+
+Opts this workflow out of the macOS CI lane only (python-tests.yaml, via the
+detect job); the ubuntu-latest lane and all container flavours are unaffected.
+Delete this file once the osx builds resolve (e.g. newer ambertools rebuilds
+on conda-forge/bioconda).
