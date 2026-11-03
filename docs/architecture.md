@@ -28,6 +28,12 @@ biobb_workflows/
 │   ├── galaxy/                 # Galaxy flavour (where present)
 │   │   └── biobb_wf_<name>.ga  # Galaxy workflow export (JSON)
 │   ├── jupyter/                # GIT SUBMODULE → separate bioexcel/biobb_wf_* repo
+│   ├── nextflow/               # Nextflow flavour (generated, where present)
+│   │   ├── main.nf             # One process call per python step (BioBB Nextflow modules)
+│   │   ├── nextflow.config     # Per-step ext.properties / ext.outputs + container profiles
+│   │   ├── samplesheet.csv     # Default input: one row with the python inputs
+│   │   ├── modules/bioexcel/   # The BioBB Nextflow modules used, copied from biobb_adapters
+│   │   └── <input files>
 │   └── tests/
 │       ├── python/             # pytest step-by-step tests (the only CI-tested flavour)
 │       │   ├── biobb_wf_<name>.py
@@ -36,7 +42,8 @@ biobb_workflows/
 │       │   └── <input files>
 │       ├── docker/             # (new, phase 1) container e2e test
 │       ├── cwl/                # (new, phase 1) cwltool e2e test
-│       └── airflow/            # (new, phase 1) Airflow DAG e2e test
+│       ├── airflow/            # (new, phase 1) Airflow DAG e2e test
+│       └── nextflow/           # nextflow run e2e test (generated with nextflow/)
 ├── common/                     # Shared templates & code used by the CI code-generation
 │   ├── docker/Dockerfile       # The single Dockerfile template
 │   ├── docker/README_*.md      # README templates (common/subrepo/python variants)
@@ -48,7 +55,7 @@ biobb_workflows/
 │   ├── airflow/plugins/cwl_run.sh         # cwltool wrapper used by every Airflow task
 │   ├── airflow/plugins/docker_wrapper.sh  # Docker path-remap wrapper (Mac-focused)
 │   └── images/                 # README images
-├── .github/workflows/          # 12 workflows (see ci.md)
+├── .github/workflows/          # 21 workflows (see ci.md)
 └── docs/                       # This documentation
 ```
 
@@ -56,33 +63,33 @@ biobb_workflows/
 
 19 workflows. `jupyter` is always a git submodule (except where absent).
 
-| Workflow | airflow | cwl | docker | galaxy | jupyter | python |
-| --- | :-: | :-: | :-: | :-: | :-: | :-: |
-| biobb_wf_amber_abc_setup | ✓ | ✓ | ✓ | ✓ | ✓¹ | ✓ |
-| biobb_wf_amber_md_setup | ✓ | ✓ | ✓ | ✓ | ✓¹ | ✓ |
-| biobb_wf_amber_md_setup_lig | ✓ | ✓ | ✓ | ✓ | ✓¹ | ✓ |
-| biobb_wf_autoencoder | ✓ | ✓ | ✓ |  | ✓ | ✓ |
-| biobb_wf_cmip | ✓ | ✓ | ✓ | ² | ✓ | ✓ |
-| biobb_wf_dna_helparms |  |  | ✓ |  | ✓ | ✓ |
-| biobb_wf_flexdyn | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| biobb_wf_flexserv | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| biobb_wf_godmd | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| biobb_wf_haddock |  |  | ✓ |  | ✓ | ✓ |
-| biobb_wf_ligand_parameterization | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| biobb_wf_md_setup | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| biobb_wf_md_setup_mutations | ✓ | ✓ | ✓ |  |  | ✓ |
-| biobb_wf_mem | ✓ | ✓ | ✓ |  | ✓ | ✓ |
-| biobb_wf_pmx_tutorial |  |  | ✓ |  | ✓ | ✓ |
-| biobb_wf_protein-complex_md_setup | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| biobb_wf_protein_md_analysis |  |  | ✓ |  |  | ✓ |
-| biobb_wf_structure_checking | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| biobb_wf_virtual-screening_fpocket | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Workflow | airflow | cwl | docker | galaxy | jupyter | nextflow | python |
+| --- | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+| biobb_wf_amber_abc_setup | ✓ | ✓ | ✓ | ✓ | ✓¹ | ✓ | ✓ |
+| biobb_wf_amber_md_setup | ✓ | ✓ | ✓ | ✓ | ✓¹ | ✓ | ✓ |
+| biobb_wf_amber_md_setup_lig | ✓ | ✓ | ✓ | ✓ | ✓¹ | ✓ | ✓ |
+| biobb_wf_autoencoder | ✓ | ✓ | ✓ |  | ✓ | ✓ | ✓ |
+| biobb_wf_cmip | ✓ | ✓ | ✓ | ² | ✓ | ✓ | ✓ |
+| biobb_wf_dna_helparms |  |  | ✓ |  | ✓ |  | ✓ |
+| biobb_wf_flexdyn | ✓ | ✓ | ✓ | ✓ | ✓ |  | ✓ |
+| biobb_wf_flexserv | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| biobb_wf_godmd | ✓ | ✓ | ✓ | ✓ | ✓ |  | ✓ |
+| biobb_wf_haddock |  |  | ✓ |  | ✓ |  | ✓ |
+| biobb_wf_ligand_parameterization | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| biobb_wf_md_setup | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| biobb_wf_md_setup_mutations | ✓ | ✓ | ✓ |  |  |  | ✓ |
+| biobb_wf_mem | ✓ | ✓ | ✓ |  | ✓ | ✓ | ✓ |
+| biobb_wf_pmx_tutorial |  |  | ✓ |  | ✓ |  | ✓ |
+| biobb_wf_protein-complex_md_setup | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| biobb_wf_protein_md_analysis |  |  | ✓ |  |  |  | ✓ |
+| biobb_wf_structure_checking | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| biobb_wf_virtual-screening_fpocket | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 
 ¹ The three amber sub-workflows are submodules of the **same** repo `bioexcel/biobb_wf_amber`
 (pinned to the same commit), each exposing a different notebook subfolder.
 ² `biobb_wf_cmip/galaxy/` exists locally but is git-ignored (no Galaxy workflow for cmip).
 
-Counts: docker 19/19, python 19/19, jupyter 17/19, airflow 15/19, cwl 15/19, galaxy 11/19.
+Counts: docker 19/19, python 19/19, jupyter 17/19, airflow 15/19, cwl 15/19, nextflow 12/19, galaxy 11/19.
 
 ## 3. Flavour anatomy & provenance
 
@@ -159,6 +166,28 @@ execution substrate differs.
   (the **same** env file the Docker image installs), `binder/` (myBinder),
   `.readthedocs.yaml` (docs), `CITATION.cff`.
 - The notebook mirrors the python steps interactively.
+
+### 3.7 nextflow (generated)
+- Generated, with `tests/nextflow/run_test.sh`, by utils_biobb
+  `nextflow/nextflow_wf_generator.py` from `python/workflow.yml` + `workflow.py`
+  (like the cwl flavour's `cwl_wf_generator.py`, but with no manual correction: regenerate,
+  don't edit). 12 workflows; the 7 with loops or Python logic between steps are not
+  supported by the generator.
+- `main.nf`: one call per python step of the BioBB Nextflow module of its block, under the
+  step name (`include { BIOBB_GROMACS_GROMPP as STEP9_GROMPP_MIN }`); `file:` inputs are
+  samplesheet columns, `dependency/<step>/<output>` paths the output channel of that step;
+  steps under `if global_properties[<flag>]` run only with `--<flag> true`. The modules
+  (`modules/bioexcel/<package>/<block>`) are copied from biobb_adapters, generated from the
+  JSON schemas of the last tagged biobb versions; each runs its block in the package
+  biocontainer (`quay.io/biocontainers/*`, Galaxy depot image for apptainer/singularity).
+- `nextflow.config`: each step's properties (`ext.properties`, without the MPI ones: the
+  biocontainers have no MPI) and output extensions (`ext.outputs`), profiles `docker`,
+  `apptainer`, `singularity`, `conda`.
+- `samplesheet.csv` (`--input`): one row per system, all run in parallel; the default one
+  has the python inputs, copied next to it.
+- Run from a clone: `nextflow run biobb_wf_<name>/nextflow -profile docker` → results in
+  `results/<id>/<step>/`. (`nextflow run bioexcel/biobb_workflows` from GitHub can't be used:
+  Nextflow only reads the `nextflow.config` at the repository root.)
 
 ## 4. `common/` and the CI code-generation loop
 

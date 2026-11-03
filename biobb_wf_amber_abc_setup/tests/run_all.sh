@@ -3,7 +3,7 @@
 # Run the flavour e2e tests for this workflow, in sequence.
 #
 # Usage:
-#   ./run_all.sh                 # docker, cwl, airflow, jupyter
+#   ./run_all.sh                 # docker, cwl, airflow, jupyter, nextflow
 #   ./run_all.sh docker cwl      # selected flavours
 #   KEEP=1 ./run_all.sh docker   # keep scratch dirs / images for inspection
 #
@@ -13,14 +13,14 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 if [[ $# -gt 0 ]]; then
   FLAVOURS=("$@")
 else
-  FLAVOURS=(docker cwl airflow jupyter)
+  FLAVOURS=(docker cwl airflow jupyter nextflow)
 fi
 
 RESULTS=()
 for fl in "${FLAVOURS[@]}"; do
   case "$fl" in
-    docker|cwl|airflow|jupyter) ;;
-    *) echo "ERROR: unknown flavour '$fl' (expected docker|cwl|airflow|jupyter)" >&2; exit 2 ;;
+    docker|cwl|airflow|jupyter|nextflow) ;;
+    *) echo "ERROR: unknown flavour '$fl' (expected docker|cwl|airflow|jupyter|nextflow)" >&2; exit 2 ;;
   esac
   echo
   echo "================ FLAVOUR: $fl ================"

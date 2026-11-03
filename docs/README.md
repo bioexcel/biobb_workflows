@@ -1,7 +1,7 @@
 # biobb_workflows — Technical Documentation
 
-Monorepo containing the **BioExcel Building Blocks (BioBB) workflows** in six execution
-"flavours": `python`, `airflow`, `cwl`, `docker`, `galaxy` and `jupyter`.
+Monorepo containing the **BioExcel Building Blocks (BioBB) workflows** in seven execution
+"flavours": `python`, `airflow`, `cwl`, `docker`, `galaxy`, `jupyter` and `nextflow`.
 
 | Document | Content |
 | --- | --- |
@@ -12,12 +12,13 @@ Monorepo containing the **BioExcel Building Blocks (BioBB) workflows** in six ex
 ## Quick facts
 
 - **19 workflows**, each a top-level folder `biobb_wf_<name>/`.
-- **6 flavours** are the possible sub-folders of a workflow; not every workflow has every
+- **7 flavours** are the possible sub-folders of a workflow; not every workflow has every
   flavour (see the matrix in [architecture.md](architecture.md)).
 - **Single conceptual source of truth**: the ordered list of BioBB tool *steps*. The python
   flavour (`workflow.py` + `workflow.yml`) is the reference implementation used by CI. The
   CWL, Airflow and Galaxy flavours are derived artefacts that must be kept in sync manually
-  (with generator scripts + manual fixes, see per-workflow `NOTES.md`).
+  (with generator scripts + manual fixes, see per-workflow `NOTES.md`). The Nextflow
+  flavour is fully generated (utils_biobb `nextflow_wf_generator.py`): regenerate it.
 - **Jupyter flavour** lives in *separate* repos (`bioexcel/biobb_wf_*`) mounted as git
   submodules at `<wf>/jupyter`.
 - **Docker flavour** images are built from `common/docker/Dockerfile` (with per-workflow

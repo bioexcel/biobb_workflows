@@ -1,18 +1,18 @@
 # biobb_wf_cmip — tests
 
 Per-flavour end-to-end tests. `python/` is the step-by-step pytest suite;
-`docker/`, `cwl/` and `airflow/` are local e2e scripts (see `docs/testing.md`).
+`docker/`, `cwl/`, `airflow/` and `nextflow/` are local e2e scripts (see `docs/testing.md`).
 
 ## Machine requirement: ~25 GiB of free RAM
 
 The MIP steps (`cmip_run`, AMBER sander) allocate ~25 GiB of RAM. These e2e
 scripts therefore **run only on a big machine** (the GH-hosted 7 GiB runner
-OOMs), and all three flavours are opted out of CI via the `tests/<flavour>/SKIP`
+OOMs), and all four flavours are opted out of CI via the `tests/<flavour>/SKIP`
 files — delete a SKIP file to re-enable that flavour once the tests can run on
 a bigger runner. Run locally:
 
 ```console
-./run_all.sh                 # docker, then cwl, then airflow (hours)
+./run_all.sh                 # docker, then cwl, then airflow, then nextflow (hours)
 ```
 
 ## Running
@@ -23,7 +23,8 @@ cd biobb_workflows/biobb_wf_cmip/tests
 ./docker/run_test.sh            # build image + run MODE=python + assert outputs
 ./cwl/run_test.sh               # cwltool over cwl/workflow.cwl + assert outputs
 ./airflow/run_test.sh           # Airflow standalone in docker, trigger DAG, assert all tasks
-./run_all.sh [docker cwl airflow]
+./nextflow/run_test.sh          # nextflow run of nextflow/ + assert every step output
+./run_all.sh [docker cwl airflow nextflow]
 KEEP=1 ./docker/run_test.sh     # keep image/work dir for inspection
 ```
 
@@ -36,6 +37,7 @@ All scripts exit non-zero on failure and print a `PASS:`/`FAIL:` line per check.
 | docker | docker daemon. Image build pulls the conda env (~GB) and fetches env.yml/notebook/workflow.py from GitHub `main` at build time. |
 | cwl | docker daemon + `cwltool` on PATH (`micromamba create -n cwl -c conda-forge cwltool`). Pre-pulls the 4 `quay.io/biocontainers/*` tool images (several GB) with retries before the run. |
 | airflow | docker daemon. Builds `biobb-airflow-test:3.3.2` (apache/airflow 3.3.2 + cwltool + docker CLI) once. |
+| nextflow | docker daemon + `nextflow` (>=25.10, Java 17+) on PATH. Pre-pulls the `quay.io/biocontainers/*` images of the modules with retries before the run. |
 
 On failure every script keeps its work dir (with the full log) and records it
 in `tests/<flavour>/.e2e_workdir` — in CI the on-failure step tars + uploads

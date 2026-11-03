@@ -1,7 +1,7 @@
 # biobb_wf_mem — tests
 
 Per-flavour end-to-end tests. `python/` is the step-by-step pytest suite (run
-in CI); `docker/`, `cwl/`, `airflow/` and `jupyter/` are local e2e scripts
+in CI); `docker/`, `cwl/`, `airflow/`, `jupyter/` and `nextflow/` are local e2e scripts
 (see `docs/testing.md`).
 
 ## Running
@@ -13,7 +13,8 @@ cd biobb_workflows/biobb_wf_mem/tests
 ./cwl/run_test.sh              # cwltool over the CWL adapters (needs cwltool)
 ./airflow/run_test.sh          # Airflow standalone DAG run (needs docker socket)
 ./jupyter/run_test.sh          # execute the tutorial notebook in the image
-./run_all.sh [docker cwl airflow jupyter]
+./nextflow/run_test.sh         # nextflow run of nextflow/ + assert every step output
+./run_all.sh [docker cwl airflow jupyter nextflow]
 KEEP=1 ./docker/run_test.sh    # keep image/work dir for inspection
 ```
 
@@ -31,6 +32,7 @@ inspect it.
 | cwl | docker daemon + `cwltool` (e.g. `micromamba create -n cwl -c conda-forge cwltool`). Tool images (quay.io/biocontainers/*, 5.2.x) are pre-pulled with retries; cwltool runs with `--no-match-user`. |
 | airflow | docker daemon reachable from the container (`/var/run/docker.sock`) for the nested tool containers. Builds a throwaway `biobb-airflow-test:3.3.2` image. |
 | jupyter | docker daemon + **network** (the notebook downloads the A023K DPPC system from MDDb at runtime). |
+| nextflow | docker daemon + `nextflow` (>=25.10, Java 17+) on PATH. Pre-pulls the `quay.io/biocontainers/*` images of the modules with retries before the run. |
 
 Apple Silicon: the scripts auto-add `--platform linux/amd64` and warn — runs
 are emulated (slow).

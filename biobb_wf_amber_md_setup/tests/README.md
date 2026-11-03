@@ -1,8 +1,8 @@
 # biobb_wf_amber_md_setup — tests
 
 End-to-end tests per flavour. `python/` is the step-by-step pytest suite
-(already run in CI, with reduced runtime). `docker/`, `cwl/`, `airflow/` and
-`jupyter/` are local e2e scripts (can also be triggered manually from GitHub
+(already run in CI, with reduced runtime). `docker/`, `cwl/`, `airflow/`,
+`jupyter/` and `nextflow/` are local e2e scripts (can also be triggered manually from GitHub
 Actions, see `docs/testing.md`).
 
 This workflow sets up a protein MD system from a crystal structure (1aki):
@@ -55,15 +55,16 @@ cd biobb_workflows/biobb_wf_amber_md_setup/tests
 ./cwl/run_test.sh           # 2. cwl flavour
 ./airflow/run_test.sh       # 3. airflow flavour
 ./jupyter/run_test.sh       # 4. jupyter flavour
+./nextflow/run_test.sh      # 5. nextflow flavour
 ```
 
-or all four in sequence:
+or all five in sequence:
 
 ```console
 ./run_all.sh
 ```
 
-Useful options (same for all four):
+Useful options (same for all five):
 
 - `--keep` — keep the image / scratch folders after the run, to inspect what happened
 - docker & jupyter: `--pull` runs the **published** image from GitHub Container
@@ -72,6 +73,9 @@ Useful options (same for all four):
 - airflow only: `TIMEOUT_MIN=120 ./run_test.sh` sets the max waiting time
 - jupyter only: `NB_REPO_URL=<url> ./run_test.sh` overrides the notebook repo
   (e.g. to test a fork/branch)
+- nextflow only: `PROFILE=apptainer ./run_test.sh` uses the apptainer profile, `FULL_STEPS=1`
+  skips the runtime cuts, `EXTRA_NF_ARGS="..."` adds `nextflow run` arguments (the script is
+  generated with the workflow by utils_biobb `nextflow_wf_generator.py`)
 - cwl only: `EXTRA_CWL_ARGS="--no-match-user" ./run_test.sh` passes extra
   cwltool args (useful on Mac ARM)
 

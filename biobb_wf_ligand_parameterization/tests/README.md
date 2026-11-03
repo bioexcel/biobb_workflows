@@ -1,7 +1,7 @@
 # biobb_wf_ligand_parameterization — tests
 
 End-to-end tests per flavour. `python/` is the step-by-step pytest suite (already
-run in CI). `docker/`, `cwl/`, `airflow/` and `jupyter/` are local e2e scripts
+run in CI). `docker/`, `cwl/`, `airflow/`, `jupyter/` and `nextflow/` are local e2e scripts
 (phase 1 — can also be triggered manually from GitHub Actions, see
 `docs/testing.md`).
 
@@ -18,15 +18,16 @@ cd biobb_workflows/biobb_wf_ligand_parameterization/tests
 ./cwl/run_test.sh           # 2. cwl flavour
 ./airflow/run_test.sh       # 3. airflow flavour
 ./jupyter/run_test.sh       # 4. jupyter flavour
+./nextflow/run_test.sh      # 5. nextflow flavour
 ```
 
-or all four in sequence:
+or all five in sequence:
 
 ```console
 ./run_all.sh
 ```
 
-Useful options (same for all four):
+Useful options (same for all five):
 
 - `--keep` — keep the image / scratch folders after the run, to inspect what happened
 - docker & jupyter: `--pull` runs the **published** image from GitHub Container
@@ -35,6 +36,9 @@ Useful options (same for all four):
 - airflow only: `TIMEOUT_MIN=120 ./run_test.sh` sets the max waiting time
 - jupyter only: `NB_REPO_URL=<url> ./run_test.sh` overrides the notebook repo
   (e.g. to test a fork/branch)
+- nextflow only: `PROFILE=apptainer ./run_test.sh` uses the apptainer profile, `FULL_STEPS=1`
+  skips the runtime cuts, `EXTRA_NF_ARGS="..."` adds `nextflow run` arguments (the script is
+  generated with the workflow by utils_biobb `nextflow_wf_generator.py`)
 
 Each script prints `PASS:`/`FAIL:` lines and a final `PASS`/`FAIL` summary, and exits
 with a non-zero code on failure (so scripts/CI can detect it).
@@ -74,6 +78,7 @@ or `tests/python/`.
 | cwl | a running docker daemon + `cwltool` on PATH (e.g. `micromamba create -n cwl -c conda-forge cwltool`). First run pulls the tool containers from quay.io. |
 | airflow | a running docker daemon. Builds the helper image `biobb-airflow-test:3.3.2` once (official Airflow 3.3.2 + cwltool + docker CLI), then starts/stops a throwaway Airflow. |
 | jupyter | a running docker daemon (reuses the docker-test image, so the first run builds it) + `git` (only if the `jupyter/` submodule is not checked out) + network access (the notebook fetches the IBP structure from the MMB REST API). |
+| nextflow | docker daemon + `nextflow` (>=25.10, Java 17+) on PATH. Pre-pulls the `quay.io/biocontainers/*` images of the modules with retries before the run. |
 
 On Apple Silicon the docker/cwl tests run the x86 images under emulation (slow, and
 some Intel OpenMP binaries need workarounds) — for representative results run them on

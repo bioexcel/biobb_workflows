@@ -90,7 +90,9 @@ Notes:
 - When porting the e2e scripts (§2), each wf's `adjust_runtime()` hook must **mirror**
   that wf's values from this table, or the e2e runs full-size steps. The cwl flavour's
   config has quoted keys (`"nsteps":`), so its pattern differs — see the commented
-  examples in `biobb_wf_cmip/tests/*/run_test.sh`.
+  examples in `biobb_wf_cmip/tests/*/run_test.sh`. The nextflow flavour's hook is
+  generated from `TEST_SETTINGS` in utils_biobb `nextflow_wf_generator.py` (§2.2):
+  change the values there and regenerate.
 - These values are what decide which wf fits which runner pool (§3.3): with reductions,
   all CI-runnable wfs fit GH-hosted `ubuntu-latest`; a `bigmem` pool is only needed to
   run heavy wfs *without* reductions (e.g. re-enable cmip).
@@ -240,6 +242,7 @@ What each flavour test asserts:
 | cwl | `cwltool --outdir out workflow.cwl workflow_input_descriptions.yml` (adapters pull `quay.io/biocontainers/*` via the host daemon) | exit 0 **and** same final outputs in `out/` |
 | airflow | host scratch dir with `dags/<wf>` + `plugins/` mounted into an `apache/airflow`+cwltool container at the *same absolute path*; `airflow dags trigger <wf>`; poll `airflow dags state` | DAG run state `success` (all 27 tasks) + per-step `outputs/step*/manifest.json` present |
 | jupyter | tutorial notebook executed headlessly **inside the wf docker image** (`conda run -n <env> jupyter nbconvert --to notebook --execute`); notebook from the `jupyter/` submodule if checked out, else a shallow clone of `https://github.com/bioexcel/<WF>` (CI checkouts have no submodules, so the clone path is the CI one) | nbconvert exit 0 (aborts on first raising cell) + no `error` outputs in the executed notebook + final files present (`IBPparams.gro/.itp/.top` for the pilot) |
+| nextflow | `nextflow run <wf>/nextflow -profile docker -c out/test.config` (a copy of `nextflow.config` with the runtime cuts), default samplesheet; the modules pull `quay.io/biocontainers/*` via the host daemon | exit 0 **and** every output of every step present and non-empty in `out/results/<id>/<step>/` |
 
 Caveats baked into the design:
 
@@ -329,6 +332,48 @@ Caveats baked into the design:
   notebook copy). (2) `biobb_analysis:5.3.0--gmx2026_2` (gromacs build) has **no cpptraj**;
   cpptraj adapters must use `biobb_analysis:5.3.0--pyhdfd78af_1` (depends on
   `ambertools >=23`).
+
+### 2.2 Nextflow flavour (generated, 2026-11)
+
+`<wf>/nextflow/` and `<wf>/tests/nextflow/run_test.sh` are both **generated** by
+utils_biobb `nextflow/nextflow_wf_generator.py` from `python/workflow.yml` +
+`workflow.py` (regenerate them, never edit them: the files carry a generated mark).
+Done for the 12 workflows whose python steps form a plain graph; the 7 with loops or
+Python logic (dna_helparms, flexdyn, godmd, haddock, md_setup_mutations, pmx_tutorial,
+protein_md_analysis) have no nextflow flavour yet.
+
+The script follows the conventions above (`WF_NAME`, `EXPECTED_OUTPUTS`,
+`adjust_runtime()`, `--keep`, `.e2e_workdir`, PASS/FAIL) with these differences:
+
+- The committed files are never touched: `adjust_runtime()` seds a copy of
+  `nextflow.config` (`out/test.config`, given with `-c`, so it overrides the
+  workflow's), with the §1.5 values from `TEST_SETTINGS` in the generator.
+- `EXPECTED_OUTPUTS` is **every** published output of every step run by default
+  (`<id>/<step>/<id>_<step>_<role>.<ext>`), not just the final ones.
+- `MAX_ATTEMPTS` (3 for structure_checking, flaky structure_check lookups): a failed
+  attempt is resumed with `-resume`, so only the failed steps run again.
+- `process.resourceLimits` caps the task CPUs to the host's (the multithreaded mdrun
+  steps ask for 4, more than a 2 vCPU runner has). `PROFILE=apptainer` runs the
+  Galaxy depot images instead of docker.
+
+Opted out of CI (`tests/nextflow/SKIP`): cmip (memory, as for every flavour) and the
+4 workflows with cpptraj steps (amber_abc_setup, amber_md_setup, amber_md_setup_lig,
+flexserv): the biobb_analysis Nextflow modules use the image of the biobb_analysis
+v5.3.0 JSON schema, `5.3.0--gmx2026_2`, which has no cpptraj (§2.1). With
+`biobb_analysis:5.3.0--pyhdfd78af_1` they pass every step.
+
+Pitfalls found while testing the generated workflows (2026-10-28):
+
+- **MPI**: the python configs run sander as `binary_path: sander.MPI` with `mpi_bin` /
+  `mpi_np`; the biocontainers have no MPI, so the generator leaves those three
+  properties out (as the cwl/airflow flavours do by hand).
+- **sander's 256-character file names**: sander truncates longer paths ("Error
+  opening unit 9 ... is missing or unreadable"). The work dir hash, biobb's
+  `sandbox_<uuid>/` and the `<id>_<step>_<role>` file names make the paths long:
+  a launch folder deeper than ~80 characters hits it. Workaround: a shorter launch
+  folder, or `sandbox_path: '/tmp'` in the step properties (inside the container).
+- **protein-complex_md_setup**: cutting every `nsteps` to 10 makes the NPT mdrun blow
+  up (same as the python CI, §1.5): only the free MD (`nsteps: 250000`) is cut.
 
 ## 3. Phase 2 plan: scale to all workflows + wire into CI
 

@@ -18,3 +18,5 @@ biobb_wf_cmip/galaxy/
 biobb_wf_*/tests/docker/work/
 biobb_wf_*/tests/cwl/out/
 biobb_wf_*/tests/jupyter/work/
+biobb_wf_*/tests/nextflow/out/
+biobb_wf_*/tests/nextflow/.e2e_workdir
