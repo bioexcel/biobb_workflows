@@ -1,0 +1,2 @@
+id,trajectory,structure,topology
+mem,trajectory.xtc,structure.pdb,topology.tpr

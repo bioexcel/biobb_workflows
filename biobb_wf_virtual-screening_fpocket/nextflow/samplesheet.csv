@@ -1,0 +1,2 @@
+id,all_pockets,ligand,protein
+virtual-screening_fpocket,all_pockets.zip,ligand.pdb,protein.pdb

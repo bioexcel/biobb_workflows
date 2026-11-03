@@ -1,0 +1,2 @@
+id,structure,ions,heteroatoms,input_lib,input_frcmod
+amber_md_setup_lig,structure.pdb,ions.pdb,heteroatoms.pdb,input_lib.zip,input_frcmod.zip

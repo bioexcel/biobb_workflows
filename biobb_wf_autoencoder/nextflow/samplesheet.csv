@@ -1,0 +1,2 @@
+id,trj_in,str_in,test_trj_in,test_str_in
+autoencoder,trj_in.xtc,str_in.pdb,test_trj_in.xtc,test_str_in.pdb

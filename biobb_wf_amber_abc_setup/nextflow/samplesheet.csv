@@ -1,0 +1,2 @@
+id,sequence,step1,step2,step3,step4,step5,step6,step7,step8,step9,step10,md
+amber_abc_setup,sequence.pdb,ABCix_config_files/step1.in,ABCix_config_files/step2.in,ABCix_config_files/step3.in,ABCix_config_files/step4.in,ABCix_config_files/step5.in,ABCix_config_files/step6.in,ABCix_config_files/step7.in,ABCix_config_files/step8.in,ABCix_config_files/step9.in,ABCix_config_files/step10.in,ABCix_config_files/md.in
