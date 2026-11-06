@@ -9,10 +9,10 @@ process BIOBB_ANALYSIS_GMX_TRJCONV_STR {
     tag "${meta.id}"
     label 'process_single'
 
-    conda 'bioconda::biobb_analysis=5.3.0'
+    conda 'bioconda::biobb_analysis=5.3.1'
     container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-        ? 'https://depot.galaxyproject.org/singularity/biobb_analysis:5.3.0--gmx2026_2'
-        : 'quay.io/biocontainers/biobb_analysis:5.3.0--gmx2026_2'}"
+        ? 'https://depot.galaxyproject.org/singularity/biobb_analysis:5.3.1--pyhdfd78af_0'
+        : 'quay.io/biocontainers/biobb_analysis:5.3.1--pyhdfd78af_0'}"
 
     input:
     tuple val(meta),

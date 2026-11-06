@@ -7,7 +7,7 @@ Wrapper of the Ambertools Cpptraj module for computing the radius of gyration (R
 
 Cpptraj (the successor to ptraj) is the main program in Ambertools for processing coordinate trajectories and data files. The parameter names and defaults are the same as the ones in the official Cpptraj manual.
 
-Nextflow adapter of the [CpptrajRgyr](https://biobb-analysis.readthedocs.io/en/latest/ambertools.html#module-ambertools.cpptraj_rgyr) building block of [biobb_analysis](https://github.com/bioexcel/biobb_analysis) 5.3.0.
+Nextflow adapter of the [CpptrajRgyr](https://biobb-analysis.readthedocs.io/en/latest/ambertools.html#module-ambertools.cpptraj_rgyr) building block of [biobb_analysis](https://github.com/bioexcel/biobb_analysis) 5.3.1.
 
 ## Get started
 

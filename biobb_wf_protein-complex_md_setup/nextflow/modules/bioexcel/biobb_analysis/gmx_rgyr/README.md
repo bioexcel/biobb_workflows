@@ -7,7 +7,7 @@ Wrapper of the GROMACS gyrate module for computing the radius of gyration (Rgyr)
 
 GROMACS gyrate computes the radius of gyration of a molecule and the radii of gyration about the x-, y- and z-axes, as a function of time. The atoms are explicitly mass weighted.
 
-Nextflow adapter of the [GMXRgyr](https://biobb-analysis.readthedocs.io/en/latest/gromacs.html#module-gromacs.gmx_rgyr) building block of [biobb_analysis](https://github.com/bioexcel/biobb_analysis) 5.3.0.
+Nextflow adapter of the [GMXRgyr](https://biobb-analysis.readthedocs.io/en/latest/gromacs.html#module-gromacs.gmx_rgyr) building block of [biobb_analysis](https://github.com/bioexcel/biobb_analysis) 5.3.1.
 
 ## Get started
 

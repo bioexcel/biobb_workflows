@@ -356,11 +356,12 @@ The script follows the conventions above (`WF_NAME`, `EXPECTED_OUTPUTS`,
   steps ask for 4, more than a 2 vCPU runner has). `PROFILE=apptainer` runs the
   Galaxy depot images instead of docker.
 
-Opted out of CI (`tests/nextflow/SKIP`): cmip (memory, as for every flavour) and the
-4 workflows with cpptraj steps (amber_abc_setup, amber_md_setup, amber_md_setup_lig,
-flexserv): the biobb_analysis Nextflow modules use the image of the biobb_analysis
-v5.3.0 JSON schema, `5.3.0--gmx2026_2`, which has no cpptraj (§2.1). With
-`biobb_analysis:5.3.0--pyhdfd78af_1` they pass every step.
+Opted out of CI (`tests/nextflow/SKIP`): cmip (memory, as for every flavour). The 4
+workflows with cpptraj steps (amber_abc_setup, amber_md_setup, amber_md_setup_lig,
+flexserv) were opted out until 2026-11-05, while the biobb_analysis Nextflow modules
+used the image of the biobb_analysis v5.3.0 JSON schema, `5.3.0--gmx2026_2`, which has
+no cpptraj (§2.1). The modules of biobb_analysis 5.3.1 use `5.3.1--pyhdfd78af_0`,
+which has cpptraj and GROMACS.
 
 Pitfalls found while testing the generated workflows (2026-10-28):
 

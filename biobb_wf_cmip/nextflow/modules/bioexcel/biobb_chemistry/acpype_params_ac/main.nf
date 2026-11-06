@@ -9,10 +9,10 @@ process BIOBB_CHEMISTRY_ACPYPE_PARAMS_AC {
     tag "${meta.id}"
     label 'process_single'
 
-    conda 'bioconda::biobb_chemistry=5.3.0'
+    conda 'bioconda::biobb_chemistry=5.3.1'
     container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-        ? 'https://depot.galaxyproject.org/singularity/biobb_chemistry:5.3.0--pyhdfd78af_0'
-        : 'quay.io/biocontainers/biobb_chemistry:5.3.0--pyhdfd78af_0'}"
+        ? 'https://depot.galaxyproject.org/singularity/biobb_chemistry:5.3.1--pyhdfd78af_0'
+        : 'quay.io/biocontainers/biobb_chemistry:5.3.1--pyhdfd78af_0'}"
 
     input:
     tuple val(meta),

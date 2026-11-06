@@ -7,7 +7,7 @@ Wrapper of the GROMACS energy module for extracting energy components from a giv
 
 GROMACS energy extracts energy components from an energy file. The user is prompted to interactively select the desired energy terms.
 
-Nextflow adapter of the [GMXEnergy](https://biobb-analysis.readthedocs.io/en/latest/gromacs.html#module-gromacs.gmx_energy) building block of [biobb_analysis](https://github.com/bioexcel/biobb_analysis) 5.3.0.
+Nextflow adapter of the [GMXEnergy](https://biobb-analysis.readthedocs.io/en/latest/gromacs.html#module-gromacs.gmx_energy) building block of [biobb_analysis](https://github.com/bioexcel/biobb_analysis) 5.3.1.
 
 ## Get started
 

@@ -7,7 +7,7 @@ Wrapper of the GROMACS rmsf module for performing a Root Mean Square Fluctuation
 
 GROMACS rmsf computes the root mean square fluctuation (RMSF) of the atomic positions over the trajectory.
 
-Nextflow adapter of the [GMXRmsf](https://biobb-analysis.readthedocs.io/en/latest/gromacs.html#module-gromacs.gmx_rmsf) building block of [biobb_analysis](https://github.com/bioexcel/biobb_analysis) 5.3.0.
+Nextflow adapter of the [GMXRmsf](https://biobb-analysis.readthedocs.io/en/latest/gromacs.html#module-gromacs.gmx_rmsf) building block of [biobb_analysis](https://github.com/bioexcel/biobb_analysis) 5.3.1.
 
 ## Get started
 

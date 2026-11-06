@@ -7,7 +7,7 @@ Wrapper of the GROMACS trjconv module for converting between GROMACS compatible 
 
 GROMACS trjconv module can convert trajectory files in many ways. See the GROMACS trjconv official documentation for further information.
 
-Nextflow adapter of the [GMXTrjconvStr](https://biobb-analysis.readthedocs.io/en/latest/gromacs.html#module-gromacs.gmx_trjconv_str) building block of [biobb_analysis](https://github.com/bioexcel/biobb_analysis) 5.3.0.
+Nextflow adapter of the [GMXTrjconvStr](https://biobb-analysis.readthedocs.io/en/latest/gromacs.html#module-gromacs.gmx_trjconv_str) building block of [biobb_analysis](https://github.com/bioexcel/biobb_analysis) 5.3.1.
 
 ## Get started
 
