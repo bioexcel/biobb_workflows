@@ -1,0 +1,2 @@
+id,stateA_tpr,stateA_traj,stateB_tpr,stateB_traj
+pmx_tutorial,pmx_tutorial/stateA.tpr,pmx_tutorial/stateA_1ns.xtc,pmx_tutorial/stateB.tpr,pmx_tutorial/stateB_1ns.xtc

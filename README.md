@@ -8,6 +8,7 @@ Welcome to the global repository for all the **BioExcel Building Blocks Workflow
 * Pure Python
 * Docker
 * Apache Airflow
+* Nextflow
 
 ## Installation
 

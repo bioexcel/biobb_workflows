@@ -1,0 +1,2 @@
+id,antigen,antibody_actpass,antibody,complex
+haddock,antigen.pdb,antibody_actpass.txt,antibody.pdb,complex.pdb

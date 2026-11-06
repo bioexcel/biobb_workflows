@@ -1,0 +1,234 @@
+/*
+ * Mutations Protein MD Setup tutorial using BioExcel Building Blocks (biobb)
+ * Nextflow version of biobb_wf_md_setup_mutations/python/workflow.py, with the BioBB Nextflow modules in modules/.
+ * Ported by hand: nextflow_wf_generator.py can't translate the python loop over the mutations of workflow.py.
+ * Regenerating it only refreshes the modules.
+ * Usage: nextflow run main.nf -profile docker [--input samplesheet.csv] [--run_md <value>] [-params-file mutations.yml]
+ */
+
+include { BIOBB_CHEMISTRY_REDUCE_REMOVE_HYDROGENS as STEP0_REDUCE_REMOVE_HYDROGENS } from './modules/bioexcel/biobb_chemistry/reduce_remove_hydrogens'
+include { BIOBB_STRUCTURE_UTILS_EXTRACT_MOLECULE as STEP1_EXTRACT_MOLECULE } from './modules/bioexcel/biobb_structure_utils/extract_molecule'
+include { BIOBB_STRUCTURE_UTILS_CAT_PDB as STEP00_CAT_PDB } from './modules/bioexcel/biobb_structure_utils/cat_pdb'
+include { BIOBB_MODEL_FIX_SIDE_CHAIN as STEP2_FIX_SIDE_CHAIN } from './modules/bioexcel/biobb_model/fix_side_chain'
+include { BIOBB_MODEL_MUTATE as STEP3_MUTATE } from './modules/bioexcel/biobb_model/mutate'
+include { BIOBB_GROMACS_PDB2GMX as STEP4_PDB2GMX } from './modules/bioexcel/biobb_gromacs/pdb2gmx'
+include { BIOBB_GROMACS_EDITCONF as STEP5_EDITCONF } from './modules/bioexcel/biobb_gromacs/editconf'
+include { BIOBB_GROMACS_SOLVATE as STEP6_SOLVATE } from './modules/bioexcel/biobb_gromacs/solvate'
+include { BIOBB_GROMACS_GROMPP as STEP7_GROMPP_GENION } from './modules/bioexcel/biobb_gromacs/grompp'
+include { BIOBB_GROMACS_GENION as STEP8_GENION } from './modules/bioexcel/biobb_gromacs/genion'
+include { BIOBB_GROMACS_GROMPP as STEP9_GROMPP_MIN } from './modules/bioexcel/biobb_gromacs/grompp'
+include { BIOBB_GROMACS_MDRUN as STEP10_MDRUN_MIN } from './modules/bioexcel/biobb_gromacs/mdrun'
+include { BIOBB_GROMACS_MAKE_NDX as STEP100_MAKE_NDX } from './modules/bioexcel/biobb_gromacs/make_ndx'
+include { BIOBB_GROMACS_GROMPP as STEP11_GROMPP_NVT } from './modules/bioexcel/biobb_gromacs/grompp'
+include { BIOBB_GROMACS_MDRUN as STEP12_MDRUN_NVT } from './modules/bioexcel/biobb_gromacs/mdrun'
+include { BIOBB_GROMACS_GROMPP as STEP13_GROMPP_NPT } from './modules/bioexcel/biobb_gromacs/grompp'
+include { BIOBB_GROMACS_MDRUN as STEP14_MDRUN_NPT } from './modules/bioexcel/biobb_gromacs/mdrun'
+include { BIOBB_GROMACS_GROMPP as STEP15_GROMPP_MD } from './modules/bioexcel/biobb_gromacs/grompp'
+include { BIOBB_GROMACS_MDRUN as STEP16_MDRUN_MD } from './modules/bioexcel/biobb_gromacs/mdrun'
+include { BIOBB_ANALYSIS_GMX_IMAGE as STEP17_GMX_IMAGE1 } from './modules/bioexcel/biobb_analysis/gmx_image'
+include { BIOBB_ANALYSIS_GMX_IMAGE as STEP18_GMX_IMAGE2 } from './modules/bioexcel/biobb_analysis/gmx_image'
+include { BIOBB_ANALYSIS_GMX_TRJCONV_STR as STEP19_GMX_TRJCONV_STR } from './modules/bioexcel/biobb_analysis/gmx_trjconv_str'
+include { BIOBB_ANALYSIS_GMX_ENERGY as STEP20_GMX_ENERGY } from './modules/bioexcel/biobb_analysis/gmx_energy'
+include { BIOBB_ANALYSIS_GMX_RGYR as STEP21_GMX_RGYR } from './modules/bioexcel/biobb_analysis/gmx_rgyr'
+include { BIOBB_ANALYSIS_GMX_RMS as STEP22_RMSD_FIRST } from './modules/bioexcel/biobb_analysis/gmx_rms'
+include { BIOBB_ANALYSIS_GMX_RMS as STEP23_RMSD_EXP } from './modules/bioexcel/biobb_analysis/gmx_rms'
+include { BIOBB_GROMACS_GROMPP as STEP24_GROMPP_MD } from './modules/bioexcel/biobb_gromacs/grompp'
+
+params {
+    // CSV with an id column and one column per input file: one workflow run per row
+    input: String = "${projectDir}/samplesheet.csv"
+    run_md: Boolean = true
+    // Mutations of the python loop (mutations global property): step3 to step24 run once per system and mutation
+    mutations: List = ['A:Gly4Lys', 'A:Leu8Met', 'A:Tyr20Gln']
+}
+
+workflow {
+    main:
+    // One [meta, files] item per samplesheet row: the steps of every row run in parallel
+    ch_samples = channel.fromPath(params.input)
+        .splitCsv(header: true)
+        .map { row -> [[id: row.id], [structure: samplePath(row.structure), ions: samplePath(row.ions)]] }
+
+    // step0_reduce_remove_hydrogens: Removing Hydrogens
+    STEP0_REDUCE_REMOVE_HYDROGENS(ch_samples.map { meta, files -> [meta, files.structure] })
+    // step1_extract_molecule: Extracting Protein
+    STEP1_EXTRACT_MOLECULE(STEP0_REDUCE_REMOVE_HYDROGENS.out.output_path)
+    // step00_cat_pdb: Concatenating protein with included ions
+    STEP00_CAT_PDB(
+        STEP1_EXTRACT_MOLECULE.out.output_molecule_path
+            .join(ch_samples.map { meta, files -> [meta, files.ions] })
+    )
+    // step2_fix_side_chain: Modeling the missing heavy atoms in the structure side chains
+    STEP2_FIX_SIDE_CHAIN(STEP00_CAT_PDB.out.output_structure_path)
+    // step3_mutate: Modeling mutation
+    STEP3_MUTATE(
+        STEP2_FIX_SIDE_CHAIN.out.output_pdb_path
+            .combine(channel.fromList(params.mutations))
+            .map { meta, pdb, mutation -> [meta + [mutation: mutation], pdb] }
+    )
+    // step4_pdb2gmx: Generate the topology
+    STEP4_PDB2GMX(STEP3_MUTATE.out.output_pdb_path)
+    // step5_editconf: Create the solvent box
+    STEP5_EDITCONF(STEP4_PDB2GMX.out.output_gro_path)
+    // step6_solvate: Fill the solvent box with water molecules
+    STEP6_SOLVATE(
+        STEP5_EDITCONF.out.output_gro_path
+            .join(STEP4_PDB2GMX.out.output_top_zip_path)
+            .map { meta, solute_gro, top_zip -> [meta, solute_gro, top_zip, []] }
+    )
+    // step7_grompp_genion: Preprocess ion generation
+    STEP7_GROMPP_GENION(
+        STEP6_SOLVATE.out.output_gro_path
+            .join(STEP6_SOLVATE.out.output_top_zip_path)
+            .map { meta, gro, top_zip -> [meta, gro, top_zip, [], [], []] }
+    )
+    // step8_genion: Ion generation
+    STEP8_GENION(
+        STEP7_GROMPP_GENION.out.output_tpr_path
+            .join(STEP6_SOLVATE.out.output_top_zip_path)
+            .map { meta, tpr, top_zip -> [meta, tpr, top_zip, []] }
+    )
+    // step9_grompp_min: Preprocess energy minimization
+    STEP9_GROMPP_MIN(
+        STEP8_GENION.out.output_gro_path
+            .join(STEP8_GENION.out.output_top_zip_path)
+            .map { meta, gro, top_zip -> [meta, gro, top_zip, [], [], []] }
+    )
+    // step10_mdrun_min: Execute energy minimization
+    STEP10_MDRUN_MIN(
+        STEP9_GROMPP_MIN.out.output_tpr_path
+            .map { meta, tpr -> [meta, tpr, []] }
+    )
+    // step100_make_ndx: Creating an index file for the whole system
+    STEP100_MAKE_NDX(
+        STEP10_MDRUN_MIN.out.output_gro_path
+            .map { meta, structure -> [meta, structure, []] }
+    )
+    // step11_grompp_nvt: Preprocess system temperature equilibration
+    STEP11_GROMPP_NVT(
+        STEP10_MDRUN_MIN.out.output_gro_path
+            .join(STEP8_GENION.out.output_top_zip_path)
+            .join(STEP100_MAKE_NDX.out.output_ndx_path)
+            .map { meta, gro, top_zip, ndx -> [meta, gro, top_zip, [], ndx, []] }
+    )
+    // step12_mdrun_nvt: Execute system temperature equilibration
+    STEP12_MDRUN_NVT(
+        STEP11_GROMPP_NVT.out.output_tpr_path
+            .map { meta, tpr -> [meta, tpr, []] }
+    )
+    // step13_grompp_npt: Preprocess system pressure equilibration
+    STEP13_GROMPP_NPT(
+        STEP12_MDRUN_NVT.out.output_gro_path
+            .join(STEP8_GENION.out.output_top_zip_path)
+            .join(STEP12_MDRUN_NVT.out.output_cpt_path)
+            .join(STEP100_MAKE_NDX.out.output_ndx_path)
+            .map { meta, gro, top_zip, cpt, ndx -> [meta, gro, top_zip, cpt, ndx, []] }
+    )
+    // step14_mdrun_npt: Execute system pressure equilibration
+    STEP14_MDRUN_NPT(
+        STEP13_GROMPP_NPT.out.output_tpr_path
+            .map { meta, tpr -> [meta, tpr, []] }
+    )
+    // step15_grompp_md: Preprocess free dynamics
+    STEP15_GROMPP_MD(
+        STEP14_MDRUN_NPT.out.output_gro_path
+            .join(STEP8_GENION.out.output_top_zip_path)
+            .join(STEP14_MDRUN_NPT.out.output_cpt_path)
+            .join(STEP100_MAKE_NDX.out.output_ndx_path)
+            .map { meta, gro, top_zip, cpt, ndx -> [meta, gro, top_zip, cpt, ndx, []] }
+    )
+    // step16_mdrun_md: Execute free molecular dynamics simulation
+    STEP16_MDRUN_MD(
+        STEP15_GROMPP_MD.out.output_tpr_path
+            .map { meta, tpr -> [meta, tpr, []] }
+    )
+    // step17_gmx_image1: Image Trajectory, step1, moving ligand to center of the water box
+    STEP17_GMX_IMAGE1(
+        STEP16_MDRUN_MD.out.output_trr_path
+            .join(STEP9_GROMPP_MIN.out.output_tpr_path)
+            .join(STEP100_MAKE_NDX.out.output_ndx_path)
+    )
+    // step18_gmx_image2: Image Trajectory, step2, removing rotation
+    STEP18_GMX_IMAGE2(
+        STEP17_GMX_IMAGE1.out.output_traj_path
+            .join(STEP9_GROMPP_MIN.out.output_tpr_path)
+            .join(STEP100_MAKE_NDX.out.output_ndx_path)
+    )
+    // step19_gmx_trjconv_str: Convert final structure from GRO to PDB
+    STEP19_GMX_TRJCONV_STR(
+        STEP16_MDRUN_MD.out.output_gro_path
+            .join(STEP9_GROMPP_MIN.out.output_tpr_path)
+            .join(STEP100_MAKE_NDX.out.output_ndx_path)
+    )
+    // step20_gmx_energy: Generate energy plot from minimization/equilibration
+    STEP20_GMX_ENERGY(STEP16_MDRUN_MD.out.output_edr_path)
+    // step21_gmx_rgyr: Generate Radius of Gyration plot for the resulting setup trajectory from the free md step
+    STEP21_GMX_RGYR(
+        STEP15_GROMPP_MD.out.output_tpr_path
+            .join(STEP18_GMX_IMAGE2.out.output_traj_path)
+            .join(STEP100_MAKE_NDX.out.output_ndx_path)
+    )
+    // step22_rmsd_first: Generate RMSd (against 1st snp.) plot for the resulting setup trajectory from the free md step
+    STEP22_RMSD_FIRST(
+        STEP15_GROMPP_MD.out.output_tpr_path
+            .join(STEP18_GMX_IMAGE2.out.output_traj_path)
+            .join(STEP100_MAKE_NDX.out.output_ndx_path)
+    )
+    // step23_rmsd_exp: Generate RMSd (against exp.) plot for the resulting setup trajectory from the free md step
+    STEP23_RMSD_EXP(
+        STEP9_GROMPP_MIN.out.output_tpr_path
+            .join(STEP18_GMX_IMAGE2.out.output_traj_path)
+            .join(STEP100_MAKE_NDX.out.output_ndx_path)
+    )
+    // step24_grompp_md: Preprocess long MD simulation after setup
+    STEP24_GROMPP_MD(
+        STEP16_MDRUN_MD.out.output_gro_path
+            .join(STEP8_GENION.out.output_top_zip_path)
+            .join(STEP16_MDRUN_MD.out.output_cpt_path)
+            .map { meta, gro, top_zip, cpt -> [meta, gro, top_zip, cpt, [], []] }
+            .filter { params.run_md }
+    )
+
+    publish:
+    results = channel.empty().mix(
+        STEP0_REDUCE_REMOVE_HYDROGENS.out.output_path.map { meta, result -> [meta, 'step0_reduce_remove_hydrogens', result] },
+        STEP1_EXTRACT_MOLECULE.out.output_molecule_path.map { meta, result -> [meta, 'step1_extract_molecule', result] },
+        STEP00_CAT_PDB.out.output_structure_path.map { meta, result -> [meta, 'step00_cat_pdb', result] },
+        STEP2_FIX_SIDE_CHAIN.out.output_pdb_path.map { meta, result -> [meta, 'step2_fix_side_chain', result] },
+        STEP3_MUTATE.out.output_pdb_path.map { meta, result -> [meta, 'step3_mutate', result] },
+        STEP4_PDB2GMX.out.output_gro_path.mix(STEP4_PDB2GMX.out.output_top_zip_path).map { meta, result -> [meta, 'step4_pdb2gmx', result] },
+        STEP5_EDITCONF.out.output_gro_path.map { meta, result -> [meta, 'step5_editconf', result] },
+        STEP6_SOLVATE.out.output_gro_path.mix(STEP6_SOLVATE.out.output_top_zip_path).map { meta, result -> [meta, 'step6_solvate', result] },
+        STEP7_GROMPP_GENION.out.output_tpr_path.map { meta, result -> [meta, 'step7_grompp_genion', result] },
+        STEP8_GENION.out.output_gro_path.mix(STEP8_GENION.out.output_top_zip_path).map { meta, result -> [meta, 'step8_genion', result] },
+        STEP9_GROMPP_MIN.out.output_tpr_path.map { meta, result -> [meta, 'step9_grompp_min', result] },
+        STEP10_MDRUN_MIN.out.output_gro_path.mix(STEP10_MDRUN_MIN.out.output_edr_path, STEP10_MDRUN_MIN.out.output_log_path, STEP10_MDRUN_MIN.out.output_trr_path).map { meta, result -> [meta, 'step10_mdrun_min', result] },
+        STEP100_MAKE_NDX.out.output_ndx_path.map { meta, result -> [meta, 'step100_make_ndx', result] },
+        STEP11_GROMPP_NVT.out.output_tpr_path.map { meta, result -> [meta, 'step11_grompp_nvt', result] },
+        STEP12_MDRUN_NVT.out.output_gro_path.mix(STEP12_MDRUN_NVT.out.output_edr_path, STEP12_MDRUN_NVT.out.output_log_path, STEP12_MDRUN_NVT.out.output_trr_path, STEP12_MDRUN_NVT.out.output_cpt_path).map { meta, result -> [meta, 'step12_mdrun_nvt', result] },
+        STEP13_GROMPP_NPT.out.output_tpr_path.map { meta, result -> [meta, 'step13_grompp_npt', result] },
+        STEP14_MDRUN_NPT.out.output_gro_path.mix(STEP14_MDRUN_NPT.out.output_edr_path, STEP14_MDRUN_NPT.out.output_log_path, STEP14_MDRUN_NPT.out.output_trr_path, STEP14_MDRUN_NPT.out.output_cpt_path).map { meta, result -> [meta, 'step14_mdrun_npt', result] },
+        STEP15_GROMPP_MD.out.output_tpr_path.map { meta, result -> [meta, 'step15_grompp_md', result] },
+        STEP16_MDRUN_MD.out.output_gro_path.mix(STEP16_MDRUN_MD.out.output_edr_path, STEP16_MDRUN_MD.out.output_log_path, STEP16_MDRUN_MD.out.output_trr_path, STEP16_MDRUN_MD.out.output_cpt_path).map { meta, result -> [meta, 'step16_mdrun_md', result] },
+        STEP17_GMX_IMAGE1.out.output_traj_path.map { meta, result -> [meta, 'step17_gmx_image1', result] },
+        STEP18_GMX_IMAGE2.out.output_traj_path.map { meta, result -> [meta, 'step18_gmx_image2', result] },
+        STEP19_GMX_TRJCONV_STR.out.output_str_path.map { meta, result -> [meta, 'step19_gmx_trjconv_str', result] },
+        STEP20_GMX_ENERGY.out.output_xvg_path.map { meta, result -> [meta, 'step20_gmx_energy', result] },
+        STEP21_GMX_RGYR.out.output_xvg_path.map { meta, result -> [meta, 'step21_gmx_rgyr', result] },
+        STEP22_RMSD_FIRST.out.output_xvg_path.map { meta, result -> [meta, 'step22_rmsd_first', result] },
+        STEP23_RMSD_EXP.out.output_xvg_path.map { meta, result -> [meta, 'step23_rmsd_exp', result] },
+        STEP24_GROMPP_MD.out.output_tpr_path.map { meta, result -> [meta, 'step24_grompp_md', result] }
+    )
+}
+
+output {
+    // results/<id>/<step>/<id>_<step>_<role>.<ext>, results/<id>/<mutation>/<step>/... for the steps of the mutations loop
+    results {
+        path { meta, step, _result -> meta.mutation ? "${meta.id}/${meta.mutation}/${step}" : "${meta.id}/${step}" }
+    }
+}
+
+// Path of a samplesheet column: absolute, or relative to the samplesheet folder
+def samplePath(String value) {
+    file(file(params.input).parent.resolve(value).toString(), checkIfExists: true)
+}

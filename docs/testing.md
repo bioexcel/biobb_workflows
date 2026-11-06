@@ -92,7 +92,8 @@ Notes:
   config has quoted keys (`"nsteps":`), so its pattern differs — see the commented
   examples in `biobb_wf_cmip/tests/*/run_test.sh`. The nextflow flavour's hook is
   generated from `TEST_SETTINGS` in utils_biobb `nextflow_wf_generator.py` (§2.2):
-  change the values there and regenerate.
+  change the values there and regenerate. The 7 hand-ported nextflow workflows have them
+  in their own `run_test.sh` (md_setup_mutations, pmx_tutorial).
 - These values are what decide which wf fits which runner pool (§3.3): with reductions,
   all CI-runnable wfs fit GH-hosted `ubuntu-latest`; a `bigmem` pool is only needed to
   run heavy wfs *without* reductions (e.g. re-enable cmip).
@@ -333,14 +334,41 @@ Caveats baked into the design:
   cpptraj adapters must use `biobb_analysis:5.3.0--pyhdfd78af_1` (depends on
   `ambertools >=23`).
 
-### 2.2 Nextflow flavour (generated, 2026-11)
+### 2.2 Nextflow flavour (2026-11)
 
 `<wf>/nextflow/` and `<wf>/tests/nextflow/run_test.sh` are both **generated** by
 utils_biobb `nextflow/nextflow_wf_generator.py` from `python/workflow.yml` +
-`workflow.py` (regenerate them, never edit them: the files carry a generated mark).
-Done for the 12 workflows whose python steps form a plain graph; the 7 with loops or
-Python logic (dna_helparms, flexdyn, godmd, haddock, md_setup_mutations, pmx_tutorial,
-protein_md_analysis) have no nextflow flavour yet.
+`workflow.py` (regenerate them, never edit them: the files carry a generated mark)
+for the 12 workflows whose python steps form a plain graph.
+
+The other 7 have Python logic between the steps that the generator can't translate. The
+generator stops on them: any block not called as
+`<block>(**global_paths[<step>], properties=global_prop[<step>])`, a step called inside a
+loop or a condition that is not a global property, or a change of the step paths or
+properties. They are **ported by hand**, with the same layout and conventions (from a
+generator run on a flattened copy of the python workflow):
+
+| Workflow | Python logic, as ported |
+| --- | --- |
+| dna_helparms | Loops over the helical parameters: one task each (`meta.helpar`), input from the extracted Canal zip. Loops over the base pairs (steps) found in the extracted timeseries zips (`meta.pair`). Zip of the outputs of every step (`<id>_<step>_outputs.zip`) |
+| flexdyn | Zip of the five ensembles concatenated by step25_trjcat. `CONCOORDLIB` (set from `$CONDA_PREFIX` by `workflow.py`) is left to the biobb_flexdyn container, which sets it |
+| godmd | step2/step3 run only when their `molecules` property is not empty: `step2_molecules` / `step3_molecules` params (lists, given in a `-params-file`), otherwise step4/step5 take the step0/step1 chains |
+| haddock | pdb_tools pipelines of step0 and step2 to step8: one `<step>_<n>_PDB_<BLOCK>` call per block, H and L chains as `meta.chain`. Zips of the chains for biobb_pdb_merge. Inputs of the haddock3 steps made by them |
+| md_setup_mutations | Loop over the mutations: `mutations` param (list), step3 to step24 once per mutation (`meta.mutation`, `mutation_list` of step3), results in `results/<id>/<mutation>/<step>/` |
+| pmx_tutorial | Loops over the states and the frames extracted from their trajectories (`meta.state`, `meta.frame`, results in `results/<id>/<state>/<frame>/<step>/`). stateA without energy minimization. Zip of the dhdl files of each state for step11. `gmx_lib` (GMXLIB): the pmx force field folder, copied from the biobb_pmx image by the MUTFF process |
+| protein_md_analysis | B-factor PDB file (Biopython) and clusters JSON file, written in the step4 and step7 folders |
+
+- The python logic runs in small processes: the local `zip` and `unzip` modules
+  (`nextflow/modules/local/`, the same in every workflow) or processes of `main.nf`. They
+  run in the biobb_common image (Python and Biopython), except MUTFF (biobb_pmx image).
+- Running the generator on a hand-ported workflow (its `main.nf` has no generated mark)
+  only refreshes the modules of `modules/bioexcel` that `main.nf` includes, so the new
+  module versions reach them with the same command. The rest is kept.
+- Their `run_test.sh` is written from the generator's template (same steps, options and
+  PASS/FAIL), with every output of the loops for the default inputs: 9 base-pair steps and
+  12 base pairs (dna_helparms), 3 mutations (md_setup_mutations), 25 frames per state
+  (pmx_tutorial). Runtime cuts (§1.5): md_setup_mutations `nsteps: 10`, pmx_tutorial
+  `nsteps: 50`.
 
 The script follows the conventions above (`WF_NAME`, `EXPECTED_OUTPUTS`,
 `adjust_runtime()`, `--keep`, `.e2e_workdir`, PASS/FAIL) with these differences:
@@ -363,6 +391,12 @@ used the image of the biobb_analysis v5.3.0 JSON schema, `5.3.0--gmx2026_2`, whi
 no cpptraj (§2.1). The modules of biobb_analysis 5.3.1 use `5.3.1--pyhdfd78af_0`,
 which has cpptraj and GROMACS.
 
+pmx_tutorial fails in step3_pmx_gentop with the image of its module,
+`biobb_pmx:5.3.1--pyhdfd78af_0` (pmx `KeyError: 'N3'`, Python 3.14), and passes with
+step3 in `5.3.0--pyhdfd78af_0`:
+`EXTRA_NF_ARGS="-c pmxgentop.config" ./run_test.sh`, the config file as in its
+`nextflow/README.md`.
+
 Pitfalls found while testing the generated workflows (2026-10-28):
 
 - **MPI**: the python configs run sander as `binary_path: sander.MPI` with `mpi_bin` /
@@ -375,6 +409,24 @@ Pitfalls found while testing the generated workflows (2026-10-28):
   folder, or `sandbox_path: '/tmp'` in the step properties (inside the container).
 - **protein-complex_md_setup**: cutting every `nsteps` to 10 makes the NPT mdrun blow
   up (same as the python CI, §1.5): only the free MD (`nsteps: 250000`) is cut.
+
+Pitfalls found while porting the other 7 (2026-11-06):
+
+- **pmx force field (pmx_tutorial)**: pdb2gmx and grompp run in the biobb_gromacs image,
+  which has no pmx `mutff` force field, and the modules have no input for a GMXLIB
+  folder. MUTFF copies it from the biobb_pmx image into the work directory and its path
+  goes to `gmx_lib` (`meta.gmx_lib`), mounted with `containerOptions` in the containers
+  of the steps that read it. Nextflow only mounts the common parent folder of a task's
+  inputs (`work/` or just `work/<xx>/`), so without that mount pmxmutate failed at
+  random ("forcefield path not found"). Needs a work directory on a shared file system
+  (not in object storage).
+- **haddock topology**: the biobb_haddock JSON schema of `topology` only accepts zip for
+  `output_haddock_wf_data` (the other haddock3 blocks also accept a folder), so the module
+  names the folder `<id>_step12_topology_haddock_wf_data.directory/`.
+- **haddock workflow.yml**: step21 and step23 give their zips as `output_cluster_zip_path`
+  and `output_contact_map_zip_path`, which are not arguments of `sele_top_clusts` and
+  `contact_map`: the python workflow ignores them. The Nextflow port asks for them with
+  the block names (`output_selection_zip_path`, `output_contactmap_zip_path`).
 
 ## 3. Phase 2 plan: scale to all workflows + wire into CI
 
