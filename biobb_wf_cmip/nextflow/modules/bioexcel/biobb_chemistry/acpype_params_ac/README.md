@@ -7,7 +7,7 @@ This class is a wrapper of Acpype tool for small molecule parameterization for A
 
 Generation of topologies for Antechamber. Acpype is a tool based in Python to use Antechamber to generate topologies for chemical compounds and to interface with others python applications like CCPN or ARIA. Visit the official page.
 
-Nextflow adapter of the [AcpypeParamsAC](https://biobb-chemistry.readthedocs.io/en/latest/acpype.html#module-acpype.acpype_params_ac) building block of [biobb_chemistry](https://github.com/bioexcel/biobb_chemistry) 5.3.1.
+Nextflow adapter of the [AcpypeParamsAC](https://biobb-chemistry.readthedocs.io/en/latest/acpype.html#module-acpype.acpype_params_ac) building block of [biobb_chemistry](https://github.com/bioexcel/biobb_chemistry) 5.3.2.
 
 ## Get started
 

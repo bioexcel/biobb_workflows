@@ -9,10 +9,10 @@ process BIOBB_CHEMISTRY_REDUCE_ADD_HYDROGENS {
     tag "${meta.id}"
     label 'process_single'
 
-    conda 'bioconda::biobb_chemistry=5.3.1'
+    conda 'bioconda::biobb_chemistry=5.3.2'
     container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-        ? 'https://depot.galaxyproject.org/singularity/biobb_chemistry:5.3.1--pyhdfd78af_0'
-        : 'quay.io/biocontainers/biobb_chemistry:5.3.1--pyhdfd78af_0'}"
+        ? 'https://depot.galaxyproject.org/singularity/biobb_chemistry:5.3.2--pyhdfd78af_0'
+        : 'quay.io/biocontainers/biobb_chemistry:5.3.2--pyhdfd78af_0'}"
 
     input:
     tuple val(meta),

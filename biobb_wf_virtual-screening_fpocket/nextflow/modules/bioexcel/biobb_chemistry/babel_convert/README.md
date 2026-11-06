@@ -7,7 +7,7 @@ This class is a wrapper of the Open Babel tool.
 
 Small molecule format conversion for structures or trajectories. Open Babel is a chemical toolbox designed to speak the many languages of chemical data. It's an open, collaborative project allowing anyone to search, convert, analyze, or store data from molecular modeling, chemistry, solid-state materials, biochemistry, or related areas. Visit the official page.
 
-Nextflow adapter of the [BabelConvert](https://biobb-chemistry.readthedocs.io/en/latest/babelm.html#module-babelm.babel_convert) building block of [biobb_chemistry](https://github.com/bioexcel/biobb_chemistry) 5.3.1.
+Nextflow adapter of the [BabelConvert](https://biobb-chemistry.readthedocs.io/en/latest/babelm.html#module-babelm.babel_convert) building block of [biobb_chemistry](https://github.com/bioexcel/biobb_chemistry) 5.3.2.
 
 ## Get started
 

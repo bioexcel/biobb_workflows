@@ -7,7 +7,7 @@ This class is a wrapper of the Ambertools reduce module for adding hydrogens to 
 
 Reduce is a program for adding or removing hydrogens to a Protein DataBank (PDB) molecular structure file.
 
-Nextflow adapter of the [ReduceAddHydrogens](https://biobb-chemistry.readthedocs.io/en/latest/ambertools.html#module-ambertools.reduce_add_hydrogens) building block of [biobb_chemistry](https://github.com/bioexcel/biobb_chemistry) 5.3.1.
+Nextflow adapter of the [ReduceAddHydrogens](https://biobb-chemistry.readthedocs.io/en/latest/ambertools.html#module-ambertools.reduce_add_hydrogens) building block of [biobb_chemistry](https://github.com/bioexcel/biobb_chemistry) 5.3.2.
 
 ## Get started
 
