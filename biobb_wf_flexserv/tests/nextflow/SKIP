@@ -1,9 +1,0 @@
-The cpptraj steps fail with the image of the biobb_analysis Nextflow modules:
-biobb_analysis:5.3.0--gmx2026_2, the image of the biobb_analysis v5.3.0 JSON schema,
-is the GROMACS build and has no cpptraj (docs/testing.md §2.1). The other 5.3.0
-build, biobb_analysis:5.3.0--pyhdfd78af_1, has it, and the workflow passes every
-step with it (the cwl/airflow adapters of this workflow already use it).
-
-This file opts biobb_wf_flexserv out of the automatic nextflow e2e (nextflow-tests.yaml,
-via the detect job). Delete it once the biobb_analysis schema, and the Nextflow
-modules generated from it, point at the pyhdfd78af build.
