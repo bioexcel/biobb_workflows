@@ -57,7 +57,7 @@ EXPECTED_OUTPUTS=(
   "haddock/step9_haddock3_passive_from_active/haddock_step9_haddock3_passive_from_active_actpass.txt"
   "haddock/step10_haddock3_actpass_to_ambig/haddock_step10_haddock3_actpass_to_ambig_tbl.tbl"
   "haddock/step11_haddock3_restrain_bodies/haddock_step11_haddock3_restrain_bodies_tbl.tbl"
-  "haddock/step12_topology/haddock_step12_topology_haddock_wf_data.directory/"
+  "haddock/step12_topology/haddock_step12_topology_haddock_wf_data/"
   "haddock/step12_topology/haddock_step12_topology_mol1_output_top_zip.zip"
   "haddock/step12_topology/haddock_step12_topology_mol2_output_top_zip.zip"
   "haddock/step13_rigid_body/haddock_step13_rigid_body_haddock_wf_data/"

@@ -451,6 +451,7 @@ def step21_sele_top_clusts(config, system=None):
     sele_top_clusts(**global_paths["step21_sele_top_clusts"], properties=global_prop["step21_sele_top_clusts"])
 
     assert fx.not_empty(global_paths["step21_sele_top_clusts"]["output_haddock_wf_data"])
+    assert fx.not_empty(global_paths["step21_sele_top_clusts"]["output_selection_zip_path"])
 
 
 def step22_capri_eval4(config, system=None):
@@ -481,6 +482,7 @@ def step23_contact_map(config, remove=False, system=None):
     contact_map(**global_paths["step23_contact_map"], properties=global_prop["step23_contact_map"])
 
     assert fx.not_empty(global_paths["step23_contact_map"]["output_haddock_wf_data"])
+    assert fx.not_empty(global_paths["step23_contact_map"]["output_contactmap_zip_path"])
     assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/00_topoaa/antibody_clean.pdb"), f'reference/step23_contact_map/haddock_wf_data/data/00_topoaa/antibody_clean.pdb', 10)
     assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/00_topoaa/antigen_clean.pdb"), f'reference/step23_contact_map/haddock_wf_data/data/00_topoaa/antigen_clean.pdb', 10)
     assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/01_rigidbody/ambig-paratope-NMR-epitope.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/01_rigidbody/ambig-paratope-NMR-epitope.tbl', 10)

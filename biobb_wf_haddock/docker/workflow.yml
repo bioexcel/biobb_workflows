@@ -134,7 +134,7 @@ step21_sele_top_clusts:
   paths:
     input_haddock_wf_data: dependency/step20_clust_fcc/output_haddock_wf_data
     output_haddock_wf_data: haddock_wf_data
-    output_cluster_zip_path: 10_seletopclusts.zip
+    output_selection_zip_path: 10_seletopclusts.zip
   properties:
     cfg:
       top_models: 4
@@ -153,4 +153,4 @@ step23_contact_map:
   paths:
     input_haddock_wf_data: dependency/step22_capri_eval4/output_haddock_wf_data
     output_haddock_wf_data: haddock_wf_data
-    output_contact_map_zip_path: 12_contact_map.zip
+    output_contactmap_zip_path: 12_contact_map.zip

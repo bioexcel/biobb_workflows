@@ -419,13 +419,6 @@ Pitfalls found while porting the other 7 (2026-11-06):
   inputs (`work/` or just `work/<xx>/`), so without that mount pmxmutate failed at
   random ("forcefield path not found"). Needs a work directory on a shared file system
   (not in object storage).
-- **haddock topology**: the biobb_haddock JSON schema of `topology` only accepts zip for
-  `output_haddock_wf_data` (the other haddock3 blocks also accept a folder), so the module
-  names the folder `<id>_step12_topology_haddock_wf_data.directory/`.
-- **haddock workflow.yml**: step21 and step23 give their zips as `output_cluster_zip_path`
-  and `output_contact_map_zip_path`, which are not arguments of `sele_top_clusts` and
-  `contact_map`: the python workflow ignores them. The Nextflow port asks for them with
-  the block names (`output_selection_zip_path`, `output_contactmap_zip_path`).
 
 ## 3. Phase 2 plan: scale to all workflows + wire into CI
 

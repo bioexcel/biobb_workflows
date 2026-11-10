@@ -37,7 +37,7 @@ Optional outputs are only produced if requested in `ext.outputs`.
 
 | Channel | Required | Formats (default first) | Description |
 |---|---|---|---|
-| `output_haddock_wf_data` | yes | zip | Path to the output zipball containing all the current Haddock workflow data |
+| `output_haddock_wf_data` | yes | directory, zip | Path to the output directory containing all the current Haddock workflow data |
 | `mol1_output_top_zip_path` | no, opt-in | zip | Path to the output PDB file collection in zip format |
 | `mol2_output_top_zip_path` | no, opt-in | zip | Path to the output PDB file collection in zip format |
 | `versions_biobb_haddock` | yes | | `[process, 'biobb_haddock', version]`, also sent to the `versions` topic |

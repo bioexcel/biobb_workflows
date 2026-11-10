@@ -29,7 +29,7 @@ process BIOBB_HADDOCK_TOPOLOGY {
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
     def outputs = task.ext.outputs ?: [:]
-    output_haddock_wf_data = "${prefix}_haddock_wf_data.${outputs.output_haddock_wf_data ?: 'zip'}"
+    output_haddock_wf_data = (outputs.output_haddock_wf_data ?: 'directory') == 'directory' ? "${prefix}_haddock_wf_data" : "${prefix}_haddock_wf_data.${outputs.output_haddock_wf_data ?: 'directory'}"
     mol1_output_top_zip_path = "${prefix}_mol1_output_top_zip.${outputs.mol1_output_top_zip_path ?: 'zip'}"
     mol2_output_top_zip_path = "${prefix}_mol2_output_top_zip.${outputs.mol2_output_top_zip_path ?: 'zip'}"
     def props = [can_write_file_log: false] + (task.ext.properties ?: [:]) + [raise_error: true, restart: false]
@@ -54,11 +54,11 @@ process BIOBB_HADDOCK_TOPOLOGY {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     def outputs = task.ext.outputs ?: [:]
-    output_haddock_wf_data = "${prefix}_haddock_wf_data.${outputs.output_haddock_wf_data ?: 'zip'}"
+    output_haddock_wf_data = (outputs.output_haddock_wf_data ?: 'directory') == 'directory' ? "${prefix}_haddock_wf_data" : "${prefix}_haddock_wf_data.${outputs.output_haddock_wf_data ?: 'directory'}"
     mol1_output_top_zip_path = "${prefix}_mol1_output_top_zip.${outputs.mol1_output_top_zip_path ?: 'zip'}"
     mol2_output_top_zip_path = "${prefix}_mol2_output_top_zip.${outputs.mol2_output_top_zip_path ?: 'zip'}"
     """
-    touch ${output_haddock_wf_data}
+    ${(outputs.output_haddock_wf_data ?: 'directory') == 'directory' ? 'mkdir -p' : 'touch'} ${output_haddock_wf_data}
     ${outputs.mol1_output_top_zip_path ? "touch ${mol1_output_top_zip_path}" : ''}
     ${outputs.mol2_output_top_zip_path ? "touch ${mol2_output_top_zip_path}" : ''}
     """

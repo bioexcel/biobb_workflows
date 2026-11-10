@@ -34,7 +34,7 @@ Profiles: `docker`, `apptainer`, `singularity` and `conda`. Results are written 
 
 ## Configuration
 
-`nextflow.config` has the BioBB properties (`ext.properties`) and output extensions (`ext.outputs`) of every step. Change them there or in a config file given with `-c`. The pdb_tools properties of the python pipelines are set per block; `chains` and `selection` (residues 1-120 of H, 1-107 of L) come from the chain loop (`meta.chain`, `meta.residues`). step21 and step23 also write their zips (`output_selection_zip_path`, `output_contactmap_zip_path`): `python/workflow.yml` gives them as `output_cluster_zip_path` and `output_contact_map_zip_path`, which are not arguments of the blocks, so the python workflow does not write them.
+`nextflow.config` has the BioBB properties (`ext.properties`) and output extensions (`ext.outputs`) of every step. Change them there or in a config file given with `-c`. The pdb_tools properties of the python pipelines are set per block; `chains` and `selection` (residues 1-120 of H, 1-107 of L) come from the chain loop (`meta.chain`, `meta.residues`). step21 and step23 also write their zips (`output_selection_zip_path`, `output_contactmap_zip_path`).
 
 ## Steps
 
