@@ -391,11 +391,10 @@ used the image of the biobb_analysis v5.3.0 JSON schema, `5.3.0--gmx2026_2`, whi
 no cpptraj (§2.1). The modules of biobb_analysis 5.3.1 use `5.3.1--pyhdfd78af_0`,
 which has cpptraj and GROMACS.
 
-pmx_tutorial fails in step3_pmx_gentop with the image of its module,
-`biobb_pmx:5.3.1--pyhdfd78af_0` (pmx `KeyError: 'N3'`, Python 3.14), and passes with
-step3 in `5.3.0--pyhdfd78af_0`:
-`EXTRA_NF_ARGS="-c pmxgentop.config" ./run_test.sh`, the config file as in its
-`nextflow/README.md`.
+pmx_tutorial failed in step3_pmx_gentop until 2026-11-10 with the first biobb_pmx 5.3.1
+image, `5.3.1--pyhdfd78af_0` (Python 3.14, pmx `KeyError: 'N3'`). Its bioconda rebuild
+`5.3.1--pyhdfd78af_1` (Python 3.13), now in the biobb_pmx JSON schema and modules,
+passes (module tests 7/7, pmx_tutorial 931/931).
 
 Pitfalls found while testing the generated workflows (2026-10-28):
 

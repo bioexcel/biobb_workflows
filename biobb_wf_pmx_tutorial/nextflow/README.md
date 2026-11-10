@@ -42,18 +42,6 @@ Parameters:
 | `--stateA_mutation` | `10Ala` | Mutation of the stateA frames (`mutations` global property, `mutation_list` of step1_pmx_mutate) |
 | `--stateB_mutation` | `10Ile` | Mutation of the stateB frames |
 
-## Known problem
-
-step3_pmx_gentop fails in the image of its module, `biobb_pmx:5.3.1--pyhdfd78af_0` (pmx `KeyError: 'N3'`, Python 3.14). It runs in `biobb_pmx:5.3.0--pyhdfd78af_0`: until a fixed release, give that image to step3 in a config file (`-c pmxgentop.config`):
-
-```groovy
-process {
-    withName: 'STEP3_PMX_GENTOP' {
-        container = 'quay.io/biocontainers/biobb_pmx:5.3.0--pyhdfd78af_0'
-    }
-}
-```
-
 ## Configuration
 
 `nextflow.config` has the BioBB properties (`ext.properties`) and output extensions (`ext.outputs`) of every step, and the CPUs of the multithreaded steps (process_medium label). Change them there or in a config file given with `-c`.

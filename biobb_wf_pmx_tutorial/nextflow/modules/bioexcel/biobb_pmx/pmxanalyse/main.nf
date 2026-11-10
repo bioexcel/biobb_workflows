@@ -11,8 +11,8 @@ process BIOBB_PMX_PMXANALYSE {
 
     conda 'bioconda::biobb_pmx=5.3.1'
     container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-        ? 'https://depot.galaxyproject.org/singularity/biobb_pmx:5.3.1--pyhdfd78af_0'
-        : 'quay.io/biocontainers/biobb_pmx:5.3.1--pyhdfd78af_0'}"
+        ? 'https://depot.galaxyproject.org/singularity/biobb_pmx:5.3.1--pyhdfd78af_1'
+        : 'quay.io/biocontainers/biobb_pmx:5.3.1--pyhdfd78af_1'}"
 
     input:
     tuple val(meta),
