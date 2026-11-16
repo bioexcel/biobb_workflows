@@ -73,7 +73,7 @@ step8_reduce_add_hydrogens:
     input_path: dependency/step7_extract_heteroatoms/output_heteroatom_path
     output_path: ligand.reduce.H.pdb
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_chemistry:5.3.0--pyhdfd78af_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_chemistry:5.3.2--pyhdfd78af_0
     container_path: singularity
 step9_acpype_params_ac:
   tool: acpype_params_ac
@@ -86,7 +86,7 @@ step9_acpype_params_ac:
   properties:
     basename: ligand.params
     charge: 0
-    container_image: https://depot.galaxyproject.org/singularity/biobb_chemistry:5.3.0--pyhdfd78af_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_chemistry:5.3.2--pyhdfd78af_0
     container_path: singularity
 step10_leap_gen_top:
   tool: leap_gen_top

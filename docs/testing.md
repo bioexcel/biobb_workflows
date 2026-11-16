@@ -99,6 +99,18 @@ Notes:
   all CI-runnable wfs fit GH-hosted `ubuntu-latest`; a `bigmem` pool is only needed to
   run heavy wfs *without* reductions (e.g. re-enable cmip).
 
+### 1.5b Environment drift fixes (2026-11-16)
+
+`ubuntu-latest` moved to **Ubuntu 26.04** (Oct 2026) and conda-forge/bioconda moved on;
+the 2026-11-16 full run failed in 21 jobs, all from these causes:
+
+| Cause | Affected | Fix |
+| --- | --- | --- |
+| AmberTools 26.0 (conda-forge, 2026-11-06) no longer ships `reduce`; `biobb_chemistry==5.3.0` does not depend on the separate bioconda `reduce` package → `reduce -Trim` exit 127 | md_setup, md_setup_mutations, protein-complex_md_setup, amber_md_setup(_lig), structure_checking (+ cmip, CI-skipped) | `biobb_chemistry` 5.3.0 → **5.3.2** (depends on `reduce >=4.14`) in `python/` (env, requirements, container tags), `cwl/` and `airflow/` adapters. Jupyter repos intentionally left at 5.3.0 |
+| `biobb_chemistry` 5.3.0 build 1 (2026-10-19) relaxed `openbabel 3.1.1` → `>=3.1.1`; Open Babel 3.2.1 copies COMPND/AUTHOR into the ligand `.pdbqt` → Vina 1.2.7 "PDBQT parsing error" | virtual-screening_fpocket (conda) | `openbabel==3.1.1` in `python/workflow.env.yml` only (container mode uses the image's Open Babel; fpocket keeps the `biobb_chemistry:5.3.0--pyhdfd78af_0` image, built with 3.1.1) |
+| Ubuntu 26.04 glibc refuses libraries flagged "executable stack" → `libtorch_cpu.so: cannot enable executable stack` | autoencoder (conda, Linux) | `python-reusable.yaml` step *Clear executable-stack flag on env libraries (Linux)*: `patchelf --clear-execstack` on any flagged `.so` of the throwaway env (no-op otherwise); README conda note `common/python/conda_notes/biobb_wf_autoencoder.md` |
+| Ubuntu 26.04 system `python3` is 3.14: no wheels for `torch==2.5.0`, `scipy` 1.13, `biobb_mem` 5.3.0 (`<3.13`) | autoencoder, flexdyn, mem, pmx_tutorial (container mode) | **TEMPORARY** `actions/setup-python` 3.12 in `python-container-tests.yaml`; remove with the next biobb release (Python no longer fixed) |
+
 ### 1.6 Container flavours (docker / singularity) — pip-installed biobb, no conda
 
 Some workflows ship extra python configs — `workflow.docker.yml` and

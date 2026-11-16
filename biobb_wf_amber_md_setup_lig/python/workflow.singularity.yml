@@ -8,7 +8,7 @@ step000_reduce_remove_hydrogens:
     input_path: file:structure.pdb
     output_path: structure.noH.pdb
   properties:
-    container_image: https://depot.galaxyproject.org/singularity/biobb_chemistry:5.3.0--pyhdfd78af_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_chemistry:5.3.2--pyhdfd78af_0
     container_path: singularity
 
 step00_extract_molecule:
