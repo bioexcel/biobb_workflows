@@ -13,11 +13,6 @@ on:
       - 'biobb_wf_*/nextflow/**'
       - 'biobb_wf_*/tests/nextflow/**'
 
-# if you push twice quickly, cancel the older run
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   detect:
     name: Detect workflows to test (nextflow)

@@ -291,6 +291,8 @@ jobs:
     uses: ./.github/workflows/jupyter-tests.yaml
     with:
       wf_names: ${{ needs.probe.outputs.e2e_wfs }}
+      # the publish below is gated on this e2e: never cancel it from a newer run
+      cancel_stale: false
 
   # after the e2e: a broken notebook can never reach the image
   publish:

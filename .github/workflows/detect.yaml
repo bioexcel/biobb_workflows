@@ -17,6 +17,9 @@ name: Detect workflows to test
 #   flavour       test flavour; derives require_path:
 #                 python -> tests/python (the dir every wf has),
 #                 other  -> tests/<flavour>/run_test.sh
+#   skip_file     wf-relative opt-out file overriding the derived one (needed when
+#                 require_path is a plain file, e.g. python/workflow.docker.yml, whose
+#                 derived '<file>/SKIP' can never exist)
 #
 # Opt-out: a tests/<flavour>/SKIP file next to run_test.sh excludes the wf from
 # that flavour's selection (first line = printed reason). Same convention as
@@ -40,6 +43,10 @@ on:
         type: string
         default: ''
       flavour:
+        required: false
+        type: string
+        default: ''
+      skip_file:
         required: false
         type: string
         default: ''
@@ -70,6 +77,7 @@ jobs:
           ALL_ON_PATHS: ${{ inputs.all_on_paths }}
           REQUIRE_PATH: ${{ inputs.require_path }}
           FLAVOUR: ${{ inputs.flavour }}
+          SKIP_FILE: ${{ inputs.skip_file }}
         run: |
           python3 - <<'PY'
           import json, os, re, subprocess, sys
@@ -82,6 +90,7 @@ jobs:
           all_on = os.environ.get("ALL_ON_PATHS", "")
           require_path = os.environ.get("REQUIRE_PATH", "")
           flavour = os.environ.get("FLAVOUR", "")
+          skip_file = os.environ.get("SKIP_FILE", "")
           if flavour == "python":
               # every wf has tests/python/ (no run_test.sh for this flavour)
               require_path = "tests/python"
@@ -100,14 +109,16 @@ jobs:
               # a SKIP file next to the test opts the wf out of this flavour's
               # selection (for python the folder IS the test, so the file lives
               # inside it: tests/python/SKIP)
-              if os.path.basename(require_path) == "run_test.sh":
+              if skip_file:
+                  skip = os.path.join(w, skip_file)
+              elif os.path.basename(require_path) == "run_test.sh":
                   skip = os.path.join(os.path.dirname(base), "SKIP")
               else:
                   skip = os.path.join(base, "SKIP")
               if os.path.exists(skip):
                   reason = open(skip).read().strip().splitlines()[0]
                   print("::warning::" + w + " opted out of " + require_path
-                        + " (SKIP file: " + reason + ")")
+                        + " (" + os.path.relpath(skip, w) + ": " + reason + ")")
                   return False
               return True
 

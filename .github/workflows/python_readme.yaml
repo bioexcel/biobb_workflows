@@ -3,6 +3,8 @@ on:
     paths:
       - common/python/README_common.md
       - common/python/README_subrepo.md
+      - common/python/container_notes/**
+      - .github/workflows/python_readme.yaml
   workflow_dispatch:
 
 name: Python README
@@ -64,6 +66,25 @@ jobs:
           sed -i "s/<repository>/biobb_wf_structure_checking/g" biobb_wf_structure_checking/python/README.md
           sed -i "s/<repository>/biobb_wf_virtual-screening/g" biobb_wf_virtual-screening_fpocket/python/README.md
           sed -i "s/<subrepository>/fpocket/g" biobb_wf_virtual-screening_fpocket/python/README.md
+      - name: Insert per-workflow container-mode notes
+        run: |
+          # common/python/container_notes/<wf>.md (if any) replaces the
+          # '<!-- container-notes -->' placeholder line; otherwise the line is dropped
+          for readme in biobb_wf_*/python/README.md; do
+            wf="${readme%%/*}"
+            python3 - "$readme" "common/python/container_notes/${wf}.md" <<'PY'
+          import os, sys
+          readme, notes = sys.argv[1], sys.argv[2]
+          text = open(readme).read()
+          marker = "<!-- container-notes -->\n"
+          assert marker in text, readme + ": placeholder missing"
+          if os.path.exists(notes):
+              text = text.replace(marker, open(notes).read().rstrip("\n") + "\n")
+          else:
+              text = text.replace(marker + "\n", "").replace(marker, "")
+          open(readme, "w").write(text)
+          PY
+          done
       - name: Commit and push changes
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}

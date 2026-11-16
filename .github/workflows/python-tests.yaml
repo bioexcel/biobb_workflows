@@ -24,11 +24,6 @@ on:
         default: ''
         type: string
 
-# if you push twice quickly, cancel the older run
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   detect:
     name: Detect workflows to test

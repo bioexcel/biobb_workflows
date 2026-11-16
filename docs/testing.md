@@ -61,8 +61,9 @@ The problems below are fixed by `detect.yaml` + a matrix of call jobs (details i
 3. ~~No bot-commit guard~~ → `github.actor == github-actions[bot]` pushes are skipped.
 4. ~~19 hand-maintained filter/job blocks~~ → one reusable `detect` job + one matrix job;
    adding a new workflow needs zero CI edits.
-A weekly full regression was added (`schedule`, Monday 04:00 UTC), and rapid re-pushes
-cancel the older run (`concurrency`).
+A weekly full regression was added (`schedule`, Monday 04:00 UTC; removed 2026-09-22).
+Concurrency is per workflow folder since 2026-11-16 (ci.md §1.1b): a newer run of the same
+wf cancels the stale one, different wfs never cancel each other.
 
 ### 1.5 CI runtime reductions (per-wf, in `python-reusable.yaml`)
 
@@ -124,8 +125,10 @@ and `biobb_wf_structure_checking` have these.
   the standard test file is not a valid Python identifier, so the wrapper loads it from its
   file path with `importlib.util.spec_from_file_location` instead of a plain `import`.)
 - `run_container_test.sh <flavour> [wf_name]` — the local + CI entry point. It:
-  1. creates a venv and `pip install`s the `biobb_*` packages from
-      `workflow.env.yml` (+ pytest, imagehash, matplotlib);
+  1. creates a venv and `pip install`s `python/requirements.txt` — the committed pip
+      list users install for the container mode (`biobb_*` pins = `workflow.env.yml`,
+      plus python-level extras such as `matplotlib`, flexserv `numpy`, pmx
+      `scipy==1.13`/`numpy<2`) — + pytest, imagehash;
    2. copies `workflow.<flavour>.yml` to a scratch file and seds `nsteps → 10`
       where present (MD workflows; a no-op otherwise; `FULL_STEPS=1` skips it);
     3. **docker**: checks the daemon, and injects `container_user_id: <uid>:<gid>` into
@@ -149,7 +152,7 @@ and `biobb_wf_structure_checking` have these.
       dir + `*.sif` land here), then removes the venv / scratch / work dir / `*.sif`
       (`KEEP=1` to keep them).
 
-`matplotlib` is in that install because the biobb plotting tools (e.g. `biobb_dna`'s
+`matplotlib` is in `requirements.txt` because the biobb plotting tools (e.g. `biobb_dna`'s
 `dna_averages`/correlation steps) render their `.jpg` plots from the **native** python:
 conda supplies matplotlib, but `pip install biobb_*` omits it, so without it those steps
 die with `ModuleNotFoundError: No module named 'matplotlib'`.
@@ -173,7 +176,9 @@ editing `biobb_wf_ligand_parameterization` does not also run `biobb_wf_md_setup`
 `python/workflow.{docker,singularity}.yml`, `python/workflow.env.yml` or
 `tests/python/**` (detect narrows to the wf's that actually ship a container config) and
 on manual dispatch. A workflow opts in simply by having `python/workflow.docker.yml` —
-nothing else to wire up. The singularity jobs rely on the runner allowing unprivileged
+nothing else to wire up. The python opt-out `tests/python/SKIP` also applies here
+(`detect` input `skip_file`; before 2026-11-16 it was silently ignored because the derived
+path was `python/workflow.docker.yml/SKIP`). The singularity jobs rely on the runner allowing unprivileged
 user namespaces (GH `ubuntu-latest` does by default), because biobb runs `singularity
 exec` as the non-root CI user.
 

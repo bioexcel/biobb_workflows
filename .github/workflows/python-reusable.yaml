@@ -10,11 +10,23 @@ on:
         required: false
         type: string
         default: ubuntu-latest
+      cancel_stale:
+        description: 'Cancel an in-flight run of the SAME workflow folder (same caller, ref and runner) when a newer one starts'
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   python:
     runs-on: ${{ inputs.runs_on }}
     timeout-minutes: 720
+    # Per-folder concurrency: runs for DIFFERENT workflow folders always run side
+    # by side; only a newer run of the same folder (same caller workflow, ref and
+    # runner OS) cancels the stale one. github.workflow is the CALLER's name here,
+    # so e.g. a manual Flavour e2e never cancels the automatic python pipeline.
+    concurrency:
+      group: ${{ github.workflow }}-python-${{ github.ref }}-${{ inputs.wf_name }}-${{ inputs.runs_on }}
+      cancel-in-progress: ${{ inputs.cancel_stale != false }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4

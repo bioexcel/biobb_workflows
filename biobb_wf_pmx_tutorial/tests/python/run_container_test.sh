@@ -2,7 +2,7 @@
 #
 # Run the DOCKER or SINGULARITY flavour of a python workflow's step-by-step test
 # WITHOUT conda. The biobb python packages are pip-installed (from the workflow's
-# workflow.env.yml) and every step's executables run inside a docker or singularity
+# python/requirements.txt) and every step's executables run inside a docker or singularity
 # container, as declared by the container_image / container_path properties in
 # workflow.<variant>.yml.
 #
@@ -38,10 +38,10 @@ esac
 
 PY_DIR="$WF_DIR/python"
 CONFIG_SRC="$PY_DIR/workflow.${VARIANT}.yml"
-ENV_FILE="$PY_DIR/workflow.env.yml"
+REQ_FILE="$PY_DIR/requirements.txt"
 TEST_FILE="${WF_NAME}_${VARIANT}.py"
 
-for f in "$CONFIG_SRC" "$ENV_FILE" "$SCRIPT_DIR/$TEST_FILE"; do
+for f in "$CONFIG_SRC" "$REQ_FILE" "$SCRIPT_DIR/$TEST_FILE"; do
   [ -f "$f" ] || { echo "ERROR: missing $f" >&2; exit 1; }
 done
 
@@ -86,7 +86,7 @@ if [ "$VARIANT" = "docker" ]; then
   echo "==> docker: injecting container_user_id ${_UGID} (run container as host user)"
 fi
 
-# --- venv + pip install the biobb packages from workflow.env.yml --------------
+# --- venv + pip install the biobb packages from python/requirements.txt -------
 if [ -n "${VENV_DIR:-}" ]; then
   VENV="$VENV_DIR"; VENV_OWNED=0
 else
@@ -116,22 +116,11 @@ echo "==> venv at $VENV ($("$PYBIN" -V 2>&1))"
 "$VENV/bin/pip" install --quiet --upgrade pip
 
 REQS="$SCRATCH/requirements.txt"
-grep -E '^[[:space:]]*-[[:space:]]*(biobb_[a-z0-9_]+|scipy)==' "$ENV_FILE" \
-  | sed -E 's/^[[:space:]]*-[[:space:]]*//' \
-  | sed -E 's/==([^=]+)=[A-Za-z0-9_]+$/==\1/' > "$REQS"
-# (the last sed strips conda build pins like '==5.3.0=pyhdfd78af_1', which
-# pip cannot parse; they only select conda builds)
+# python/requirements.txt is the single pip source (exactly what users install for
+# the container mode) + the test-only deps
+cp "$REQ_FILE" "$REQS"
 echo "pytest" >> "$REQS"
 echo "imagehash" >> "$REQS"
-# biobb plotting tools write .jpg outputs with matplotlib; conda supplies it, but
-# pip-installing the biobb_* packages omits it, so add it to the test venv.
-echo "matplotlib" >> "$REQS"
-# Match the working conda env's numerical stack: workflow.env.yml pins
-# scipy==1.13 (now carried over above) but not numpy; pmx 5.2.2's BAR estimator
-# does float(scipy.optimize.fmin(...)) and fmin has always returned a (1,)
-# array, so numpy must stay < 2 (numpy >= 2 removed the ndim>0 -> scalar
-# conversion; scipy >= 1.18 would also force numpy >= 2).
-echo "numpy<2" >> "$REQS"
 echo "==> pip installing:"; sed 's/^/    /' "$REQS"
 "$VENV/bin/pip" install -r "$REQS"
 # fail fast if any pip-installed biobb package is missing (import name == pip name)

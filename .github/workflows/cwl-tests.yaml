@@ -12,11 +12,6 @@ on:
       - 'biobb_wf_*/cwl/**'
       - 'biobb_wf_*/tests/cwl/**'
 
-# if you push twice quickly, cancel the older run
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   detect:
     name: Detect workflows to test (cwl)

@@ -7,4 +7,6 @@
 ## Notes for agents
 - Recorded e2e pitfalls + bug fixes: `docs/testing.md` §2.1 — read it before touching `tests/` scripts or calling the Airflow CLI (key rule: never parse `table` CLI output in non-TTY; use `-o json`/`-o plain`).
 - When bumping a wf's biobb versions, also create/update `<wf>/docker/VERSION` (one line, e.g. `2026.1`) — `common/docker/sync_dockerfiles.sh` uses it as the image's version label.
+- The same bump must also update `<wf>/python/requirements.txt` (container mode pip list) and the `container_image` tags in `<wf>/python/workflow.{docker,singularity}.yml`; `python3 common/python/check_versions.py` must pass (CI: `python-lint.yaml`).
+- CI concurrency is per workflow folder at JOB level (`docs/ci.md` §1.1b) — never re-add a workflow-level `concurrency: <workflow>-<ref>` block to a test/publish workflow: it makes runs for different wfs cancel each other.
 - Backgrounding long-running commands from the shell tool: the process group is SIGTERMed when the tool call times out (default 120 s). To survive, fully detach, e.g. `python3 -c 'import os; os.setsid(); ...' &` with stdout/stderr redirected to a file and stdin from /dev/null.

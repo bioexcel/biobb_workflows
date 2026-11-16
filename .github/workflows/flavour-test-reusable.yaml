@@ -20,6 +20,11 @@ on:
         required: false
         type: string
         default: 'ubuntu-latest'
+      cancel_stale:
+        description: 'Cancel an in-flight test of the SAME workflow folder + flavour (same caller and ref) when a newer one starts. Gated chains (publish-ghcr, jupyter-sync) pass false so a sibling wf in the same run never loses its publish.'
+        required: false
+        type: boolean
+        default: true
 
 jobs:
   python:
@@ -29,12 +34,18 @@ jobs:
     with:
       wf_name: ${{ inputs.wf_name }}
       runs_on: ${{ inputs.runs_on }}
+      cancel_stale: ${{ inputs.cancel_stale != false }}
 
   flavour:
     name: ${{ inputs.wf_name }} (${{ inputs.flavour }})
     if: inputs.flavour != 'python'
     runs-on: ${{ inputs.runs_on }}
     timeout-minutes: 720
+    # Per-folder concurrency (see python-reusable.yaml): different wfs never
+    # cancel each other; github.workflow is the CALLER's name.
+    concurrency:
+      group: ${{ github.workflow }}-${{ inputs.flavour }}-${{ github.ref }}-${{ inputs.wf_name }}
+      cancel-in-progress: ${{ inputs.cancel_stale != false }}
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4

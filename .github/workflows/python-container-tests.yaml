@@ -15,6 +15,7 @@ on:
       - 'biobb_wf_*/python/workflow.docker.yml'
       - 'biobb_wf_*/python/workflow.singularity.yml'
       - 'biobb_wf_*/python/workflow.env.yml'
+      - 'biobb_wf_*/python/requirements.txt'
       - 'biobb_wf_*/tests/python/**'
   workflow_dispatch:
     inputs:
@@ -24,11 +25,6 @@ on:
         default: ''
         type: string
 
-# if you push twice quickly, cancel the older run
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   detect:
     name: Detect workflows to test (container)
@@ -37,6 +33,8 @@ jobs:
     with:
       wf_names: ${{ inputs.wf_names }}
       require_path: python/workflow.docker.yml
+      # honour the python flavour's opt-out (e.g. cmip: too much RAM for the runner)
+      skip_file: tests/python/SKIP
 
   docker:
     name: ${{ matrix.wf }} (docker)
@@ -44,6 +42,11 @@ jobs:
     if: needs.detect.result == 'success' && needs.detect.outputs.matrix != '[]'
     runs-on: ${{ matrix.runs_on }}
     timeout-minutes: 720
+    # per-folder concurrency: a newer run of the same wf cancels the stale one;
+    # different wfs always run side by side
+    concurrency:
+      group: ${{ github.workflow }}-docker-${{ github.ref }}-${{ matrix.wf }}
+      cancel-in-progress: true
     strategy:
       fail-fast: false
       matrix:
@@ -64,6 +67,11 @@ jobs:
     if: needs.detect.result == 'success' && needs.detect.outputs.matrix != '[]'
     runs-on: ${{ matrix.runs_on }}
     timeout-minutes: 720
+    # per-folder concurrency: a newer run of the same wf cancels the stale one;
+    # different wfs always run side by side
+    concurrency:
+      group: ${{ github.workflow }}-singularity-${{ github.ref }}-${{ matrix.wf }}
+      cancel-in-progress: true
     strategy:
       fail-fast: false
       matrix:

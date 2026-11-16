@@ -1,0 +1,17 @@
+# pip requirements for running this workflow in CONTAINER mode
+# (workflow.docker.yml / workflow.singularity.yml): only the biobb python packages are
+# installed here; the tool binaries (GROMACS, AmberTools, Open Babel...) run inside the
+# biocontainers images named by container_image in those configs.
+#
+# Keep the biobb_* versions in sync with workflow.env.yml and the container_image tags
+# (checked by common/python/check_versions.py).
+
+biobb_flexdyn==5.3.0
+biobb_flexserv==5.3.0
+biobb_structure_utils==5.3.0
+biobb_gromacs==5.3.2
+biobb_analysis==5.3.0
+
+# non-biobb python dependencies
+pandas
+matplotlib  # biobb plotting tools; conda pulls it in, pip does not

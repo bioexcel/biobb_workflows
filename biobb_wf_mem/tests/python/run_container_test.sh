@@ -2,7 +2,7 @@
 #
 # Run the DOCKER or SINGULARITY flavour of a python workflow's step-by-step test
 # WITHOUT conda. The biobb python packages are pip-installed (from the workflow's
-# workflow.env.yml) and every step's executables run inside a docker or singularity
+# python/requirements.txt) and every step's executables run inside a docker or singularity
 # container, as declared by the container_image / container_path properties in
 # workflow.<variant>.yml.
 #
@@ -38,10 +38,10 @@ esac
 
 PY_DIR="$WF_DIR/python"
 CONFIG_SRC="$PY_DIR/workflow.${VARIANT}.yml"
-ENV_FILE="$PY_DIR/workflow.env.yml"
+REQ_FILE="$PY_DIR/requirements.txt"
 TEST_FILE="${WF_NAME}_${VARIANT}.py"
 
-for f in "$CONFIG_SRC" "$ENV_FILE" "$SCRIPT_DIR/$TEST_FILE"; do
+for f in "$CONFIG_SRC" "$REQ_FILE" "$SCRIPT_DIR/$TEST_FILE"; do
   [ -f "$f" ] || { echo "ERROR: missing $f" >&2; exit 1; }
 done
 
@@ -72,7 +72,7 @@ if [ "$VARIANT" = "docker" ]; then
   echo "==> docker: injecting container_user_id ${_UGID} (run container as host user)"
 fi
 
-# --- venv + pip install the biobb packages from workflow.env.yml --------------
+# --- venv + pip install the biobb packages from python/requirements.txt -------
 if [ -n "${VENV_DIR:-}" ]; then
   VENV="$VENV_DIR"; VENV_OWNED=0
 else
@@ -99,13 +99,11 @@ python3 -m venv "$VENV"
 "$VENV/bin/pip" install --quiet --upgrade pip
 
 REQS="$SCRATCH/requirements.txt"
-grep -E '^[[:space:]]*-[[:space:]]*biobb_[a-z0-9_]+==' "$ENV_FILE" \
-  | sed -E 's/^[[:space:]]*-[[:space:]]*//' > "$REQS"
+# python/requirements.txt is the single pip source (exactly what users install for
+# the container mode) + the test-only deps
+cp "$REQ_FILE" "$REQS"
 echo "pytest" >> "$REQS"
 echo "imagehash" >> "$REQS"
-# biobb plotting tools write .jpg outputs with matplotlib; conda supplies it, but
-# pip-installing the biobb_* packages omits it, so add it to the test venv.
-echo "matplotlib" >> "$REQS"
 echo "==> pip installing:"; sed 's/^/    /' "$REQS"
 "$VENV/bin/pip" install -r "$REQS"
 # fail fast if any pip-installed biobb package is missing (import name == pip name)

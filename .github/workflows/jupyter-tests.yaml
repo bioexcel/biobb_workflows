@@ -19,16 +19,16 @@ on:
         required: false
         default: ''
         type: string
+      cancel_stale:
+        description: 'Cancel an in-flight e2e of the same wf when a newer one starts (the probe passes false: its publish is gated on this e2e)'
+        required: false
+        default: true
+        type: boolean
   push:
     paths:
       - 'biobb_wf_*/tests/jupyter/**'
       - 'biobb_wf_*/jupyter'
       - 'biobb_wf_*/jupyter/**'
-
-# if you push twice quickly, cancel the older run
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   detect:
@@ -51,3 +51,5 @@ jobs:
     with:
       wf_name: ${{ matrix.wf }}
       flavour: jupyter
+      # push events have no inputs -> null != false -> true
+      cancel_stale: ${{ inputs.cancel_stale != false }}

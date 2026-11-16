@@ -16,7 +16,7 @@ step1_cmip_titration:
     num_positive_ions: 5
     num_negative_ions: 5
     num_wats: 20
-    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.0--pyhdfd78af_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.1--pyhdfd78af_0
     container_path: singularity
 step2_cat_pdb:
   tool: cat_pdb
@@ -32,7 +32,7 @@ step3_cmip_run_pos:
     output_cube_path: structure.mip_pos.cube
   properties:
     execution_type: mip_pos
-    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.0--pyhdfd78af_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.1--pyhdfd78af_0
     container_path: singularity
 step4_cmip_run_neg:
   tool: cmip_run
@@ -42,7 +42,7 @@ step4_cmip_run_neg:
     output_cube_path: structure.mip_neg.cube
   properties:
     execution_type: mip_neg
-    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.0--pyhdfd78af_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.1--pyhdfd78af_0
     container_path: singularity
 step5_cmip_run_neu:
   tool: cmip_run
@@ -52,7 +52,7 @@ step5_cmip_run_neu:
     output_cube_path: structure.mip_neutral.cube
   properties:
     execution_type: mip_neu
-    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.0--pyhdfd78af_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.1--pyhdfd78af_0
     container_path: singularity
 step6_remove_pdb_water:
   tool: remove_pdb_water
@@ -440,7 +440,7 @@ step16_cmip_run_int_en:
     output_byat_path: complex.EGFR.energies.byat.out
   properties:
     execution_type: pb_interaction_energy
-    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.0--pyhdfd78af_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.1--pyhdfd78af_0
     container_path: singularity
 step17_cmip_prepare_structure:
   tool: cmip_prepare_structure
@@ -476,7 +476,7 @@ step20_cmip_run_rbd:
     execution_type: check_only
     params:
       perfill: 0.8
-    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.0--pyhdfd78af_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.1--pyhdfd78af_0
     container_path: singularity
 step21_cmip_run_hace2:
   tool: cmip_run
@@ -488,7 +488,7 @@ step21_cmip_run_hace2:
     execution_type: check_only
     params:
       perfill: 0.8
-    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.0--pyhdfd78af_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.1--pyhdfd78af_0
     container_path: singularity
 step22_cmip_run_rbd_hace2:
   tool: cmip_run
@@ -500,7 +500,7 @@ step22_cmip_run_rbd_hace2:
     execution_type: check_only
     params:
       perfill: 0.8
-    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.0--pyhdfd78af_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.1--pyhdfd78af_0
     container_path: singularity
 step23_cmip_ignore_residues_rbd:
   tool: cmip_ignore_residues
@@ -522,7 +522,7 @@ step24_cmip_run_prot_prot:
     output_byat_path: RBD.energies.byat.out
   properties:
     execution_type: pb_interaction_energy
-    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.0--pyhdfd78af_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.1--pyhdfd78af_0
     container_path: singularity
 step25_cmip_ignore_residues_hace2:
   tool: cmip_ignore_residues
@@ -544,5 +544,5 @@ step26_cmip_run_complex:
     output_byat_path: hACE2.energies.byat.out
   properties:
     execution_type: pb_interaction_energy
-    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.0--pyhdfd78af_0
+    container_image: https://depot.galaxyproject.org/singularity/biobb_cmip:5.3.1--pyhdfd78af_0
     container_path: singularity

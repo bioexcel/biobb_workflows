@@ -69,11 +69,6 @@ on:
         default: false
         type: boolean
 
-# a re-dispatch / new push of the same ref cancels the in-flight run
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   detect:
     name: Detect workflows to publish
@@ -170,6 +165,9 @@ jobs:
       wf_name: ${{ matrix.wf }}
       flavour: docker
       runs_on: ${{ matrix.runs_on }}
+      # the publish gate needs EVERY test of this run: never cancel one from a
+      # newer chain, or the sibling wfs of this run would never be published
+      cancel_stale: false
 
   publish:
     needs: [detect, select, test]
@@ -184,6 +182,11 @@ jobs:
           || needs.test.result == 'skipped')
     name: publish ${{ matrix.wf }}
     runs-on: ubuntu-latest
+    # two chains building the SAME image serialise (never killed mid-push);
+    # different images publish in parallel
+    concurrency:
+      group: publish-ghcr-${{ matrix.wf }}
+      cancel-in-progress: false
     strategy:
       fail-fast: false
       matrix:

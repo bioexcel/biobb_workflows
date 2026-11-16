@@ -1,0 +1,27 @@
+name: Python flavour lint
+
+# Fast consistency check (seconds, no env setup): every workflow must pin the SAME
+# biobb_* versions in python/workflow.env.yml (conda mode), python/requirements.txt
+# (container mode, pip) and the container_image tags of python/workflow.docker.yml /
+# workflow.singularity.yml. Catches a half-done version bump before the long test
+# pipelines run. See common/python/check_versions.py.
+
+on:
+  push:
+    paths:
+      - 'biobb_wf_*/python/**'
+      - 'common/python/**'
+      - '.github/workflows/python-lint.yaml'
+  workflow_dispatch:
+
+jobs:
+  versions:
+    name: biobb versions consistent (env.yml / requirements.txt / container tags)
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Check biobb versions
+        run: python3 common/python/check_versions.py

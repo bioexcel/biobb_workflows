@@ -12,11 +12,6 @@ on:
       - 'biobb_wf_*/airflow/**'
       - 'biobb_wf_*/tests/airflow/**'
 
-# if you push twice quickly, cancel the older run
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
 jobs:
   detect:
     name: Detect workflows to test (airflow)
