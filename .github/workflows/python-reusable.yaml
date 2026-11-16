@@ -211,5 +211,10 @@ jobs:
 
           cd ${{ inputs.wf_name }}/tests/python
 
-          # Production one
-          "$HOME/miniconda3/bin/conda" run -n biobb_env pytest ${{ inputs.wf_name }}.py --config ../../python/workflow.yml --remove
+          # --no-capture-output: stream pytest's output live (plain `conda run`
+          # buffers it until exit, so a hung job showed nothing for hours).
+          # -v: one line per step. faulthandler_timeout: if one test runs > 10 min,
+          # dump every thread's stack to the log (diagnostic only, the test goes on).
+          "$HOME/miniconda3/bin/conda" run --no-capture-output -n biobb_env \
+            pytest ${{ inputs.wf_name }}.py --config ../../python/workflow.yml --remove \
+            -v -o faulthandler_timeout=600
