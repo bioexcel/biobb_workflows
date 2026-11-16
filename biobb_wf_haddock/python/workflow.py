@@ -3,7 +3,6 @@
 import time
 import argparse
 import os
-import zipfile
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_pdb_tools.pdb_tools import biobb_pdb_tidy
@@ -13,10 +12,10 @@ from biobb_pdb_tools.pdb_tools import biobb_pdb_fixinsert
 from biobb_pdb_tools.pdb_tools import biobb_pdb_selaltloc
 from biobb_pdb_tools.pdb_tools import biobb_pdb_keepcoord
 from biobb_pdb_tools.pdb_tools import biobb_pdb_selres
-from biobb_pdb_tools.pdb_tools.biobb_pdb_merge import biobb_pdb_merge
 from biobb_pdb_tools.pdb_tools import biobb_pdb_reres
 from biobb_pdb_tools.pdb_tools import biobb_pdb_chain
 from biobb_pdb_tools.pdb_tools import biobb_pdb_chainxseg
+from biobb_structure_utils.utils.cat_pdb import cat_pdb
 from biobb_haddock.haddock_restraints.haddock3_passive_from_active import haddock3_passive_from_active
 from biobb_haddock.haddock_restraints.haddock3_actpass_to_ambig import haddock3_actpass_to_ambig
 from biobb_haddock.haddock_restraints.haddock3_restrain_bodies import haddock3_restrain_bodies
@@ -71,15 +70,11 @@ def main(config, system=None):
         pdb_tools_pipeline(os.path.join(cwd, 'antibody.pdb'), pdb_final[ch], steps)
     os.chdir(cwd)
 
-    zip_file_path = f'{step0_pth}/antibody_HL.zip'
-    with zipfile.ZipFile(zip_file_path, 'w') as zipf:
-        zipf.write(pdb_final['H'], arcname='antibody_H.pdb')
-        zipf.write(pdb_final['L'], arcname='antibody_L.pdb')
-
-    global_log.info("step1_biobb_pdb_merge: Merge regions into a single file")
-    paths = global_paths["step1_biobb_pdb_merge"]
-    paths['input_file_path'] = zip_file_path
-    biobb_pdb_merge(**paths, properties=global_prop["step1_biobb_pdb_merge"])
+    global_log.info("step1_cat_pdb: Merge the Heavy and Light chains into a single file")
+    paths = global_paths["step1_cat_pdb"]
+    paths['input_structure1'] = pdb_final['H']
+    paths['input_structure2'] = pdb_final['L']
+    cat_pdb(**paths, properties=global_prop["step1_cat_pdb"])
 
     global_log.info("step2_prepare_antibody_clean: Prepare PDB file to meet HADDOCK3 requirements")
     step2_pth = os.path.join(conf.get_working_dir_path(), "step2_prepare_antibody_clean")
@@ -92,7 +87,7 @@ def main(config, system=None):
         (biobb_pdb_chainxseg.biobb_pdb_chainxseg, {}),
         (biobb_pdb_tidy.biobb_pdb_tidy, {'strict': True}),
     ]
-    pdb_tools_pipeline(paths['output_file_path'], antibody_prep, steps)
+    pdb_tools_pipeline(paths['output_structure_path'], antibody_prep, steps)
     os.chdir(cwd)
 
     global_log.info("step3_prepare_antigen_clean: Preparing the antigen structure")
@@ -131,15 +126,11 @@ def main(config, system=None):
         pdb_tools_pipeline(os.path.join(cwd, 'complex.pdb'), pdb_ref[ch], steps)
     os.chdir(cwd)
 
-    zip_file_path = f'{step4_pth}/complex_HL.zip'
-    with zipfile.ZipFile(zip_file_path, 'w') as zipf:
-        zipf.write(pdb_ref['H'], arcname='complex_H.pdb')
-        zipf.write(pdb_ref['L'], arcname='complex_L.pdb')
-
-    global_log.info("step5_biobb_pdb_merge: Merge Heavy and Light regions (from the complex) into a single file")
-    paths = global_paths["step5_biobb_pdb_merge"]
-    paths['input_file_path'] = zip_file_path
-    biobb_pdb_merge(**paths, properties=global_prop["step5_biobb_pdb_merge"])
+    global_log.info("step5_cat_pdb: Merge Heavy and Light regions (from the complex) into a single file")
+    paths = global_paths["step5_cat_pdb"]
+    paths['input_structure1'] = pdb_ref['H']
+    paths['input_structure2'] = pdb_ref['L']
+    cat_pdb(**paths, properties=global_prop["step5_cat_pdb"])
 
     global_log.info("step6_prepare_complex_antibody_clean: Prepare the Antibody PDB file (from the complex) to match HADDOCK3 requirements")
     step6_pth = os.path.join(conf.get_working_dir_path(), "step6_prepare_complex_antibody_clean")
@@ -152,7 +143,7 @@ def main(config, system=None):
         (biobb_pdb_chainxseg.biobb_pdb_chainxseg, {}),
         (biobb_pdb_tidy.biobb_pdb_tidy, {'strict': True})
     ]
-    pdb_tools_pipeline(paths['output_file_path'], complex_ref_antibody, steps)
+    pdb_tools_pipeline(paths['output_structure_path'], complex_ref_antibody, steps)
     os.chdir(cwd)
 
     global_log.info("step7_prepare_complex_antigen_clean: Prepare the Antigen PDB file (from the complex) to match HADDOCK3 requirements")
@@ -161,29 +152,30 @@ def main(config, system=None):
     os.chdir(step7_pth)
     complex_ref_antigen = f'{step7_pth}/complex_clean_antigen_final.pdb'
     steps = [
-        (biobb_pdb_reres.biobb_pdb_reres, {'number': 1}),
-        (biobb_pdb_chain.biobb_pdb_chain, {'chain': 'A'}),
+        (biobb_pdb_tidy.biobb_pdb_tidy, {'strict': True}),
+        (biobb_pdb_selchain.biobb_pdb_selchain, {'chains': 'A'}),
+        (biobb_pdb_chain.biobb_pdb_chain, {'chain': 'B'}),
         (biobb_pdb_chainxseg.biobb_pdb_chainxseg, {}),
+        (biobb_pdb_delhetatm.biobb_pdb_delhetatm, {}),
+        (biobb_pdb_fixinsert.biobb_pdb_fixinsert, {}),
+        (biobb_pdb_selaltloc.biobb_pdb_selaltloc, {}),
+        (biobb_pdb_keepcoord.biobb_pdb_keepcoord, {}),
         (biobb_pdb_tidy.biobb_pdb_tidy, {'strict': True})
     ]
     pdb_tools_pipeline(os.path.join(cwd, 'complex.pdb'), complex_ref_antigen, steps)
     os.chdir(cwd)
 
-    zip_file_path = f'{step7_pth}/complex_HL_B.zip'
-    with zipfile.ZipFile(zip_file_path, 'w') as zipf:
-        zipf.write(f'{step6_pth}/complex_clean_antibody_final.pdb', arcname='complex_antibody.pdb')
-        zipf.write(f'{step7_pth}/complex_clean_antigen_final.pdb', arcname='complex_antigen.pdb')
-
     global_log.info("step8_merge_heavy_light_antigen: Merge Heavy + Light regions and Antigen (from the complex) into a single file")
     step8_pth = os.path.join(conf.get_working_dir_path(), "step8_merge_heavy_light_antigen")
     os.mkdir(step8_pth)
     os.chdir(step8_pth)
+    complex_merge = f'{step8_pth}/complex_clean_merge.pdb'
+    cat_pdb(input_structure1=complex_ref_antibody, input_structure2=complex_ref_antigen, output_structure_path=complex_merge)
     complex_prep = f'{step8_pth}/complex_clean.pdb'
     steps = [
-        (biobb_pdb_merge, {}),
         (biobb_pdb_tidy.biobb_pdb_tidy, {'strict': True})
     ]
-    pdb_tools_pipeline(zip_file_path, complex_prep, steps)
+    pdb_tools_pipeline(complex_merge, complex_prep, steps)
     os.chdir(cwd)
 
     global_log.info("step9_haddock3_passive_from_active: Passive restraints")

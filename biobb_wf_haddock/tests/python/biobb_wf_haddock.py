@@ -1,6 +1,5 @@
 import pytest
 import os
-import zipfile
 from biobb_common.configuration import settings
 from biobb_common.tools import file_utils as fu
 from biobb_common.tools import test_fixtures as fx
@@ -11,10 +10,10 @@ from biobb_pdb_tools.pdb_tools import biobb_pdb_fixinsert
 from biobb_pdb_tools.pdb_tools import biobb_pdb_selaltloc
 from biobb_pdb_tools.pdb_tools import biobb_pdb_keepcoord
 from biobb_pdb_tools.pdb_tools import biobb_pdb_selres
-from biobb_pdb_tools.pdb_tools.biobb_pdb_merge import biobb_pdb_merge
 from biobb_pdb_tools.pdb_tools import biobb_pdb_reres
 from biobb_pdb_tools.pdb_tools import biobb_pdb_chain
 from biobb_pdb_tools.pdb_tools import biobb_pdb_chainxseg
+from biobb_structure_utils.utils.cat_pdb import cat_pdb
 from biobb_haddock.haddock_restraints.haddock3_passive_from_active import haddock3_passive_from_active
 from biobb_haddock.haddock_restraints.haddock3_actpass_to_ambig import haddock3_actpass_to_ambig
 from biobb_haddock.haddock_restraints.haddock3_restrain_bodies import haddock3_restrain_bodies
@@ -69,31 +68,24 @@ def step0_prepare_antibody_reduce(config, system=None):
     assert fx.not_empty(pdb_final['H'])
     assert fx.not_empty(pdb_final['L'])
 
-    zip_file_path = f'{step0_pth}/antibody_HL.zip'
-    print(zip_file_path)
-    with zipfile.ZipFile(zip_file_path, 'w') as zipf:
-        zipf.write(pdb_final['H'], arcname='antibody_H.pdb')
-        zipf.write(pdb_final['L'], arcname='antibody_L.pdb')
-
-    assert fx.not_empty(zip_file_path)
-
     global global_work_dir
     global_work_dir = conf.get_working_dir_path()
 
 
-def step1_biobb_pdb_merge(config, system=None):
+def step1_cat_pdb(config, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    zip_file_path = os.path.join(conf.get_working_dir_path(), "step0_prepare_antibody_reduce", "antibody_HL.zip")
-    paths = global_paths["step1_biobb_pdb_merge"]
-    paths['input_file_path'] = zip_file_path
-    biobb_pdb_merge(**paths, properties=global_prop["step1_biobb_pdb_merge"])
+    step0_pth = os.path.join(conf.get_working_dir_path(), "step0_prepare_antibody_reduce")
+    paths = global_paths["step1_cat_pdb"]
+    paths['input_structure1'] = f'{step0_pth}/antibody_H_reduced.pdb'
+    paths['input_structure2'] = f'{step0_pth}/antibody_L_reduced.pdb'
+    cat_pdb(**paths, properties=global_prop["step1_cat_pdb"])
 
-    assert fx.not_empty(global_paths["step1_biobb_pdb_merge"]["output_file_path"])
+    assert fx.not_empty(global_paths["step1_cat_pdb"]["output_structure_path"])
 
 
 def step2_prepare_antibody_clean(config, system=None):
@@ -112,7 +104,7 @@ def step2_prepare_antibody_clean(config, system=None):
         (biobb_pdb_chainxseg.biobb_pdb_chainxseg, {}),
         (biobb_pdb_tidy.biobb_pdb_tidy, {'strict': True}),
     ]
-    pdb_tools_pipeline(global_paths["step1_biobb_pdb_merge"]["output_file_path"], antibody_prep, steps)
+    pdb_tools_pipeline(global_paths["step1_cat_pdb"]["output_structure_path"], antibody_prep, steps)
     os.chdir(cwd)
 
     assert fx.not_empty(antibody_prep)
@@ -168,27 +160,21 @@ def step4_prepare_reference_structure(config, system=None):
     assert fx.not_empty(pdb_ref['H'])
     assert fx.not_empty(pdb_ref['L'])
 
-    zip_file_path = f'{step4_pth}/complex_HL.zip'
-    with zipfile.ZipFile(zip_file_path, 'w') as zipf:
-        zipf.write(pdb_ref['H'], arcname='complex_H.pdb')
-        zipf.write(pdb_ref['L'], arcname='complex_L.pdb')
 
-    assert fx.not_empty(zip_file_path)
-
-
-def step5_biobb_pdb_merge(config, system=None):
+def step5_cat_pdb(config, system=None):
     conf = settings.ConfReader(config, system)
     conf.working_dir_path = global_work_dir
     global_log, _ = fu.get_logs(path=conf.get_working_dir_path(), light_format=True)
     global_prop = conf.get_prop_dic(global_log=global_log)
     global_paths = conf.get_paths_dic()
 
-    zip_file_path = os.path.join(conf.get_working_dir_path(), "step4_prepare_reference_structure", "complex_HL.zip")
-    paths = global_paths["step5_biobb_pdb_merge"]
-    paths['input_file_path'] = zip_file_path
-    biobb_pdb_merge(**paths, properties=global_prop["step5_biobb_pdb_merge"])
+    step4_pth = os.path.join(conf.get_working_dir_path(), "step4_prepare_reference_structure")
+    paths = global_paths["step5_cat_pdb"]
+    paths['input_structure1'] = f'{step4_pth}/complex_H_reduced.pdb'
+    paths['input_structure2'] = f'{step4_pth}/complex_L_reduced.pdb'
+    cat_pdb(**paths, properties=global_prop["step5_cat_pdb"])
 
-    assert fx.not_empty(global_paths["step5_biobb_pdb_merge"]["output_file_path"])
+    assert fx.not_empty(global_paths["step5_cat_pdb"]["output_structure_path"])
 
 
 def step6_prepare_complex_antibody_clean(config, system=None):
@@ -207,7 +193,7 @@ def step6_prepare_complex_antibody_clean(config, system=None):
         (biobb_pdb_chainxseg.biobb_pdb_chainxseg, {}),
         (biobb_pdb_tidy.biobb_pdb_tidy, {'strict': True})
     ]
-    pdb_tools_pipeline(global_paths["step5_biobb_pdb_merge"]['output_file_path'], complex_ref_antibody, steps)
+    pdb_tools_pipeline(global_paths["step5_cat_pdb"]['output_structure_path'], complex_ref_antibody, steps)
     os.chdir(cwd)
 
     assert fx.not_empty(complex_ref_antibody)
@@ -223,9 +209,14 @@ def step7_prepare_complex_antigen_clean(config, system=None):
     os.chdir(step7_pth)
     complex_ref_antigen = f'{step7_pth}/complex_clean_antigen_final.pdb'
     steps = [
-        (biobb_pdb_reres.biobb_pdb_reres, {'number': 1}),
-        (biobb_pdb_chain.biobb_pdb_chain, {'chain': 'A'}),
+        (biobb_pdb_tidy.biobb_pdb_tidy, {'strict': True}),
+        (biobb_pdb_selchain.biobb_pdb_selchain, {'chains': 'A'}),
+        (biobb_pdb_chain.biobb_pdb_chain, {'chain': 'B'}),
         (biobb_pdb_chainxseg.biobb_pdb_chainxseg, {}),
+        (biobb_pdb_delhetatm.biobb_pdb_delhetatm, {}),
+        (biobb_pdb_fixinsert.biobb_pdb_fixinsert, {}),
+        (biobb_pdb_selaltloc.biobb_pdb_selaltloc, {}),
+        (biobb_pdb_keepcoord.biobb_pdb_keepcoord, {}),
         (biobb_pdb_tidy.biobb_pdb_tidy, {'strict': True})
     ]
     pdb_tools_pipeline(os.path.join(cwd, 'complex.pdb'), complex_ref_antigen, steps)
@@ -243,20 +234,17 @@ def step8_merge_heavy_light_antigen(config, system=None):
     step7_pth = os.path.join(conf.get_working_dir_path(), "step7_prepare_complex_antigen_clean")
     step8_pth = os.path.join(conf.get_working_dir_path(), "step8_merge_heavy_light_antigen")
     os.mkdir(step8_pth)
-    zip_file_path = f'{step8_pth}/complex_HL_B.zip'
-    with zipfile.ZipFile(zip_file_path, 'w') as zipf:
-        zipf.write(f'{step6_pth}/complex_clean_antibody_final.pdb', arcname='complex_antibody.pdb')
-        zipf.write(f'{step7_pth}/complex_clean_antigen_final.pdb', arcname='complex_antigen.pdb')
-
-    assert fx.not_empty(zip_file_path)
-
     os.chdir(step8_pth)
+    complex_merge = f'{step8_pth}/complex_clean_merge.pdb'
+    cat_pdb(input_structure1=f'{step6_pth}/complex_clean_antibody_final.pdb', input_structure2=f'{step7_pth}/complex_clean_antigen_final.pdb',
+            output_structure_path=complex_merge)
+    assert fx.not_empty(complex_merge)
+
     complex_prep = f'{step8_pth}/complex_clean.pdb'
     steps = [
-        (biobb_pdb_merge, {}),
         (biobb_pdb_tidy.biobb_pdb_tidy, {'strict': True})
     ]
-    pdb_tools_pipeline(zip_file_path, complex_prep, steps)
+    pdb_tools_pipeline(complex_merge, complex_prep, steps)
     os.chdir(cwd)
 
     assert fx.not_empty(complex_prep)
@@ -503,8 +491,8 @@ def test_step0_prepare_antibody_reduce(config_path, system):
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step1_biobb_pdb_merge(config_path, system):
-    step1_biobb_pdb_merge(config_path, system)
+def test_step1_cat_pdb(config_path, system):
+    step1_cat_pdb(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])
@@ -523,8 +511,8 @@ def test_step4_prepare_reference_structure(config_path, system):
 
 
 @pytest.mark.parametrize("system", [None])
-def test_step5_biobb_pdb_merge(config_path, system):
-    step5_biobb_pdb_merge(config_path, system)
+def test_step5_cat_pdb(config_path, system):
+    step5_cat_pdb(config_path, system)
 
 
 @pytest.mark.parametrize("system", [None])

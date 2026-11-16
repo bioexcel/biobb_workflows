@@ -174,7 +174,7 @@ fi
 # --- run the step-by-step test (CWD = tests/python: file: inputs + work dir) --
 cd "$SCRIPT_DIR"
 # Host-mode tools that shell out to a pip-installed console_script (e.g.
-# biobb_pdb_merge -> pdb_merge from pdb-tools) need the venv bin dir on PATH:
+# biobb_pdb_tidy -> pdb_tidy from pdb-tools) need the venv bin dir on PATH:
 # run_biobb() spawns a shell that inherits this environment, and invoking
 # "$VENV/bin/python" directly does not add "$VENV/bin" to PATH.
 export PATH="$VENV/bin:$PATH"

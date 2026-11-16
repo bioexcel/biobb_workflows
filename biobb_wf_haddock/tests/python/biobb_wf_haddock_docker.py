@@ -8,7 +8,7 @@ The workflow is mixed, and that config mirrors the split:
   * The PDB-preparation steps are pure-Python and run natively on the host — no
     container: the ``biobb_pdb_tools`` pipeline (tidy / selchain / delhetatm /
     fixinsert / selaltloc / keepcoord / selres / reres / chain / chainxseg) and
-    ``biobb_pdb_merge`` (-> the ``pdb_merge`` binary) for steps 0-8.
+    ``cat_pdb`` (biobb_structure_utils, pure Python) for steps 0-8.
   * The HADDOCK3 steps shell out to the ``haddock3-restraints`` / ``haddock3``
     binaries via ``run_biobb`` and carry a ``container_image``
     (quay.io/biocontainers/biobb_haddock) + ``container_path: docker`` — the pip
@@ -27,11 +27,11 @@ or, if the environment + docker daemon are already ready, directly:
 """
 from biobb_wf_haddock import (  # noqa: F401
     test_step0_prepare_antibody_reduce,
-    test_step1_biobb_pdb_merge,
+    test_step1_cat_pdb,
     test_step2_prepare_antibody_clean,
     test_step3_prepare_antigen_clean,
     test_step4_prepare_reference_structure,
-    test_step5_biobb_pdb_merge,
+    test_step5_cat_pdb,
     test_step6_prepare_complex_antibody_clean,
     test_step7_prepare_complex_antigen_clean,
     test_step8_merge_heavy_light_antigen,

@@ -2,7 +2,7 @@
  * Protein-protein Docking tutorial using HADDOCK with the BioExcel Building Blocks (biobb)
  * Nextflow version of biobb_wf_haddock/python/workflow.py, with the BioBB Nextflow modules in modules/.
  * Ported by hand: nextflow_wf_generator.py can't translate the python logic of workflow.py (pipelines of pdb_tools
- * blocks for the heavy and light chains, zips of their outputs, inputs of the haddock3 steps made by them).
+ * blocks for the heavy and light chains, inputs of the haddock3 steps made by them).
  * Regenerating it only refreshes the modules.
  * Usage: nextflow run main.nf -profile docker [--input samplesheet.csv]
  */
@@ -15,8 +15,7 @@ include { BIOBB_PDB_TOOLS_BIOBB_PDB_SELALTLOC as STEP0_5_PDB_SELALTLOC } from '.
 include { BIOBB_PDB_TOOLS_BIOBB_PDB_KEEPCOORD as STEP0_6_PDB_KEEPCOORD } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_keepcoord'
 include { BIOBB_PDB_TOOLS_BIOBB_PDB_SELRES as STEP0_7_PDB_SELRES } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_selres'
 include { BIOBB_PDB_TOOLS_BIOBB_PDB_TIDY as STEP0_8_PDB_TIDY } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_tidy'
-include { ZIP as STEP0_ZIP } from './modules/local/zip'
-include { BIOBB_PDB_TOOLS_BIOBB_PDB_MERGE as STEP1_BIOBB_PDB_MERGE } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_merge'
+include { BIOBB_STRUCTURE_UTILS_CAT_PDB as STEP1_CAT_PDB } from './modules/bioexcel/biobb_structure_utils/cat_pdb'
 include { BIOBB_PDB_TOOLS_BIOBB_PDB_RERES as STEP2_1_PDB_RERES } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_reres'
 include { BIOBB_PDB_TOOLS_BIOBB_PDB_CHAIN as STEP2_2_PDB_CHAIN } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_chain'
 include { BIOBB_PDB_TOOLS_BIOBB_PDB_CHAINXSEG as STEP2_3_PDB_CHAINXSEG } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_chainxseg'
@@ -35,18 +34,21 @@ include { BIOBB_PDB_TOOLS_BIOBB_PDB_SELALTLOC as STEP4_4_PDB_SELALTLOC } from '.
 include { BIOBB_PDB_TOOLS_BIOBB_PDB_KEEPCOORD as STEP4_5_PDB_KEEPCOORD } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_keepcoord'
 include { BIOBB_PDB_TOOLS_BIOBB_PDB_SELRES as STEP4_6_PDB_SELRES } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_selres'
 include { BIOBB_PDB_TOOLS_BIOBB_PDB_TIDY as STEP4_7_PDB_TIDY } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_tidy'
-include { ZIP as STEP4_ZIP } from './modules/local/zip'
-include { BIOBB_PDB_TOOLS_BIOBB_PDB_MERGE as STEP5_BIOBB_PDB_MERGE } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_merge'
+include { BIOBB_STRUCTURE_UTILS_CAT_PDB as STEP5_CAT_PDB } from './modules/bioexcel/biobb_structure_utils/cat_pdb'
 include { BIOBB_PDB_TOOLS_BIOBB_PDB_RERES as STEP6_1_PDB_RERES } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_reres'
 include { BIOBB_PDB_TOOLS_BIOBB_PDB_CHAIN as STEP6_2_PDB_CHAIN } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_chain'
 include { BIOBB_PDB_TOOLS_BIOBB_PDB_CHAINXSEG as STEP6_3_PDB_CHAINXSEG } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_chainxseg'
 include { BIOBB_PDB_TOOLS_BIOBB_PDB_TIDY as STEP6_4_PDB_TIDY } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_tidy'
-include { BIOBB_PDB_TOOLS_BIOBB_PDB_RERES as STEP7_1_PDB_RERES } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_reres'
-include { BIOBB_PDB_TOOLS_BIOBB_PDB_CHAIN as STEP7_2_PDB_CHAIN } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_chain'
-include { BIOBB_PDB_TOOLS_BIOBB_PDB_CHAINXSEG as STEP7_3_PDB_CHAINXSEG } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_chainxseg'
-include { BIOBB_PDB_TOOLS_BIOBB_PDB_TIDY as STEP7_4_PDB_TIDY } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_tidy'
-include { ZIP as STEP7_ZIP } from './modules/local/zip'
-include { BIOBB_PDB_TOOLS_BIOBB_PDB_MERGE as STEP8_1_PDB_MERGE } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_merge'
+include { BIOBB_PDB_TOOLS_BIOBB_PDB_TIDY as STEP7_1_PDB_TIDY } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_tidy'
+include { BIOBB_PDB_TOOLS_BIOBB_PDB_SELCHAIN as STEP7_2_PDB_SELCHAIN } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_selchain'
+include { BIOBB_PDB_TOOLS_BIOBB_PDB_CHAIN as STEP7_3_PDB_CHAIN } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_chain'
+include { BIOBB_PDB_TOOLS_BIOBB_PDB_CHAINXSEG as STEP7_4_PDB_CHAINXSEG } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_chainxseg'
+include { BIOBB_PDB_TOOLS_BIOBB_PDB_DELHETATM as STEP7_5_PDB_DELHETATM } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_delhetatm'
+include { BIOBB_PDB_TOOLS_BIOBB_PDB_FIXINSERT as STEP7_6_PDB_FIXINSERT } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_fixinsert'
+include { BIOBB_PDB_TOOLS_BIOBB_PDB_SELALTLOC as STEP7_7_PDB_SELALTLOC } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_selaltloc'
+include { BIOBB_PDB_TOOLS_BIOBB_PDB_KEEPCOORD as STEP7_8_PDB_KEEPCOORD } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_keepcoord'
+include { BIOBB_PDB_TOOLS_BIOBB_PDB_TIDY as STEP7_9_PDB_TIDY } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_tidy'
+include { BIOBB_STRUCTURE_UTILS_CAT_PDB as STEP8_1_CAT_PDB } from './modules/bioexcel/biobb_structure_utils/cat_pdb'
 include { BIOBB_PDB_TOOLS_BIOBB_PDB_TIDY as STEP8_2_PDB_TIDY } from './modules/bioexcel/biobb_pdb_tools/biobb_pdb_tidy'
 include { BIOBB_HADDOCK_HADDOCK3_PASSIVE_FROM_ACTIVE as STEP9_HADDOCK3_PASSIVE_FROM_ACTIVE } from './modules/bioexcel/biobb_haddock/haddock3_passive_from_active'
 include { BIOBB_HADDOCK_HADDOCK3_ACTPASS_TO_AMBIG as STEP10_HADDOCK3_ACTPASS_TO_AMBIG } from './modules/bioexcel/biobb_haddock/haddock3_actpass_to_ambig'
@@ -89,12 +91,10 @@ workflow {
     STEP0_6_PDB_KEEPCOORD(STEP0_5_PDB_SELALTLOC.out.output_file_path)
     STEP0_7_PDB_SELRES(STEP0_6_PDB_KEEPCOORD.out.output_file_path)
     STEP0_8_PDB_TIDY(STEP0_7_PDB_SELRES.out.output_file_path)
-    // step0_prepare_antibody_reduce: zip of the H and L chains (antibody_HL.zip of workflow.py)
-    STEP0_ZIP(chainsZip(STEP0_8_PDB_TIDY.out.output_file_path))
-    // step1_biobb_pdb_merge: Merge regions into a single file
-    STEP1_BIOBB_PDB_MERGE(STEP0_ZIP.out.zip)
+    // step1_cat_pdb: Merge the Heavy and Light chains into a single file
+    STEP1_CAT_PDB(chainPair(STEP0_8_PDB_TIDY.out.output_file_path))
     // step2_prepare_antibody_clean: Prepare PDB file to meet HADDOCK3 requirements (pdb_tools pipeline of workflow.py)
-    STEP2_1_PDB_RERES(STEP1_BIOBB_PDB_MERGE.out.output_file_path)
+    STEP2_1_PDB_RERES(STEP1_CAT_PDB.out.output_structure_path)
     STEP2_2_PDB_CHAIN(STEP2_1_PDB_RERES.out.output_file_path)
     STEP2_3_PDB_CHAINXSEG(STEP2_2_PDB_CHAIN.out.output_file_path)
     STEP2_4_PDB_TIDY(STEP2_3_PDB_CHAINXSEG.out.output_file_path)
@@ -114,29 +114,27 @@ workflow {
     STEP4_5_PDB_KEEPCOORD(STEP4_4_PDB_SELALTLOC.out.output_file_path)
     STEP4_6_PDB_SELRES(STEP4_5_PDB_KEEPCOORD.out.output_file_path)
     STEP4_7_PDB_TIDY(STEP4_6_PDB_SELRES.out.output_file_path)
-    // step4_prepare_reference_structure: zip of the H and L chains (complex_HL.zip of workflow.py)
-    STEP4_ZIP(chainsZip(STEP4_7_PDB_TIDY.out.output_file_path))
-    // step5_biobb_pdb_merge: Merge Heavy and Light regions (from the complex) into a single file
-    STEP5_BIOBB_PDB_MERGE(STEP4_ZIP.out.zip)
+    // step5_cat_pdb: Merge Heavy and Light regions (from the complex) into a single file
+    STEP5_CAT_PDB(chainPair(STEP4_7_PDB_TIDY.out.output_file_path))
     // step6_prepare_complex_antibody_clean: Prepare the Antibody PDB file (from the complex) to match HADDOCK3 requirements (pdb_tools pipeline of workflow.py)
-    STEP6_1_PDB_RERES(STEP5_BIOBB_PDB_MERGE.out.output_file_path)
+    STEP6_1_PDB_RERES(STEP5_CAT_PDB.out.output_structure_path)
     STEP6_2_PDB_CHAIN(STEP6_1_PDB_RERES.out.output_file_path)
     STEP6_3_PDB_CHAINXSEG(STEP6_2_PDB_CHAIN.out.output_file_path)
     STEP6_4_PDB_TIDY(STEP6_3_PDB_CHAINXSEG.out.output_file_path)
     // step7_prepare_complex_antigen_clean: Prepare the Antigen PDB file (from the complex) to match HADDOCK3 requirements (pdb_tools pipeline of workflow.py)
-    STEP7_1_PDB_RERES(ch_samples.map { meta, files -> [meta, files.complex] })
-    STEP7_2_PDB_CHAIN(STEP7_1_PDB_RERES.out.output_file_path)
-    STEP7_3_PDB_CHAINXSEG(STEP7_2_PDB_CHAIN.out.output_file_path)
-    STEP7_4_PDB_TIDY(STEP7_3_PDB_CHAINXSEG.out.output_file_path)
-    // step7_prepare_complex_antigen_clean: zip of the antibody (step6) and antigen (step7) of the complex (complex_HL_B.zip of workflow.py)
-    STEP7_ZIP(
-        STEP6_4_PDB_TIDY.out.output_file_path
-            .join(STEP7_4_PDB_TIDY.out.output_file_path)
-            .map { meta, antibody, antigen -> [meta, [antibody, antigen]] }
-    )
-    // step8_merge_heavy_light_antigen: Merge Heavy + Light regions and Antigen (from the complex) into a single file (pdb_tools pipeline of workflow.py)
-    STEP8_1_PDB_MERGE(STEP7_ZIP.out.zip)
-    STEP8_2_PDB_TIDY(STEP8_1_PDB_MERGE.out.output_file_path)
+    STEP7_1_PDB_TIDY(ch_samples.map { meta, files -> [meta, files.complex] })
+    STEP7_2_PDB_SELCHAIN(STEP7_1_PDB_TIDY.out.output_file_path)
+    STEP7_3_PDB_CHAIN(STEP7_2_PDB_SELCHAIN.out.output_file_path)
+    STEP7_4_PDB_CHAINXSEG(STEP7_3_PDB_CHAIN.out.output_file_path)
+    STEP7_5_PDB_DELHETATM(STEP7_4_PDB_CHAINXSEG.out.output_file_path)
+    STEP7_6_PDB_FIXINSERT(STEP7_5_PDB_DELHETATM.out.output_file_path)
+    STEP7_7_PDB_SELALTLOC(STEP7_6_PDB_FIXINSERT.out.output_file_path)
+    STEP7_8_PDB_KEEPCOORD(STEP7_7_PDB_SELALTLOC.out.output_file_path)
+    STEP7_9_PDB_TIDY(STEP7_8_PDB_KEEPCOORD.out.output_file_path)
+    // step8_merge_heavy_light_antigen: Merge Heavy + Light regions and Antigen (from the complex) into a single file: cat_pdb of the
+    // antibody (step6) and the antigen (step7), then tidy (pdb_tools pipeline of workflow.py)
+    STEP8_1_CAT_PDB(STEP6_4_PDB_TIDY.out.output_file_path.join(STEP7_9_PDB_TIDY.out.output_file_path))
+    STEP8_2_PDB_TIDY(STEP8_1_CAT_PDB.out.output_structure_path)
     // Inputs of the haddock3 steps made by the pdb_tools pipelines
     ch_antibody_clean = STEP2_4_PDB_TIDY.out.output_file_path
     ch_antigen_clean = STEP3_7_PDB_TIDY.out.output_file_path
@@ -229,16 +227,13 @@ workflow {
     publish:
     results = channel.empty().mix(
         STEP0_8_PDB_TIDY.out.output_file_path.map { meta, result -> [sampleMeta(meta), 'step0_prepare_antibody_reduce', result] },
-        STEP0_ZIP.out.zip.map { meta, result -> [meta, 'step0_prepare_antibody_reduce', result] },
-        STEP1_BIOBB_PDB_MERGE.out.output_file_path.map { meta, result -> [meta, 'step1_biobb_pdb_merge', result] },
+        STEP1_CAT_PDB.out.output_structure_path.map { meta, result -> [meta, 'step1_cat_pdb', result] },
         STEP2_4_PDB_TIDY.out.output_file_path.map { meta, result -> [sampleMeta(meta), 'step2_prepare_antibody_clean', result] },
         STEP3_7_PDB_TIDY.out.output_file_path.map { meta, result -> [sampleMeta(meta), 'step3_prepare_antigen_clean', result] },
         STEP4_7_PDB_TIDY.out.output_file_path.map { meta, result -> [sampleMeta(meta), 'step4_prepare_reference_structure', result] },
-        STEP4_ZIP.out.zip.map { meta, result -> [meta, 'step4_prepare_reference_structure', result] },
-        STEP5_BIOBB_PDB_MERGE.out.output_file_path.map { meta, result -> [meta, 'step5_biobb_pdb_merge', result] },
+        STEP5_CAT_PDB.out.output_structure_path.map { meta, result -> [meta, 'step5_cat_pdb', result] },
         STEP6_4_PDB_TIDY.out.output_file_path.map { meta, result -> [sampleMeta(meta), 'step6_prepare_complex_antibody_clean', result] },
-        STEP7_4_PDB_TIDY.out.output_file_path.map { meta, result -> [sampleMeta(meta), 'step7_prepare_complex_antigen_clean', result] },
-        STEP7_ZIP.out.zip.map { meta, result -> [meta, 'step7_prepare_complex_antigen_clean', result] },
+        STEP7_9_PDB_TIDY.out.output_file_path.map { meta, result -> [sampleMeta(meta), 'step7_prepare_complex_antigen_clean', result] },
         STEP8_2_PDB_TIDY.out.output_file_path.map { meta, result -> [sampleMeta(meta), 'step8_merge_heavy_light_antigen', result] },
         STEP9_HADDOCK3_PASSIVE_FROM_ACTIVE.out.output_actpass_path.map { meta, result -> [meta, 'step9_haddock3_passive_from_active', result] },
         STEP10_HADDOCK3_ACTPASS_TO_AMBIG.out.output_tbl_path.map { meta, result -> [meta, 'step10_haddock3_actpass_to_ambig', result] },
@@ -270,12 +265,15 @@ def sampleMeta(Map meta) {
     meta.findAll { key, _value -> !(key in ['chain', 'residues']) }
 }
 
-// [meta, [H, L]] items of the PDBs of both chains, to zip them in the order of workflow.py
-def chainsZip(ch_chains) {
+// [meta, H, L] items of the PDBs of both chains, to concatenate them (cat_pdb) in the order of workflow.py
+def chainPair(ch_chains) {
     ch_chains
         .map { meta, pdb -> [sampleMeta(meta), [meta.chain, pdb]] }
         .groupTuple(size: 2)
-        .map { meta, chain_pdbs -> [meta, chain_pdbs.sort { chain_pdb -> chain_pdb[0] }.collect { chain_pdb -> chain_pdb[1] }] }
+        .map { meta, chain_pdbs ->
+            def pdbs = chain_pdbs.sort { chain_pdb -> chain_pdb[0] }.collect { chain_pdb -> chain_pdb[1] }
+            [meta, pdbs[0], pdbs[1]]
+        }
 }
 
 // Path of a samplesheet column: absolute, or relative to the samplesheet folder

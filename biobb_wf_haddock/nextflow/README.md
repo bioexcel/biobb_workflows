@@ -5,10 +5,9 @@ Nextflow version of the [python workflow](../python/workflow.py), with the [BioB
 Ported by hand: utils_biobb `nextflow_wf_generator.py` can't translate the python logic of `workflow.py`. That logic is:
 
 * the pipelines of pdb_tools blocks that prepare the structures (step0 and step2 to step8), with loops over the heavy (H) and light (L) chains;
-* the zips of their outputs for `biobb_pdb_merge`;
 * the inputs of the haddock3 steps made by them.
 
-Here every block of a pipeline is a step `<step>_<n>_PDB_<BLOCK>` of `main.nf` (H and L chains in parallel), and the zips are written by the local `zip` module (`modules/local`, in the biobb_common image). Running the generator on it only refreshes the modules.
+Here every block of a pipeline is a step `<step>_<n>_PDB_<BLOCK>` of `main.nf` (H and L chains in parallel), and `cat_pdb` concatenates the H and L chains (step1 and step5) and the antibody and antigen (step8). Running the generator on it only refreshes the modules.
 
 ## Run
 
@@ -40,15 +39,15 @@ Profiles: `docker`, `apptainer`, `singularity` and `conda`. Results are written 
 
 | Step | Block | Description |
 |---|---|---|
-| step0_prepare_antibody_reduce | [biobb_pdb_tools](modules/bioexcel/biobb_pdb_tools) tidy (strict), selchain, delhetatm, fixinsert, selaltloc, keepcoord, selres, tidy | Select and extract protein regions/chains: H and L chains of `antibody`, and their zip |
-| step1_biobb_pdb_merge | [biobb_pdb_tools/biobb_pdb_merge](modules/bioexcel/biobb_pdb_tools/biobb_pdb_merge/README.md) | Merge regions into a single file |
+| step0_prepare_antibody_reduce | [biobb_pdb_tools](modules/bioexcel/biobb_pdb_tools) tidy (strict), selchain, delhetatm, fixinsert, selaltloc, keepcoord, selres, tidy | Select and extract protein regions/chains: H and L chains of `antibody` |
+| step1_cat_pdb | [biobb_structure_utils/cat_pdb](modules/bioexcel/biobb_structure_utils/cat_pdb/README.md) | Merge the Heavy and Light chains into a single file |
 | step2_prepare_antibody_clean | [biobb_pdb_tools](modules/bioexcel/biobb_pdb_tools) reres, chain (A), chainxseg, tidy (strict) | Prepare PDB file to meet HADDOCK3 requirements (antibody of step1) |
 | step3_prepare_antigen_clean | [biobb_pdb_tools](modules/bioexcel/biobb_pdb_tools) tidy (strict), delhetatm, selaltloc, keepcoord, chain (B), chainxseg, tidy (strict) | Preparing the antigen structure |
-| step4_prepare_reference_structure | [biobb_pdb_tools](modules/bioexcel/biobb_pdb_tools) selchain, delhetatm, fixinsert, selaltloc, keepcoord, selres, tidy | Select and extract protein regions/chains: H and L chains of `complex`, and their zip |
-| step5_biobb_pdb_merge | [biobb_pdb_tools/biobb_pdb_merge](modules/bioexcel/biobb_pdb_tools/biobb_pdb_merge/README.md) | Merge Heavy and Light regions (from the complex) into a single file |
+| step4_prepare_reference_structure | [biobb_pdb_tools](modules/bioexcel/biobb_pdb_tools) selchain, delhetatm, fixinsert, selaltloc, keepcoord, selres, tidy | Select and extract protein regions/chains: H and L chains of `complex` |
+| step5_cat_pdb | [biobb_structure_utils/cat_pdb](modules/bioexcel/biobb_structure_utils/cat_pdb/README.md) | Merge Heavy and Light regions (from the complex) into a single file |
 | step6_prepare_complex_antibody_clean | [biobb_pdb_tools](modules/bioexcel/biobb_pdb_tools) reres, chain (A), chainxseg, tidy (strict) | Prepare the Antibody PDB file (from the complex) to match HADDOCK3 requirements |
-| step7_prepare_complex_antigen_clean | [biobb_pdb_tools](modules/bioexcel/biobb_pdb_tools) reres, chain (A), chainxseg, tidy (strict) | Prepare the Antigen PDB file (from the complex) to match HADDOCK3 requirements, and the zip with the step6 antibody |
-| step8_merge_heavy_light_antigen | [biobb_pdb_tools](modules/bioexcel/biobb_pdb_tools) merge, tidy (strict) | Merge Heavy + Light regions and Antigen (from the complex) into a single file: reference of the CAPRI evaluations |
+| step7_prepare_complex_antigen_clean | [biobb_pdb_tools](modules/bioexcel/biobb_pdb_tools) tidy (strict), selchain (A), chain (B), chainxseg, delhetatm, fixinsert, selaltloc, keepcoord, tidy (strict) | Prepare the Antigen PDB file (from the complex) to match HADDOCK3 requirements |
+| step8_merge_heavy_light_antigen | [biobb_structure_utils/cat_pdb](modules/bioexcel/biobb_structure_utils/cat_pdb/README.md), [biobb_pdb_tools](modules/bioexcel/biobb_pdb_tools) tidy (strict) | Merge Heavy + Light regions and Antigen (from the complex) into a single file: reference of the CAPRI evaluations |
 | step9_haddock3_passive_from_active | [biobb_haddock/haddock3_passive_from_active](modules/bioexcel/biobb_haddock/haddock3_passive_from_active/README.md) | Passive restraints |
 | step10_haddock3_actpass_to_ambig | [biobb_haddock/haddock3_actpass_to_ambig](modules/bioexcel/biobb_haddock/haddock3_actpass_to_ambig/README.md) | Passive restraints |
 | step11_haddock3_restrain_bodies | [biobb_haddock/haddock3_restrain_bodies](modules/bioexcel/biobb_haddock/haddock3_restrain_bodies/README.md) | Passive restraints |

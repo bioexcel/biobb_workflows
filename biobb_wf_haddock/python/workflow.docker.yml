@@ -11,17 +11,19 @@ global_properties:
   working_dir_path: biobb_wf_haddock
   can_write_console_log: False
 
-step1_biobb_pdb_merge:
-  tool: biobb_pdb_merge
+step1_cat_pdb:
+  tool: cat_pdb
   paths:
-    input_file_path: antibody_HL.zip
-    output_file_path: antibody_clean_merge.pdb
+    input_structure1: antibody_H_reduced.pdb
+    input_structure2: antibody_L_reduced.pdb
+    output_structure_path: antibody_clean_merge.pdb
 
-step5_biobb_pdb_merge:
-  tool: biobb_pdb_merge
+step5_cat_pdb:
+  tool: cat_pdb
   paths:
-    input_file_path: complex_HL.zip
-    output_file_path: complex_antibody_clean.pdb
+    input_structure1: complex_H_reduced.pdb
+    input_structure2: complex_L_reduced.pdb
+    output_structure_path: complex_antibody_clean.pdb
 
 step9_haddock3_passive_from_active:
   tool: haddock3_passive_from_active
