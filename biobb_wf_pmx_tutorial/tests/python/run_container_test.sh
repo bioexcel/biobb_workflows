@@ -122,6 +122,11 @@ cp "$REQ_FILE" "$REQS"
 echo "pytest" >> "$REQS"
 echo "imagehash" >> "$REQS"
 echo "==> pip installing:"; sed 's/^/    /' "$REQS"
+# pmx-biobb ships no wheel, so pip compiles its C extension. GCC >= 15 (e.g.
+# Ubuntu 26.04) defaults to C23, where 'bool' is a keyword and pmx.h's
+# 'typedef ... bool' fails ("'bool' cannot be defined via 'typedef'"). Compile it
+# as C17; harmless with older compilers. Real fix belongs in pmx-biobb.
+export CFLAGS="${CFLAGS:-} -std=gnu17"
 "$VENV/bin/pip" install -r "$REQS"
 # fail fast if any pip-installed biobb package is missing (import name == pip name)
 "$VENV/bin/python" -c "import importlib; [importlib.import_module(l.split('==')[0].strip()) for l in open('$REQS') if l.startswith('biobb_')]; print('==> biobb import OK')"

@@ -64,7 +64,7 @@ Take into account that depending on the number of steps, the tools executed and 
 
 ### <a name="container-requirements"></a>Requirements
 
-* **Python 3** with **pip** (the `venv` module is used below to keep the packages isolated).
+* **Python 3.12** with **pip** (the `venv` module is used below to keep the packages isolated). The biobb 5.3.x packages are built for Python 3.10 to 3.12: with newer versions (3.13, 3.14) some dependencies have no installable packages yet.
 * One container engine:
     * **Docker**: the Docker daemon must be running and your user must be allowed to run `docker` commands (`docker run hello-world` should work). On macOS and Windows, use [Docker Desktop](https://docs.docker.com/desktop/).
     * **Singularity / Apptainer**: usual on HPC clusters, where Docker is often not available.
@@ -78,7 +78,7 @@ Notes about the platform:
 
 After downloading the workflow files and decompressing them in a folder, please go to this directory, open it in terminal and execute the following script:
 
-    python3 -m venv .venv
+    python3.12 -m venv .venv
     source .venv/bin/activate
     pip install -r requirements.txt
 
@@ -129,6 +129,12 @@ Then run the workflow:
     ```
 
     The pmx package (and its force fields) is installed in the virtual environment by **requirements.txt**.
+
+* **Recent compilers (GCC 15 or newer, e.g. Ubuntu 26.04).** `pip` compiles the pmx package from source, and its C code does not build with the C23 standard these compilers use by default (`'bool' cannot be defined via 'typedef'`). Install the requirements telling the compiler to use C17:
+
+    ```shell
+    CFLAGS="-std=gnu17" pip install -r requirements.txt
+    ```
 
 ## <a name="get-output"></a>Get output results
 

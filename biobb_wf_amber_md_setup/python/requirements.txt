@@ -7,7 +7,7 @@
 # (checked by common/python/check_versions.py).
 
 biobb_structure_utils==5.3.0
-biobb_chemistry==5.3.0
+biobb_chemistry==5.3.2
 biobb_amber==5.3.1
 biobb_analysis==5.3.0
 

@@ -145,15 +145,36 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           "$HOME/miniconda3/bin/conda" config --set solver libmamba
-          "$HOME/miniconda3/bin/conda" create -y -n biobb_env -f ${{ inputs.wf_name }}/python/workflow.env.yml pytest imagehash
+          # conda-forge + bioconda only, like the env files (nodefaults) and the
+          # docker images (conda env create). Miniconda's config adds Anaconda's
+          # `defaults`, which `conda create -f` does not drop: in Nov 2026 it pulled
+          # defaults' mkl 2022 into biobb_wf_autoencoder and pushed the solver to
+          # an ancient cpu_generic pytorch (2.5/2.6 instead of 2.13+ cpu_mkl) that
+          # made the training step crawl for hours.
+          # Miniconda sets `defaults` in its own install config (not the user
+          # .condarc), so drop it from every config file conda reads, and also
+          # pass --override-channels so configured channels are ignored anyway.
+          "$HOME/miniconda3/bin/conda" config --show-sources | sed -n 's/^==> \(.*\) <==$/\1/p' | while read -r f; do
+            if [ -f "$f" ]; then "$HOME/miniconda3/bin/conda" config --file "$f" --remove channels defaults 2>/dev/null || true; fi
+          done
+          "$HOME/miniconda3/bin/conda" config --add channels bioconda
+          "$HOME/miniconda3/bin/conda" config --add channels conda-forge
+          "$HOME/miniconda3/bin/conda" config --show channels
+          "$HOME/miniconda3/bin/conda" create -y -n biobb_env --override-channels -c conda-forge -c bioconda -f ${{ inputs.wf_name }}/python/workflow.env.yml pytest imagehash
 
       - name: Create environment (macOS, native arm64 with x86_64/Rosetta fallback)
         if: runner.os == 'macOS'
         run: |
           "$HOME/miniconda3/bin/conda" config --set solver libmamba
+          # conda-forge + bioconda only (see the Linux step)
+          "$HOME/miniconda3/bin/conda" config --show-sources | sed -n 's/^==> \(.*\) <==$/\1/p' | while read -r f; do
+            if [ -f "$f" ]; then "$HOME/miniconda3/bin/conda" config --file "$f" --remove channels defaults 2>/dev/null || true; fi
+          done
+          "$HOME/miniconda3/bin/conda" config --add channels bioconda
+          "$HOME/miniconda3/bin/conda" config --add channels conda-forge
           if [ "${{ runner.arch }}" = "ARM64" ]; then
             # same create command as the ubuntu lane
-            if "$HOME/miniconda3/bin/conda" create -y -n biobb_env -f ${{ inputs.wf_name }}/python/workflow.env.yml pytest imagehash; then
+            if "$HOME/miniconda3/bin/conda" create -y -n biobb_env --override-channels -c conda-forge -c bioconda -f ${{ inputs.wf_name }}/python/workflow.env.yml pytest imagehash; then
               echo "Environment resolved for osx-arm64"
               exit 0
             fi
@@ -162,6 +183,7 @@ jobs:
             curl -fsSL "https://repo.anaconda.com/miniconda/Miniconda3-py312_25.7.0-2-MacOSX-x86_64.sh" -o /tmp/miniconda.sh
             bash /tmp/miniconda.sh -b -p "$HOME/miniconda3"
             "$HOME/miniconda3/bin/conda" config --set solver libmamba
+            "$HOME/miniconda3/bin/conda" config --remove channels defaults 2>/dev/null || true
           fi
           # conda 25.7.0 (last x86_64 macOS build) 'create' does not read
           # env-format files: pull the deps out of the env file into a plain
@@ -173,10 +195,18 @@ jobs:
             | grep -vE '^[a-z_]+:' > /tmp/wf_specs.txt
           echo pytest >> /tmp/wf_specs.txt
           echo imagehash >> /tmp/wf_specs.txt
-          "$HOME/miniconda3/bin/conda" create -y -n biobb_env --file /tmp/wf_specs.txt -c conda-forge -c bioconda
+          "$HOME/miniconda3/bin/conda" create -y -n biobb_env --file /tmp/wf_specs.txt --override-channels -c conda-forge -c bioconda
 
       - name: List installed package versions
-        run: '"$HOME/miniconda3/bin/conda" run -n biobb_env conda list'
+        run: |
+          "$HOME/miniconda3/bin/conda" run -n biobb_env conda list
+          # the env files exclude Anaconda's defaults channel (nodefaults): flag leaks
+          "$HOME/miniconda3/bin/conda" list -n biobb_env --json | python3 -c "
+          import json, sys
+          bad = [p['name'] + '=' + p['version'] for p in json.load(sys.stdin)
+                 if p.get('channel', '') in ('pkgs/main', 'pkgs/r') or 'repo.anaconda.com' in p.get('base_url', '')]
+          if bad: print('::warning::packages from Anaconda defaults (env files say nodefaults): ' + ', '.join(bad))
+          else: print('No package from Anaconda defaults')"
 
       - name: Run tests
         run: |
@@ -184,5 +214,10 @@ jobs:
 
           cd ${{ inputs.wf_name }}/tests/python
 
-          # Production one
-          "$HOME/miniconda3/bin/conda" run -n biobb_env pytest ${{ inputs.wf_name }}.py --config ../../python/workflow.yml --remove
+          # --no-capture-output: stream pytest's output live (plain `conda run`
+          # buffers it until exit, so a hung job showed nothing for hours).
+          # -v: one line per step. faulthandler_timeout: if one test runs > 30 min,
+          # dump every thread's stack to the log (diagnostic only, the test goes on).
+          "$HOME/miniconda3/bin/conda" run --no-capture-output -n biobb_env \
+            pytest ${{ inputs.wf_name }}.py --config ../../python/workflow.yml --remove \
+            -v -o faulthandler_timeout=1800

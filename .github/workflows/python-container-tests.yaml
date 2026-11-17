@@ -55,6 +55,16 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
+      # TEMPORARY (2026-11): the venv is created from the runner's python3.
+      # ubuntu-latest moved to Ubuntu 26.04 (system Python 3.14) in Oct 2026,
+      # where biobb 5.3.x deps have no wheels (biobb_pytorch's torch==2.5.0,
+      # scipy 1.13 for flexdyn/pmx, biobb_mem 5.3.0 requires <3.13). Remove
+      # this pin with the next biobb release, which no longer fixes Python.
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       # pip-installs the biobb packages from workflow.env.yml and runs the
       # step-by-step test against workflow.docker.yml (each step's binaries run in a
       # quay.io/biocontainers image pulled by biobb per step).
@@ -79,6 +89,16 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+
+      # TEMPORARY (2026-11): the venv is created from the runner's python3.
+      # ubuntu-latest moved to Ubuntu 26.04 (system Python 3.14) in Oct 2026,
+      # where biobb 5.3.x deps have no wheels (biobb_pytorch's torch==2.5.0,
+      # scipy 1.13 for flexdyn/pmx, biobb_mem 5.3.0 requires <3.13). Remove
+      # this pin with the next biobb release, which no longer fixes Python.
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
       # Same as docker, but workflow.singularity.yml + a depot.galaxyproject.org
       # image. The script warms SINGULARITY_CACHE with the unique images first so a
