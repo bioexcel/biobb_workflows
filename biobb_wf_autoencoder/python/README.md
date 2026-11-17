@@ -60,25 +60,6 @@ After that, the only thing left is to run the workflow:
 
 Take into account that depending on the number of steps, the tools executed and the settings provided, along with the power of your computer, the execution of the workflow can take from a **few minutes** to **several hours**. The workflow progress will be shown in your terminal.
 
-### <a name="conda-notes"></a>Notes for this workflow (conda mode)
-
-* **Recent Linux distributions (e.g. Ubuntu 26.04).** Their system library (glibc) refuses to load libraries that ask for an *executable stack*, and the PyTorch build installed by conda carries that flag, so the workflow stops with:
-
-    ```
-    ImportError: libtorch_cpu.so: cannot enable executable stack as shared object requires: Invalid argument
-    ```
-
-    The flag is a leftover of how the library was compiled (PyTorch does not need it). Clear it once in the environment with [patchelf](https://github.com/NixOS/patchelf) (0.18 or newer):
-
-    ```shell
-    conda install -c conda-forge "patchelf>=0.18"
-    for lib in "$CONDA_PREFIX"/lib/python3*/site-packages/torch/lib/*.so* "$CONDA_PREFIX"/lib/libtorch*.so*; do
-        [ -f "$lib" ] && patchelf --clear-execstack "$lib"
-    done
-    ```
-
-    macOS and older Linux versions (e.g. Ubuntu 24.04) are not affected.
-
 ## <a name="container-mode"></a>B. Container mode
 
 ### <a name="container-requirements"></a>Requirements
