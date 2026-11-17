@@ -197,33 +197,6 @@ jobs:
           echo imagehash >> /tmp/wf_specs.txt
           "$HOME/miniconda3/bin/conda" create -y -n biobb_env --file /tmp/wf_specs.txt --override-channels -c conda-forge -c bioconda
 
-      # Ubuntu 26.04 (ubuntu-latest since Oct 2026) ships a glibc that refuses to
-      # load shared libraries whose ELF header asks for an executable stack, e.g.
-      # conda-forge libtorch 2.5.1 (biobb_wf_autoencoder): "ImportError:
-      # libtorch_cpu.so: cannot enable executable stack as shared object
-      # requires". The flag is a build artefact (the code does not run from the
-      # stack), so clear it on any flagged library of the throwaway test env.
-      # No-op when nothing is flagged. patchelf lives in its own prefix so the
-      # test env stays exactly what workflow.env.yml resolves to.
-      - name: Clear executable-stack flag on env libraries (Linux)
-        if: runner.os == 'Linux'
-        run: |
-          ENV_DIR="$HOME/miniconda3/envs/biobb_env"
-          # GNU_STACK program header flags "RWE" = executable stack requested
-          flagged=$(find "$ENV_DIR" -name '*.so*' -type f | while read -r lib; do
-            if readelf -lW "$lib" 2>/dev/null | grep -q 'GNU_STACK.* RWE '; then echo "$lib"; fi
-          done || true)
-          if [ -z "$flagged" ]; then
-            echo "No library in the env requests an executable stack"
-            exit 0
-          fi
-          echo "Libraries requesting an executable stack:"; echo "$flagged" | sed 's/^/  /'
-          "$HOME/miniconda3/bin/conda" create -y -q -p "$RUNNER_TEMP/patchelf" -c conda-forge "patchelf>=0.18"
-          echo "$flagged" | while read -r lib; do
-            "$RUNNER_TEMP/patchelf/bin/patchelf" --clear-execstack "$lib"
-          done
-          echo "Cleared the executable-stack flag on $(echo "$flagged" | wc -l) file(s)"
-
       - name: List installed package versions
         run: |
           "$HOME/miniconda3/bin/conda" run -n biobb_env conda list
@@ -243,8 +216,8 @@ jobs:
 
           # --no-capture-output: stream pytest's output live (plain `conda run`
           # buffers it until exit, so a hung job showed nothing for hours).
-          # -v: one line per step. faulthandler_timeout: if one test runs > 10 min,
+          # -v: one line per step. faulthandler_timeout: if one test runs > 30 min,
           # dump every thread's stack to the log (diagnostic only, the test goes on).
           "$HOME/miniconda3/bin/conda" run --no-capture-output -n biobb_env \
             pytest ${{ inputs.wf_name }}.py --config ../../python/workflow.yml --remove \
-            -v -o faulthandler_timeout=600
+            -v -o faulthandler_timeout=1800
