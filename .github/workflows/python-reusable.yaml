@@ -151,23 +151,30 @@ jobs:
           # defaults' mkl 2022 into biobb_wf_autoencoder and pushed the solver to
           # an ancient cpu_generic pytorch (2.5/2.6 instead of 2.13+ cpu_mkl) that
           # made the training step crawl for hours.
-          "$HOME/miniconda3/bin/conda" config --remove channels defaults 2>/dev/null || true
+          # Miniconda sets `defaults` in its own install config (not the user
+          # .condarc), so drop it from every config file conda reads, and also
+          # pass --override-channels so configured channels are ignored anyway.
+          "$HOME/miniconda3/bin/conda" config --show-sources | sed -n 's/^==> \(.*\) <==$/\1/p' | while read -r f; do
+            if [ -f "$f" ]; then "$HOME/miniconda3/bin/conda" config --file "$f" --remove channels defaults 2>/dev/null || true; fi
+          done
           "$HOME/miniconda3/bin/conda" config --add channels bioconda
           "$HOME/miniconda3/bin/conda" config --add channels conda-forge
           "$HOME/miniconda3/bin/conda" config --show channels
-          "$HOME/miniconda3/bin/conda" create -y -n biobb_env -f ${{ inputs.wf_name }}/python/workflow.env.yml pytest imagehash
+          "$HOME/miniconda3/bin/conda" create -y -n biobb_env --override-channels -c conda-forge -c bioconda -f ${{ inputs.wf_name }}/python/workflow.env.yml pytest imagehash
 
       - name: Create environment (macOS, native arm64 with x86_64/Rosetta fallback)
         if: runner.os == 'macOS'
         run: |
           "$HOME/miniconda3/bin/conda" config --set solver libmamba
           # conda-forge + bioconda only (see the Linux step)
-          "$HOME/miniconda3/bin/conda" config --remove channels defaults 2>/dev/null || true
+          "$HOME/miniconda3/bin/conda" config --show-sources | sed -n 's/^==> \(.*\) <==$/\1/p' | while read -r f; do
+            if [ -f "$f" ]; then "$HOME/miniconda3/bin/conda" config --file "$f" --remove channels defaults 2>/dev/null || true; fi
+          done
           "$HOME/miniconda3/bin/conda" config --add channels bioconda
           "$HOME/miniconda3/bin/conda" config --add channels conda-forge
           if [ "${{ runner.arch }}" = "ARM64" ]; then
             # same create command as the ubuntu lane
-            if "$HOME/miniconda3/bin/conda" create -y -n biobb_env -f ${{ inputs.wf_name }}/python/workflow.env.yml pytest imagehash; then
+            if "$HOME/miniconda3/bin/conda" create -y -n biobb_env --override-channels -c conda-forge -c bioconda -f ${{ inputs.wf_name }}/python/workflow.env.yml pytest imagehash; then
               echo "Environment resolved for osx-arm64"
               exit 0
             fi
