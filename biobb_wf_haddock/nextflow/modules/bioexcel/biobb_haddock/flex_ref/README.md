@@ -7,7 +7,7 @@ Wrapper class for the HADDOCK3 FlexRef module.
 
 The FlexRef module.HADDOCK3 FlexRef module computes a flexible refinement over selected structures.
 
-Nextflow adapter of the [FlexRef](https://biobb-haddock.readthedocs.io/en/latest/haddock.html#module-haddock.flex_ref) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.2.
+Nextflow adapter of the [FlexRef](https://biobb-haddock.readthedocs.io/en/latest/haddock.html#module-haddock.flex_ref) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.3.
 
 ## Get started
 

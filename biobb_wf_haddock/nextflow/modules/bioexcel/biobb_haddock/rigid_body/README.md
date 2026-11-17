@@ -7,7 +7,7 @@ Wrapper class for the HADDOCK3 RigidBody module.
 
 The RigidBody module. HADDOCK3 RigidBody module compute rigid body docking between two molecules.
 
-Nextflow adapter of the [RigidBody](https://biobb-haddock.readthedocs.io/en/latest/haddock.html#module-haddock.rigid_body) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.2.
+Nextflow adapter of the [RigidBody](https://biobb-haddock.readthedocs.io/en/latest/haddock.html#module-haddock.rigid_body) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.3.
 
 ## Get started
 

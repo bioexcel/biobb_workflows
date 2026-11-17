@@ -7,7 +7,7 @@ Wrapper class for the Haddock-Restraints restrain_bodies module.
 
 Haddock-Restraints restrain_bodies creates distance restraints to lock several chains together. Useful to avoid unnatural flexibility or movement due to sequence/numbering gaps.
 
-Nextflow adapter of the [RestrainBodies](https://biobb-haddock.readthedocs.io/en/latest/haddock_restraints.html#module-haddock_restraints.haddock3_restrain_bodies) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.2.
+Nextflow adapter of the [RestrainBodies](https://biobb-haddock.readthedocs.io/en/latest/haddock_restraints.html#module-haddock_restraints.haddock3_restrain_bodies) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.3.
 
 ## Get started
 

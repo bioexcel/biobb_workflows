@@ -7,7 +7,7 @@ Wrapper class for the HADDOCK3 SeleTop module.
 
 The SeleTop module. HADDOCK3 SeleTop module selects the top models of a docking.
 
-Nextflow adapter of the [SeleTop](https://biobb-haddock.readthedocs.io/en/latest/haddock.html#module-haddock.sele_top) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.2.
+Nextflow adapter of the [SeleTop](https://biobb-haddock.readthedocs.io/en/latest/haddock.html#module-haddock.sele_top) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.3.
 
 ## Get started
 

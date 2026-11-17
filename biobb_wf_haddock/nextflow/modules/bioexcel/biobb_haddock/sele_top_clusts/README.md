@@ -7,7 +7,7 @@ Wrapper class for the HADDOCK3 SeleTopClusts module.
 
 The SeleTopClusts module. HADDOCK3 SeleTopClusts module selects the top clusters of a docking.
 
-Nextflow adapter of the [SeleTopClusts](https://biobb-haddock.readthedocs.io/en/latest/haddock.html#module-haddock.sele_top_clusts) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.2.
+Nextflow adapter of the [SeleTopClusts](https://biobb-haddock.readthedocs.io/en/latest/haddock.html#module-haddock.sele_top_clusts) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.3.
 
 ## Get started
 

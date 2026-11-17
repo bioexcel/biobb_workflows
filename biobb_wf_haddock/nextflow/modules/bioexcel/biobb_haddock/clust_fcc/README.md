@@ -7,7 +7,7 @@ Wrapper class for the HADDOCK3 ClustFCC module.
 
 The ClustFCC module. HADDOCK3 ClustFCC module computes clusters of structures using FCC.
 
-Nextflow adapter of the [ClustFCC](https://biobb-haddock.readthedocs.io/en/latest/haddock.html#module-haddock.clust_fcc) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.2.
+Nextflow adapter of the [ClustFCC](https://biobb-haddock.readthedocs.io/en/latest/haddock.html#module-haddock.clust_fcc) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.3.
 
 ## Get started
 

@@ -475,10 +475,14 @@ def step23_contact_map(config, remove=False, system=None):
     assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/00_topoaa/antigen_clean.pdb"), f'reference/step23_contact_map/haddock_wf_data/data/00_topoaa/antigen_clean.pdb', 10)
     assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/01_rigidbody/ambig-paratope-NMR-epitope.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/01_rigidbody/ambig-paratope-NMR-epitope.tbl', 10)
     assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/01_rigidbody/antibody-unambig.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/01_rigidbody/antibody-unambig.tbl', 10)
-    assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/02_flexref/antibody-unambig.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/02_flexref/antibody-unambig.tbl', 10)
-    assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/02_flexref/antibody-unambig.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/02_flexref/antibody-unambig.tbl', 10)
-    assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/03_emref/antibody-unambig.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/03_emref/antibody-unambig.tbl', 10)
-    assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/03_emref/antibody-unambig.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/03_emref/antibody-unambig.tbl', 10)
+    assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/03_flexref/ambig-paratope-NMR-epitope.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/03_flexref/ambig-paratope-NMR-epitope.tbl', 10)
+    assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/03_flexref/antibody-unambig.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/03_flexref/antibody-unambig.tbl', 10)
+    assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/05_emref/ambig-paratope-NMR-epitope.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/05_emref/ambig-paratope-NMR-epitope.tbl', 10)
+    assert fx.compare_size(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data/05_emref/antibody-unambig.tbl"), f'reference/step23_contact_map/haddock_wf_data/data/05_emref/antibody-unambig.tbl', 10)
+    # Each caprieval step keeps its reference structure (step8 complex_clean.pdb) in data/.
+    # It is missing if the reference does not reach HADDOCK3 (biobb_haddock < 5.3.3).
+    for capri_data in ("02_caprieval", "04_caprieval", "06_caprieval", "07_caprieval"):
+        assert fx.not_empty(os.path.join(global_paths["step23_contact_map"]["output_haddock_wf_data"], "data", capri_data, "complex_clean.pdb"))
 
     if remove:
         tmp_files = [conf.get_working_dir_path()]

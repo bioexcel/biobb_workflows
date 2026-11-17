@@ -7,7 +7,7 @@ Wrapper class for the HADDOCK3 Topology module.
 
 The Topology module. HADDOCK3 Topology module creates a topology from a system to be used for docking.
 
-Nextflow adapter of the [Topology](https://biobb-haddock.readthedocs.io/en/latest/haddock.html#module-haddock.topology) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.2.
+Nextflow adapter of the [Topology](https://biobb-haddock.readthedocs.io/en/latest/haddock.html#module-haddock.topology) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.3.
 
 ## Get started
 

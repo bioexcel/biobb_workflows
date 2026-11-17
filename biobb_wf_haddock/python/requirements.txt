@@ -6,7 +6,7 @@
 # Keep the biobb_* versions in sync with workflow.env.yml and the container_image tags
 # (checked by common/python/check_versions.py).
 
-biobb_haddock==5.3.0
+biobb_haddock==5.3.3
 biobb_pdb_tools==5.3.2
 biobb_structure_utils==5.3.0
 

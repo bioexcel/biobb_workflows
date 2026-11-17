@@ -7,7 +7,7 @@ Wrapper class for the HADDOCK3 ContactMap module.
 
 The ContactMap module. HADDOCK3 ContactMap module computes contacts between chains in complexes and generates heatmaps and chordcharts.
 
-Nextflow adapter of the [ContactMap](https://biobb-haddock.readthedocs.io/en/latest/haddock.html#module-haddock.contact_map) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.2.
+Nextflow adapter of the [ContactMap](https://biobb-haddock.readthedocs.io/en/latest/haddock.html#module-haddock.contact_map) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.3.
 
 ## Get started
 

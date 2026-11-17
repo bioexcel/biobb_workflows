@@ -7,7 +7,7 @@ Wrapper class for the Haddock3-Restraints passive_from_active module.
 
 Haddock3-Restraints passive_from_active given a list of active_residues and a PDB structure, it will return a list of surface exposed passive residues within a radius (6.5Å by default) from the active residues.
 
-Nextflow adapter of the [PassiveFromActive](https://biobb-haddock.readthedocs.io/en/latest/haddock_restraints.html#module-haddock_restraints.haddock3_passive_from_active) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.2.
+Nextflow adapter of the [PassiveFromActive](https://biobb-haddock.readthedocs.io/en/latest/haddock_restraints.html#module-haddock_restraints.haddock3_passive_from_active) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.3.
 
 ## Get started
 

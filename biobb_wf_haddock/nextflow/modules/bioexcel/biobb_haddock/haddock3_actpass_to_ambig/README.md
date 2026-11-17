@@ -7,7 +7,7 @@ Wrapper class for the Haddock-Restraints active_passive_to_ambig module.
 
 Haddock-Restraints active_passive_to_ambig generates a corresponding ambig.tbl file to be used by HADDOCK from two given files containing active (in the first line) and passive (second line) residues.
 
-Nextflow adapter of the [ActpassToAmbig](https://biobb-haddock.readthedocs.io/en/latest/haddock_restraints.html#module-haddock_restraints.haddock3_actpass_to_ambig) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.2.
+Nextflow adapter of the [ActpassToAmbig](https://biobb-haddock.readthedocs.io/en/latest/haddock_restraints.html#module-haddock_restraints.haddock3_actpass_to_ambig) building block of [biobb_haddock](https://github.com/bioexcel/biobb_haddock) 5.3.3.
 
 ## Get started
 

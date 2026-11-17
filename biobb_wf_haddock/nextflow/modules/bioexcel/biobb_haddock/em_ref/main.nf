@@ -9,10 +9,10 @@ process BIOBB_HADDOCK_EM_REF {
     tag "${meta.id}"
     label 'process_single'
 
-    conda 'bioconda::biobb_haddock=5.3.2'
+    conda 'bioconda::biobb_haddock=5.3.3'
     container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
-        ? 'https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.2--pyh106432d_0'
-        : 'quay.io/biocontainers/biobb_haddock:5.3.2--pyh106432d_0'}"
+        ? 'https://depot.galaxyproject.org/singularity/biobb_haddock:5.3.3--pyh106432d_0'
+        : 'quay.io/biocontainers/biobb_haddock:5.3.3--pyh106432d_0'}"
 
     input:
     tuple val(meta),
