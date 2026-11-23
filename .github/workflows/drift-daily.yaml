@@ -16,10 +16,6 @@ on:
   schedule:
     - cron: '43 5 * * *'
   workflow_dispatch:
-  # TEMPORARY test trigger, remove before merging to main
-  push:
-    branches: [feat/weekly-schedules]
-    paths: ['.github/workflows/drift-daily.yaml', 'common/drift/**']
 
 # a singleton (not a test/publish workflow): two runs must not race on the snapshot
 # branch and the issue; a second run waits for the first
