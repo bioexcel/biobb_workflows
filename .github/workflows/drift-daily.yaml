@@ -1,0 +1,238 @@
+name: Drift daily check
+
+# Every morning: can every environment we ship still be installed today, with the
+# tools people use, on the platforms they use? Nothing is installed (dry-run solves
+# only), so the whole run takes minutes. Results are compared with yesterday's and
+# saved on the drift-snapshots branch; a single issue ("Drift: daily check") shows
+# the current state and gets a comment only when something changed.
+#
+# Docs: docs/ci.md §1.1d. Scripts: common/drift/.
+#
+# Runs from a branch other than main (manual test runs) write to the
+# drift-snapshots-test branch and the "Drift: daily check (test)" issue instead,
+# and do not touch the scheduled workflows.
+
+on:
+  schedule:
+    - cron: '43 5 * * *'
+  workflow_dispatch:
+  # TEMPORARY test trigger, remove before merging to main
+  push:
+    branches: [feat/weekly-schedules]
+    paths: ['.github/workflows/drift-daily.yaml', 'common/drift/**']
+
+# a singleton (not a test/publish workflow): two runs must not race on the snapshot
+# branch and the issue; a second run waits for the first
+concurrency:
+  group: drift-daily-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    name: Collect environments and runtimes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Environment files (python flavour + jupyter repos on GitHub main)
+        run: python3 common/drift/list_envs.py work
+      - name: Colab and runner versions
+        run: python3 common/drift/meta.py work
+      - uses: actions/upload-artifact@v4
+        with:
+          name: drift-prepare
+          path: work/
+          retention-days: 7
+
+  solve:
+    name: Solve (${{ matrix.solver }}, ${{ matrix.platform }})
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # conda: what CI, the Docker images and most users use (same build as CI)
+          - {solver: conda, platform: linux-64}
+          - {solver: conda, platform: osx-64}
+          - {solver: conda, platform: osx-arm64}
+          # mamba: what the notebooks' Colab cell uses (Miniforge 26.1.0-0)
+          - {solver: mamba, platform: linux-64}
+          # micromamba: what many local users and setup-micromamba use (latest)
+          - {solver: micromamba, platform: linux-64}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: drift-prepare
+          path: work/
+
+      - name: Install ${{ matrix.solver }}
+        id: tool
+        run: |
+          case "${{ matrix.solver }}" in
+            conda)
+              curl -fsSL https://repo.anaconda.com/miniconda/Miniconda3-py312_26.7.1-0-Linux-x86_64.sh -o /tmp/inst.sh
+              bash /tmp/inst.sh -b -p "$HOME/miniconda3"
+              exe="$HOME/miniconda3/bin/conda"
+              "$exe" config --set solver libmamba ;;
+            mamba)
+              curl -fsSL https://github.com/conda-forge/miniforge/releases/download/26.1.0-0/Miniforge3-26.1.0-0-Linux-x86_64.sh -o /tmp/inst.sh
+              bash /tmp/inst.sh -b -p "$HOME/miniforge3"
+              exe="$HOME/miniforge3/bin/mamba" ;;
+            micromamba)
+              mkdir -p "$HOME/mm"
+              curl -fsSL https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xj -C "$HOME/mm" bin/micromamba
+              exe="$HOME/mm/bin/micromamba"
+              echo "MAMBA_ROOT_PREFIX=$HOME/mm/root" >> "$GITHUB_ENV" ;;
+          esac
+          "$exe" --version
+          echo "exe=$exe" >> "$GITHUB_OUTPUT"
+
+      - name: Dry-run solve every environment
+        run: |
+          python3 common/drift/solve.py --solver ${{ matrix.solver }} \
+            --exe "${{ steps.tool.outputs.exe }}" --platform ${{ matrix.platform }} \
+            --work work --out out --jobs 3
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: drift-solve-${{ matrix.solver }}-${{ matrix.platform }}
+          path: out/
+          retention-days: 7
+
+  report:
+    name: Compare, save snapshot, update issue
+    needs: [prepare, solve]
+    if: always() && needs.prepare.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # push the snapshot branch
+      issues: write     # the drift issue
+      actions: write    # re-enable scheduled workflows (60-day rule)
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      ON_MAIN: ${{ github.ref == 'refs/heads/main' }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: drift-*
+          path: new/
+          merge-multiple: true
+
+      - name: Fetch previous snapshots
+        id: snap
+        run: |
+          if [ "$ON_MAIN" = true ]; then branch=drift-snapshots; else branch=drift-snapshots-test; fi
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          url="https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git"
+          if git ls-remote --exit-code --heads "$url" "$branch" >/dev/null; then
+            git clone --quiet --depth 1 --branch "$branch" "$url" snap
+          else
+            echo "No $branch branch yet: this run saves the first snapshot (baseline)"
+            git init --quiet snap
+            git -C snap checkout --quiet --orphan "$branch"
+            git -C snap remote add origin "$url"
+          fi
+
+      - name: Compare
+        id: cmp
+        run: |
+          missing=""
+          if [ "${{ needs.solve.result }}" != success ]; then
+            missing="One or more solve jobs did not finish (${{ needs.solve.result }}): their results are missing from today's comparison."
+            echo "::warning::$missing"
+          fi
+          python3 common/drift/report.py --new new --prev snap/latest --green snap/last-green \
+            --green-date "$(cat snap/last-green/DATE 2>/dev/null || true)" \
+            --out rep --run-url "$RUN_URL"
+          { [ -n "$missing" ] && printf '> ⚠️ %s\n\n' "$missing"; cat rep/report.md; } >> "$GITHUB_STEP_SUMMARY"
+          python3 -c 'import json;d=json.load(open("rep/status.json"));[print(f"{k}={str(v).lower()}") for k,v in d.items()]' >> "$GITHUB_OUTPUT"
+
+      - name: Save snapshot
+        run: |
+          today=$(date -u +%F)
+          rm -rf snap/latest && cp -r new snap/latest && echo "$today" > snap/latest/DATE
+          if [ "${{ steps.cmp.outputs.all_green }}" = true ]; then
+            rm -rf snap/last-green && cp -r new snap/last-green && echo "$today" > snap/last-green/DATE
+          fi
+          cat > snap/README.md <<'EOF'
+          # Drift snapshots
+
+          Written every day by `.github/workflows/drift-daily.yaml` (docs/ci.md §1.1d).
+          Do not edit by hand.
+
+          - `latest/`: today's dry-run solves (`envs/<env>/<platform>__<tool>.txt`), the spec
+            lists they came from (`specs/`), and the tool, runner and Colab versions (`meta/`).
+          - `last-green/`: the same, from the last day when nothing was red.
+
+          The git history of this branch is the day-by-day record: `git log -p -- latest/`.
+          EOF
+          cd snap
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "No change since the last snapshot"; exit 0; fi
+          git commit --quiet -m "drift $today: ${{ steps.cmp.outputs.red }} red, ${{ steps.cmp.outputs.yellow }} yellow" \
+            -m "$RUN_URL"
+          git push --quiet origin "HEAD:${{ steps.snap.outputs.branch }}"
+
+      - name: Update the drift issue
+        env:
+          ASSIGNEE: ${{ vars.DRIFT_ASSIGNEE }}
+        run: |
+          if [ "$ON_MAIN" = true ]; then title="Drift: daily check"; else title="Drift: daily check (test)"; fi
+          gh label create drift --color FBCA04 --description "Automatic drift checks" --force >/dev/null
+          num=$(gh issue list --repo "$REPO" --label drift --state all --limit 50 --json number,title \
+                --jq "map(select(.title == \"$title\")) | sort_by(.number) | last | .number // empty")
+          state=""
+          [ -n "$num" ] && state=$(gh issue view "$num" --repo "$REPO" --json state --jq .state)
+          red=${{ steps.cmp.outputs.red }}
+          notable=${{ steps.cmp.outputs.notable }}
+          assign=(); [ -n "$ASSIGNEE" ] && assign=(--assignee "$ASSIGNEE")
+
+          if [ "$red" -gt 0 ]; then
+            if [ -z "$num" ]; then
+              gh issue create --repo "$REPO" --title "$title" --label drift "${assign[@]}" --body-file rep/issue_body.md
+            else
+              [ "$state" = CLOSED ] && gh issue reopen "$num" --repo "$REPO"
+              gh issue edit "$num" --repo "$REPO" --body-file rep/issue_body.md
+              if [ "$notable" = true ]; then gh issue comment "$num" --repo "$REPO" --body-file rep/comment.md; fi
+            fi
+          else
+            if [ "$state" = OPEN ]; then
+              gh issue edit "$num" --repo "$REPO" --body-file rep/issue_body.md
+              if [ -s rep/comment.md ]; then gh issue comment "$num" --repo "$REPO" --body-file rep/comment.md
+              else gh issue comment "$num" --repo "$REPO" --body "### 🟢 All shipped environments solve again ([run]($RUN_URL))"; fi
+              gh issue close "$num" --repo "$REPO"
+            elif [ "$notable" = true ]; then
+              # nothing red, but something worth knowing changed (Colab, runner, tools disagreeing)
+              if [ -z "$num" ]; then
+                num=$(gh issue create --repo "$REPO" --title "$title" --label drift "${assign[@]}" \
+                      --body-file rep/issue_body.md | sed 's#.*/##')
+                gh issue comment "$num" --repo "$REPO" --body-file rep/comment.md
+                gh issue close "$num" --repo "$REPO"
+              else
+                gh issue edit "$num" --repo "$REPO" --body-file rep/issue_body.md
+                gh issue comment "$num" --repo "$REPO" --body-file rep/comment.md
+              fi
+            fi
+          fi
+
+      - name: Keep scheduled workflows enabled
+        if: env.ON_MAIN == 'true'
+        run: |
+          # GitHub disables scheduled workflows in public repos after 60 days without
+          # repository activity; re-enabling every day prevents that silently happening
+          for wf in drift-daily python-tests python-container-tests cwl-tests airflow-tests \
+                    nextflow-tests flavour-tests jupyter-tests jupyter-sync citation; do
+            gh api -X PUT "repos/$REPO/actions/workflows/$wf.yaml/enable" >/dev/null \
+              && echo "enabled $wf" || echo "::warning::could not enable $wf"
+          done
