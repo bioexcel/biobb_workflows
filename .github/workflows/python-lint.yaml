@@ -11,6 +11,10 @@ on:
     paths:
       - 'biobb_wf_*/python/**'
       - 'common/python/**'
+      - 'common/release/**'
+      - 'biobb_wf_*/cwl/biobb_adapters/**'
+      - 'biobb_wf_*/airflow/biobb_adapters/**'
+      - 'biobb_wf_*/nextflow/modules/**'
       - '.github/workflows/python-lint.yaml'
   workflow_dispatch:
 

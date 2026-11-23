@@ -25,6 +25,7 @@ ROUND = [  # (workflow file, day, what)
     ("nextflow-tests.yaml", "Thu", "Nextflow"),
     ("flavour-tests.yaml", "Thu", "Docker images (test only)"),
     ("jupyter-tests.yaml", "Fri", "Jupyter notebooks"),
+    ("galaxy-tests.yaml", "Sat", "Galaxy (BioBB Galaxy server)"),
 ]
 BAD = {"failure", "timed_out", "startup_failure"}
 

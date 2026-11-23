@@ -15,7 +15,13 @@ Errors (exit 1):
   * a container_image tag whose version differs from the pin of that package
 Warnings (exit 0): a container_image of a biobb package that is not pinned at all.
 
-Usage:  python3 common/python/check_versions.py [biobb_wf_x ...]   (default: all)
+The other flavours of the same workflow (cwl/airflow adapters' dockerPull, nextflow
+modules' container + conda lines, tests/) must use the same versions too. Those
+mismatches are WARNINGS by default (the flavours were out of step before the 2026.2
+release) and ERRORS with --strict-flavours (used by the /biobb-release skill; switch CI
+to it once every flavour is in step).
+
+Usage:  python3 common/python/check_versions.py [--strict-flavours] [biobb_wf_x ...]
 Stdlib only, so it runs on a bare CI runner.
 """
 import os
@@ -23,6 +29,10 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.insert(0, os.path.join(ROOT, "common", "release"))
+import bump_versions  # noqa: E402  (same patterns the release script edits)
+
+OTHER_FLAVOURS = ("cwl", "airflow", "nextflow", "tests")
 
 PIN_RE = re.compile(r"^\s*(?:-\s*)?(biobb_[a-z0-9_]+)\s*==\s*([^=\s#]+)")
 IMAGE_RE = re.compile(r"^\s*container_image:\s*\S*?/(biobb_[a-z0-9_]+):([^-\s]+)--\S*", re.M)
@@ -42,7 +52,32 @@ def pins(path):
     return out
 
 
-def check(wf):
+def other_flavours(wf, pinned):
+    """Mismatches between the python pins and the other flavours of the workflow."""
+    found = {}
+    for flavour in OTHER_FLAVOURS:
+        base = os.path.join(ROOT, wf, flavour)
+        for dirpath, dirnames, filenames in os.walk(base):
+            dirnames[:] = [d for d in dirnames if d not in bump_versions.SKIP_DIRS]
+            for fn in filenames:
+                if os.path.splitext(fn)[1] not in bump_versions.EDIT_EXT:
+                    continue
+                for _, pkg, ver, _ in bump_versions.occurrences(os.path.join(dirpath, fn)):
+                    found.setdefault((pkg, ver), set()).add(flavour)
+    out = []
+    for (pkg, ver), flavours in sorted(found.items()):
+        if pkg in pinned and pinned[pkg] != ver:
+            out.append(f"{pkg} {ver} in {'/'.join(sorted(flavours))} != python pin {pinned[pkg]}")
+    versions = {}
+    for (pkg, ver) in found:
+        versions.setdefault(pkg, set()).add(ver)
+    for pkg, vs in sorted(versions.items()):
+        if pkg not in pinned and len(vs) > 1:
+            out.append(f"{pkg}: several versions across flavours ({', '.join(sorted(vs))})")
+    return out
+
+
+def check(wf, strict_flavours=False):
     errors, warnings = [], []
     py = os.path.join(ROOT, wf, "python")
     env_path = os.path.join(py, "workflow.env.yml")
@@ -73,15 +108,18 @@ def check(wf):
                 warnings.append(f"workflow.{variant}.yml uses a {pkg}:{ver} image but {pkg} is not pinned")
             elif pinned[pkg] != ver:
                 errors.append(f"workflow.{variant}.yml: {pkg} image tag {ver} != pinned {pinned[pkg]}")
+    (errors if strict_flavours else warnings).extend(other_flavours(wf, pinned))
     return errors, warnings
 
 
 def main(argv):
+    strict = "--strict-flavours" in argv
+    argv = [a for a in argv if a != "--strict-flavours"]
     wfs = argv or sorted(d for d in os.listdir(ROOT)
                          if d.startswith("biobb_wf_") and os.path.isdir(os.path.join(ROOT, d)))
     failed = 0
     for wf in wfs:
-        errors, warnings = check(wf)
+        errors, warnings = check(wf, strict)
         for w in warnings:
             print(f"::warning::{wf}: {w}")
         for e in errors:

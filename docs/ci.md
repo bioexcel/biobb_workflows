@@ -16,7 +16,8 @@
 | `drift-weekly-report.yaml` | `workflow_run` (completed runs of the 7 weekly-round test workflows; acts only when the run was started by the `schedule`) + `workflow_dispatch` | `ubuntu-latest` | Refreshes the single "Drift: weekly tests" issue: latest scheduled result per flavour, links to failing jobs; comment only when a workflow's failing set changed; closed when the round is green (§1.1c) |
 | `python-reusable.yaml` | `workflow_call` (`wf_name`, optional `runs_on`) | input-driven | Per-workflow python test: checkout → per-wf `sed` runtime reductions (values: testing.md §1.5) → **conda 26.7.1** env (libmamba solver; conda installed from the official Anaconda installer, the same conda the docker images use) from `<wf>/python/workflow.env.yml` (+`pytest`, `imagehash`) → `pytest <wf>.py --config ../../python/workflow.yml --remove`. `timeout-minutes: 720`. **Why conda, not micromamba:** micromamba 2.9.0's solver fails to resolve the biobb 5.3.x MD dependency knot (gromacs/libhwloc/libxml2/icu/zlib — the md_setup 2026-09-25 incident), while conda 26.7.1's libmamba solves it (proven by a controlled probe: same spec, same index, micromamba UNSAT / conda SAT). Do not "simplify" this back to micromamba. |
 | `python-container-tests.yaml` | `push` (`biobb_wf_*/python/workflow.{docker,singularity}.yml`, `python/workflow.env.yml`, `python/requirements.txt`, `tests/python/**`) + `workflow_dispatch` (`wf_names`) + weekly `schedule` (Tue, §1.1c) | `ubuntu-latest` (per job) | Container mode of the python flavour (testing.md §1.6): `detect` (wfs with `python/workflow.docker.yml`; `skip_file: tests/python/SKIP` honours the python opt-out) → a `docker` and a `singularity` matrix job per wf running `tests/python/run_container_test.sh` (pip-installs `python/requirements.txt`, tools run in biocontainers images) |
-| `python-lint.yaml` | `push` (`biobb_wf_*/python/**`, `common/python/**`) + dispatch | `ubuntu-latest` | Seconds-long `common/python/check_versions.py`: every wf pins the same `biobb_*` versions in `workflow.env.yml`, `requirements.txt` and the `container_image` tags of `workflow.{docker,singularity}.yml` |
+| `python-lint.yaml` | `push` (`biobb_wf_*/python/**`, `common/python/**`, `common/release/**`, cwl/airflow adapters, nextflow modules) + dispatch | `ubuntu-latest` | Seconds-long `common/python/check_versions.py`: every wf pins the same `biobb_*` versions in `workflow.env.yml`, `requirements.txt` and the `container_image` tags of `workflow.{docker,singularity}.yml` (errors); the cwl/airflow/nextflow/tests versions must match too (warnings until the flavours are in step; errors with `--strict-flavours`, used by the release skill) |
+| `galaxy-tests.yaml` | `push` (`biobb_wf_*/galaxy/**`, `biobb_wf_*/tests/galaxy/**`) + weekly `schedule` (Sat, §1.1c) + `workflow_dispatch` (`wf_names`) | `ubuntu-latest` (per job) | Galaxy flavour e2e (`tests/galaxy/run_test.sh`, `tests/galaxy/SKIP` opt-out): every tool of the `.ga` must be installed on https://biobb.usegalaxy.es (`common/galaxy/galaxy_wf.py check`); with the optional secret `GALAXY_API_KEY` it also imports and runs the workflow on that server (`run`). See testing.md §2.3 |
 | `flavour-tests.yaml` | `workflow_dispatch` (inputs: `flavour` = docker/cwl/airflow/jupyter/nextflow/python, `wf_names`) + weekly `schedule` (Thu, **docker** flavour: images built from today's `main` and tested, never published; §1.1c) | `ubuntu-latest` (per job) | Manual e2e runner for any flavour: `detect` (only workflows that have `tests/<flavour>/run_test.sh`; for python, the `tests/python/` dir = every wf) → one call of `flavour-test-reusable.yaml` each. The per-flavour **automatic** counterparts (`cwl-tests.yaml`, `airflow-tests.yaml`, `jupyter-tests.yaml`, `nextflow-tests.yaml`, and the test-gated publish chain for docker) run on path changes; this workflow is for ad-hoc subsets. Concurrency is per workflow folder and flavour at job level (§1.1b): flavours and workflows run in parallel |
 | `flavour-test-reusable.yaml` | `workflow_call` (`wf_name`, `flavour`, optional `runs_on`) | input-driven | Runs `<wf>/tests/<flavour>/run_test.sh` (installs `cwltool` via micromamba for the cwl flavour, Java 21 + Nextflow 26.10.3 via `nf-core/setup-nextflow` for the nextflow flavour). `timeout-minutes: 720`. The **python** flavour has no script: the job delegates to `python-reusable.yaml` (the CI python pipeline, so manual and automatic runs can never drift) |
 
@@ -104,6 +105,7 @@ avoid GitHub's top-of-hour scheduler congestion):
 | Thu | 02:17 | `nextflow-tests.yaml` | Nextflow e2e |
 | Thu | 12:17 | `flavour-tests.yaml` | docker e2e: image **built** from the committed Dockerfile + today's `main` (jupyter env, notebook, `workflow.py`), then run. **Test only, never published**: it answers "would an image rebuild today still work?" |
 | Fri | 02:17 | `jupyter-tests.yaml` | Jupyter notebooks e2e |
+| Sat | 02:17 | `galaxy-tests.yaml` | Galaxy: tools installed on the BioBB Galaxy server (+ a run on it when `GALAXY_API_KEY` is set) |
 | Sat | | (planned) | Colab check + notebooks on macOS (drift plan, part C) |
 
 - Selection: `detect.yaml` already treats `schedule` as "all eligible", so `SKIP` files
@@ -183,10 +185,24 @@ history is the day-by-day record (`git log -p -- latest/envs/<env>/`). Runs from
 branch write to `drift-snapshots-test` and the "(test)" issue, and do not touch the
 scheduled workflows.
 
-**60-day rule**: the report job re-enables every scheduled workflow each day
-(`PUT /repos/{repo}/actions/workflows/{file}/enable`), so GitHub's "disabled after 60 days
-without activity" cannot silently switch off the weekly round. If `drift-daily` itself
+**60-day rule**: each day the report job re-enables every scheduled workflow that GitHub
+disabled for inactivity (state `disabled_inactivity`), so GitHub's "disabled after 60 days
+without activity" cannot silently switch off the weekly round. A workflow switched off on
+purpose (`disabled_manually`, e.g. `jupyter-sync` during a release) is left alone. If `drift-daily` itself
 were disabled, GitHub e-mails a warning first.
+
+### 1.1e A BioBB release: every version in every flavour (`/biobb-release`)
+
+A release changes the biobb versions in about 700 files of this repo, plus the env files
+of 15 jupyter repos. This is never done by hand: the project skill
+`.claude/skills/biobb-release/` drives `common/release/bump_versions.py` (scan, latest,
+check, apply), the strict version check, the Galaxy update and the dry-run solves. The
+user decides at three gates: the versions, the push, and the merge.
+
+The skill also switches `jupyter-sync` off while the release branch is tested, so images
+are not rebuilt from the new jupyter envs under the old label, and back on after the
+merge. The merge's `docker/VERSION` change publishes every image. Details:
+`common/release/README.md`.
 
 ### 1.2 The per-workflow update flow (version bump → tests → image)
 

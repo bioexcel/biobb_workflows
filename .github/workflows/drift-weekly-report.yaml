@@ -18,6 +18,7 @@ on:
       - Nextflow e2e Tests (auto)
       - Flavour e2e Tests (manual)
       - Jupyter e2e Tests (auto)
+      - Galaxy e2e Tests (auto)
     types: [completed]
   workflow_dispatch:
 

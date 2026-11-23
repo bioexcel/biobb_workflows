@@ -437,6 +437,35 @@ Pitfalls found while porting the other 7 (2026-11-06):
   random ("forcefield path not found"). Needs a work directory on a shared file system
   (not in object storage).
 
+### 2.3 Galaxy flavour (2026-11)
+
+The 11 `.ga` workflows run on the BioBB Galaxy server (https://biobb.usegalaxy.es, INB).
+There the biobb tools are local tools (ids like `biobb_io_pdb_ext`), and only the latest
+version of each tool is installed. `tests/galaxy/run_test.sh` (CI: `galaxy-tests.yaml`)
+has two parts:
+
+1. `common/galaxy/galaxy_wf.py check <wf>` uses anonymous API calls and fails if a tool
+   is not installed. It also lists version differences:
+   - "server newer": the server has a newer version, and the release updates the `.ga`;
+   - "server behind": the server only has an older version, and its admins must update
+     it. This is never fixed by downgrading the `.ga`.
+2. `galaxy_wf.py run <wf>` only runs when the repository secret `GALAXY_API_KEY` is set
+   (an account on that server). It imports the workflow, runs it in a new history, waits,
+   and cleans up.
+   - Not exercised yet (no key as of 2026-11-23).
+   - The workflows have no input steps (they download their own structures), so no upload
+     is needed.
+   - Their MD steps are full length: expect long runs, and agree the load with the server
+     admins before enabling it weekly.
+
+State on 2026-11-23, at the first check (the `.ga` files were last edited for biobb 4.0):
+
+| | |
+| --- | --- |
+| tools missing on the server | godmd (`biobb_godmd_godmd_prep_ext`, `biobb_godmd_godmd_run_ext`), flexdyn (ToolShed `cmonjeau/ziptool`): both opted out with `tests/galaxy/SKIP` |
+| server behind | every `biobb_analysis_*` tool: the server has 3.0.2, the workflows ask for 4.0.x (md_setup, protein-complex_md_setup, amber_md_setup(_lig), flexserv, flexdyn, godmd) |
+| server newer | 152 steps in all 11 workflows (4.0.x → 5.3.x): `galaxy_wf.py update` |
+
 ## 3. Phase 2 plan: scale to all workflows + wire into CI
 
 ### 3.1 Port the phase-1 scripts to the other 18 workflows
