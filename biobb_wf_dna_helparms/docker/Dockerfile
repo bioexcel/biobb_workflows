@@ -84,7 +84,9 @@ CMD ["\
         else \
             cp /app/notebook.ipynb \"$dir/notebook.ipynb\"; \
         fi; \
-        cp -r /data/TRAJ \"$dir/TRAJ\"; \
+        mkdir -p \"$dir/TRAJ\"; \
+        cp /data/trajectory.nc \"$dir/TRAJ/structure.stripped.nc\"; \
+        cp /data/topology.top \"$dir/TRAJ/structure.stripped.top\"; \
         cd \"$dir\"; \
         source activate $REPOSITORY; \
         jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.base_url=$BASE_URL --NotebookApp.token='' --NotebookApp.password=''; \

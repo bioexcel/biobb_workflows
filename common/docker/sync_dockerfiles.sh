@@ -62,7 +62,15 @@ PATCHES = {
             "COPY .curvesplus /opt/conda/envs/$REPOSITORY",
             "",
         ]),
-        (FI, 2, ['        cp -r /data/TRAJ \\"$dir/TRAJ\\"; \\']),
+        # The notebook (jupyter repo) reads TRAJ/structure.stripped.{nc,top}; the
+        # docker folder ships the same files only once, as trajectory.nc and
+        # topology.top (the names the python mode, python and nextflow flavours
+        # use), so the notebook's TRAJ/ is built from them at start-up.
+        (FI, 2, [
+            '        mkdir -p \\"$dir/TRAJ\\"; \\',
+            '        cp /data/trajectory.nc \\"$dir/TRAJ/structure.stripped.nc\\"; \\',
+            '        cp /data/topology.top \\"$dir/TRAJ/structure.stripped.top\\"; \\',
+        ]),
     ],
     "biobb_wf_flexserv": [
         (FI, 2, ['        cp -r /data/Files \\"$dir/Files\\"; \\']),
