@@ -11,6 +11,12 @@ name: Flavour e2e Tests (manual)
 # Once a flavour proves reliable here, a push trigger can be added in phase 2.
 
 on:
+  # Weekly full round (docs/ci.md §1.1c): every eligible workflow, so breakage
+  # from outside (conda packages, runner images) is found within a week even
+  # when nobody pushes. One flavour per day; times are UTC, off the hour.
+  # Thursday afternoon: Docker images, built from today's main and tested, NEVER published.
+  schedule:
+    - cron: '17 12 * * 4'
   workflow_dispatch:
     inputs:
       flavour:
@@ -34,17 +40,18 @@ on:
 jobs:
   detect:
     # shows the flavour right in the job list (dispatch runs; 'auto' otherwise)
-    name: Detect workflows to test (${{ github.event.inputs.flavour || 'auto' }})
+    name: Detect workflows to test (${{ (github.event_name == 'schedule' && 'docker') || github.event.inputs.flavour || 'auto' }})
     uses: ./.github/workflows/detect.yaml
     with:
       wf_names: ${{ github.event.inputs.wf_names || '' }}
       all_on_paths: '^\.github/workflows/(detect|flavour-tests|flavour-test-reusable)\.yaml$'
       # flavour -> require_path mapping happens in detect (python: tests/python,
       # other: tests/<flavour>/run_test.sh)
-      flavour: ${{ github.event.inputs.flavour || '' }}
+      # a scheduled run has no inputs: it is the weekly docker round
+      flavour: ${{ (github.event_name == 'schedule' && 'docker') || github.event.inputs.flavour || '' }}
 
   test:
-    name: ${{ matrix.wf }} (${{ inputs.flavour }})
+    name: ${{ matrix.wf }} (${{ (github.event_name == 'schedule' && 'docker') || github.event.inputs.flavour || '' }})
     needs: detect
     if: needs.detect.result == 'success' && needs.detect.outputs.matrix != '[]'
     uses: ./.github/workflows/flavour-test-reusable.yaml
@@ -54,4 +61,4 @@ jobs:
         include: ${{ fromJSON(needs.detect.outputs.matrix) }}
     with:
       wf_name: ${{ matrix.wf }}
-      flavour: ${{ inputs.flavour }}
+      flavour: ${{ (github.event_name == 'schedule' && 'docker') || github.event.inputs.flavour || '' }}

@@ -1,10 +1,16 @@
 name: Python workflow Tests
 
 on:
+  # Weekly full round (docs/ci.md §1.1c): every eligible workflow, so breakage
+  # from outside (conda packages, runner images) is found within a week even
+  # when nobody pushes. One flavour per day; times are UTC, off the hour.
+  # Monday: python flavour (conda), Linux + macOS.
+  schedule:
+    - cron: '17 2 * * 1'
   push:
     # test-what-you-changed: only the python (conda) flavour's own paths trigger it
-    # (the always-on push trigger and the weekly full regression were removed
-    # 2026-09-22 — see ci.md). GitHub allows only `paths` OR `paths-ignore` per event,
+    # (the always-on push trigger was removed 2026-09-22; the weekly full run is the
+    # schedule above — see ci.md §1.1c). GitHub allows only `paths` OR `paths-ignore` per event,
     # so the docker/singularity python flavours (workflow.docker.yml /
     # workflow.singularity.yml, exercised by python-container-tests.yaml) are excluded
     # by listing the conda-relevant files: the three standard config names are fixed
