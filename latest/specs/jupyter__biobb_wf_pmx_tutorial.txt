@@ -1,0 +1,6 @@
+biobb_pmx==5.3.0
+biobb_gromacs==5.3.2
+biobb_analysis==5.3.0
+scipy==1.13
+jupyter
+plotly

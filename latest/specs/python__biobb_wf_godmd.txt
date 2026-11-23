@@ -1,0 +1,5 @@
+biobb_structure_utils==5.3.0
+biobb_analysis==5.3.0
+biobb_godmd==5.3.1
+biobb_structure_checking==3.15.6
+pandas

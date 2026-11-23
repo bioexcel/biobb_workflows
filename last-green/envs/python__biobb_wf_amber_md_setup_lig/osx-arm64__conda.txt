@@ -1,0 +1,1 @@
+# FAILED: The following packages are not available from current channels: | - biobb_amber==5.3.3 | Current channels: | - https://conda.anaconda.org/conda-forge | - https://conda.anaconda.org/bioconda | To search for alternate channels that may provide the conda package you're | looking for, navigate to | https://anaconda.org | and use the search bar at the top of the page.

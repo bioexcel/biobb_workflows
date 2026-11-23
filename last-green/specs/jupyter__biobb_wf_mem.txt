@@ -1,0 +1,6 @@
+biobb_mem==5.3.0
+biobb_io==5.3.1
+biobb_analysis==5.3.0
+anywidget
+plotly
+nglview<=4.0

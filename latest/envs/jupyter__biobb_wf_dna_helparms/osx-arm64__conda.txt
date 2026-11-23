@@ -1,0 +1,1 @@
+# FAILED: Encountered problems while solving: | - nothing provides curves 3.0.3 needed by biobb_dna-5.3.0-pyhdfd78af_0 | Could not solve for environment specs | The following package could not be installed | └─ biobb_dna ==5.3.0 * is not installable because it requires | └─ curves ==3.0.3 *, which does not exist (perhaps a missing channel).

@@ -1,0 +1,4 @@
+os=Ubuntu 26.04.1 LTS
+image=20261116.202.1
+python=3.14.4
+glibc=2.43

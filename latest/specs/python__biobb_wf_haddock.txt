@@ -1,0 +1,3 @@
+biobb_haddock==5.3.3
+biobb_pdb_tools==5.3.2
+biobb_structure_utils==5.3.0

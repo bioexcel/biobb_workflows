@@ -1,0 +1,1 @@
+# FAILED: Encountered problems while solving: | - nothing provides pygorder needed by biobb_mem-5.3.0-pyhdfd78af_0 | Could not solve for environment specs | The following package could not be installed | └─ biobb_mem ==5.3.0 * is not installable because it requires | └─ pygorder =* *, which does not exist (perhaps a missing channel).

@@ -1,0 +1,4 @@
+biobb_io==5.3.1
+biobb_chemistry==5.3.0
+jupyter
+nglview<=4.0

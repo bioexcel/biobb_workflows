@@ -1,0 +1,6 @@
+biobb_flexdyn==5.3.0
+biobb_flexserv==5.3.0
+biobb_structure_utils==5.3.0
+biobb_gromacs==5.3.2
+biobb_analysis==5.3.0=pyhdfd78af_1
+pandas

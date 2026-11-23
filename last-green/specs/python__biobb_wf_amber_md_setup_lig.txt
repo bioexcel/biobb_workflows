@@ -1,0 +1,6 @@
+biobb_structure_utils==5.3.0
+biobb_structure_checking==3.15.6
+biobb_chemistry==5.3.2
+biobb_amber==5.3.3
+biobb_analysis==5.3.0
+mkl <2026

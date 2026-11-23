@@ -1,0 +1,2 @@
+biobb_mem==5.3.0
+biobb_analysis==5.3.0

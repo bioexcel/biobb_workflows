@@ -1,0 +1,4 @@
+biobb_cmip==5.3.1
+biobb_structure_utils==5.3.0
+biobb_chemistry==5.3.2
+biobb_amber==5.3.2

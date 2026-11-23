@@ -1,0 +1,1 @@
+# FAILED: Encountered problems while solving: | - nothing provides pmx_biobb >=5.2.2 needed by biobb_pmx-5.3.0-pyhdfd78af_0 | Could not solve for environment specs | The following package could not be installed | └─ biobb_pmx ==5.3.0 * is not installable because it requires | └─ pmx_biobb >=5.2.2 *, which does not exist (perhaps a missing channel).

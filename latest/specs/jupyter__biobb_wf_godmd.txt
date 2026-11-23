@@ -1,0 +1,8 @@
+biobb_io==5.3.1
+biobb_structure_utils==5.3.0
+biobb_analysis==5.3.0
+biobb_godmd==5.3.0
+emboss
+jupyter
+nglview<=4.0
+simpletraj
