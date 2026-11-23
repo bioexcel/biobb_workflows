@@ -46,7 +46,7 @@ def read_kv(path):
 
 def load(root):
     """{(env, platform, solver): (ok, reason, {name: version})}, specs, index, meta."""
-    solves, specs, index = {}, {}, {}
+    solves, specs, index, warnings = {}, {}, {}, set()
     if not root or not os.path.isdir(root):
         return None
     envs_dir = os.path.join(root, "envs")
@@ -69,7 +69,16 @@ def load(root):
     if os.path.isdir(sdir):
         for f in os.listdir(sdir):
             if f.endswith(".txt"):
-                specs[f[:-4]] = open(os.path.join(sdir, f)).read()
+                text = open(os.path.join(sdir, f)).read()
+                chan = os.path.join(sdir, f[:-4] + ".channels")
+                if os.path.isfile(chan):  # a channel change counts as an env file edit
+                    text += "channels: " + " ".join(open(chan).read().split())
+                specs[f[:-4]] = text
+        wfile = os.path.join(sdir, "_warnings.tsv")
+        if os.path.isfile(wfile):
+            for line in open(wfile):
+                if "\t" in line:
+                    warnings.add(tuple(line.rstrip("\n").split("\t", 1)))
         idx = os.path.join(sdir, "_index.tsv")
         if os.path.isfile(idx):
             for line in open(idx):
@@ -86,7 +95,7 @@ def load(root):
         for f in sorted(os.listdir(mdir)):
             if f.startswith("tools__"):
                 meta["tools"][f[7:-4]] = open(os.path.join(mdir, f)).read().strip()
-    return {"solves": solves, "specs": specs, "index": index, "meta": meta}
+    return {"solves": solves, "specs": specs, "index": index, "meta": meta, "warnings": warnings}
 
 
 def expected_failure(snap, key, repo):
@@ -278,8 +287,11 @@ def main():
         affected = sorted({w for k in red for w in where.get(k[0], "").split(",") if w})
         if affected:
             b += ["Workflows affected: " + ", ".join(f"`{w}`" for w in affected), ""]
-    if yfail or dis:
+    if yfail or dis or new["warnings"]:
         b += ["### 🟡 Worth knowing", ""]
+        for env, line in sorted(new["warnings"]):
+            b.append(f"- `{env}`: conda silently ignores the dependency line `{line}` "
+                     "(a mapping, not a spec): the pin it means has no effect")
         for k in sorted(yfail):
             b.append(f"- {fmt_key(k)} fails: {short(yfail[k])}")
         for e in sorted(dis):
@@ -318,6 +330,10 @@ def main():
         c += [f"- `{e}`: {dis.get(e, 'now agree')}" for e in dis_changed] + [""]
     if metas:
         c += ["**Runtime changes**", ""] + [f"- {x}" for x in metas] + [""]
+    if prev and new["warnings"] != prev["warnings"]:
+        added = sorted(new["warnings"] - prev["warnings"])
+        if added:
+            c += ["**Env file lines conda ignores**", ""] + [f"- `{e}`: `{l}`" for e, l in added] + [""]
     notable = bool(c)
     if notable:
         if spec_changed:
@@ -344,7 +360,7 @@ def main():
     open(os.path.join(args.out, "issue_body.md"), "w").write(body)
     open(os.path.join(args.out, "comment.md"), "w").write(comment)
     open(os.path.join(args.out, "report.md"), "w").write(report)
-    status = {"red": len(red), "yellow": len(yfail) + len(dis), "notable": notable,
+    status = {"red": len(red), "yellow": len(yfail) + len(dis) + len(new["warnings"]), "notable": notable,
               "all_green": not red, "solves": n_solves, "ok": n_ok, "baseline": prev is None}
     json.dump(status, open(os.path.join(args.out, "status.json"), "w"))
     print(json.dumps(status))

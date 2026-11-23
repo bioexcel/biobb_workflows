@@ -1,0 +1,58 @@
+name: Drift weekly report
+
+# After every SCHEDULED run of a weekly-round test workflow (docs/ci.md §1.1c),
+# refresh the single "Drift: weekly tests" issue: the latest scheduled result of
+# every flavour, with links to the failing jobs. A comment is added only when the
+# set of failing jobs of the finished workflow changed since its previous scheduled
+# run; the issue is closed when the whole round is green.
+#
+# workflow_run only fires for this file on the default branch.
+
+on:
+  workflow_run:
+    workflows:
+      - Python workflow Tests
+      - Python workflow Tests (container flavours)
+      - CWL e2e Tests (auto)
+      - Airflow e2e Tests (auto)
+      - Nextflow e2e Tests (auto)
+      - Flavour e2e Tests (manual)
+      - Jupyter e2e Tests (auto)
+    types: [completed]
+  workflow_dispatch:
+
+# a singleton: two test workflows can finish at the same time (Wed, Thu)
+concurrency:
+  group: drift-weekly-report
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  report:
+    name: 'Update the Drift: weekly tests issue'
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.event == 'schedule'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: read
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      ASSIGNEE: ${{ vars.DRIFT_ASSIGNEE }}
+      TRIGGER_PATH: ${{ github.event.workflow_run.path }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Summarise the latest scheduled runs
+        id: sum
+        run: |
+          python3 common/drift/weekly_report.py --repo "$REPO" --out rep --trigger "$(basename "${TRIGGER_PATH:-none}")"
+          cat rep/issue_body.md >> "$GITHUB_STEP_SUMMARY"
+          python3 -c 'import json;d=json.load(open("rep/status.json"));[print(f"{k}={str(v).lower()}") for k,v in d.items()]' >> "$GITHUB_OUTPUT"
+      - name: Update the issue
+        run: |
+          bash common/drift/update_issue.sh "Drift: weekly tests" rep/issue_body.md rep/comment.md \
+            "${{ steps.sum.outputs.red }}" "${{ steps.sum.outputs.notable }}" \
+            "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

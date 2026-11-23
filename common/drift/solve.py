@@ -3,7 +3,7 @@
 
 For each WORK/specs/<env_id>.txt it runs
     <tool> create --dry-run --json -y -n drift_probe --override-channels \
-        -c conda-forge -c bioconda <specs...>
+        -c <each channel of the env file, nodefaults excluded> <specs...>
 (nothing is downloaded or installed) and writes
     OUT/envs/<env_id>/<platform>__<solver>.txt
 whose first line is "# OK" or "# FAILED: <reason>", followed by the sorted package list
@@ -58,8 +58,12 @@ def solve(args, env_id):
     if args.platform.startswith("linux") and not sys.platform.startswith("linux"):
         # solving for Linux from a Mac (local runs): there is no real glibc to detect
         env["CONDA_OVERRIDE_GLIBC"] = "2.28"
+    chan_file = os.path.join(args.work, "specs", env_id + ".channels")
+    channels = [c for c in open(chan_file).read().split() if c] if os.path.isfile(chan_file) else []
     cmd = [args.exe, "create", "--dry-run", "--json", "-y", "-n", f"drift_probe_{os.getpid()}",
-           "--override-channels", "-c", "conda-forge", "-c", "bioconda"]
+           "--override-channels"]
+    for c in channels or ["conda-forge", "bioconda"]:
+        cmd += ["-c", c]
     if args.solver != "conda":
         cmd += ["--platform", args.platform]
     cmd += specs

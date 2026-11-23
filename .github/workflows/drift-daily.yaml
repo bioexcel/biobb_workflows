@@ -189,42 +189,8 @@ jobs:
           ASSIGNEE: ${{ vars.DRIFT_ASSIGNEE }}
         run: |
           if [ "$ON_MAIN" = true ]; then title="Drift: daily check"; else title="Drift: daily check (test)"; fi
-          gh label create drift --color FBCA04 --description "Automatic drift checks" --force >/dev/null
-          num=$(gh issue list --repo "$REPO" --label drift --state all --limit 50 --json number,title \
-                --jq "map(select(.title == \"$title\")) | sort_by(.number) | last | .number // empty")
-          state=""
-          [ -n "$num" ] && state=$(gh issue view "$num" --repo "$REPO" --json state --jq .state)
-          red=${{ steps.cmp.outputs.red }}
-          notable=${{ steps.cmp.outputs.notable }}
-          assign=(); [ -n "$ASSIGNEE" ] && assign=(--assignee "$ASSIGNEE")
-
-          if [ "$red" -gt 0 ]; then
-            if [ -z "$num" ]; then
-              gh issue create --repo "$REPO" --title "$title" --label drift "${assign[@]}" --body-file rep/issue_body.md
-            else
-              [ "$state" = CLOSED ] && gh issue reopen "$num" --repo "$REPO"
-              gh issue edit "$num" --repo "$REPO" --body-file rep/issue_body.md
-              if [ "$notable" = true ]; then gh issue comment "$num" --repo "$REPO" --body-file rep/comment.md; fi
-            fi
-          else
-            if [ "$state" = OPEN ]; then
-              gh issue edit "$num" --repo "$REPO" --body-file rep/issue_body.md
-              if [ -s rep/comment.md ]; then gh issue comment "$num" --repo "$REPO" --body-file rep/comment.md
-              else gh issue comment "$num" --repo "$REPO" --body "### 🟢 All shipped environments solve again ([run]($RUN_URL))"; fi
-              gh issue close "$num" --repo "$REPO"
-            elif [ "$notable" = true ]; then
-              # nothing red, but something worth knowing changed (Colab, runner, tools disagreeing)
-              if [ -z "$num" ]; then
-                num=$(gh issue create --repo "$REPO" --title "$title" --label drift "${assign[@]}" \
-                      --body-file rep/issue_body.md | sed 's#.*/##')
-                gh issue comment "$num" --repo "$REPO" --body-file rep/comment.md
-                gh issue close "$num" --repo "$REPO"
-              else
-                gh issue edit "$num" --repo "$REPO" --body-file rep/issue_body.md
-                gh issue comment "$num" --repo "$REPO" --body-file rep/comment.md
-              fi
-            fi
-          fi
+          bash common/drift/update_issue.sh "$title" rep/issue_body.md rep/comment.md \
+            "${{ steps.cmp.outputs.red }}" "${{ steps.cmp.outputs.notable }}" "$RUN_URL"
 
       - name: Keep scheduled workflows enabled
         if: env.ON_MAIN == 'true'
