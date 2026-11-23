@@ -11,6 +11,12 @@ name: Jupyter e2e Tests (auto)
 # A wf opts out with tests/jupyter/SKIP (reason printed; see ci.md §1.2).
 
 on:
+  # Weekly full round (docs/ci.md §1.1c): every eligible workflow, so breakage
+  # from outside (conda packages, runner images) is found within a week even
+  # when nobody pushes. One flavour per day; times are UTC, off the hour.
+  # Friday: Jupyter notebooks.
+  schedule:
+    - cron: '17 2 * * 5'
   # called by the hourly jupyter probe (jupyter-sync.yaml) when a jupyter repo advanced
   workflow_call:
     inputs:
