@@ -52,8 +52,9 @@ are emulated (slow).
   published state, not unpushed `workflow.py`/env edits.
 - The **jupyter** test executes the notebook from the `jupyter/` submodule
   (or a shallow clone of `github.com/bioexcel/biobb_wf_dna_helparms` when the
-  submodule is absent — the CI case) and ships `docker/TRAJ/` as the notebook
-  inputs; there is no network dependency (no MDDB download).
+  submodule is absent — the CI case) and builds the notebook's `TRAJ/` inputs
+  from `docker/trajectory.nc` and `docker/topology.top` (the same files the
+  python mode uses); there is no network dependency (no MDDB download).
 
 ## Porting to another workflow
 

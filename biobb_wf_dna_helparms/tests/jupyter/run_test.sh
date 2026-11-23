@@ -14,9 +14,9 @@
 # and the final inter-base-pair-steps correlations (bps_correlation.*).
 #
 # NOTE: the notebook reads its inputs from the local TRAJ/ folder
-# (TRAJ/structure.stripped.{nc,top}) — the script copies <wf>/docker/TRAJ
-# into the work dir before the run (the image's jupyter-mode CMD does the
-# same copy from /data/TRAJ when the server is started interactively).
+# (TRAJ/structure.stripped.{nc,top}) — the script builds it in the work dir
+# from <wf>/docker/trajectory.nc and topology.top before the run (the image's
+# jupyter-mode CMD does the same from /data when started interactively).
 # There is no network dependency (no MDDB download).
 #
 # Runtime: no MD to shorten and no MPI — the curves/canal run on the
@@ -211,10 +211,13 @@ fi
 
 echo ">>> [3/5] prepare work dir"
 cp "$NOTEBOOK_SRC" "$WORK_DIR/notebook.ipynb"
-# the notebook reads its inputs from TRAJ/ (kernel cwd); the image's
-# jupyter-mode CMD copies /data/TRAJ into the notebook dir, this script
-# plays the same role for the headless run
-cp -R "$DOCKER_DIR/TRAJ" "$WORK_DIR/TRAJ"
+# the notebook reads its inputs from TRAJ/structure.stripped.{nc,top} (kernel
+# cwd); the image's jupyter-mode CMD builds that folder from /data/trajectory.nc
+# and /data/topology.top (the docker folder ships each input only once), this
+# script plays the same role for the headless run
+mkdir -p "$WORK_DIR/TRAJ"
+cp "$DOCKER_DIR/trajectory.nc" "$WORK_DIR/TRAJ/structure.stripped.nc"
+cp "$DOCKER_DIR/topology.top" "$WORK_DIR/TRAJ/structure.stripped.top"
 adjust_runtime "$WORK_DIR/notebook.ipynb"
 # record the work dir for the on-failure artefact (flavour-test-reusable.yaml
 # tars + uploads it when this job fails)
