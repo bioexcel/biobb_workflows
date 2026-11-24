@@ -12,9 +12,10 @@
 # entries to link; default: the whole wf folder) and workflowhub_exclude (prefixes to leave
 # out), skip: true (never touched).
 #
-# Editing rights (2026-11-24): the two entries created by gbayarri can be edited by the
-# job; the other 18 belong to Adam Hospital's account and need `gbayarri` added as an
-# editor (bio.tools: entry -> Update -> Permissions).
+# Editing rights (2026-11-24): the job's account (`gbayarri`) can edit all 20 entries (2
+# its own; the other 18 belong to Adam Hospital's account, which added it as an editor:
+# bio.tools entry -> Update -> Permissions). The DNA entry's check-only address is blocked
+# by the SDU firewall; the script saves it without that check (see biotools_update.py).
 entries:
   - wf: biobb_wf_amber_abc_setup
     biotoolsID: bioexcel_building_blocks_tutorials_abc_md_setup
