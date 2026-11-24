@@ -103,6 +103,19 @@ def workflowhub_links(entry, wfh):
             for _, f, i in sorted(out)]
 
 
+def clean(value):
+    """bio.tools returns records with empty lists and nulls ("otherID": [], "note": null)
+    but its validator rejects them on the way back: drop every empty value (it carries no
+    information), recursively."""
+    if isinstance(value, dict):
+        out = {k: clean(v) for k, v in value.items()}
+        return {k: v for k, v in out.items() if v not in (None, "", [], {})}
+    if isinstance(value, list):
+        out = [clean(v) for v in value]
+        return [v for v in out if v not in (None, "", [], {})]
+    return value
+
+
 def desired(record, entry, args, wfh):
     new = copy.deepcopy(record)
     vers = list(new.get("version") or [])
@@ -191,13 +204,14 @@ def main():
         if not token:
             results.append((tid, "dry run", f"{len(changes)} change(s); no token, not validated"))
             continue
-        payload = {k: v for k, v in new.items() if k not in READ_ONLY}
+        payload = clean({k: v for k, v in new.items() if k not in READ_ONLY})
         status, body = call("PUT", f"{API}/{tid}/validate/", token, payload)
         if status in (401, 403):
             results.append((tid, "NO PERMISSION", f"the job's account cannot edit it; the owner "
                             f"({record.get('owner')}) must add it as an editor"))
             continue
         if status not in (200, 201):
+            print(f"::error::{tid}: bio.tools validation HTTP {status}: {str(body)[:1500]}")
             results.append((tid, "FAILED", f"validation HTTP {status}: {str(body)[:400]}"))
             continue
         if not args.apply:
