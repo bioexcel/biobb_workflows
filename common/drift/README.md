@@ -10,6 +10,7 @@ Python scripts use only the standard library.
 | `meta.py OUT` | Writes `OUT/meta/colab.txt` (Colab's Ubuntu, Python and runtime versions, from `googlecolab/backend-info`) and `OUT/meta/runner.txt` (this machine). |
 | `solve.py --solver S --exe PATH --platform P --work OUT --out DIR` | Dry-run solves each spec list with conda, mamba or micromamba for one platform (nothing is installed) and writes the package list or the failure reason. |
 | `weekly_report.py --repo R --out DIR [--trigger FILE]` | Summarises the latest scheduled run of each weekly-round test workflow (needs `gh`) for the "Drift: weekly tests" issue. |
+| `triage_collect.py [--run ID ...] [--out FILE]` | Builds the "triage pack" for the `/drift-triage` skill: open drift issues, failed jobs with the root-cause part of their logs, red solves and package changes since the last all-green day, and the matching past cases of `docs/testing.md` (matched on real conda package names). Read-only; needs `gh`. |
 | `update_issue.sh TITLE BODY COMMENT RED NOTABLE RUN_URL` | Opens, refreshes, comments on and closes one issue per check, without spam (shared by both checks). |
 | `report.py --new DIR --prev DIR --green DIR --out DIR` | Compares today with yesterday and with the last all-green day; writes the issue text, the comment (only when something changed) and `status.json`. |
 
