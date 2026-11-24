@@ -187,6 +187,13 @@ history is the day-by-day record (`git log -p -- latest/envs/<env>/`). Runs from
 branch write to `drift-snapshots-test` and the "(test)" issue, and do not touch the
 scheduled workflows.
 
+**Triage**: when an issue opens or gets a comment, run `/drift-triage` in Claude Code
+(skill `.claude/skills/drift-triage/`, collector `common/drift/triage_collect.py`). It
+explains the cause in the issue and prepares small fixes as draft PRs on `claude/drift-*`
+branches, after you say yes; it never merges or publishes. Tested on the 2026-11-16
+failure: its pack pointed to `reduce` exit 127 (10 jobs) and the Vina/Open Babel case,
+with the two matching past cases.
+
 **60-day rule**: each day the report job re-enables every scheduled workflow that GitHub
 disabled for inactivity (state `disabled_inactivity`), so GitHub's "disabled after 60 days
 without activity" cannot silently switch off the weekly round. A workflow switched off on
