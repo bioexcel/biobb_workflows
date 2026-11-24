@@ -14,6 +14,7 @@ WorkflowHub flavours:
 [![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/2145)
 [![Docker - WorkflowHub](https://img.shields.io/badge/Docker-WorkflowHub-1f8787?logo=docker&logoColor=ffffff)](https://workflowhub.eu/workflows/2146)
 [![Apache Airflow - WorkflowHub](https://img.shields.io/badge/Airflow-WorkflowHub-1f8787?logo=apache-airflow&logoColor=ffffff)](https://workflowhub.eu/workflows/2147)
+[![Nextflow - WorkflowHub](https://img.shields.io/badge/Nextflow-WorkflowHub-1f8787?logo=nextflow&logoColor=ffffff)](https://workflowhub.eu/workflows/2394)
 
 # AutoEncoders for Anomaly Detection tutorial using BioExcel Building Blocks (biobb)
 
