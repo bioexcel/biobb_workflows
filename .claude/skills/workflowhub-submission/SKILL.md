@@ -84,6 +84,11 @@ version 2 to the same entries. Never switch back to the plain action for this re
   hasPart file present in the zip; IWC entries carry `.github/` the same way). Links to
   GitHub files inside a crate are NOT turned into files (tested on the sandbox): the
   "Remote" files of the old versions came from registering the entry from GitHub.
+- READMEs point to images and folders outside the crate (`<img src="../../common/images/docker.png">`
+  under every H1, `[tests](../tests/python)`): `wfh_stage.py` rewrites those relative URLs
+  in the crate copy to absolute GitHub URLs (raw.githubusercontent.com for images); links to
+  files inside the crate stay relative. Not base64: Markdown renderers usually strip
+  `data:` images.
 - A crate-based version lists `ro-crate-metadata.json` (and a generated
   `ro-crate-preview.html`) among its files: normal (IWC entries show the metadata too).
 - On the sandbox, Docker, Python and Airflow entries show "Unrecognized workflow type" (a

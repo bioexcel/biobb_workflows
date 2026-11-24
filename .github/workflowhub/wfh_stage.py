@@ -18,6 +18,12 @@ everything; only submission-action@v0's packing dropped hidden files). Links to
 remote files are NOT turned into files by WorkflowHub's crate submission (tested
 2026-11-24), so there is no `remote:` option any more.
 
+Markdown files are copied with their RELATIVE images and links that point outside the
+crate (e.g. the header <img src="../../common/images/docker.png"> of every README, or
+[tests](../tests/python)) rewritten to absolute GitHub URLs (raw.githubusercontent.com
+for images, github.com/.../blob|tree/<branch>/ for links), so they still work on
+WorkflowHub. Links to files inside the crate stay relative. The repo is not changed.
+
 An isBasedOn shared by several non-skipped entries would make WorkflowHub reject
 the submission: ALL entries sharing it are skipped, not only the second one.
 
@@ -93,6 +99,57 @@ def copy_tree(src, dst, patterns):
             shutil.copy2(os.path.join(root, f), target)
             copied.append(rel)
     return copied
+
+
+REL_URL = re.compile(r'(?P<pre>\b(?:src|href)=")(?P<u>[^"]+)(?P<post>")'
+                     r'|(?P<mpre>\]\()(?P<mu>[^)\s]+)(?P<mpost>[)\s])')
+
+
+def github_base(repo, path, m):
+    """(https://github.com/org/repo, branch, path inside that repo) for a repo-relative path;
+    a submodule's own repository when the path is inside one."""
+    cp = configparser.ConfigParser()
+    cp.read(os.path.join(repo, ".gitmodules"))
+    for sec in cp.sections():
+        sp, url = cp[sec].get("path", ""), cp[sec].get("url", "")
+        if sp and (path == sp or path.startswith(sp + "/")):
+            return url.removesuffix(".git").rstrip("/"), cp[sec].get("branch", "main"), path[len(sp):].strip("/")
+    r = m.get("repository") or {}
+    return (r.get("url", "https://github.com/bioexcel/biobb_workflows").rstrip("/"),
+            r.get("branch", "main"), path)
+
+
+def absolutize_markdown(text, md_repo_path, entry_path, staged, repo, m):
+    """Rewrite relative URLs that leave the crate to absolute GitHub URLs."""
+    count = 0
+
+    def fix(match):
+        nonlocal count
+        img = match.group("pre") is not None and match.group("pre").startswith("src")
+        is_md = match.group("mu") is not None
+        u = match.group("mu") if is_md else match.group("u")
+        if re.match(r"^([a-z][a-z0-9+.-]*:|#|/)", u, re.I):
+            return match.group(0)
+        path, frag = (u.split("#", 1) + [""])[:2]
+        target = os.path.normpath(os.path.join(os.path.dirname(md_repo_path), path)).replace(os.sep, "/")
+        inside = os.path.relpath(target, entry_path).replace(os.sep, "/")
+        if not inside.startswith("..") and (inside in staged or any(f.startswith(inside + "/") for f in staged)):
+            return match.group(0)
+        base, branch, inner = github_base(repo, target, m)
+        if is_md:  # markdown: image if preceded by "!"
+            start = match.start()
+            img = start > 0 and "![" in match.string[max(0, match.string.rfind("[", 0, start) - 1):start + 1]
+        if img:
+            new = base.replace("https://github.com/", "https://raw.githubusercontent.com/") + f"/{branch}/{inner}"
+        else:
+            kind = "tree" if os.path.isdir(os.path.join(repo, target)) else "blob"
+            new = f"{base}/{kind}/{branch}/{inner}" + (f"#{frag}" if frag else "")
+        count += 1
+        if is_md:
+            return f"{match.group('mpre')}{new}{match.group('mpost')}"
+        return f"{match.group('pre')}{new}{match.group('post')}"
+
+    return REL_URL.sub(fix, text), count
 
 
 def license_ids(lic):
@@ -239,6 +296,14 @@ def main():
                 if f_rel not in files:
                     files.append(f_rel)
         files = sorted(set(files))
+        if not a.dry_run:
+            for f in files:
+                if f.endswith(".md") and f not in extra_src:
+                    fp = os.path.join(dst, f)
+                    text = open(fp, encoding="utf-8").read()
+                    new, n = absolutize_markdown(text, f"{e['path']}/{f}", e["path"], set(files), a.repo, m)
+                    if n:
+                        open(fp, "w", encoding="utf-8").write(new)
         # size of what is actually sent: folder files + extra/include files
         size = sum(os.path.getsize(extra_src[f] if f in extra_src else os.path.join(src, f))
                    for f in files if os.path.isfile(extra_src.get(f, os.path.join(src, f))))
