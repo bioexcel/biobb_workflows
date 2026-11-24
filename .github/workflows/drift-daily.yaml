@@ -152,6 +152,21 @@ jobs:
           { [ -n "$missing" ] && printf '> ⚠️ %s\n\n' "$missing"; cat rep/report.md; } >> "$GITHUB_STEP_SUMMARY"
           python3 -c 'import json;d=json.load(open("rep/status.json"));[print(f"{k}={str(v).lower()}") for k,v in d.items()]' >> "$GITHUB_OUTPUT"
 
+      - name: Start the Colab check when Colab changed
+        if: env.ON_MAIN == 'true'
+        run: |
+          # Colab's Python/Ubuntu (backend-info) or Google's Colab image changed since the
+          # previous snapshot: run the notebooks in Colab now, not on Saturday.
+          old=snap/latest/meta/colab.txt; new=new/meta/colab.txt
+          [ -f "$old" ] && [ -f "$new" ] || { echo "no previous Colab record"; exit 0; }
+          key() { grep -E "^($1)=" "$2" | grep -v '=?$' | sort; }
+          if [ "$(key 'python|ubuntu|image' "$old")" != "$(key 'python|ubuntu|image' "$new")" ]; then
+            diff <(key 'python|ubuntu|image' "$old") <(key 'python|ubuntu|image' "$new") || true
+            gh workflow run colab-check.yaml --repo "$REPO" && echo "Colab check started"
+          else
+            echo "Colab unchanged"
+          fi
+
       - name: Save snapshot
         run: |
           today=$(date -u +%F)
@@ -196,7 +211,7 @@ jobs:
           # switched off ON PURPOSE (disabled_manually, e.g. jupyter-sync during a
           # release, see .claude/skills/biobb-release) is left alone.
           for wf in drift-daily python-tests python-container-tests cwl-tests airflow-tests \
-                    nextflow-tests flavour-tests jupyter-tests galaxy-tests jupyter-sync citation; do
+                    nextflow-tests flavour-tests jupyter-tests galaxy-tests colab-check jupyter-sync citation; do
             state=$(gh api "repos/$REPO/actions/workflows/$wf.yaml" --jq .state 2>/dev/null || echo unknown)
             case "$state" in
               disabled_inactivity)

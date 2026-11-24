@@ -3,7 +3,9 @@
 
 OUT_DIR/meta/colab.txt   from github.com/googlecolab/backend-info (Google publishes the
                          Colab runtime there; it can lag the real Colab by 1-2 days):
-                         ubuntu, python, runtimes (the "past runtime versions" list)
+                         ubuntu, python, runtimes (the "past runtime versions" list),
+                         image (tag of Google's public Colab CPU image, the one the
+                         Colab check runs: .github/workflows/colab-check.yaml)
 OUT_DIR/meta/runner.txt  the machine this runs on (GitHub's ubuntu-latest in CI):
                          os, image, python, glibc
 
@@ -14,9 +16,11 @@ import platform
 import re
 import subprocess
 import sys
+import json
 import urllib.request
 
 BASE = "https://raw.githubusercontent.com/googlecolab/backend-info/main/"
+IMAGE_REPO = "colab-images/public/cpu-runtime"
 
 
 def fetch(name):
@@ -36,7 +40,25 @@ def colab():
         d["runtimes"] = ",".join(re.findall(r"^###\s+(\d{4}\.\d{2})\s*$", fetch("README.md"), re.M))
     except Exception as e:
         print(f"::warning::cannot read Colab backend-info: {e}")
+    d["image"] = colab_image()
     return d
+
+
+def colab_image():
+    """The dated tag that `latest` of Google's Colab CPU image points to, or '?'."""
+    try:
+        with urllib.request.urlopen("https://us-docker.pkg.dev/v2/token?scope=repository:"
+                                    f"{IMAGE_REPO}:pull", timeout=60) as r:
+            token = json.load(r)["token"]
+        req = urllib.request.Request(f"https://us-docker.pkg.dev/v2/{IMAGE_REPO}/tags/list",
+                                     headers={"Authorization": f"Bearer {token}"})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            manifests = json.load(r).get("manifest", {}).values()
+        tags = next(m["tag"] for m in manifests if "latest" in m.get("tag", []))
+        return next((t for t in tags if t.startswith("release-")), tags[0])
+    except Exception as e:
+        print(f"::warning::cannot read the Colab image tag: {e}")
+        return "?"
 
 
 def run(cmd):

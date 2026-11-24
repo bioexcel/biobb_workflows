@@ -1,0 +1,109 @@
+name: Colab check
+
+# Runs each tutorial notebook the way a Google Colab user does: inside Google's public
+# Colab CPU image, through the notebook's own Colab cell (clone, Miniforge, mamba env).
+# Script: common/colab/run_colab_test.sh (settings reused from tests/jupyter/run_test.sh).
+# docs/ci.md §1.1f. Test only: nothing is published.
+#
+# When:
+#   - weekly round, Saturday (docs/ci.md §1.1c);
+#   - by drift-daily.yaml when Colab changed (its Python/Ubuntu or a new Colab image);
+#   - by hand (wf_names, image);
+#   - on a push touching the check itself: two workflows only (canary).
+# A wf opts out with tests/jupyter/COLAB_SKIP (first line = reason).
+# No workflow-level `concurrency:` (AGENTS.md): it is per workflow folder, at job level.
+
+on:
+  schedule:
+    - cron: '17 12 * * 6'
+  workflow_dispatch:
+    inputs:
+      wf_names:
+        description: 'Workflow folders, comma separated (empty = all with a jupyter test)'
+        required: false
+        default: ''
+      image:
+        description: 'Colab image (empty = us-docker.pkg.dev/colab-images/public/cpu-runtime:latest)'
+        required: false
+        default: ''
+      try_python_fix:
+        description: 'Try the proposed Colab-cell fix on the test copy (env with Colab''s Python + matching paths); the jupyter repos are not changed'
+        type: boolean
+        default: false
+  push:
+    paths:
+      - 'common/colab/**'
+      - '.github/workflows/colab-check.yaml'
+
+permissions:
+  contents: read
+
+env:
+  CANARY: biobb_wf_md_setup,biobb_wf_amber_md_setup
+
+jobs:
+  select:
+    name: Select notebooks
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.pick.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pick the workflows
+        id: pick
+        env:
+          EVENT: ${{ github.event_name }}
+          WANTED: ${{ inputs.wf_names }}
+        run: |
+          python3 - <<'PY'
+          import json, os, sys
+          event, wanted = os.environ["EVENT"], os.environ.get("WANTED", "")
+          if event == "push":
+              wanted = os.environ["CANARY"]
+          names = [w.strip() for w in wanted.split(",") if w.strip() and w.strip() != "all"]
+          have = sorted(d for d in os.listdir(".") if d.startswith("biobb_wf_")
+                        and os.path.isfile(f"{d}/tests/jupyter/run_test.sh"))
+          unknown = [w for w in names if w not in have]
+          if unknown:
+              sys.exit(f"::error::no jupyter test in: {', '.join(unknown)}")
+          out = []
+          for w in names or have:
+              skip = f"{w}/tests/jupyter/COLAB_SKIP"
+              if os.path.exists(skip):
+                  print(f"::warning::{w} opted out of the Colab check: {open(skip).readline().strip()}")
+                  continue
+              out.append(w)
+          print("selected:", ", ".join(out) or "(none)")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write("matrix=" + json.dumps(out) + "\n")
+          PY
+
+  colab:
+    name: ${{ matrix.wf }} (Colab${{ inputs.try_python_fix && ', fix tried' || '' }})
+    needs: select
+    if: needs.select.outputs.matrix != '[]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        wf: ${{ fromJSON(needs.select.outputs.matrix) }}
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.wf }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Free disk space (the Colab image needs ~25 GB)
+        run: |
+          df -h / | tail -1
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/.ghcup \
+            /opt/hostedtoolcache/CodeQL /usr/local/share/boost "$AGENT_TOOLSDIRECTORY" || true
+          docker image prune -af >/dev/null || true
+          df -h / | tail -1
+
+      - name: Run the notebook in Colab's image
+        env:
+          COLAB_IMAGE: ${{ inputs.image || 'us-docker.pkg.dev/colab-images/public/cpu-runtime:latest' }}
+          TRY_FIX: ${{ inputs.try_python_fix && '--try-python-fix' || '' }}
+        run: bash common/colab/run_colab_test.sh "${{ matrix.wf }}" $TRY_FIX

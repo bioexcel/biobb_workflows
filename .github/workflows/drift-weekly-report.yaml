@@ -19,6 +19,7 @@ on:
       - Flavour e2e Tests (manual)
       - Jupyter e2e Tests (auto)
       - Galaxy e2e Tests (auto)
+      - Colab check
     types: [completed]
   workflow_dispatch:
 
