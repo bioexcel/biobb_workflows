@@ -1,0 +1,70 @@
+name: Update bio.tools
+
+# Sets the release version and the WorkflowHub/GitHub/Docker links on the bio.tools
+# entries of the BioBB workflows (biotools.manifest.yml). Manual only; the /biobb-release
+# skill runs it after WorkflowHub. Dry run by default: shows the changes and lets
+# bio.tools validate them without saving. Script: .github/biotools/biotools_update.py
+#
+# Secret: BIOTOOLS_TOKEN (bio.tools login key of the account that edits the entries).
+# No workflow-level `concurrency:` (AGENTS.md).
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release label to add to every entry (e.g. 2026.2)'
+        required: true
+        type: string
+      apply:
+        description: 'Save the changes (otherwise: dry run + validation only)'
+        type: boolean
+        default: false
+      only:
+        description: 'Comma-separated workflow folders or biotoolsIDs. Empty = all'
+        required: false
+        default: ''
+      replace_versions:
+        description: 'Keep only this version label (default: add it to the existing ones)'
+        type: boolean
+        default: false
+      check_links:
+        description: 'Report links of the entries that no longer answer'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  update:
+    name: bio.tools (${{ inputs.apply && 'APPLY' || 'dry run' }}, ${{ inputs.version }})
+    runs-on: ubuntu-latest
+    concurrency:
+      group: biotools-update
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Update
+        env:
+          BIOTOOLS_TOKEN: ${{ secrets.BIOTOOLS_TOKEN }}
+          VERSION: ${{ inputs.version }}
+          ONLY: ${{ inputs.only }}
+        run: |
+          pip install -q pyyaml
+          args=(--version "$VERSION")
+          [ -n "$ONLY" ] && args+=(--only "$ONLY")
+          [ "${{ inputs.apply }}" = true ] && args+=(--apply)
+          [ "${{ inputs.replace_versions }}" = true ] && args+=(--replace-versions)
+          [ "${{ inputs.check_links }}" = true ] && args+=(--check-links)
+          python3 .github/biotools/biotools_update.py "${args[@]}"
+      - name: Keep the backups of the records before the change
+        if: always() && inputs.apply
+        uses: actions/upload-artifact@v4
+        with:
+          name: biotools-backup-${{ inputs.version }}
+          path: _biotools_backup/
+          if-no-files-found: ignore
+          retention-days: 90
