@@ -86,3 +86,9 @@ every `CHECK` and `TODO`).
 - Exact strings: `/tree/main` vs `/tree/master`, trailing slash, `.git` all matter.
 - `tests/`, hidden files and `__pycache__` are never staged; `exclude:` adds globs.
 - WorkflowHub versions get a DOI only when someone mints it on the website.
+- **Large CWL workflows get HTTP 500** (found 2026-11-24 on dev.workflowhub.eu): WorkflowHub
+  stores the inputs/outputs/steps it extracts from the CWL in one database field, which
+  seems limited to 64 KB. CWL ABC MD Setup (262; ~72 KB: 111 inputs, 70 outputs) fails
+  every time; flexdyn (~60 KB) and smaller pass. Not a problem of our files (cwltool
+  validates them). `--keep-going` lets the release continue; report it to WorkflowHub
+  (https://github.com/seek4science/seek/issues) if production behaves the same.
