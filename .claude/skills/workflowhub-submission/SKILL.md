@@ -37,6 +37,16 @@ https://dev.workflowhub.eu, the sandbox).
 So `isBasedOn` must be the entry's current source link **verbatim**, even if it looks old
 (`/tree/master/`, old repo). To change a link: edit it on WorkflowHub first, then the manifest.
 
+**The trap (found on the sandbox, 2026-11-24, confirmed in WorkflowHub's source):** when
+WorkflowHub stores the source link of a GitHub URL it keeps only the repository root
+(`https://github.com/bioexcel/biobb_workflows`), on new entries and on every new version,
+but it matches the next submission against the full link. With the official action, the
+first release would set every entry's link to the repository root, and the next one would
+create duplicates or fail with "N workflows found". `wfh_submit.py` therefore also sends
+`workflow[source_link_url]` = `isBasedOn`; WorkflowHub applies it after the extracted
+metadata, so the stored link stays exact. Verified: two sandbox runs in a row now add
+version 2 to the same entries. Never switch back to the plain action for this repo.
+
 ## Publish
 
 1. Audit: `pip install pyyaml` (or any venv), then
@@ -86,6 +96,9 @@ every `CHECK` and `TODO`).
 - Exact strings: `/tree/main` vs `/tree/master`, trailing slash, `.git` all matter.
 - `tests/`, hidden files and `__pycache__` are never staged; `exclude:` adds globs.
 - WorkflowHub versions get a DOI only when someone mints it on the website.
+- On the sandbox, old unrelated entries can share our source links: "2 workflows found"
+  (54) and HTTP 500 for 120, 55, 56 happened there only. If production shows them, the
+  link is shared with another entry on the instance (find it and give one a new link).
 - **Large CWL workflows get HTTP 500** (found 2026-11-24 on dev.workflowhub.eu): WorkflowHub
   stores the inputs/outputs/steps it extracts from the CWL in one database field, which
   seems limited to 64 KB. CWL ABC MD Setup (262; ~72 KB: 111 inputs, 70 outputs) fails
