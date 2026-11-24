@@ -1121,9 +1121,9 @@ workflows:
 
   # ---- Flavour folders with NO WorkflowHub entry yet. First submission CREATES the entry
   # ---- in team_id. Review, remove `skip: true`, and afterwards put the new id here.
-  - id: null   # NEW entry
+  - id: 2391   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_amber_abc_setup/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_amber_abc_setup/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_amber_abc_setup/nextflow
     name: Nextflow ABC MD Setup tutorial
@@ -1131,9 +1131,9 @@ workflows:
     authors:
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
-  - id: null   # NEW entry
+  - id: 2392   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_amber_md_setup/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_amber_md_setup/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_amber_md_setup/nextflow
     name: Nextflow Amber Protein MD Setup tutorial
@@ -1141,9 +1141,9 @@ workflows:
     authors:
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
-  - id: null   # NEW entry
+  - id: 2393   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_amber_md_setup_lig/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_amber_md_setup_lig/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_amber_md_setup_lig/nextflow
     name: Nextflow Amber Protein Ligand Complex MD Setup tutorial
@@ -1151,9 +1151,9 @@ workflows:
     authors:
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
-  - id: null   # NEW entry
+  - id: 2394   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_autoencoder/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_autoencoder/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_autoencoder/nextflow
     name: Nextflow AutoEncoders for MD Analysis tutorial
@@ -1161,9 +1161,9 @@ workflows:
     authors:
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
-  - id: null   # NEW entry
+  - id: 2395   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_cmip/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_cmip/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_cmip/nextflow
     name: Nextflow Classical Molecular Interaction Potentials
@@ -1171,9 +1171,9 @@ workflows:
     authors:
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
-  - id: null   # NEW entry
+  - id: 2396   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_dna_helparms/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_dna_helparms/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_dna_helparms/nextflow
     name: Nextflow Structural DNA helical parameters tutorial
@@ -1181,18 +1181,18 @@ workflows:
     authors:
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
-  - id: null   # NEW entry
+  - id: 2397   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_flexdyn/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_flexdyn/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_flexdyn/nextflow
     name: Nextflow Protein conformational ensembles generation
     authors:
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
-  - id: null   # NEW entry
+  - id: 2398   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_flexserv/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_flexserv/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_flexserv/nextflow
     name: Nextflow Macromolecular Coarse-Grained Flexibility tutorial
@@ -1200,9 +1200,9 @@ workflows:
     authors:
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
-  - id: null   # NEW entry
+  - id: 2399   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_godmd/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_godmd/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_godmd/nextflow
     name: Nextflow Protein Conformational Transitions calculations tutorial
@@ -1210,9 +1210,9 @@ workflows:
     authors:
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
-  - id: null   # NEW entry
+  - id: 2400   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_haddock/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_haddock/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_haddock/nextflow
     name: Nextflow Haddock3 Protein-Protein Docking
@@ -1220,9 +1220,9 @@ workflows:
     authors:
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
-  - id: null   # NEW entry
+  - id: 2401   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_ligand_parameterization/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_ligand_parameterization/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_ligand_parameterization/nextflow
     name: Nextflow GMX Notebook Automatic Ligand Parameterization tutorial
@@ -1231,9 +1231,9 @@ workflows:
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
       - {name: Douglas Lowe, orcid: https://orcid.org/0000-0002-1248-3594}
-  - id: null   # NEW entry
+  - id: 2402   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_md_setup/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_md_setup/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_md_setup/nextflow
     name: Nextflow Protein MD Setup tutorial
@@ -1241,9 +1241,9 @@ workflows:
     authors:
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
-  - id: null   # NEW entry
+  - id: 2403   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_md_setup_mutations/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_md_setup_mutations/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_md_setup_mutations/nextflow
     name: Nextflow Protein MD Setup tutorial with mutations
@@ -1251,9 +1251,9 @@ workflows:
     authors:
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
-  - id: null   # NEW entry
+  - id: 2404   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_mem/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_mem/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_mem/nextflow
     name: Nextflow Protein-Membrane MD analysis tutorial
@@ -1261,9 +1261,9 @@ workflows:
     authors:
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
-  - id: null   # NEW entry
+  - id: 2405   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_pmx_tutorial/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_pmx_tutorial/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_pmx_tutorial/nextflow
     name: Nextflow Mutation Free Energy Calculations
@@ -1271,9 +1271,9 @@ workflows:
     authors:
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
-  - id: null   # NEW entry
+  - id: 2406   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_protein-complex_md_setup/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_protein-complex_md_setup/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_protein-complex_md_setup/nextflow
     name: Nextflow Protein Ligand Complex MD Setup tutorial
@@ -1281,9 +1281,9 @@ workflows:
     authors:
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
-  - id: null   # NEW entry
+  - id: 2407   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_protein_md_analysis/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_protein_md_analysis/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_protein_md_analysis/nextflow
     name: Nextflow Protein MD Analysis tutorial
@@ -1291,9 +1291,9 @@ workflows:
     authors:
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
-  - id: null   # NEW entry
+  - id: 2408   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_structure_checking/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_structure_checking/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_structure_checking/nextflow
     name: Nextflow Molecular Structure Checking
@@ -1301,9 +1301,9 @@ workflows:
     authors:
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
-  - id: null   # NEW entry
+  - id: 2409   # created 2026-11-24 (version 2026.1) by workflowhub-publish.yml
     flavour: nextflow
-    path: biobb_wf_virtual-screening_fpocket/nextflow   # new entry, approved 2026-11-23: after the first submission put its id here
+    path: biobb_wf_virtual-screening_fpocket/nextflow
     main: main.nf
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_virtual-screening_fpocket/nextflow
     name: Nextflow Protein-ligand Docking tutorial (Fpocket)
