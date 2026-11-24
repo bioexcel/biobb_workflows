@@ -509,7 +509,8 @@ biobb_flexserv builds that allow Python 3.13 (and pmx a newer scipy), or those n
 stay broken in Colab.
 
 **First full run** (2026-11-24, notebooks as users get them): 1 of 16 works
-(ligand_parameterization; protein-complex_md_setup still running when this was written).
+(ligand_parameterization). protein-complex_md_setup, like md_setup, runs all MD steps and only
+fails at the MDAnalysis view cell.
 The first error of every other notebook is the Python mismatch: a compiled module built
 for 3.12 (`Bio.PDB.ccealign`: amber ×3, structure_checking, flexdyn, flexserv, godmd, pmx;
 MDAnalysis: md_setup, mem; mdtraj: autoencoder), or, where the env got 3.13/3.14, a module
