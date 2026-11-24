@@ -4,7 +4,6 @@
 # or submissions create duplicates. Change it only after editing the source link on WorkflowHub.
 instance: https://workflowhub.eu
 team_id: 11
-repository: {url: https://github.com/bioexcel/biobb_workflows, branch: main}   # base of `remote:` links
 exclude: []   # extra glob patterns to drop when staging (tests, hidden files, __pycache__ are always dropped)
 workflows:
   - id: 194   # Protein MD Setup tutorial using BioExcel Building Blocks (biobb) in Galaxy (latest v1)
@@ -161,9 +160,8 @@ workflows:
     path: biobb_wf_dna_helparms/jupyter/biobb_wf_dna_helparms/notebooks   # only folder of this flavour containing the main file
     main: biobb_wf_dna_helparms.ipynb
     isBasedOn: https://github.com/bioexcel/biobb_wf_dna_helparms
-    remote: [biobb_wf_dna_helparms/jupyter/.curvesplus]   # hidden folder: linked to GitHub (hidden files cannot travel in the crate zip)
     name: Jupyter Notebook Structural DNA helical parameters tutorial
-    extra: [{from: biobb_wf_dna_helparms/jupyter/conda_env/environment.yml, to: environment.yml}]   # shared env file copied into the crate
+    extra: [{from: biobb_wf_dna_helparms/jupyter/conda_env/environment.yml, to: environment.yml}, {from: biobb_wf_dna_helparms/jupyter/.curvesplus, to: .curvesplus}]   # shared env file + the hidden Curves+ folder (repo root)
     license: https://spdx.org/licenses/Apache-2.0
     authors:
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
@@ -529,7 +527,7 @@ workflows:
     path: biobb_wf_dna_helparms/docker   # exact match of source link path
     main: Dockerfile
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/main/biobb_wf_dna_helparms/docker
-    remote: [biobb_wf_dna_helparms/docker/.curvesplus]   # hidden folder: linked to GitHub (hidden files cannot travel in the crate zip)
+    include: [.curvesplus]   # hidden folder needed by the Dockerfile (hidden files are skipped unless listed here)
     name: Docker Structural DNA helical parameters tutorial
     license: https://spdx.org/licenses/Apache-2.0
     authors:
@@ -920,7 +918,7 @@ workflows:
     path: biobb_wf_dna_helparms/python   # exact match of source link path
     main: workflow.py
     isBasedOn: https://github.com/bioexcel/biobb_workflows/tree/master/biobb_wf_dna_helparms/python
-    remote: [biobb_wf_dna_helparms/python/.curvesplus]   # hidden folder: linked to GitHub (hidden files cannot travel in the crate zip)
+    include: [.curvesplus]   # hidden folder needed by the workflow (hidden files are skipped unless listed here)
     name: Python Structural DNA helical parameters tutorial
     license: https://spdx.org/licenses/Apache-2.0
     authors:
