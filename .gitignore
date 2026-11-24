@@ -20,3 +20,7 @@ biobb_wf_*/tests/cwl/out/
 biobb_wf_*/tests/jupyter/work/
 biobb_wf_*/tests/nextflow/out/
 biobb_wf_*/tests/nextflow/.e2e_workdir
+
+# WorkflowHub publishing (generated in CI only)
+_wfh_stage/
+.workflowhub.yml
