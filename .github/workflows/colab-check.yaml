@@ -33,6 +33,7 @@ on:
   push:
     paths:
       - 'common/colab/**'
+      - 'common/notebooks/**'
       - '.github/workflows/colab-check.yaml'
 
 permissions:
@@ -104,6 +105,15 @@ jobs:
 
       - name: Run the notebook in Colab's image
         env:
+          NB_ARTIFACT_DIR: ${{ runner.temp }}/executed
           COLAB_IMAGE: ${{ inputs.image || 'us-docker.pkg.dev/colab-images/public/cpu-runtime:latest' }}
           TRY_FIX: ${{ inputs.try_python_fix && '--try-python-fix' || '' }}
         run: bash common/colab/run_colab_test.sh "${{ matrix.wf }}" $TRY_FIX
+      - name: Keep the executed notebook (failed runs)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.wf }}-colab-executed
+          path: ${{ runner.temp }}/executed/
+          if-no-files-found: ignore
+          retention-days: 14

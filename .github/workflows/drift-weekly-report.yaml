@@ -20,6 +20,7 @@ on:
       - Jupyter e2e Tests (auto)
       - Galaxy e2e Tests (auto)
       - Colab check
+      - macOS notebooks
     types: [completed]
   workflow_dispatch:
 
