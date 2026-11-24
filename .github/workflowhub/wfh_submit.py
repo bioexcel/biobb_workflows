@@ -2,8 +2,15 @@
 """Submit the crates staged by wfh_stage.py to WorkflowHub, one by one.
 
 Does what workflowhub-eu/submission-action@v0 does (zip each staged folder, POST it
-to <instance>/workflows/submit with the team id), with three differences needed for a
+to <instance>/workflows/submit with the team id), with four differences needed for a
 release of ~120 entries:
+  - it also sends workflow[source_link_url] = the crate's isBasedOn. WorkflowHub matches
+    a submission to an entry by that exact link, but when it stores the link of a
+    GitHub URL it keeps only the repository root (GithubHttpHandler#repository_url),
+    on new entries AND on every new version. Without this field, every entry of a
+    multi-entry repo ends up with https://github.com/<org>/<repo> as its source link and
+    the next submission creates duplicates (verified on dev.workflowhub.eu 2026-11-24;
+    the request parameters are applied after the extracted metadata, so they win);
   - one failing entry does not stop the others (the action exits at the first error);
   - every result is reported: entry, version, link, or the server's error;
   - entries without an id (new on WorkflowHub) print the id they got, to be written
@@ -51,7 +58,10 @@ def multipart(fields, file_field, filename, data):
 
 def submit(instance, team, token, entry, stage_root):
     data = zip_dir(os.path.join(stage_root, os.path.basename(entry["dir"])))
-    body, ctype = multipart([("workflow[project_ids][]", str(team))], "ro_crate", "crate.zip", data)
+    fields = [("workflow[project_ids][]", str(team))]
+    if entry.get("isBasedOn"):
+        fields.append(("workflow[source_link_url]", entry["isBasedOn"]))
+    body, ctype = multipart(fields, "ro_crate", "crate.zip", data)
     req = urllib.request.Request(f"{instance}/workflows/submit", data=body, method="POST", headers={
         "Authorization": f"Token {token}", "Content-Type": ctype, "Accept": "application/json",
         "User-Agent": "biobb-workflows wfh_submit.py"})
