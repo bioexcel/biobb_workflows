@@ -10,7 +10,8 @@
 #
 # Fields: wf (folder), biotoolsID, optional workflowhub (path prefixes of the WorkflowHub
 # entries to link; default: the whole wf folder) and workflowhub_exclude (prefixes to leave
-# out), skip: true (never touched).
+# out), skip: true (never touched), fix_urls (dead URLs found by --check-links: old: new
+# replaces it in link/download/documentation, old: null removes it).
 #
 # Editing rights (2026-11-24): the job's account (`gbayarri`) can edit all 20 entries (2
 # its own; the other 18 belong to Adam Hospital's account, which added it as an editor:
@@ -19,14 +20,22 @@
 entries:
   - wf: biobb_wf_amber_abc_setup
     biotoolsID: bioexcel_building_blocks_tutorials_abc_md_setup
+    fix_urls:
+      https://biobb-wf-amber-md-setup.readthedocs.io/en/latest/abcsetup_tutorial.html: https://biobb-wf-amber-md-setup.readthedocs.io/en/latest/abc_setup_tutorial.html
   - wf: biobb_wf_amber_md_setup
     biotoolsID: bioexcel_building_blocks_tutorials_protein_md_setup_amber_version
+    fix_urls:
+      https://biobb-wf-amber-md-setup.readthedocs.io/en/latest/mdsetup_tutorial.html: https://biobb-wf-amber-md-setup.readthedocs.io/en/latest/md_setup_tutorial.html
     workflowhub_exclude: [biobb_wf_amber_md_setup/jupyter/biobb_wf_amber/notebooks/md_setup_ph]
   - wf: biobb_wf_amber_md_setup
     biotoolsID: bioexcel_building_blocks_tutorials_amber_constant_ph_md_setup
+    fix_urls:
+      https://biobb-wf-amber-md-setup.readthedocs.io/en/latest/mdsetup_ph_tutorial.html: https://biobb-wf-amber-md-setup.readthedocs.io/en/latest/md_setup_ph_tutorial.html
     workflowhub: [biobb_wf_amber_md_setup/jupyter/biobb_wf_amber/notebooks/md_setup_ph]
   - wf: biobb_wf_amber_md_setup_lig
     biotoolsID: bioexcel_building_blocks_tutorials_protein-ligand_complex_md_setup_amber_version
+    fix_urls:
+      https://biobb-wf-amber-md-setup.readthedocs.io/en/latest/mdsetup_lig_tutorial.html: https://biobb-wf-amber-md-setup.readthedocs.io/en/latest/md_setup_lig_tutorial.html
   - wf: biobb_wf_autoencoder
     biotoolsID: bioexcel_building_blocks_tutorials_autoencoders_for_anomaly_detection
   - wf: biobb_wf_cmip
@@ -35,6 +44,8 @@ entries:
     biotoolsID: bioexcel_building_blocks_tutorials_structural_dna_helical_parameters_from_md_trajectory
   - wf: biobb_wf_flexdyn
     biotoolsID: 3d-bioinfo_bioexcel_protein_conformational_ensembles_generation
+    fix_urls:  # the BioExcel Binder at EBI is gone (and this pointed to the md_setup notebook)
+      "https://bioexcel-binder.tsi.ebi.ac.uk/v2/gh/bioexcel/biobb_wf_md_setup/master?filepath=biobb_wf_md_setup%2Fnotebooks%2Fbiobb_MDsetup_tutorial.ipynb": null
   - wf: biobb_wf_flexserv
     biotoolsID: bioexcel_building_blocks_tutorials_macromolecular_coarse-grained_flexibility
   - wf: biobb_wf_godmd

@@ -11,6 +11,8 @@ docs do not say whether missing fields are erased, so nothing is ever left out):
             plus the workflow folder on GitHub ("Repository") if missing
   download  the workflow folder ("Source code") and the GHCR Docker image ("Container
             file") if missing
+  fix_urls  per entry in the manifest: dead link/download/documentation URLs to replace
+            (old: new) or to remove (old: null)
 
 Other links are kept as they are; --check-links reports the ones that no longer answer
 (e.g. renamed repositories) so a person can fix them on bio.tools.
@@ -122,8 +124,23 @@ def clean(value):
     return value
 
 
+def fix_urls(record, fixes):
+    """Replace (old: new) or remove (old: null) URLs in link/download/documentation."""
+    for key in ("link", "download", "documentation"):
+        items = []
+        for x in record.get(key) or []:
+            u = str(x.get("url", ""))
+            if u in fixes:
+                if fixes[u] is None:
+                    continue
+                x = {**x, "url": fixes[u]}
+            items.append(x)
+        record[key] = items
+
+
 def desired(record, entry, args, wfh):
     new = copy.deepcopy(record)
+    fix_urls(new, entry.get("fix_urls") or {})
     vers = list(new.get("version") or [])
     if args.replace_versions:
         vers = [args.version]
@@ -154,7 +171,7 @@ def diff(old, new):
     lines = []
     if old.get("version") != new.get("version"):
         lines.append(f"    version: {old.get('version')} -> {new.get('version')}")
-    for key in ("link", "download"):
+    for key in ("link", "download", "documentation"):
         o = {str(x.get("url")) for x in old.get(key) or []}
         n = {str(x.get("url")) for x in new.get(key) or []}
         lines += [f"    {key} - {u}" for u in sorted(o - n)]
@@ -198,8 +215,8 @@ def main():
         print(f"== {tid} ({e['wf']})  owner {record.get('owner')}")
         print("\n".join(changes) if changes else "    nothing to change")
         if args.check_links:
-            urls = [record.get("homepage")] + [x.get("url") for k in ("link", "download", "documentation")
-                                               for x in record.get(k) or []]
+            urls = [new.get("homepage")] + [x.get("url") for k in ("link", "download", "documentation")
+                                            for x in new.get(k) or []]
             for u in sorted({u for u in urls if u and not u.startswith(WFH)}):
                 state = link_state(u)
                 if state:
