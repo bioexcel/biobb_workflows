@@ -136,7 +136,9 @@ GATE 3: all green (or every red explained and accepted by the user). Then:
    summary, every entry must say `valid`), then the same with `-f apply=true`. It adds the
    version, the WorkflowHub links of every flavour, the GitHub folder and the GHCR image;
    it keeps a backup of each record (job artifact). "NO PERMISSION" = the entry's owner
-   must add the job's account (`gbayarri`) as an editor; report dead links to the user.
+   must add the job's account (`gbayarri`) as an editor; "BLOCKED" = the SDU firewall in
+   front of bio.tools refuses changes to that entry's address (the DNA helical parameters
+   entry, whose ID contains "_from_"): edit it by hand on the website. Report dead links.
 5. Record what broke and how it was fixed in `docs/testing.md` §1.5b, and update the
    user's memory notes (e.g. the temporary Python pin is gone).
 
