@@ -42,6 +42,11 @@ WORK="$REPO_ROOT/_macos_work/$WF"
 CONDA_HOME="$HOME/.biobb_macos_conda"
 cleanup() {
   local rc=$?
+  # CI keeps the executed notebook of a failed run as an artifact (NB_ARTIFACT_DIR)
+  local ex="$WORK/repo/$(dirname "$NOTEBOOK")/_macos_executed.ipynb"
+  if [[ "$rc" -ne 0 && -n "${NB_ARTIFACT_DIR:-}" && -s "$ex" ]]; then
+    mkdir -p "$NB_ARTIFACT_DIR" && cp "$ex" "$NB_ARTIFACT_DIR/${WF}_macos_executed.ipynb"
+  fi
   if [[ "$KEEP" -ne 1 ]]; then rm -rf "$WORK" 2>/dev/null || true; else echo "Kept: $WORK"; fi
   exit "$rc"
 }

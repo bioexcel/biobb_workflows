@@ -87,4 +87,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Run the notebook on macOS
+        env:
+          NB_ARTIFACT_DIR: ${{ runner.temp }}/executed
         run: bash common/macos/run_macos_test.sh "${{ matrix.wf }}"
+      - name: Keep the executed notebook (failed runs)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.wf }}-macos-executed
+          path: ${{ runner.temp }}/executed/
+          if-no-files-found: ignore
+          retention-days: 14

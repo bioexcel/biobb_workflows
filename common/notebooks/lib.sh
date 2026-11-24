@@ -10,7 +10,9 @@
 #   report_executed <executed.ipynb> [setup-cell-marker]
 #       prints the end of the setup cell's output (the first cell containing the marker,
 #       if given) and the FIRST cell that raised (later ones are usually consequences);
-#       returns 1 if any cell raised.
+#       returns 1 if any cell raised. Cells BEFORE it whose output reports a failed
+#       command (biobb logs "Exit code N" without raising) are listed too: a missing file
+#       later on usually comes from one of them.
 #   check_outputs <dir>
 #       every EXPECTED_OUTPUTS file must exist (anywhere under dir) and be non-empty;
 #       returns 1 otherwise.
@@ -50,6 +52,19 @@ if setup:
     out = "".join(text(o) for o in setup.get("outputs", []))
     print("\n".join(out.splitlines()[-40:]))
 i, c, e = first
+bad = re.compile(r"[Ee]xit code:? *[1-9]|returned non-zero|command not found|No such file|ERROR|Traceback")
+quiet = []
+for k, cc in enumerate(cells[:i]):
+    hits = [l for o in cc.get("outputs", []) for l in text(o).splitlines() if bad.search(l)]
+    if hits:
+        quiet.append((k, cc, hits))
+if quiet:
+    print("--- earlier cells whose output reports a problem (they did not raise) ---")
+    for k, cc, hits in quiet[-6:]:
+        head = next((l for l in "".join(cc["source"]).splitlines() if l.strip()), "")
+        print(f"  code cell {k}: {head[:100]}")
+        for h in hits[:4]:
+            print(f"      {h.strip()[:200]}")
 print(f"--- FIRST failing cell (code cell {i}) ---")
 print("".join(c["source"])[:1500])
 print(f"--- error: {e.get('ename')}: {strip(e.get('evalue', ''))[:500]}")

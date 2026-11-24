@@ -73,6 +73,10 @@ cleanup() {
       "$IMAGE" -R "$(id -u):$(id -g)" /w >/dev/null 2>&1 || true
   fi
   docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
+  # CI keeps the executed notebook of a failed run as an artifact (NB_ARTIFACT_DIR)
+  if [[ "$rc" -ne 0 && -n "${NB_ARTIFACT_DIR:-}" && -s "$WORK/executed.ipynb" ]]; then
+    mkdir -p "$NB_ARTIFACT_DIR" && cp "$WORK/executed.ipynb" "$NB_ARTIFACT_DIR/${WF}_colab_executed.ipynb"
+  fi
   if [[ "$KEEP" -ne 1 ]]; then rm -rf "$WORK" 2>/dev/null || true; else echo "Kept: $WORK"; fi
   exit "$rc"
 }

@@ -21,6 +21,7 @@
 | `python-lint.yaml` | `push` (`biobb_wf_*/python/**`, `common/python/**`, `common/release/**`, cwl/airflow adapters, nextflow modules) + dispatch | `ubuntu-latest` | Seconds-long `common/python/check_versions.py`: every wf pins the same `biobb_*` versions in `workflow.env.yml`, `requirements.txt` and the `container_image` tags of `workflow.{docker,singularity}.yml` (errors); the cwl/airflow/nextflow/tests versions must match too (warnings until the flavours are in step; errors with `--strict-flavours`, used by the release skill) |
 | `galaxy-tests.yaml` | `push` (`biobb_wf_*/galaxy/**`, `biobb_wf_*/tests/galaxy/**`) + weekly `schedule` (Sat, §1.1c) + `workflow_dispatch` (`wf_names`) | `ubuntu-latest` (per job) | Galaxy flavour e2e (`tests/galaxy/run_test.sh`, `tests/galaxy/SKIP` opt-out): every tool of the `.ga` must be installed on https://biobb.usegalaxy.es (`common/galaxy/galaxy_wf.py check`); with the optional secret `GALAXY_API_KEY` it also imports and runs the workflow on that server (`run`). See testing.md §2.3 |
 | `colab-check.yaml` | weekly `schedule` (Sat 12:17, §1.1c) + started by `drift-daily.yaml` when Colab changed + `workflow_dispatch` (`wf_names`, `image`, `try_python_fix`) + `push` (`common/colab/**`, itself: 2 canary wfs) | `ubuntu-latest` (per job, disk freed first) | **Colab check** (§1.1f): each notebook runs in Google's public Colab CPU image through its own Colab cell (`common/colab/run_colab_test.sh`, settings from `tests/jupyter/run_test.sh`; `tests/jupyter/COLAB_SKIP` opt-out). Test only |
+| `macos-notebooks.yaml` | weekly `schedule` (Sun 02:17, §1.1c) + `workflow_dispatch` (`wf_names`) + `push` (`common/macos/**`, `common/notebooks/**`, itself: 2 canary wfs) | `macos-latest` (Apple Silicon, per job, max 5 at a time) | **macOS notebooks** (§1.1g): each notebook installed and run as its README says (`common/macos/run_macos_test.sh`, settings from `tests/jupyter/run_test.sh`; `tests/jupyter/MACOS_SKIP` opt-out). Test only |
 | `flavour-tests.yaml` | `workflow_dispatch` (inputs: `flavour` = docker/cwl/airflow/jupyter/nextflow/python, `wf_names`) + weekly `schedule` (Thu, **docker** flavour: images built from today's `main` and tested, never published; §1.1c) | `ubuntu-latest` (per job) | Manual e2e runner for any flavour: `detect` (only workflows that have `tests/<flavour>/run_test.sh`; for python, the `tests/python/` dir = every wf) → one call of `flavour-test-reusable.yaml` each. The per-flavour **automatic** counterparts (`cwl-tests.yaml`, `airflow-tests.yaml`, `jupyter-tests.yaml`, `nextflow-tests.yaml`, and the test-gated publish chain for docker) run on path changes; this workflow is for ad-hoc subsets. Concurrency is per workflow folder and flavour at job level (§1.1b): flavours and workflows run in parallel |
 | `flavour-test-reusable.yaml` | `workflow_call` (`wf_name`, `flavour`, optional `runs_on`) | input-driven | Runs `<wf>/tests/<flavour>/run_test.sh` (installs `cwltool` via micromamba for the cwl flavour, Java 21 + Nextflow 26.10.3 via `nf-core/setup-nextflow` for the nextflow flavour). `timeout-minutes: 720`. The **python** flavour has no script: the job delegates to `python-reusable.yaml` (the CI python pipeline, so manual and automatic runs can never drift) |
 
@@ -110,7 +111,7 @@ avoid GitHub's top-of-hour scheduler congestion):
 | Fri | 02:17 | `jupyter-tests.yaml` | Jupyter notebooks e2e |
 | Sat | 02:17 | `galaxy-tests.yaml` | Galaxy: tools installed on the BioBB Galaxy server (+ a run on it when `GALAXY_API_KEY` is set) |
 | Sat | 12:17 | `colab-check.yaml` | Colab: notebooks in Google's Colab image through their Colab cell (§1.1f) |
-| Sat | | (planned) | notebooks on a real Mac (drift plan, part C) |
+| Sun | 02:17 | `macos-notebooks.yaml` | notebooks on a real Mac (Apple Silicon; Intel conda under Rosetta when needed) (§1.1g) |
 
 - Selection: `detect.yaml` already treats `schedule` as "all eligible", so `SKIP` files
   (cmip) and `MACOS_SKIP` apply exactly as for manual runs.
@@ -245,6 +246,25 @@ notebooks would work with the fixed cell. Not what users get, so the weekly run 
 
 Limits: no browser (viewers are created but not shown); Google's image can lag the live
 Colab by a few days. State and findings: `docs/testing.md` §2.4.
+
+### 1.1g macOS notebooks (`macos-notebooks.yaml`, since 2026-11-24)
+
+Replaces the manual runs of the notebooks on a Mac. `common/macos/run_macos_test.sh <wf>`
+does what the README tells a user, on GitHub's Apple Silicon runner:
+1. `git clone` the jupyter repo (main);
+2. `conda env create -f conda_env/environment.yml`, first with the native arm64 conda
+   (Miniconda 26.7.1, as the python tests); if the env has no Apple Silicon solution, again
+   with the Intel conda (Miniconda 25.7.0, the last Intel build) under Rosetta 2 (osx-64).
+   The log says which one worked (`::notice::` when only Intel did);
+3. runs the notebook from its own folder with `jupyter nbconvert --execute --allow-errors`
+   and the short-run settings of the jupyter test; the Colab cell skips itself;
+4. reports the first failing cell and checks `EXPECTED_OUTPUTS` (shared code with the Colab
+   check: `common/notebooks/lib.sh`).
+
+It also runs on any Mac: `bash common/macos/run_macos_test.sh biobb_wf_md_setup` (installs
+Miniconda once under `~/.biobb_macos_conda/`, or set `CONDA_ARM64` / `CONDA_X86_64`).
+Opt-out: `tests/jupyter/MACOS_SKIP` (first line = reason). Sunday, so it never competes
+with the python flavour's macOS lane (Monday) for the 5 macOS runners.
 
 ### 1.2 The per-workflow update flow (version bump → tests → image)
 

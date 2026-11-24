@@ -27,6 +27,7 @@ ROUND = [  # (workflow file, day, what)
     ("jupyter-tests.yaml", "Fri", "Jupyter notebooks"),
     ("galaxy-tests.yaml", "Sat", "Galaxy (BioBB Galaxy server)"),
     ("colab-check.yaml", "Sat", "Colab (notebooks in Google's Colab image)"),
+    ("macos-notebooks.yaml", "Sun", "notebooks on a real Mac"),
 ]
 BAD = {"failure", "timed_out", "startup_failure"}
 

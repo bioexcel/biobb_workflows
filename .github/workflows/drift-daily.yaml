@@ -211,7 +211,7 @@ jobs:
           # switched off ON PURPOSE (disabled_manually, e.g. jupyter-sync during a
           # release, see .claude/skills/biobb-release) is left alone.
           for wf in drift-daily python-tests python-container-tests cwl-tests airflow-tests \
-                    nextflow-tests flavour-tests jupyter-tests galaxy-tests colab-check jupyter-sync citation; do
+                    nextflow-tests flavour-tests jupyter-tests galaxy-tests colab-check macos-notebooks jupyter-sync citation; do
             state=$(gh api "repos/$REPO/actions/workflows/$wf.yaml" --jq .state 2>/dev/null || echo unknown)
             case "$state" in
               disabled_inactivity)
