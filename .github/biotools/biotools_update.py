@@ -207,6 +207,7 @@ def main():
         payload = clean({k: v for k, v in new.items() if k not in READ_ONLY})
         status, body = call("PUT", f"{API}/{tid}/validate/", token, payload)
         if status in (401, 403):
+            print(f"::warning::{tid}: bio.tools refused (HTTP {status}): {str(body)[:600]}")
             results.append((tid, "NO PERMISSION", f"the job's account cannot edit it; the owner "
                             f"({record.get('owner')}) must add it as an editor"))
             continue
