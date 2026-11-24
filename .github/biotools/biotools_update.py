@@ -213,27 +213,35 @@ def main():
         payload = clean({k: v for k, v in new.items() if k not in READ_ONLY})
         status, body = call("PUT", f"{API}/{tid}/validate/", token, payload)
         if status == 403 and "Request Blocked" in str(body):
-            # the SDU firewall in front of bio.tools, not bio.tools: it blocks every PUT to
-            # this entry's URL (seen for an ID containing "_from_", 2026-11-24)
-            results.append((tid, "BLOCKED", "the SDU firewall in front of bio.tools blocks changes to "
-                            "this entry's address (false alarm); edit it on the website or ask "
-                            "registry-support@elixir-dk.org"))
-            continue
-        if status in (401, 403):
+            # The SDU firewall in front of bio.tools (not bio.tools) blocks the check-only
+            # address `<id>/validate/` of some entries (the DNA one, 2026-11-24: even a GET or
+            # an empty PUT), while the save address `<id>/` works. bio.tools checks the record
+            # on save as well, so these entries are saved without the separate check.
+            print(f"::notice::{tid}: the firewall blocks the check-only address; "
+                  "the change is checked by bio.tools when it is saved")
+            if not args.apply:
+                results.append((tid, "not checked", f"{len(changes)} change(s); the firewall blocks the "
+                                "check-only address, --apply saves directly (bio.tools checks on save)"))
+                continue
+        elif status in (401, 403):
             print(f"::warning::{tid}: bio.tools refused (HTTP {status}): {str(body)[:600]}")
             results.append((tid, "NO PERMISSION", f"the job's account cannot edit it; the owner "
                             f"({record.get('owner')}) must add it as an editor"))
             continue
-        if status not in (200, 201):
+        elif status not in (200, 201):
             print(f"::error::{tid}: bio.tools validation HTTP {status}: {str(body)[:1500]}")
             results.append((tid, "FAILED", f"validation HTTP {status}: {str(body)[:400]}"))
             continue
-        if not args.apply:
+        elif not args.apply:
             results.append((tid, "valid", f"{len(changes)} change(s), not saved (dry run)"))
             continue
         with open(os.path.join(args.backup, f"{tid}.json"), "w") as fh:
             json.dump(record, fh, indent=2)
         status, body = call("PUT", f"{API}/{tid}/", token, payload)
+        if status == 403 and "Request Blocked" in str(body):
+            results.append((tid, "BLOCKED", "the SDU firewall in front of bio.tools blocked the save; edit "
+                            "it on the website or ask registry-support@elixir-dk.org"))
+            continue
         results.append((tid, "saved" if status in (200, 201) else "FAILED",
                         f"{len(changes)} change(s)" if status in (200, 201) else f"HTTP {status}: {str(body)[:400]}"))
 

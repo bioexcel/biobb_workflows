@@ -133,12 +133,14 @@ GATE 3: all green (or every red explained and accepted by the user). Then:
    rest (no filter). Write the ids of NEW entries into `workflowhub.manifest.yml`
    (release-follow-up commit).
 4. bio.tools: `gh workflow run biotools-update.yml -f version=$LABEL` (dry run: read the
-   summary, every entry must say `valid`), then the same with `-f apply=true`. It adds the
+   summary, every entry must say `valid`, or `not checked` for the DNA helical parameters
+   entry), then the same with `-f apply=true`. It adds the
    version, the WorkflowHub links of every flavour, the GitHub folder and the GHCR image;
    it keeps a backup of each record (job artifact). "NO PERMISSION" = the entry's owner
-   must add the job's account (`gbayarri`) as an editor; "BLOCKED" = the SDU firewall in
-   front of bio.tools refuses changes to that entry's address (the DNA helical parameters
-   entry, whose ID contains "_from_"): edit it by hand on the website. Report dead links.
+   must add the job's account (`gbayarri`) as an editor; "not checked" = the SDU firewall in
+   front of bio.tools blocks the check-only address of that entry (the DNA one), so the
+   apply run saves it directly and bio.tools checks it on save; "BLOCKED" = the firewall
+   refused the save too: edit it by hand on the website. Report dead links.
 5. Record what broke and how it was fixed in `docs/testing.md` §1.5b, and update the
    user's memory notes (e.g. the temporary Python pin is gone).
 
