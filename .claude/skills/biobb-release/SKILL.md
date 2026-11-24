@@ -85,10 +85,17 @@ only expected when the wf has `tests/python/MACOS_SKIP` (arm64 falls back to osx
 3. Release-only reminders (check the user's memory notes too):
    - the temporary `Set up Python 3.12` steps in `.github/workflows/python-container-tests.yaml`
      go away once the biobb release no longer fixes Python (ask; their comment says so);
-   - the notebooks' Colab cell (in the jupyter repos) hard-codes
-     `lib/python3.12/site-packages` and creates the env without Colab's Python version;
-     Colab runs Python 3.13. Show the user `grep -rn "python3\." <wf>/jupyter/*/notebooks`
-     and agree the fix before editing (it needs a Colab test, plan part C);
+   - Colab (docs/testing.md §2.4): the notebooks' Colab cell (in the jupyter repos)
+     hard-codes `lib/python3.12/site-packages` and creates the env without a Python pin,
+     while Colab runs Python 3.13 (check `meta/colab.txt` on `drift-snapshots`). First
+     dry-run solve the new jupyter envs with `python=<Colab's version>` added (as in
+     step 2): on 2026-11-24 biobb_analysis, biobb_mem, biobb_amber, biobb_flexdyn and
+     biobb_flexserv still declared `python <3.13`, and pmx pinned `scipy 1.13`. Tell the
+     user which envs cannot get Colab's Python with the chosen versions. Then try the fix
+     without editing anything: `gh workflow run colab-check.yaml -f try_python_fix=true`
+     (env with Colab's Python + matching paths, test copy only). Agree the cell change
+     with the user before editing the jupyter repos (`grep -rn "python3\." <wf>/jupyter/*/notebooks`
+     also finds pmx's `gmxlib` path);
    - `docker/VERSION` was set to `$LABEL` by `apply --docker-version`.
 4. Markdown files are not edited by the script; `scan` lists those quoting versions:
    update READMEs only where a version is part of an instruction.
