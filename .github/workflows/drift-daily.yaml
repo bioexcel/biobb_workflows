@@ -192,9 +192,18 @@ jobs:
         if: env.ON_MAIN == 'true'
         run: |
           # GitHub disables scheduled workflows in public repos after 60 days without
-          # repository activity; re-enabling every day prevents that silently happening
+          # repository activity; re-enable those (state disabled_inactivity). A workflow
+          # switched off ON PURPOSE (disabled_manually, e.g. jupyter-sync during a
+          # release, see .claude/skills/biobb-release) is left alone.
           for wf in drift-daily python-tests python-container-tests cwl-tests airflow-tests \
-                    nextflow-tests flavour-tests jupyter-tests jupyter-sync citation; do
-            gh api -X PUT "repos/$REPO/actions/workflows/$wf.yaml/enable" >/dev/null \
-              && echo "enabled $wf" || echo "::warning::could not enable $wf"
+                    nextflow-tests flavour-tests jupyter-tests galaxy-tests jupyter-sync citation; do
+            state=$(gh api "repos/$REPO/actions/workflows/$wf.yaml" --jq .state 2>/dev/null || echo unknown)
+            case "$state" in
+              disabled_inactivity)
+                gh api -X PUT "repos/$REPO/actions/workflows/$wf.yaml/enable" >/dev/null \
+                  && echo "re-enabled $wf (was disabled for inactivity)" \
+                  || echo "::warning::could not enable $wf" ;;
+              disabled_manually) echo "::notice::$wf is disabled on purpose; left alone" ;;
+              *) echo "$wf: $state" ;;
+            esac
           done

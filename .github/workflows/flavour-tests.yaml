@@ -30,6 +30,7 @@ on:
           - airflow
           - jupyter
           - nextflow
+          - galaxy
           - python
       wf_names:
         description: 'Workflow FOLDERS to test, e.g. biobb_wf_ligand_parameterization,biobb_wf_cmip (empty = all that have this test)'
@@ -55,6 +56,7 @@ jobs:
     needs: detect
     if: needs.detect.result == 'success' && needs.detect.outputs.matrix != '[]'
     uses: ./.github/workflows/flavour-test-reusable.yaml
+    secrets: inherit
     strategy:
       fail-fast: false
       matrix:

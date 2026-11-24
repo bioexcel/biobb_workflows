@@ -1,0 +1,44 @@
+name: Galaxy e2e Tests (auto)
+
+on:
+  # Weekly full round (docs/ci.md §1.1c): every eligible workflow, so breakage
+  # from outside (the BioBB Galaxy server's tools) is found within a week even
+  # when nobody pushes. One flavour per day; times are UTC, off the hour.
+  # Saturday: Galaxy.
+  schedule:
+    - cron: '17 2 * * 6'
+  push:
+    paths:
+      - 'biobb_wf_*/galaxy/**'
+      - 'biobb_wf_*/tests/galaxy/**'
+  workflow_dispatch:
+    inputs:
+      wf_names:
+        description: 'Workflow folder(s) to test (comma separated); empty = all with a galaxy test'
+        required: false
+        default: ''
+        type: string
+
+jobs:
+  detect:
+    name: Detect workflows to test (galaxy)
+    uses: ./.github/workflows/detect.yaml
+    if: github.actor != 'github-actions[bot]'
+    with:
+      wf_names: ${{ inputs.wf_names }}
+      flavour: galaxy
+
+  test:
+    name: ${{ matrix.wf }} (galaxy)
+    needs: detect
+    if: needs.detect.result == 'success' && needs.detect.outputs.matrix != '[]'
+    uses: ./.github/workflows/flavour-test-reusable.yaml
+    # GALAXY_API_KEY (optional repository secret) enables the run on the server
+    secrets: inherit
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.detect.outputs.matrix) }}
+    with:
+      wf_name: ${{ matrix.wf }}
+      flavour: galaxy

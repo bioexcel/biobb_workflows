@@ -15,7 +15,10 @@ The jupyter env files are fetched from GitHub main (not from the submodule point
 because that is what users, the Colab cell and the Docker image builds get today.
 
 Only the standard library is used (the runner's system python runs it).
-Usage: python3 common/drift/list_envs.py OUT_DIR
+Usage: python3 common/drift/list_envs.py OUT_DIR [--local-jupyter]
+  --local-jupyter  read the jupyter env files from the local submodule checkouts
+                   (<wf>/jupyter/conda_env/environment.yml) instead of GitHub main:
+                   used by the release skill to test edits before pushing them
 """
 import configparser
 import os
@@ -85,9 +88,11 @@ def jupyter_repos():
 
 
 def main():
-    if len(sys.argv) != 2:
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    local = "--local-jupyter" in sys.argv[1:]
+    if len(args) != 1:
         sys.exit(__doc__)
-    out = os.path.join(sys.argv[1], "specs")
+    out = os.path.join(args[0], "specs")
     os.makedirs(out, exist_ok=True)
     index, warnings = [], []
 
@@ -102,10 +107,14 @@ def main():
     for owner_repo, wfs in sorted(jupyter_repos().items()):
         url = RAW.format(owner_repo=owner_repo)
         try:
-            with urllib.request.urlopen(url, timeout=60) as r:
-                text = r.read().decode()
+            if local:
+                url = os.path.join(sorted(wfs)[0], "jupyter", "conda_env", "environment.yml")
+                text = open(url).read()
+            else:
+                with urllib.request.urlopen(url, timeout=60) as r:
+                    text = r.read().decode()
         except Exception as e:  # a missing env file is itself worth reporting
-            print(f"::warning::cannot fetch {url}: {e}")
+            print(f"::warning::cannot read {url}: {e}")
             continue
         env_id = "jupyter__" + owner_repo.split("/", 1)[1]
         write_env(out, env_id, parse_env(text, url), warnings)
