@@ -9,7 +9,8 @@ Download and install workflow:
 WorkflowHub flavours:
 
 [![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/287)
-[![Docker - WorkflowHub](https://img.shields.io/badge/Docker-WorkflowHub-1f8787?logo=docker&logoColor=ffffff)](https://workflowhub.eu/workflows/2134)
+[![Docker - WorkflowHub](https://img.shields.io/badge/Docker-WorkflowHub-1f8787?logo=docker&logoColor=ffffff)](https://workflowhub.eu/workflows/2135)
+[![Nextflow - WorkflowHub](https://img.shields.io/badge/Nextflow-WorkflowHub-1f8787?logo=nextflow&logoColor=ffffff)](https://workflowhub.eu/workflows/2407)
 
 # Protein MD Analysis tutorial using BioExcel Building Blocks (biobb)
 

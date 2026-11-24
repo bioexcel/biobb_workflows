@@ -15,6 +15,7 @@ WorkflowHub flavours:
 [![Python - WorkflowHub](https://img.shields.io/badge/Python-WorkflowHub-1f8787?logo=python&logoColor=ffffff)](https://workflowhub.eu/workflows/487)
 [![Docker - WorkflowHub](https://img.shields.io/badge/Docker-WorkflowHub-1f8787?logo=docker&logoColor=ffffff)](https://workflowhub.eu/workflows/822)
 [![Apache Airflow - WorkflowHub](https://img.shields.io/badge/Airflow-WorkflowHub-1f8787?logo=apache-airflow&logoColor=ffffff)](https://workflowhub.eu/workflows/2125)
+[![Nextflow - WorkflowHub](https://img.shields.io/badge/Nextflow-WorkflowHub-1f8787?logo=nextflow&logoColor=ffffff)](https://workflowhub.eu/workflows/2397)
 
 # Conformational ensembles generation, data representation and visualization of predicted flexibility properties using BioExcel Building Blocks (biobb) and FlexDyn tools
 
