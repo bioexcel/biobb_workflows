@@ -33,6 +33,7 @@ on:
   push:
     paths:
       - 'common/colab/**'
+      - 'common/notebooks/**'
       - '.github/workflows/colab-check.yaml'
 
 permissions:

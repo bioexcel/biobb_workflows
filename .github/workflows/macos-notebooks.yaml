@@ -1,0 +1,90 @@
+name: macOS notebooks
+
+# Runs each tutorial notebook on a real Mac (GitHub's Apple Silicon runner) the way its
+# README tells users: clone, `conda env create -f conda_env/environment.yml`, run the
+# notebook (native arm64 conda; Intel conda under Rosetta 2 when the env has no arm64
+# solution). Script: common/macos/run_macos_test.sh (settings reused from
+# tests/jupyter/run_test.sh). docs/ci.md §1.1g. Test only: nothing is published.
+#
+# When: weekly round, Sunday (docs/ci.md §1.1c); by hand (wf_names); on a push touching
+# the check itself: two workflows only (canary).
+# A wf opts out with tests/jupyter/MACOS_SKIP (first line = reason).
+# macOS runners: at most 5 jobs at a time on this account (max-parallel below).
+# No workflow-level `concurrency:` (AGENTS.md): it is per workflow folder, at job level.
+
+on:
+  schedule:
+    - cron: '17 2 * * 0'
+  workflow_dispatch:
+    inputs:
+      wf_names:
+        description: 'Workflow folders, comma separated (empty = all with a jupyter test)'
+        required: false
+        default: ''
+  push:
+    paths:
+      - 'common/macos/**'
+      - 'common/notebooks/**'
+      - '.github/workflows/macos-notebooks.yaml'
+
+permissions:
+  contents: read
+
+env:
+  CANARY: biobb_wf_md_setup,biobb_wf_structure_checking
+
+jobs:
+  select:
+    name: Select notebooks
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.pick.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pick the workflows
+        id: pick
+        env:
+          EVENT: ${{ github.event_name }}
+          WANTED: ${{ inputs.wf_names }}
+        run: |
+          python3 - <<'PY'
+          import json, os, sys
+          event, wanted = os.environ["EVENT"], os.environ.get("WANTED", "")
+          if event == "push":
+              wanted = os.environ["CANARY"]
+          names = [w.strip() for w in wanted.split(",") if w.strip() and w.strip() != "all"]
+          have = sorted(d for d in os.listdir(".") if d.startswith("biobb_wf_")
+                        and os.path.isfile(f"{d}/tests/jupyter/run_test.sh"))
+          unknown = [w for w in names if w not in have]
+          if unknown:
+              sys.exit(f"::error::no jupyter test in: {', '.join(unknown)}")
+          out = []
+          for w in names or have:
+              skip = f"{w}/tests/jupyter/MACOS_SKIP"
+              if os.path.exists(skip):
+                  print(f"::warning::{w} opted out of the macOS check: {open(skip).readline().strip()}")
+                  continue
+              out.append(w)
+          print("selected:", ", ".join(out) or "(none)")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write("matrix=" + json.dumps(out) + "\n")
+          PY
+
+  macos:
+    name: ${{ matrix.wf }} (macOS)
+    needs: select
+    if: needs.select.outputs.matrix != '[]'
+    runs-on: macos-latest
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        wf: ${{ fromJSON(needs.select.outputs.matrix) }}
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.wf }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run the notebook on macOS
+        run: bash common/macos/run_macos_test.sh "${{ matrix.wf }}"

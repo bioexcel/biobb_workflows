@@ -51,19 +51,10 @@ done
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 WF_DIR="$REPO_ROOT/$WF"
-T="$WF_DIR/tests/jupyter/run_test.sh"
-[[ -f "$T" ]] || { echo "ERROR: $T not found (the Colab check reuses the jupyter test's settings)" >&2; exit 1; }
-
-# ---- settings from the jupyter test ------------------------------------------------
-if sed --version >/dev/null 2>&1; then SED_INPLACE=(sed -i); else SED_INPLACE=(sed -i ''); fi
 NB_REPO_URL_OVERRIDE="${NB_REPO_URL:-}"
-unset NB_REPO_URL
-eval "$(grep -E '^(WF_NAME|ENV_NAME|NOTEBOOK|NB_REPO_URL)=' "$T")"
-eval "$(awk '/^EXPECTED_OUTPUTS=\(/,/^\)/' "$T")"
-adjust_runtime() { :; }   # wfs without one
-eval "$(awk '/^adjust_runtime\(\) \{/,/^\}/' "$T")"
-NB_REPO_URL="${NB_REPO_URL_OVERRIDE:-$NB_REPO_URL}"
-: "${NOTEBOOK:?NOTEBOOK= not found in $T}"
+# shellcheck source=../notebooks/lib.sh
+. "$REPO_ROOT/common/notebooks/lib.sh"
+load_jupyter_settings "$WF_DIR"
 
 WORK="$REPO_ROOT/_colab_work/$WF"
 CONTAINER="biobb-colab-${WF}-$$"
@@ -175,44 +166,9 @@ if [[ "$RC" -ne 0 || ! -s "$EXECUTED" ]]; then
   echo "FAIL: the notebook run did not finish (exit code $RC)"
   exit 1
 fi
-# --allow-errors runs every cell; report the setup cell's output and the FIRST error
-# (later errors are usually consequences of the first)
-python3 - "$EXECUTED" <<'PY' || FAIL=1
-import json, re, sys
-nb = json.load(open(sys.argv[1]))
-strip = lambda s: re.sub(r"\x1b\[[0-9;]*m", "", s)
-def text(o):
-    t = o.get("text") or (o.get("data") or {}).get("text/plain") or ""
-    return strip("".join(t) if isinstance(t, list) else t)
-cells = [c for c in nb["cells"] if c.get("cell_type") == "code"]
-setup = next((c for c in cells if "condabin/mamba" in "".join(c["source"])
-              or "google.colab' in sys.modules" in "".join(c["source"])), None)
-first = None
-for i, c in enumerate(cells):
-    errs = [o for o in c.get("outputs", []) if o.get("output_type") == "error"]
-    if errs:
-        first = (i, c, errs[0])
-        break
-if first is None:
-    print("  PASS: no cell raised an error")
-    sys.exit(0)
-i, c, e = first
-print("--- Colab setup cell, last lines of its output ---")
-if setup:
-    out = "".join(text(o) for o in setup.get("outputs", []))
-    print("\n".join(out.splitlines()[-40:]))
-print(f"--- FIRST failing cell (code cell {i}) ---")
-print("".join(c["source"])[:1500])
-print(f"--- error: {e.get('ename')}: {strip(e.get('evalue', ''))[:500]}")
-print("\n".join(strip(l) for l in e.get("traceback", []))[-3000:])
-n = sum(any(o.get("output_type") == "error" for o in c.get("outputs", [])) for c in cells)
-print(f"FAIL: {n} cell(s) raised an error")
-sys.exit(1)
-PY
-for out in "${EXPECTED_OUTPUTS[@]}"; do
-  found="$(find "$WORK" -type f -name "$out" 2>/dev/null | head -1)"
-  if [[ -n "$found" && -s "$found" ]]; then echo "  PASS: $out"; else echo "  FAIL: not found (or empty): $out"; FAIL=1; fi
-done
+# --allow-errors runs every cell: report the setup cell's output and the FIRST error
+report_executed "$EXECUTED" "google.colab' in sys.modules" || FAIL=1
+check_outputs "$WORK" || FAIL=1
 if [[ "$FAIL" -eq 0 ]]; then
   echo "PASS: $WF works in Colab"
 else
