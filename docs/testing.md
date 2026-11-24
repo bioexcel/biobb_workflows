@@ -508,6 +508,31 @@ So the release must bring biobb_analysis, biobb_mem, biobb_amber, biobb_flexdyn 
 biobb_flexserv builds that allow Python 3.13 (and pmx a newer scipy), or those notebooks
 stay broken in Colab.
 
+**First full run** (2026-11-24, notebooks as users get them): 1 of 16 works
+(ligand_parameterization; protein-complex_md_setup still running when this was written).
+The first error of every other notebook is the Python mismatch: a compiled module built
+for 3.12 (`Bio.PDB.ccealign`: amber ×3, structure_checking, flexdyn, flexserv, godmd, pmx;
+MDAnalysis: md_setup, mem; mdtraj: autoencoder), or, where the env got 3.13/3.14, a module
+not found at all because the `python3.12` path does not exist (`biobb_dna`, `nglview`:
+dna_helparms, haddock, virtual-screening).
+
+**Fix tried** (`try_python_fix`, on the 4 envs that can get 3.13 + md_setup):
+ligand_parameterization works; md_setup's env does not install (biobb_analysis, as
+expected); dna_helparms, haddock and virtual-screening get past the imports and stop later:
+
+- **manual Colab instructions in the notebooks**: dna_helparms needs
+  `'stdlib_path': '.curvesplus/standard'` uncommented ("uncomment when running in google
+  colab"), haddock needs `import pytraj` commented ("not compatible": its libcurl needs a
+  newer OpenSSL than Colab's Ubuntu has). The same kind of comment exists in amber ×3 and
+  structure_checking (`AMBERHOME`, "uncomment ALWAYS"), flexdyn (`simpletraj`, `CONCOORD*`,
+  `CONDA_PREFIX`), flexserv (`CONDA_PREFIX`) and godmd (viewer lines). The check runs the
+  cells as they are (like a user who does not read those comments), so these fail.
+  Proposal for the release: make them automatic with `if 'google.colab' in sys.modules:`
+  (as flexdyn's `prefix` lines already do), so no manual edit is needed;
+- virtual-screening: the Vina output viewer gets no file (`nglview ... you must provide
+  file extension`): the docking step left no `output_vina_pdbqt`; to investigate (the
+  Vina/Open Babel drift case of §1.5b is a candidate).
+
 ## 3. Phase 2 plan: scale to all workflows + wire into CI
 
 ### 3.1 Port the phase-1 scripts to the other 18 workflows
