@@ -18,6 +18,10 @@ WorkflowHub flavours:
 [![Apache Airflow - WorkflowHub](https://img.shields.io/badge/Airflow-WorkflowHub-1f8787?logo=apache-airflow&logoColor=ffffff)](https://workflowhub.eu/workflows/2130)
 [![Nextflow - WorkflowHub](https://img.shields.io/badge/Nextflow-WorkflowHub-1f8787?logo=nextflow&logoColor=ffffff)](https://workflowhub.eu/workflows/2392)
 
+Registry entry:
+
+[![Registry - bio.tools](https://img.shields.io/badge/registry-bio.tools-f08a24)](https://bio.tools/bioexcel_building_blocks_tutorials_protein_md_setup_amber_version)
+
 # AMBER Protein MD Setup tutorial using BioExcel Building Blocks (biobb)
 
 **Based on the official [GROMACS tutorial](http://www.mdtutorials.com/gmx/lysozyme/index.html).**
@@ -36,6 +40,7 @@ This tutorial aims to illustrate the process of **setting up a simulation** syst
 * [Pure Python](python)
 * [Docker](docker)
 * [Apache Airflow](airflow)
+* [Nextflow](nextflow)
 
 ## Copyright & Licensing
 This software has been developed in the [MMB group](http://mmb.irbbarcelona.org) at the [BSC](http://www.bsc.es/) & [IRB](https://www.irbbarcelona.org/) for the [European BioExcel](http://bioexcel.eu/), funded by the European Commission (EU Horizon Europe [101093290](https://cordis.europa.eu/project/id/101093290), EU H2020 [823830](http://cordis.europa.eu/projects/823830), EU H2020 [675728](http://cordis.europa.eu/projects/675728)).
