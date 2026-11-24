@@ -13,7 +13,7 @@ the version's RO-Crate. Nothing is uploaded by hand.
 
 | File | Role |
 | --- | --- |
-| `workflowhub.manifest.yml` (repo root) | The "phone book": one block per entry (id, flavour, path, main file, exact source link `isBasedOn`, name, extra files, `remote` links, license, authors). `skip: true` = never sent; `id: null` = new entry |
+| `workflowhub.manifest.yml` (repo root) | The "phone book": one block per entry (id, flavour, path, main file, exact source link `isBasedOn`, name, `extra` files or folders from outside the folder, `include` hidden paths inside it, license, authors). `skip: true` = never sent; `id: null` = new entry |
 | `.github/workflowhub/wfh_stage.py` | Builds `_wfh_stage/<key>/` per entry (folder copy + extras + `ro-crate-metadata.json`) and `_wfh_stage/index.json`. `--dry-run` audits only. `--keep-going` stages what is ready |
 | `.github/workflowhub/wfh_submit.py` | Zips and POSTs each staged crate to `<instance>/workflows/submit`; keeps going after a failure; reports links and NEW ids |
 | `.github/workflows/workflowhub-publish.yml` | The button: version, target (sandbox/production), filters. Production refuses to run while the latest test runs on main are not green |
@@ -78,9 +78,17 @@ version 2 to the same entries. Never switch back to the plain action for this re
   (`git submodule update --init`).
 - A duplicate entry appeared: the source link did not match. Delete the duplicate on
   WorkflowHub, fix `isBasedOn` (or the entry's link), re-run with a new version name.
-- Hidden files (e.g. `.curvesplus/`) never travel inside the zip (the RO-Crate libraries
-  skip them): list them under `remote:` and they are added as links to the file on GitHub
-  (`blob/main`), like the existing dna_helparms entries.
+- Hidden files (e.g. `.curvesplus/`) are skipped unless listed: `include: [.curvesplus]`
+  for a path inside the flavour folder, or an `extra` with a folder `from` for one outside
+  it (dna_helparms' jupyter entry). They travel as real files (WorkflowHub keeps every
+  hasPart file present in the zip; IWC entries carry `.github/` the same way). Links to
+  GitHub files inside a crate are NOT turned into files (tested on the sandbox): the
+  "Remote" files of the old versions came from registering the entry from GitHub.
+- A crate-based version lists `ro-crate-metadata.json` (and a generated
+  `ro-crate-preview.html`) among its files: normal (IWC entries show the metadata too).
+- On the sandbox, Docker, Python and Airflow entries show "Unrecognized workflow type" (a
+  gear icon): the sandbox lacks those types. Our language entities are identical to the
+  production entries' (checked), so production recognizes them.
 
 ## Add a workflow or flavour
 

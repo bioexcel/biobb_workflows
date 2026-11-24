@@ -9,9 +9,14 @@ WorkflowHub language entity for the flavour. It then writes <out>/index.json
 (read by wfh_submit.py) and .workflowhub.yml (the official submission-action
 format, kept for compatibility).
 
-Hidden files (e.g. dna_helparms' .curvesplus/) cannot travel inside the crate
-zip (the RO-Crate libraries skip them), so an entry's `remote:` list adds them
-as links to the file on GitHub (blob/<branch>), as the existing entries do.
+Hidden files are skipped by default. To publish one (e.g. dna_helparms'
+.curvesplus/), list it under the entry's `include:` (paths relative to the flavour
+folder) or, when it lives outside the folder, under `extra:` (`from` may be a
+folder; it is copied recursively under `to`). They travel as real files listed in
+hasPart: WorkflowHub reads every hasPart file present in the zip (wfh_submit.py zips
+everything; only submission-action@v0's packing dropped hidden files). Links to
+remote files are NOT turned into files by WorkflowHub's crate submission (tested
+2026-11-24), so there is no `remote:` option any more.
 
 An isBasedOn shared by several non-skipped entries would make WorkflowHub reject
 the submission: ALL entries sharing it are skipped, not only the second one.
@@ -90,43 +95,6 @@ def copy_tree(src, dst, patterns):
     return copied
 
 
-def github_base(repo, path, m):
-    """(base_url, branch, path_inside_that_repo) for a repo-relative path: a submodule's own
-    repo when the path is inside one, else the manifest's repository (default branch)."""
-    cp = configparser.ConfigParser()
-    cp.read(os.path.join(repo, ".gitmodules"))
-    for sec in cp.sections():
-        sp, url = cp[sec].get("path", ""), cp[sec].get("url", "")
-        if sp and (path == sp or path.startswith(sp + "/")):
-            return (url.removesuffix(".git").rstrip("/"), cp[sec].get("branch", "main"),
-                    path[len(sp):].strip("/"))
-    r = m.get("repository") or {}
-    return (r.get("url", "https://github.com/bioexcel/biobb_workflows").rstrip("/"),
-            r.get("branch", "main"), path)
-
-
-def remote_entities(repo, e, m):
-    """[(url, name)] for the entry's `remote:` paths (files, or folders expanded recursively,
-    hidden files included)."""
-    out = []
-    for p in e.get("remote") or []:
-        full = os.path.join(repo, p)
-        files = []
-        if os.path.isdir(full):
-            for root, _, fs in os.walk(full):
-                files += [os.path.relpath(os.path.join(root, f), repo) for f in fs]
-        elif os.path.isfile(full):
-            files = [p]
-        else:
-            raise FileNotFoundError(p)
-        for f in sorted(files):
-            base, branch, inner = github_base(repo, f.replace(os.sep, "/"), m)
-            name = os.path.relpath(f, os.path.join(repo, e["path"])) if f.startswith(e["path"]) \
-                else os.path.relpath(f, os.path.dirname(p.rstrip("/")) or ".")
-            out.append((f"{base}/blob/{branch}/{inner}", name.replace(os.sep, "/")))
-    return out
-
-
 def license_ids(lic):
     if not lic:
         return None, None
@@ -135,7 +103,7 @@ def license_ids(lic):
     return (lic if lic.startswith("http") else f"https://spdx.org/licenses/{spdx}"), spdx
 
 
-def write_crate(dst, e, files, version, defaults, remotes=()):
+def write_crate(dst, e, files, version, defaults):
     flav = e["flavour"]
     if flav not in LANGS:
         raise ValueError(f"unknown flavour {flav!r}; add it to LANGS")
@@ -146,7 +114,7 @@ def write_crate(dst, e, files, version, defaults, remotes=()):
         "conformsTo": [{"@id": "https://w3id.org/ro/crate/1.1"},
                        {"@id": "https://w3id.org/workflowhub/workflow-ro-crate/1.0"}],
         "name": e["name"], "isBasedOn": e["isBasedOn"], "version": str(version),
-        "mainEntity": {"@id": main}, "hasPart": [{"@id": f} for f in files] + [{"@id": u} for u, _ in remotes],
+        "mainEntity": {"@id": main}, "hasPart": [{"@id": f} for f in files],
     }
     if e.get("description"):
         root["description"] = e["description"]
@@ -172,8 +140,6 @@ def write_crate(dst, e, files, version, defaults, remotes=()):
             if people:
                 ent["author"] = people
         graph.append(ent)
-    for url, name in remotes:
-        graph.append({"@id": url, "@type": "File", "name": name})
     graph.append(lang)
     with open(os.path.join(dst, "ro-crate-metadata.json"), "w", encoding="utf-8") as fh:
         json.dump({"@context": "https://w3id.org/ro/crate/1.1/context", "@graph": graph},
@@ -235,15 +201,14 @@ def main():
             elif not os.path.isfile(os.path.join(src, e["main"])):
                 problems.append(f"main file not found: {e['path']}/{e['main']}")
             for x in e.get("extra") or []:
-                if not os.path.isfile(os.path.join(a.repo, x["from"])):
-                    problems.append(f"extra file not found: {x['from']}")
+                if not os.path.exists(os.path.join(a.repo, x["from"])):
+                    problems.append(f"extra not found: {x['from']}")
             if e["isBasedOn"] in shared:
                 problems.append("isBasedOn shared by entries " + ", ".join(shared[e["isBasedOn"]])
                                 + ": WorkflowHub would reject them all; give each its own source link")
-            try:
-                remotes = remote_entities(a.repo, e, m)
-            except FileNotFoundError as err:
-                problems.append(f"remote path not found: {err}")
+            for inc in e.get("include") or []:
+                if not os.path.exists(os.path.join(src, inc)):
+                    problems.append(f"include not found: {e['path']}/{inc}")
         if problems:
             errors.append((key, e.get("name"), problems))
             continue
@@ -253,22 +218,33 @@ def main():
         else:
             os.makedirs(dst)
             files = copy_tree(src, dst, patterns)
-        for x in e.get("extra") or []:
-            to = x.get("to") or os.path.basename(x["from"])
-            if not a.dry_run:
-                os.makedirs(os.path.dirname(os.path.join(dst, to)) or dst, exist_ok=True)
-                shutil.copy2(os.path.join(a.repo, x["from"]), os.path.join(dst, to))
-            if to not in files:
-                files.append(to)
+        # extra (out-of-folder, may be a folder) and include (hidden, inside the folder):
+        # both copied with every file, hidden ones too
+        extra_src = {}
+        pairs = [(os.path.join(a.repo, x["from"]), x.get("to") or os.path.basename(x["from"].rstrip("/")))
+                 for x in e.get("extra") or []]
+        pairs += [(os.path.join(src, inc), inc.rstrip("/")) for inc in e.get("include") or []]
+        for from_abs, to in pairs:
+            if os.path.isdir(from_abs):
+                items = [(os.path.join(r, f), os.path.join(to, os.path.relpath(os.path.join(r, f), from_abs)))
+                         for r, _, fs in os.walk(from_abs) for f in fs]
+            else:
+                items = [(from_abs, to)]
+            for f_abs, f_rel in items:
+                f_rel = f_rel.replace(os.sep, "/")
+                extra_src[f_rel] = f_abs
+                if not a.dry_run:
+                    os.makedirs(os.path.dirname(os.path.join(dst, f_rel)) or dst, exist_ok=True)
+                    shutil.copy2(f_abs, os.path.join(dst, f_rel))
+                if f_rel not in files:
+                    files.append(f_rel)
         files = sorted(set(files))
-        # size of what is actually sent: folder files + extra files
-        extra_src = {(x.get("to") or os.path.basename(x["from"])): os.path.join(a.repo, x["from"])
-                     for x in e.get("extra") or []}
+        # size of what is actually sent: folder files + extra/include files
         size = sum(os.path.getsize(extra_src[f] if f in extra_src else os.path.join(src, f))
                    for f in files if os.path.isfile(extra_src.get(f, os.path.join(src, f))))
         if not a.dry_run:
-            write_crate(dst, e, files, a.version, defaults, remotes)
-        staged.append((key, e, len(files) + len(remotes), size))
+            write_crate(dst, e, files, a.version, defaults)
+        staged.append((key, e, len(files), size))
 
     for key, e, n, size in staged:
         warn = f"  WARNING: {size / 1e6:.0f} MB" if size > WARN_MB * 1e6 else ""
