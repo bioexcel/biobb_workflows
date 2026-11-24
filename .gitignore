@@ -24,3 +24,4 @@ biobb_wf_*/tests/nextflow/.e2e_workdir
 # WorkflowHub publishing (generated in CI only)
 _wfh_stage/
 .workflowhub.yml
+_biotools_backup/

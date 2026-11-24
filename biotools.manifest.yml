@@ -1,0 +1,60 @@
+# bio.tools entries of the BioBB workflows: one per WORKFLOW (all flavours together),
+# unlike WorkflowHub (one entry per flavour). Used by .github/biotools/biotools_update.py
+# (workflow .github/workflows/biotools-update.yml), which only changes, per entry:
+#   version   adds the release label
+#   link      one "Software catalogue" link per WorkflowHub entry of the workflow (from
+#             workflowhub.manifest.yml) + the workflow folder on GitHub ("Repository")
+#   download  the workflow folder ("Source code") + the GHCR Docker image ("Container file")
+# Everything else (description, EDAM terms, publications, credits) is edited by hand on
+# bio.tools. Dead links found are reported, never removed automatically.
+#
+# Fields: wf (folder), biotoolsID, optional workflowhub (path prefixes of the WorkflowHub
+# entries to link; default: the whole wf folder) and workflowhub_exclude (prefixes to leave
+# out), skip: true (never touched).
+#
+# Editing rights (2026-11-24): the two entries created by gbayarri can be edited by the
+# job; the other 18 belong to Adam Hospital's account and need `gbayarri` added as an
+# editor (bio.tools: entry -> Update -> Permissions).
+entries:
+  - wf: biobb_wf_amber_abc_setup
+    biotoolsID: bioexcel_building_blocks_tutorials_abc_md_setup
+  - wf: biobb_wf_amber_md_setup
+    biotoolsID: bioexcel_building_blocks_tutorials_protein_md_setup_amber_version
+    workflowhub_exclude: [biobb_wf_amber_md_setup/jupyter/biobb_wf_amber/notebooks/md_setup_ph]
+  - wf: biobb_wf_amber_md_setup
+    biotoolsID: bioexcel_building_blocks_tutorials_amber_constant_ph_md_setup
+    workflowhub: [biobb_wf_amber_md_setup/jupyter/biobb_wf_amber/notebooks/md_setup_ph]
+  - wf: biobb_wf_amber_md_setup_lig
+    biotoolsID: bioexcel_building_blocks_tutorials_protein-ligand_complex_md_setup_amber_version
+  - wf: biobb_wf_autoencoder
+    biotoolsID: bioexcel_building_blocks_tutorials_autoencoders_for_anomaly_detection
+  - wf: biobb_wf_cmip
+    biotoolsID: bioexcel_building_blocks_tutorials_molecular_interaction_potentials
+  - wf: biobb_wf_dna_helparms
+    biotoolsID: bioexcel_building_blocks_tutorials_structural_dna_helical_parameters_from_md_trajectory
+  - wf: biobb_wf_flexdyn
+    biotoolsID: 3d-bioinfo_bioexcel_protein_conformational_ensembles_generation
+  - wf: biobb_wf_flexserv
+    biotoolsID: bioexcel_building_blocks_tutorials_macromolecular_coarse-grained_flexibility
+  - wf: biobb_wf_godmd
+    biotoolsID: bioexcel_building_blocks_tutorials_protein_conformational_transitions
+  - wf: biobb_wf_haddock
+    biotoolsID: bioexcel_building_blocks_tutorials_protein-protein_docking
+  - wf: biobb_wf_ligand_parameterization
+    biotoolsID: bioexcel_building_blocks_tutorials_automatic_ligand_parameterization
+  - wf: biobb_wf_md_setup
+    biotoolsID: bioexcel_building_blocks_tutorials_protein_md_setup
+  - wf: biobb_wf_md_setup_mutations
+    biotoolsID: bioexcel_building_blocks_tutorials_protein_md_setup_with_mutations
+  - wf: biobb_wf_mem
+    biotoolsID: bioexcel_building_blocks_tutorials_protein-membrane_md_analysis
+  - wf: biobb_wf_pmx_tutorial
+    biotoolsID: bioexcel_building_blocks_tutorials_mutation_free_energy_calculations
+  - wf: biobb_wf_protein-complex_md_setup
+    biotoolsID: bioexcel_building_blocks_tutorials_protein-ligand_complex_md_setup
+  - wf: biobb_wf_protein_md_analysis
+    biotoolsID: bioexcel_building_blocks_tutorials_protein_md_analysis
+  - wf: biobb_wf_structure_checking
+    biotoolsID: bioexcel_building_blocks_tutorials_molecular_structure_checking
+  - wf: biobb_wf_virtual-screening_fpocket
+    biotoolsID: bioexcel_building_blocks_tutorials_protein-ligand_docking
