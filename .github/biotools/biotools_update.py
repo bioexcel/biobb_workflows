@@ -11,8 +11,8 @@ docs do not say whether missing fields are erased, so nothing is ever left out):
             plus the workflow folder on GitHub ("Repository") if missing
   download  the workflow folder ("Source code") and the GHCR Docker image ("Container
             file") if missing
-  fix_urls  per entry in the manifest: dead link/download/documentation URLs to replace
-            (old: new) or to remove (old: null)
+  fix_urls  per entry in the manifest: outdated URLs to replace (old: new, also the
+            homepage) or to remove (old: null; link/download/documentation only)
 
 Other links are kept as they are; --check-links reports the ones that no longer answer
 (e.g. renamed repositories) so a person can fix them on bio.tools.
@@ -125,7 +125,10 @@ def clean(value):
 
 
 def fix_urls(record, fixes):
-    """Replace (old: new) or remove (old: null) URLs in link/download/documentation."""
+    """Replace (old: new) URLs in homepage/link/download/documentation, or remove
+    (old: null) them from link/download/documentation (the homepage is required)."""
+    if fixes.get(record.get("homepage")):
+        record["homepage"] = fixes[record["homepage"]]
     for key in ("link", "download", "documentation"):
         items = []
         for x in record.get(key) or []:
@@ -169,6 +172,8 @@ def desired(record, entry, args, wfh):
 
 def diff(old, new):
     lines = []
+    if old.get("homepage") != new.get("homepage"):
+        lines.append(f"    homepage: {old.get('homepage')} -> {new.get('homepage')}")
     if old.get("version") != new.get("version"):
         lines.append(f"    version: {old.get('version')} -> {new.get('version')}")
     for key in ("link", "download", "documentation"):
