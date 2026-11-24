@@ -206,6 +206,13 @@ def main():
             continue
         payload = clean({k: v for k, v in new.items() if k not in READ_ONLY})
         status, body = call("PUT", f"{API}/{tid}/validate/", token, payload)
+        if status == 403 and "Request Blocked" in str(body):
+            # the SDU firewall in front of bio.tools, not bio.tools: it blocks every PUT to
+            # this entry's URL (seen for an ID containing "_from_", 2026-11-24)
+            results.append((tid, "BLOCKED", "the SDU firewall in front of bio.tools blocks changes to "
+                            "this entry's address (false alarm); edit it on the website or ask "
+                            "registry-support@elixir-dk.org"))
+            continue
         if status in (401, 403):
             print(f"::warning::{tid}: bio.tools refused (HTTP {status}): {str(body)[:600]}")
             results.append((tid, "NO PERMISSION", f"the job's account cannot edit it; the owner "
