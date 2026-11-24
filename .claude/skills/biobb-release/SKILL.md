@@ -131,8 +131,13 @@ GATE 3: all green (or every red explained and accepted by the user). Then:
    `gh workflow run workflowhub-publish.yml -f version=$LABEL -f target=production
    -f tutorials=<one wf>/` first, check it on workflowhub.eu with the user, then the
    rest (no filter). Write the ids of NEW entries into `workflowhub.manifest.yml`
-   (release-follow-up commit). Then bio.tools (version `$LABEL`, links), when installed.
-4. Record what broke and how it was fixed in `docs/testing.md` §1.5b, and update the
+   (release-follow-up commit).
+4. bio.tools: `gh workflow run biotools-update.yml -f version=$LABEL` (dry run: read the
+   summary, every entry must say `valid`), then the same with `-f apply=true`. It adds the
+   version, the WorkflowHub links of every flavour, the GitHub folder and the GHCR image;
+   it keeps a backup of each record (job artifact). "NO PERMISSION" = the entry's owner
+   must add the job's account (`gbayarri`) as an editor; report dead links to the user.
+5. Record what broke and how it was fixed in `docs/testing.md` §1.5b, and update the
    user's memory notes (e.g. the temporary Python pin is gone).
 
 ## Never
