@@ -10,7 +10,7 @@ aws-c-cal 1.0.0 h704dcf7_1 conda-forge
 aws-c-common 1.0.6 h9ec13f6_0 conda-forge
 aws-c-compression 1.0.0 h704dcf7_1 conda-forge
 aws-c-http 1.2.0 hb821d93_0 conda-forge
-aws-c-io 1.1.2 hc676471_1 conda-forge
+aws-c-io 1.1.2 hb1e57cc_2 conda-forge
 aws-c-s3 1.5.2 h9d1e54f_1 conda-forge
 aws-c-sdkutils 1.0.1 hfcfb7ce_0 conda-forge
 aws-checksums 1.0.1 hfcfb7ce_1 conda-forge
@@ -36,7 +36,7 @@ cpython 3.12.16 py312hd8ed1ab_0 conda-forge
 cycler 0.12.1 pyhcf101f3_2 conda-forge
 fatslim_biobb 0.2.2 py312h73b7c68_1 bioconda
 fftw 3.3.11 nompi_h54214ab_100 conda-forge
-filelock 4.3.0 pyh5ded981_0 conda-forge
+filelock 4.3.1 pyh5ded981_0 conda-forge
 font-ttf-dejavu-sans-mono 2.37 hab24e00_0 conda-forge
 font-ttf-inconsolata 3.000 h77eed37_0 conda-forge
 font-ttf-source-code-pro 2.038 h77eed37_0 conda-forge
@@ -44,7 +44,7 @@ font-ttf-ubuntu 0.83 h77eed37_4 conda-forge
 fontconfig 2.18.4 h0555eca_0 conda-forge
 fonts-conda-ecosystem 1 0 conda-forge
 fonts-conda-forge 1 hc364b38_1 conda-forge
-fonttools 4.68.0 py312h9d40a6d_1 conda-forge
+fonttools 4.68.0 py312h9d40a6d_2 conda-forge
 formulaic 1.2.2 pyhd8ed1ab_0 conda-forge
 freesasa 2.2.1 hd8ed1ab_5 conda-forge
 freesasa-python 2.2.1 py312h2f459f6_1 conda-forge
@@ -137,7 +137,7 @@ munkres 1.1.4 pyhd8ed1ab_1 conda-forge
 narwhals 2.29.0 pyh5ded981_0 conda-forge
 ncurses 6.6 hcc0dc9a_1 conda-forge
 netcdf-fortran 4.6.4 nompi_h4de1b4c_102 conda-forge
-netcdf4 1.7.5 nompi_py311h4ad6d3e_100 conda-forge
+netcdf4 1.7.5 nompi_py311h4ad6d3e_101 conda-forge
 networkx 3.7 pyhc364b38_0 conda-forge
 nlopt 2.11.0 np2py312hfa968ca_3 conda-forge
 numba 0.68.1 py312h9a5cd42_1 conda-forge
@@ -180,7 +180,7 @@ requests 2.34.2 pyhcf101f3_0 conda-forge
 rich 15.0.0 pyhcf101f3_0 conda-forge
 rowan 1.3.2 pyhd8ed1ab_1 conda-forge
 rpds-py 2026.9.1 py312h3b11fa5_0 conda-forge
-s2n 1.7.13 hb94138d_0 conda-forge
+s2n 1.7.14 h23787d1_1 conda-forge
 scikit-learn 1.9.1 np2py312h2f0d670_1 conda-forge
 scipy 1.18.1 py312hbbb90ee_4 conda-forge
 seaborn 0.13.2 hd8ed1ab_3 conda-forge
@@ -209,6 +209,6 @@ xorg-libxau 1.0.12 hd115831_2 conda-forge
 xorg-libxdmcp 1.1.5 hd115831_2 conda-forge
 xorg-libxext 1.3.7 hd115831_1 conda-forge
 xorg-libxt 1.3.1 hd115831_1 conda-forge
-yaml 0.2.6 h9ec13f6_0 conda-forge
+yaml 0.2.7 h5a9b756_0 conda-forge
 zlib-ng 2.3.3 h646e873_1 conda-forge
 zstd 1.5.7 hbc1a06c_7 conda-forge

@@ -171,7 +171,7 @@ python-tzdata 2026.6 pyh5ded981_0 conda-forge
 python_abi 3.12 9_cp312 conda-forge
 pytz 2026.6 pyh5ded981_0 conda-forge
 pyyaml 6.0.3 py312h9d40a6d_4 conda-forge
-pyzmq 27.3.0 py312h0293f73_0 conda-forge
+pyzmq 27.3.0 py312h0293f73_1 conda-forge
 readline 8.3 h000c2f7_1 conda-forge
 referencing 0.37.0 pyhcf101f3_0 conda-forge
 requests 2.34.2 pyhcf101f3_0 conda-forge
@@ -194,7 +194,7 @@ terminado 0.18.1 pyhc90fa1f_1 conda-forge
 tinycss2 1.4.0 pyhd8ed1ab_0 conda-forge
 tk 8.6.13 ha6c374e_4 conda-forge
 tomli 2.5.0 pyh5ded981_0 conda-forge
-tornado 6.6.1 py312h8be31a5_0 conda-forge
+tornado 6.6.1 py312h8be31a5_1 conda-forge
 traitlets 5.16.1 pyhcf101f3_0 conda-forge
 typing-extensions 4.16.0 h69aa097_0 conda-forge
 typing_extensions 4.16.0 pyhcf101f3_0 conda-forge
@@ -208,7 +208,7 @@ webencodings 0.6.1 pyh5ded981_0 conda-forge
 websocket-client 1.9.2 pyh5ded981_1 conda-forge
 wheel 0.48.0 pyhd8ed1ab_0 conda-forge
 widgetsnbextension 4.0.16 pyhd8ed1ab_0 conda-forge
-yaml 0.2.6 h9ec13f6_0 conda-forge
+yaml 0.2.7 h5a9b756_0 conda-forge
 zeromq 4.3.5 h5dbc3f3_12 conda-forge
 zipp 4.1.2 pyh5ded981_0 conda-forge
 zstd 1.5.7 hbc1a06c_7 conda-forge

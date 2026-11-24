@@ -29,7 +29,7 @@ contourpy 1.4.0 py312hbf67821_2 conda-forge
 cpython 3.12.16 py312hd8ed1ab_0 conda-forge
 cycler 0.12.1 pyhcf101f3_2 conda-forge
 fftw 3.3.11 nompi_haf1500d_100 conda-forge
-fonttools 4.68.0 py312h05c94ff_1 conda-forge
+fonttools 4.68.0 py312h05c94ff_2 conda-forge
 freesasa 2.2.1 hd8ed1ab_5 conda-forge
 freesasa-python 2.2.1 py312h163523d_1 conda-forge
 freetype 2.14.3 hce30654_2 conda-forge
@@ -151,6 +151,6 @@ xorg-libxau 1.0.12 hb001647_2 conda-forge
 xorg-libxdmcp 1.1.5 hb001647_2 conda-forge
 xorg-libxext 1.3.7 hb001647_1 conda-forge
 xorg-libxt 1.3.1 hb001647_1 conda-forge
-yaml 0.2.6 h602ebc4_0 conda-forge
+yaml 0.2.7 h4c53d1a_0 conda-forge
 zlib-ng 2.3.3 h31dac16_1 conda-forge
 zstd 1.5.7 hf451053_7 conda-forge

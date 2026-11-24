@@ -1,3 +1,4 @@
 ubuntu=Ubuntu 24.04.5 LTS
 python=3.13.18
 runtimes=2026.10,2026.07,2026.04,2026.01
+image=release-colab-external-images_20261109-060054_RC00

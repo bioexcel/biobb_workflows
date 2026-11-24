@@ -19,7 +19,7 @@ aws-c-cal 1.0.0 h50d513f_1 conda-forge
 aws-c-common 1.0.6 h602ebc4_0 conda-forge
 aws-c-compression 1.0.0 h50d513f_1 conda-forge
 aws-c-http 1.2.0 h66a2f59_0 conda-forge
-aws-c-io 1.1.2 h0f3197d_1 conda-forge
+aws-c-io 1.1.2 h93f52e9_2 conda-forge
 aws-c-s3 1.5.2 h34bae17_1 conda-forge
 aws-c-sdkutils 1.0.1 h8339b81_0 conda-forge
 aws-checksums 1.0.1 h8339b81_1 conda-forge
@@ -59,7 +59,7 @@ debugpy 1.8.22 py312hdef455b_1 conda-forge
 defusedxml 0.7.1 pyhd8ed1ab_0 conda-forge
 executing 2.3.0 pyhd8ed1ab_0 conda-forge
 fftw 3.3.11 nompi_haf1500d_100 conda-forge
-filelock 4.3.0 pyh5ded981_0 conda-forge
+filelock 4.3.1 pyh5ded981_0 conda-forge
 font-ttf-dejavu-sans-mono 2.37 hab24e00_0 conda-forge
 font-ttf-inconsolata 3.000 h77eed37_0 conda-forge
 font-ttf-source-code-pro 2.038 h77eed37_0 conda-forge
@@ -67,7 +67,7 @@ font-ttf-ubuntu 0.83 h77eed37_4 conda-forge
 fontconfig 2.18.4 he47a414_0 conda-forge
 fonts-conda-ecosystem 1 0 conda-forge
 fonts-conda-forge 1 hc364b38_1 conda-forge
-fonttools 4.68.0 py312h05c94ff_1 conda-forge
+fonttools 4.68.0 py312h05c94ff_2 conda-forge
 formulaic 1.2.2 pyhd8ed1ab_0 conda-forge
 fqdn 1.6.0 pyh5ded981_0 conda-forge
 freesasa 2.2.1 hd8ed1ab_5 conda-forge
@@ -194,7 +194,7 @@ nbformat 5.11.1 pyhcf101f3_0 conda-forge
 ncurses 6.6 he64c551_1 conda-forge
 nest-asyncio2 1.7.4 pyh5ded981_0 conda-forge
 netcdf-fortran 4.6.4 nompi_hfcab3f9_102 conda-forge
-netcdf4 1.7.5 nompi_py311h4288b78_100 conda-forge
+netcdf4 1.7.5 nompi_py311h4288b78_101 conda-forge
 networkx 3.7 pyhc364b38_0 conda-forge
 nglview 4.0 pyh309af5b_0 conda-forge
 nlopt 2.11.0 np2py312hd29a785_3 conda-forge
@@ -248,7 +248,7 @@ python-tzdata 2026.6 pyh5ded981_0 conda-forge
 python_abi 3.12 9_cp312 conda-forge
 pytng 0.3.4 py312he040d82_0 conda-forge
 pyyaml 6.0.3 py312h05c94ff_4 conda-forge
-pyzmq 27.3.0 py312h6ba1a2d_0 conda-forge
+pyzmq 27.3.0 py312h6ba1a2d_1 conda-forge
 qhull 2020.2 h48a1422_6 conda-forge
 readline 8.3 h8b90a29_1 conda-forge
 referencing 0.37.0 pyhcf101f3_0 conda-forge
@@ -258,7 +258,7 @@ rfc3986-validator 0.1.1 pyh9f0ad1d_0 conda-forge
 rfc3987-syntax 1.1.0 pyhe01879c_1 conda-forge
 rich 15.0.0 pyhcf101f3_0 conda-forge
 rpds-py 2026.9.1 py312ha80e978_0 conda-forge
-s2n 1.7.13 hd1ca2f0_0 conda-forge
+s2n 1.7.14 he0ce667_1 conda-forge
 scikit-learn 1.9.1 np2py312hda66c2e_1 conda-forge
 scipy 1.18.1 py312hc6ebad4_4 conda-forge
 seaborn 0.13.2 hd8ed1ab_3 conda-forge
@@ -279,7 +279,7 @@ tidynamics 1.1.2 pyhd8ed1ab_0 conda-forge
 tinycss2 1.4.0 pyhd8ed1ab_0 conda-forge
 tk 8.6.13 hbeba79b_4 conda-forge
 tomli 2.5.0 pyh5ded981_0 conda-forge
-tornado 6.6.1 py312h4de8a2e_0 conda-forge
+tornado 6.6.1 py312h4de8a2e_1 conda-forge
 tqdm 4.70.1 pyhfa0c392_0 conda-forge
 traitlets 5.16.1 pyhcf101f3_0 conda-forge
 typer 0.29.2 pyh5ded981_0 conda-forge
@@ -306,7 +306,7 @@ xorg-libxau 1.0.12 hb001647_2 conda-forge
 xorg-libxdmcp 1.1.5 hb001647_2 conda-forge
 xorg-libxext 1.3.7 hb001647_1 conda-forge
 xorg-libxt 1.3.1 hb001647_1 conda-forge
-yaml 0.2.6 h602ebc4_0 conda-forge
+yaml 0.2.7 h4c53d1a_0 conda-forge
 zeromq 4.3.5 h6eb0046_12 conda-forge
 zipp 4.1.2 pyh5ded981_0 conda-forge
 zlib-ng 2.3.3 h31dac16_1 conda-forge

@@ -9,7 +9,7 @@ aws-c-cal 1.0.0 h50d513f_1 conda-forge
 aws-c-common 1.0.6 h602ebc4_0 conda-forge
 aws-c-compression 1.0.0 h50d513f_1 conda-forge
 aws-c-http 1.2.0 h66a2f59_0 conda-forge
-aws-c-io 1.1.2 h0f3197d_1 conda-forge
+aws-c-io 1.1.2 h93f52e9_2 conda-forge
 aws-c-s3 1.5.2 h34bae17_1 conda-forge
 aws-c-sdkutils 1.0.1 h8339b81_0 conda-forge
 aws-checksums 1.0.1 h8339b81_1 conda-forge
@@ -41,7 +41,7 @@ font-ttf-ubuntu 0.83 h77eed37_4 conda-forge
 fontconfig 2.18.4 he47a414_0 conda-forge
 fonts-conda-ecosystem 1 0 conda-forge
 fonts-conda-forge 1 hc364b38_1 conda-forge
-fonttools 4.68.0 py312h05c94ff_1 conda-forge
+fonttools 4.68.0 py312h05c94ff_2 conda-forge
 freesasa 2.2.1 hd8ed1ab_5 conda-forge
 freesasa-python 2.2.1 py312h163523d_1 conda-forge
 freetype 2.14.3 hce30654_2 conda-forge
@@ -154,7 +154,7 @@ referencing 0.37.0 pyhcf101f3_0 conda-forge
 requests 2.34.2 pyhcf101f3_0 conda-forge
 rich 15.0.0 pyhcf101f3_0 conda-forge
 rpds-py 2026.9.1 py312ha80e978_0 conda-forge
-s2n 1.7.13 hd1ca2f0_0 conda-forge
+s2n 1.7.14 he0ce667_1 conda-forge
 scikit-learn 1.9.1 np2py312hda66c2e_1 conda-forge
 scipy 1.18.1 py312hc6ebad4_4 conda-forge
 setuptools 84.2.1 pyhe730653_0 conda-forge
@@ -176,6 +176,6 @@ xorg-libxau 1.0.12 hb001647_2 conda-forge
 xorg-libxdmcp 1.1.5 hb001647_2 conda-forge
 xorg-libxext 1.3.7 hb001647_1 conda-forge
 xorg-libxt 1.3.1 hb001647_1 conda-forge
-yaml 0.2.6 h602ebc4_0 conda-forge
+yaml 0.2.7 h4c53d1a_0 conda-forge
 zlib-ng 2.3.3 h31dac16_1 conda-forge
 zstd 1.5.7 hf451053_7 conda-forge

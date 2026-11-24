@@ -15,7 +15,7 @@ certifi 2026.11.20 pyhd8ed1ab_0 conda-forge
 charset-normalizer 3.5.3 h1114479_0 conda-forge
 cpython 3.13.18 py313hd8ed1ab_100 conda-forge
 exceptiongroup 1.3.2 pyh5ded981_0 conda-forge
-filelock 4.3.0 pyh5ded981_0 conda-forge
+filelock 4.3.1 pyh5ded981_0 conda-forge
 fmt 12.1.0 h76c4fd7_1 conda-forge
 freesasa 2.2.1 hd8ed1ab_5 conda-forge
 freesasa-python 2.2.1 py313h07c4f96_1 conda-forge
@@ -104,6 +104,6 @@ typing-extensions 4.16.0 h69aa097_0 conda-forge
 typing_extensions 4.16.0 pyhcf101f3_0 conda-forge
 tzdata 2026e h5d301ff_0 conda-forge
 urllib3 2.8.0 pyh5ded981_1 conda-forge
-yaml 0.2.6 hebe6cf0_0 conda-forge
+yaml 0.2.7 hebe6cf0_0 conda-forge
 zlib-ng 2.3.3 hce19668_1 conda-forge
 zstd 1.5.7 hb78ec9c_7 conda-forge

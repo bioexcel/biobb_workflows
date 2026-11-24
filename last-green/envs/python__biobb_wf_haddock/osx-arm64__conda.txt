@@ -17,7 +17,7 @@ colorama 0.4.6 pyhd8ed1ab_1 conda-forge
 cpython 3.12.16 py312hd8ed1ab_0 conda-forge
 distlib 0.4.4 pyh5ded981_0 conda-forge
 exceptiongroup 1.3.2 pyh5ded981_0 conda-forge
-filelock 4.3.0 pyh5ded981_0 conda-forge
+filelock 4.3.1 pyh5ded981_0 conda-forge
 fmt 12.1.0 h99e4e11_1 conda-forge
 freesasa 2.2.1 hd8ed1ab_5 conda-forge
 freesasa-python 2.2.1 py312h163523d_1 conda-forge
@@ -80,7 +80,7 @@ pybind11-global 3.0.4 pyh648e204_0 conda-forge
 pyproject-api 1.12.6 pyh5ded981_0 conda-forge
 python 3.12.16 hd05a0c4_0_cpython conda-forge
 python-dateutil 4.0.0 pyh5ded981_0 conda-forge
-python-discovery 1.9.6 pyh5ded981_0 conda-forge
+python-discovery 1.9.7 pyh5ded981_0 conda-forge
 python-tzdata 2026.6 pyh5ded981_0 conda-forge
 python_abi 3.12 9_cp312 conda-forge
 pytorch 2.14.1 cpu_generic_py312_hfc0fe18_3 conda-forge
@@ -104,7 +104,7 @@ typing-extensions 4.16.0 h69aa097_0 conda-forge
 typing_extensions 4.16.0 pyhcf101f3_0 conda-forge
 tzdata 2026e h5d301ff_0 conda-forge
 urllib3 2.8.0 pyh5ded981_1 conda-forge
-virtualenv 21.15.12 pyh5ded981_0 conda-forge
+virtualenv 21.15.13 pyh5ded981_0 conda-forge
 wheel 0.48.0 pyhd8ed1ab_0 conda-forge
-yaml 0.2.6 h602ebc4_0 conda-forge
+yaml 0.2.7 h4c53d1a_0 conda-forge
 zlib-ng 2.3.3 h31dac16_1 conda-forge

@@ -36,7 +36,7 @@ cycler 0.12.1 pyhcf101f3_2 conda-forge
 fftw 3.3.11 nompi_h54214ab_100 conda-forge
 flex 2.6.4 hcc69e7b_1004 conda-forge
 flexserv 1.0.2 hd8697dd_4 bioconda
-fonttools 4.68.0 py312h9d40a6d_1 conda-forge
+fonttools 4.68.0 py312h9d40a6d_2 conda-forge
 freesasa 2.2.1 hd8ed1ab_5 conda-forge
 freesasa-python 2.2.1 py312h2f459f6_1 conda-forge
 freetype 2.14.3 h694c41f_2 conda-forge
@@ -161,6 +161,6 @@ xorg-libxau 1.0.12 hd115831_2 conda-forge
 xorg-libxdmcp 1.1.5 hd115831_2 conda-forge
 xorg-libxext 1.3.7 hd115831_1 conda-forge
 xorg-libxt 1.3.1 hd115831_1 conda-forge
-yaml 0.2.6 h9ec13f6_0 conda-forge
+yaml 0.2.7 h5a9b756_0 conda-forge
 zlib-ng 2.3.3 h646e873_1 conda-forge
 zstd 1.5.7 hbc1a06c_7 conda-forge

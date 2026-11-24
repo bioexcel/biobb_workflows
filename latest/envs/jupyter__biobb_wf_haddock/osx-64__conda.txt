@@ -55,9 +55,9 @@ distlib 0.4.4 pyh5ded981_0 conda-forge
 exceptiongroup 1.3.2 pyh5ded981_0 conda-forge
 executing 2.3.0 pyhd8ed1ab_0 conda-forge
 fftw 3.3.11 nompi_h54214ab_100 conda-forge
-filelock 4.3.0 pyh5ded981_0 conda-forge
+filelock 4.3.1 pyh5ded981_0 conda-forge
 fmt 12.1.0 he6aba6a_1 conda-forge
-fonttools 4.68.0 py312h9d40a6d_1 conda-forge
+fonttools 4.68.0 py312h9d40a6d_2 conda-forge
 fqdn 1.6.0 pyh5ded981_0 conda-forge
 freesasa 2.2.1 hd8ed1ab_5 conda-forge
 freesasa-python 2.2.1 py312h2f459f6_1 conda-forge
@@ -221,7 +221,7 @@ pyproject-api 1.12.6 pyh5ded981_0 conda-forge
 python 3.12.16 h6907cb8_0_cpython conda-forge
 python-abi3 3.12 he1d15d4_3 conda-forge
 python-dateutil 4.0.0 pyh5ded981_0 conda-forge
-python-discovery 1.9.6 pyh5ded981_0 conda-forge
+python-discovery 1.9.7 pyh5ded981_0 conda-forge
 python-fastjsonschema 2.22.3 pyh5ded981_0 conda-forge
 python-gil 3.12.16 hd8ed1ab_0 conda-forge
 python-json-logger 4.2.0 pyhd8ed1ab_0 conda-forge
@@ -229,7 +229,7 @@ python-tzdata 2026.6 pyh5ded981_0 conda-forge
 python_abi 3.12 9_cp312 conda-forge
 pytorch 2.14.1 cpu_mkl_py312_h78ffc80_102 conda-forge
 pyyaml 6.0.3 py312h9d40a6d_4 conda-forge
-pyzmq 27.3.0 py312h0293f73_0 conda-forge
+pyzmq 27.3.0 py312h0293f73_1 conda-forge
 qhull 2020.2 h15054a0_6 conda-forge
 readline 8.3 h000c2f7_1 conda-forge
 referencing 0.37.0 pyhcf101f3_0 conda-forge
@@ -261,7 +261,7 @@ tk 8.6.13 ha6c374e_4 conda-forge
 toml 0.10.2 pyhcf101f3_3 conda-forge
 tomli 2.5.0 pyh5ded981_0 conda-forge
 tomli-w 1.2.0 pyhd8ed1ab_0 conda-forge
-tornado 6.6.1 py312h8be31a5_0 conda-forge
+tornado 6.6.1 py312h8be31a5_1 conda-forge
 tox 4.67.15 pyh5ded981_0 conda-forge
 traitlets 5.16.1 pyhcf101f3_0 conda-forge
 typing-extensions 4.16.0 h69aa097_0 conda-forge
@@ -272,7 +272,7 @@ tzdata 2026e h5d301ff_0 conda-forge
 unicodedata2 18.0.0 py312h6ea13a3_1 conda-forge
 uri-template 1.3.0 pyhd8ed1ab_1 conda-forge
 urllib3 2.8.0 pyh5ded981_1 conda-forge
-virtualenv 21.15.12 pyh5ded981_0 conda-forge
+virtualenv 21.15.13 pyh5ded981_0 conda-forge
 wcwidth 0.9.5 py311h888ea4b_0 conda-forge
 webcolors 25.10.0 pyhd8ed1ab_0 conda-forge
 webencodings 0.6.1 pyh5ded981_0 conda-forge
@@ -286,7 +286,7 @@ xorg-libxau 1.0.12 hd115831_2 conda-forge
 xorg-libxdmcp 1.1.5 hd115831_2 conda-forge
 xorg-libxext 1.3.7 hd115831_1 conda-forge
 xorg-libxt 1.3.1 hd115831_1 conda-forge
-yaml 0.2.6 h9ec13f6_0 conda-forge
+yaml 0.2.7 h5a9b756_0 conda-forge
 zeromq 4.3.5 h5dbc3f3_12 conda-forge
 zipp 4.1.2 pyh5ded981_0 conda-forge
 zlib-ng 2.3.3 h646e873_1 conda-forge
