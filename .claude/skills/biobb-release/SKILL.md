@@ -126,8 +126,12 @@ GATE 3: all green (or every red explained and accepted by the user). Then:
    starts the publish chain for every image (docker e2e, then publish only if green),
    tagged `$LABEL` + `latest`. Watch `publish-ghcr.yaml` to the end.
 2. `gh workflow enable jupyter-sync.yaml`.
-3. Registries (plan part E/F, when installed): WorkflowHub publishing, then bio.tools
-   (version `$LABEL`, links).
+3. WorkflowHub (follow `.claude/skills/workflowhub-submission/SKILL.md`): audit with
+   `wfh_stage.py --version $LABEL --dry-run`, then
+   `gh workflow run workflowhub-publish.yml -f version=$LABEL -f target=production
+   -f tutorials=<one wf>/` first, check it on workflowhub.eu with the user, then the
+   rest (no filter). Write the ids of NEW entries into `workflowhub.manifest.yml`
+   (release-follow-up commit). Then bio.tools (version `$LABEL`, links), when installed.
 4. Record what broke and how it was fixed in `docs/testing.md` §1.5b, and update the
    user's memory notes (e.g. the temporary Python pin is gone).
 

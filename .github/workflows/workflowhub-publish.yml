@@ -1,0 +1,118 @@
+name: Publish to WorkflowHub
+
+# Publishes a new version of WorkflowHub entries from workflowhub.manifest.yml:
+# each entry's folder (+ extra files) becomes an RO-Crate, submitted to its entry
+# (WorkflowHub matches it by the exact source link, isBasedOn). Manual only: run it
+# from the Actions tab, or let the /biobb-release skill run it after the release
+# merge has published the images. Docs: .claude/skills/workflowhub-submission/SKILL.md
+#
+# Secrets/variables (set by the user, never in files):
+#   WORKFLOWHUB_API_TOKEN       production (workflowhub.eu, team 11 from the manifest)
+#   DEV_WORKFLOWHUB_API_TOKEN   sandbox (dev.workflowhub.eu)
+#   DEV_TEAM_ID (variable)      the team id on the sandbox
+#
+# No workflow-level `concurrency:` (AGENTS.md); one submission at a time per job.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version name for every selected entry (e.g. 2026.2). Must be NEW for each entry (a reused name is silently ignored by WorkflowHub)'
+        required: true
+        type: string
+      target:
+        description: 'Where to publish'
+        type: choice
+        options: [sandbox, production]
+        default: sandbox
+      tutorials:
+        description: 'Comma-separated workflow folders or substrings (e.g. biobb_wf_amber_abc_setup/). Empty = all'
+        required: false
+        default: ''
+      flavours:
+        description: 'Comma-separated: jupyter,python,cwl,airflow,nextflow,docker,galaxy. Empty = all'
+        required: false
+        default: ''
+      ids:
+        description: 'Comma-separated WorkflowHub ids (e.g. to re-run the failed ones). Empty = no id filter'
+        required: false
+        default: ''
+      skip_test_check:
+        description: 'Production only: publish even if the latest test runs on main are not green (not recommended)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  publish:
+    name: Publish (${{ inputs.target }}, ${{ inputs.version }})
+    runs-on: ubuntu-latest
+    concurrency:
+      group: workflowhub-publish-${{ inputs.target }}
+      cancel-in-progress: false
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive   # the Jupyter flavours live in the jupyter submodules
+
+      - name: The latest tests on main must be green (production)
+        if: inputs.target == 'production' && !inputs.skip_test_check
+        run: |
+          bad=0
+          for wf in python-tests python-container-tests cwl-tests airflow-tests nextflow-tests \
+                    jupyter-tests galaxy-tests publish-ghcr; do
+            line=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow "$wf.yaml" --branch main --limit 10 \
+                   --json status,conclusion,url,createdAt \
+                   --jq '[.[] | select(.status != "completed" or (.conclusion != "cancelled" and .conclusion != "skipped"))][0] | "\(.status) \(.conclusion) \(.createdAt) \(.url)"')
+            echo "$wf: ${line:-no runs}"
+            case "$line" in
+              completed\ success*|"") ;;
+              completed*) echo "::error::$wf: the latest run on main did not pass ($line)"; bad=1 ;;
+              *) echo "::error::$wf: a run on main is still in progress; wait for it ($line)"; bad=1 ;;
+            esac
+          done
+          exit $bad
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Stage the crates
+        env:
+          VERSION: ${{ inputs.version }}
+          TUTORIALS: ${{ inputs.tutorials }}
+          FLAVOURS: ${{ inputs.flavours }}
+          IDS: ${{ inputs.ids }}
+        run: |
+          pip install -q pyyaml
+          args=(--version "$VERSION" --keep-going)
+          [ -n "$TUTORIALS" ] && args+=(--tutorial "$TUTORIALS")
+          [ -n "$FLAVOURS" ] && args+=(--flavour "$FLAVOURS")
+          [ -n "$IDS" ] && args+=(--ids "$IDS")
+          python3 .github/workflowhub/wfh_stage.py "${args[@]}"
+
+      - name: Submit
+        env:
+          WORKFLOWHUB_API_TOKEN: ${{ inputs.target == 'production' && secrets.WORKFLOWHUB_API_TOKEN || secrets.DEV_WORKFLOWHUB_API_TOKEN }}
+          DEV_TEAM_ID: ${{ vars.DEV_TEAM_ID }}
+        run: |
+          if [ "${{ inputs.target }}" = production ]; then
+            python3 .github/workflowhub/wfh_submit.py
+          else
+            [ -n "$DEV_TEAM_ID" ] || { echo "::error::set the repository variable DEV_TEAM_ID (sandbox team id)"; exit 1; }
+            python3 .github/workflowhub/wfh_submit.py --instance https://dev.workflowhub.eu --team "$DEV_TEAM_ID"
+          fi
+
+      - name: Keep the crates and results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: workflowhub-${{ inputs.target }}-${{ inputs.version }}
+          path: _wfh_stage/
+          if-no-files-found: ignore
+          retention-days: 30
