@@ -19,6 +19,12 @@ Default is a DRY RUN: prints "current -> new" per entry and, with a token, asks 
 to validate the change (PUT /api/tool/<id>/validate/) without saving it. --apply saves:
 it first writes a backup of every record to --backup, then PUTs /api/tool/<id>/.
 
+Side effects seen on the first real run (2026-11-24, 15 entries): bio.tools fills the
+publications' metadata itself after a save (good), may reorder unordered lists (EDAM
+operations, operating systems), and resets its internal `confidence_flag` (a curation hint
+from its automatic imports, not shown on the entry page), which the API does not accept
+back. Nothing else changes (each record was compared with its backup).
+
 Env: BIOTOOLS_TOKEN (a bio.tools login key; see .claude/skills/biobb-release). Without it
 only the diff is shown. Needs PyYAML.
 
