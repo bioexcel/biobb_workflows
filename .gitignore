@@ -25,3 +25,4 @@ biobb_wf_*/tests/nextflow/.e2e_workdir
 _wfh_stage/
 .workflowhub.yml
 _biotools_backup/
+_colab_work/
