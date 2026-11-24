@@ -89,7 +89,7 @@ jobs:
       matrix:
         wf: ${{ fromJSON(needs.select.outputs.matrix) }}
     concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.wf }}
+      group: ${{ github.workflow }}-${{ github.ref }}-${{ matrix.wf }}${{ inputs.try_python_fix && '-fix' || '' }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
