@@ -354,7 +354,7 @@ workflows:
     authors:
       - {name: "Genís Bayarri", orcid: https://orcid.org/0000-0003-0513-0288}
       - {name: Adam Hospital, orcid: https://orcid.org/0000-0002-8291-8071}
-  - id: 262   # CWL ABC MD Setup tutorial (latest v3)
+  - id: 262   # CWL ABC MD Setup tutorial (latest v3). dev.workflowhub.eu answers HTTP 500 (CWL internals > 64 KB, see the skill's Gotchas)
     flavour: cwl
     path: biobb_wf_amber_abc_setup/cwl   # exact match of source link path
     main: workflow.cwl

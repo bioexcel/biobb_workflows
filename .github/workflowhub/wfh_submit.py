@@ -84,14 +84,16 @@ def main():
         sys.exit("no team id (manifest team_id or --team)")
     print(f"Submitting {len(idx['entries'])} crate(s), version {idx['version']}, to {instance} team {team}")
 
+    same_instance = instance == (idx.get("instance") or "https://workflowhub.eu").rstrip("/")
     results = []
     for e in idx["entries"]:
         r = submit(instance, team, token, e, a.stage)
         r.update({"key": e["key"], "manifest_id": e.get("id"), "name": e["name"], "flavour": e["flavour"]})
         results.append(r)
         if r["ok"]:
-            new = "  NEW ENTRY: put this id in the manifest" if not e.get("id") else ""
-            if e.get("id") and r.get("id") and str(r["id"]) != str(e["id"]):
+            new = "  NEW ENTRY: put this id in the manifest" if not e.get("id") and same_instance else ""
+            # the ids in the manifest are production ids; another instance numbers its own
+            if same_instance and e.get("id") and r.get("id") and str(r["id"]) != str(e["id"]):
                 new = f"  WARNING: landed on entry {r['id']}, manifest says {e['id']} (source link mismatch?)"
             print(f"ok      {e['key']:>40}  -> {r.get('url')} (version {r.get('version')}){new}")
         else:
@@ -100,7 +102,7 @@ def main():
     json.dump({"instance": instance, "version": idx["version"], "results": results},
               open(os.path.join(a.stage, "results.json"), "w"), indent=2)
     failed = [r for r in results if not r["ok"]]
-    new = [r for r in results if r["ok"] and not r["manifest_id"]]
+    new = [r for r in results if r["ok"] and not r["manifest_id"]] if same_instance else []
     summary = [f"## WorkflowHub: {len(results) - len(failed)}/{len(results)} submitted "
                f"(version `{idx['version']}`, {instance})", "",
                "| entry | flavour | result |", "| --- | --- | --- |"]
