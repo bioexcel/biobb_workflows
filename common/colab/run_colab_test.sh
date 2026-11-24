@@ -20,7 +20,12 @@
 #   - Google's image can lag the live Colab by a few days (docs: googlecolab/backend-info).
 #
 # Usage: common/colab/run_colab_test.sh <biobb_wf_folder> [--image IMAGE] [--keep] [--prepare-only]
-#   --prepare-only  stop after preparing the notebook copy (no docker; it is kept)
+#          [--try-python-fix [X.Y]]
+#   --prepare-only    stop after preparing the notebook copy (no docker; it is kept)
+#   --try-python-fix  try the proposed fix of the Colab cell in the COPY: build the env with
+#                     Colab's Python (default: the image's; or X.Y) and use the matching
+#                     lib/pythonX.Y paths. Answers "would the fixed cell work?" before
+#                     anyone edits the jupyter repo.
 #   env COLAB_IMAGE overrides the default image; NB_REPO_URL a fork of the jupyter repo
 #   (only for the notebook file: the Colab cell itself always clones bioexcel's main).
 # Needs docker and ~25 GB of free disk (the image is ~7 GB compressed).
@@ -30,11 +35,16 @@ WF="${1:?usage: $0 <biobb_wf_folder> [--image IMAGE] [--keep]}"; shift
 IMAGE="${COLAB_IMAGE:-us-docker.pkg.dev/colab-images/public/cpu-runtime:latest}"
 KEEP=0
 PREPARE_ONLY=0
+TRY_FIX=0
+FIX_PY=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --image) IMAGE="$2"; shift 2 ;;
     --keep)  KEEP=1; shift ;;
     --prepare-only) PREPARE_ONLY=1; KEEP=1; shift ;;
+    --try-python-fix)
+      TRY_FIX=1; shift
+      if [[ "${1:-}" =~ ^3\.[0-9]+$ ]]; then FIX_PY="$1"; shift; fi ;;
     *) echo "Unknown option: $1" >&2; exit 2 ;;
   esac
 done
@@ -77,6 +87,12 @@ cleanup() {
 }
 trap cleanup EXIT
 
+ensure_image() {
+  docker image inspect "$IMAGE" >/dev/null 2>&1 && return 0
+  for attempt in 1 2 3; do docker pull -q "$IMAGE" && return 0; sleep 30; done
+  echo "ERROR: cannot pull $IMAGE" >&2; exit 1
+}
+
 echo ">>> [1/5] notebook $NOTEBOOK"
 rm -rf "$WORK"; mkdir -p "$WORK"
 if [[ -f "$WF_DIR/jupyter/$NOTEBOOK" && -z "$NB_REPO_URL_OVERRIDE" ]]; then
@@ -106,12 +122,39 @@ cells.insert(0, {"cell_type": "code", "execution_count": None, "metadata": {}, "
                             "import google.colab\n"]})
 json.dump(nb, open(p, "w"), indent=1)
 PY
+if [[ "$TRY_FIX" -eq 1 ]]; then
+  if [[ -z "$FIX_PY" ]]; then
+    ensure_image
+    FIX_PY="$(docker run --rm ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} --entrypoint python3 "$IMAGE" \
+      -c 'import sys; print("%d.%d" % sys.version_info[:2])')"
+  fi
+  echo "  TRYING THE FIX: env with python=$FIX_PY and lib/python$FIX_PY paths (copy only)"
+  python3 - "$WORK/notebook.ipynb" "$FIX_PY" <<'PY'
+import json, re, sys
+p, v = sys.argv[1], sys.argv[2]
+nb = json.load(open(p))
+n = 0
+for c in nb["cells"]:
+    if c.get("cell_type") != "code":
+        continue
+    out = []
+    for line in c.get("source", []):
+        new = re.sub(r"/lib/python3\.\d+/", f"/lib/python{v}/", line)
+        new = re.sub(r"python=3\.\d+", f"python={v}", new)
+        if "condabin/mamba create" in new and "python=" not in new:
+            new = re.sub(r"(\s-y\b)", f" python={v}\\1", new, count=1)
+        n += new != line
+        out.append(new)
+    c["source"] = out
+json.dump(nb, open(p, "w"), indent=1)
+print(f"  changed {n} line(s)")
+PY
+fi
 
 if [[ "$PREPARE_ONLY" -eq 1 ]]; then echo "prepared: $WORK/notebook.ipynb"; exit 0; fi
 
 echo ">>> [3/5] Colab image: $IMAGE"
-docker image inspect "$IMAGE" >/dev/null 2>&1 || {
-  for attempt in 1 2 3; do docker pull -q "$IMAGE" && break; [[ $attempt -eq 3 ]] && exit 1; sleep 30; done; }
+ensure_image
 docker run --rm ${PLATFORM_FLAGS[@]+"${PLATFORM_FLAGS[@]}"} --entrypoint bash "$IMAGE" -c \
   'echo "  $(. /etc/os-release; echo $PRETTY_NAME), $(python3 --version)"; python3 -c "import google.colab" && echo "  google.colab importable"'
 

@@ -466,6 +466,48 @@ State on 2026-11-23, at the first check (the `.ga` files were last edited for bi
 | server behind | every `biobb_analysis_*` tool: the server has 3.0.2, the workflows ask for 4.0.x (md_setup, protein-complex_md_setup, amber_md_setup(_lig), flexserv, flexdyn, godmd) |
 | server newer | 152 steps in all 11 workflows (4.0.x → 5.3.x): `galaxy_wf.py update` |
 
+### 2.4 Colab check (2026-11-24)
+
+How it works: `docs/ci.md` §1.1f (`common/colab/run_colab_test.sh`, `colab-check.yaml`).
+
+**Why Colab breaks.** The Colab cell builds the env with `mamba create` (no Python pin)
+and appends `/usr/local/miniforge/envs/<env>/lib/python3.12/site-packages/` to Colab's
+own Python. Colab moved to Python 3.13 (Ubuntu 24.04) in 2026, so compiled modules built
+for 3.12 cannot load in Colab's kernel. Programs started as separate processes (gmx,
+sander, ...) still work, which is why some notebooks get far before failing.
+
+First runs (canary, 2026-11-24, image `release-colab-external-images_20261109`):
+
+| wf | result | first error |
+| --- | --- | --- |
+| md_setup | all MD steps ran and the outputs exist; the analysis/view cell fails | `ImportError: MDAnalysis not installed properly` (`MDAnalysis.lib._cutil`, built for 3.12) |
+| amber_md_setup | fails from the first biobb import (38 cells) | `No module named 'Bio.PDB.ccealign'` (Biopython built for 3.12) |
+
+The solver also picks a different Python per env today (drift snapshot, mamba linux-64):
+3.12 for most, 3.13 for haddock, 3.14 for dna_helparms, ligand_parameterization and
+virtual-screening. For those, the `python3.12` path in the cell does not exist at all.
+
+**The fix** (in the jupyter repos, at the release): create the env with Colab's Python
+(`mamba create -f ... python=3.13 -y`) and use the matching `lib/python3.13/` paths in the
+Colab cell and in the cells that build paths from it (pmx `gmxlib`). The Colab check can
+try exactly this on its test copy first: `gh workflow run colab-check.yaml -f
+try_python_fix=true`.
+
+**What blocks it today** (dry-run solves of the 15 jupyter envs with `python=3.13`,
+linux-64, 2026-11-24):
+
+| result | envs | blocker |
+| --- | --- | --- |
+| installs | dna_helparms, haddock, ligand_parameterization, virtual-screening | none |
+| no solution | amber, autoencoder, godmd, md_setup, protein-complex_md_setup, flexdyn, flexserv | `biobb_analysis` 5.3.x declares `python <3.13`; flexdyn and flexserv are also only built up to 3.12 |
+| no solution | mem | `biobb_mem` 5.3.x declares `python <3.13` |
+| no solution | structure_checking, cmip | `biobb_amber` 5.3.x is only built up to 3.12 |
+| no solution | pmx_tutorial | the env pins `scipy 1.13`, which has no build for 3.13 |
+
+So the release must bring biobb_analysis, biobb_mem, biobb_amber, biobb_flexdyn and
+biobb_flexserv builds that allow Python 3.13 (and pmx a newer scipy), or those notebooks
+stay broken in Colab.
+
 ## 3. Phase 2 plan: scale to all workflows + wire into CI
 
 ### 3.1 Port the phase-1 scripts to the other 18 workflows

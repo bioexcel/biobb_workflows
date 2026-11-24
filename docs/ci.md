@@ -20,6 +20,7 @@
 | `python-container-tests.yaml` | `push` (`biobb_wf_*/python/workflow.{docker,singularity}.yml`, `python/workflow.env.yml`, `python/requirements.txt`, `tests/python/**`) + `workflow_dispatch` (`wf_names`) + weekly `schedule` (Tue, §1.1c) | `ubuntu-latest` (per job) | Container mode of the python flavour (testing.md §1.6): `detect` (wfs with `python/workflow.docker.yml`; `skip_file: tests/python/SKIP` honours the python opt-out) → a `docker` and a `singularity` matrix job per wf running `tests/python/run_container_test.sh` (pip-installs `python/requirements.txt`, tools run in biocontainers images) |
 | `python-lint.yaml` | `push` (`biobb_wf_*/python/**`, `common/python/**`, `common/release/**`, cwl/airflow adapters, nextflow modules) + dispatch | `ubuntu-latest` | Seconds-long `common/python/check_versions.py`: every wf pins the same `biobb_*` versions in `workflow.env.yml`, `requirements.txt` and the `container_image` tags of `workflow.{docker,singularity}.yml` (errors); the cwl/airflow/nextflow/tests versions must match too (warnings until the flavours are in step; errors with `--strict-flavours`, used by the release skill) |
 | `galaxy-tests.yaml` | `push` (`biobb_wf_*/galaxy/**`, `biobb_wf_*/tests/galaxy/**`) + weekly `schedule` (Sat, §1.1c) + `workflow_dispatch` (`wf_names`) | `ubuntu-latest` (per job) | Galaxy flavour e2e (`tests/galaxy/run_test.sh`, `tests/galaxy/SKIP` opt-out): every tool of the `.ga` must be installed on https://biobb.usegalaxy.es (`common/galaxy/galaxy_wf.py check`); with the optional secret `GALAXY_API_KEY` it also imports and runs the workflow on that server (`run`). See testing.md §2.3 |
+| `colab-check.yaml` | weekly `schedule` (Sat 12:17, §1.1c) + started by `drift-daily.yaml` when Colab changed + `workflow_dispatch` (`wf_names`, `image`, `try_python_fix`) + `push` (`common/colab/**`, itself: 2 canary wfs) | `ubuntu-latest` (per job, disk freed first) | **Colab check** (§1.1f): each notebook runs in Google's public Colab CPU image through its own Colab cell (`common/colab/run_colab_test.sh`, settings from `tests/jupyter/run_test.sh`; `tests/jupyter/COLAB_SKIP` opt-out). Test only |
 | `flavour-tests.yaml` | `workflow_dispatch` (inputs: `flavour` = docker/cwl/airflow/jupyter/nextflow/python, `wf_names`) + weekly `schedule` (Thu, **docker** flavour: images built from today's `main` and tested, never published; §1.1c) | `ubuntu-latest` (per job) | Manual e2e runner for any flavour: `detect` (only workflows that have `tests/<flavour>/run_test.sh`; for python, the `tests/python/` dir = every wf) → one call of `flavour-test-reusable.yaml` each. The per-flavour **automatic** counterparts (`cwl-tests.yaml`, `airflow-tests.yaml`, `jupyter-tests.yaml`, `nextflow-tests.yaml`, and the test-gated publish chain for docker) run on path changes; this workflow is for ad-hoc subsets. Concurrency is per workflow folder and flavour at job level (§1.1b): flavours and workflows run in parallel |
 | `flavour-test-reusable.yaml` | `workflow_call` (`wf_name`, `flavour`, optional `runs_on`) | input-driven | Runs `<wf>/tests/<flavour>/run_test.sh` (installs `cwltool` via micromamba for the cwl flavour, Java 21 + Nextflow 26.10.3 via `nf-core/setup-nextflow` for the nextflow flavour). `timeout-minutes: 720`. The **python** flavour has no script: the job delegates to `python-reusable.yaml` (the CI python pipeline, so manual and automatic runs can never drift) |
 
@@ -108,7 +109,8 @@ avoid GitHub's top-of-hour scheduler congestion):
 | Thu | 12:17 | `flavour-tests.yaml` | docker e2e: image **built** from the committed Dockerfile + today's `main` (jupyter env, notebook, `workflow.py`), then run. **Test only, never published**: it answers "would an image rebuild today still work?" |
 | Fri | 02:17 | `jupyter-tests.yaml` | Jupyter notebooks e2e |
 | Sat | 02:17 | `galaxy-tests.yaml` | Galaxy: tools installed on the BioBB Galaxy server (+ a run on it when `GALAXY_API_KEY` is set) |
-| Sat | | (planned) | Colab check + notebooks on macOS (drift plan, part C) |
+| Sat | 12:17 | `colab-check.yaml` | Colab: notebooks in Google's Colab image through their Colab cell (§1.1f) |
+| Sat | | (planned) | notebooks on a real Mac (drift plan, part C) |
 
 - Selection: `detect.yaml` already treats `schedule` as "all eligible", so `SKIP` files
   (cmip) and `MACOS_SKIP` apply exactly as for manual runs.
@@ -212,6 +214,37 @@ The skill also switches `jupyter-sync` off while the release branch is tested, s
 are not rebuilt from the new jupyter envs under the old label, and back on after the
 merge. The merge's `docker/VERSION` change publishes every image. Details:
 `common/release/README.md`.
+
+### 1.1f Colab check (`colab-check.yaml`, since 2026-11-24)
+
+Many users open the notebooks in Google Colab. Each notebook has a cell "Only executed when
+using google colab" that clones the jupyter repo, installs Miniforge, builds the env with
+`mamba create`, and adds the env's `lib/python3.X/site-packages` to **Colab's own Python**.
+So a notebook works in Colab only if the env's Python is the same version as Colab's, and
+the Docker-based jupyter test cannot see that.
+
+`common/colab/run_colab_test.sh <wf>` runs the notebook in Google's public Colab CPU image
+(`us-docker.pkg.dev/colab-images/public/cpu-runtime:latest`, ~7 GB compressed; the job
+frees disk first):
+- the settings come from the wf's jupyter test (`NOTEBOOK`, `EXPECTED_OUTPUTS`,
+  `adjust_runtime` for the short runs), so there is one place to change them;
+- a first cell `import google.colab` is added to the copy (Colab's kernel does that
+  itself), so the notebook's own Colab cells run, unchanged;
+- every cell runs (`--allow-errors`); the log shows the end of the setup cell's output
+  and the **first** failing cell (later ones are usually consequences);
+- about 6-10 minutes per notebook.
+
+When: Saturday (weekly round), and whenever the daily check sees Colab change (its Python
+or Ubuntu in `googlecolab/backend-info`, or a new tag of the Colab image, recorded in the
+snapshot's `meta/colab.txt`). By hand: `gh workflow run colab-check.yaml [-f wf_names=...]`.
+
+**Trying a fix before editing the jupyter repos**: `-f try_python_fix=true` (or
+`--try-python-fix [X.Y]` locally) changes the test copy only: the env is created with
+`python=<Colab's version>` and the `lib/python3.X` paths follow. Use it to see which
+notebooks would work with the fixed cell. Not what users get, so the weekly run never uses it.
+
+Limits: no browser (viewers are created but not shown); Google's image can lag the live
+Colab by a few days. State and findings: `docs/testing.md` §2.4.
 
 ### 1.2 The per-workflow update flow (version bump → tests → image)
 

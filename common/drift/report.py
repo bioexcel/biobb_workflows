@@ -197,6 +197,8 @@ def meta_changes(old, new):
             out.append(f"Colab Ubuntu: {oc.get('ubuntu')} → {nc.get('ubuntu')}")
         if minor(oc.get("python")) != minor(nc.get("python")):
             out.append(f"Colab Python: {oc.get('python')} → {nc.get('python')}")
+        if oc.get("image", "?") != "?" and nc.get("image", "?") != "?" and oc.get("image") != nc.get("image"):
+            out.append(f"Colab image: {oc.get('image')} → {nc.get('image')} (the Colab check runs on it)")
         if oc.get("runtimes") != nc.get("runtimes"):
             out.append(f"Colab runtime versions: {oc.get('runtimes')} → {nc.get('runtimes')}")
     orr, nr = old["meta"]["runner"], new["meta"]["runner"]

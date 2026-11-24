@@ -26,6 +26,10 @@ on:
         description: 'Colab image (empty = us-docker.pkg.dev/colab-images/public/cpu-runtime:latest)'
         required: false
         default: ''
+      try_python_fix:
+        description: 'Try the proposed Colab-cell fix on the test copy (env with Colab''s Python + matching paths); the jupyter repos are not changed'
+        type: boolean
+        default: false
   push:
     paths:
       - 'common/colab/**'
@@ -75,7 +79,7 @@ jobs:
           PY
 
   colab:
-    name: ${{ matrix.wf }} (Colab)
+    name: ${{ matrix.wf }} (Colab${{ inputs.try_python_fix && ', fix tried' || '' }})
     needs: select
     if: needs.select.outputs.matrix != '[]'
     runs-on: ubuntu-latest
@@ -101,4 +105,5 @@ jobs:
       - name: Run the notebook in Colab's image
         env:
           COLAB_IMAGE: ${{ inputs.image || 'us-docker.pkg.dev/colab-images/public/cpu-runtime:latest' }}
-        run: bash common/colab/run_colab_test.sh "${{ matrix.wf }}"
+          TRY_FIX: ${{ inputs.try_python_fix && '--try-python-fix' || '' }}
+        run: bash common/colab/run_colab_test.sh "${{ matrix.wf }}" $TRY_FIX
