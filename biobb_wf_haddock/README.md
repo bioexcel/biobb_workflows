@@ -14,6 +14,10 @@ WorkflowHub flavours:
 [![Docker - WorkflowHub](https://img.shields.io/badge/Docker-WorkflowHub-1f8787?logo=docker&logoColor=ffffff)](https://workflowhub.eu/workflows/2138)
 [![Nextflow - WorkflowHub](https://img.shields.io/badge/Nextflow-WorkflowHub-1f8787?logo=nextflow&logoColor=ffffff)](https://workflowhub.eu/workflows/2400)
 
+Registry entry:
+
+[![Registry - bio.tools](https://img.shields.io/badge/registry-bio.tools-f08a24)](https://bio.tools/bioexcel_building_blocks_tutorials_protein-protein_docking)
+
 # Protein-protein Docking tutorial using HADDOCK with the BioExcel Building Blocks (biobb)
 
 **Based on the official [HADDOCK3 Antibody-antigen modelling tutorial](https://www.bonvinlab.org/education/HADDOCK3/HADDOCK3-antibody-antigen/).**
@@ -29,6 +33,7 @@ This tutorial aims to illustrate the process of **protein-protein docking**, ste
 * [Jupyter Notebooks](https://github.com/bioexcel/biobb_wf_haddock) (this link switches to a different repository) 
 * [Pure Python](python)
 * [Docker](docker)
+* [Nextflow](nextflow)
 
 ## Copyright & Licensing
 This software has been developed in the [MMB group](http://mmb.irbbarcelona.org) at the [BSC](http://www.bsc.es/) & [IRB](https://www.irbbarcelona.org/) for the [European BioExcel](http://bioexcel.eu/), funded by the European Commission (EU Horizon Europe [101093290](https://cordis.europa.eu/project/id/101093290), EU H2020 [823830](http://cordis.europa.eu/projects/823830), EU H2020 [675728](http://cordis.europa.eu/projects/675728)).

@@ -17,6 +17,10 @@ WorkflowHub flavours:
 [![Apache Airflow - WorkflowHub](https://img.shields.io/badge/Airflow-WorkflowHub-1f8787?logo=apache-airflow&logoColor=ffffff)](https://workflowhub.eu/workflows/2133)
 [![Nextflow - WorkflowHub](https://img.shields.io/badge/Nextflow-WorkflowHub-1f8787?logo=nextflow&logoColor=ffffff)](https://workflowhub.eu/workflows/2408)
 
+Registry entry:
+
+[![Registry - bio.tools](https://img.shields.io/badge/registry-bio.tools-f08a24)](https://bio.tools/bioexcel_building_blocks_tutorials_molecular_structure_checking)
+
 # Molecular Structure Checking using BioExcel Building Blocks (biobb)
 
 ***
@@ -47,6 +51,7 @@ An implementation of this workflow in a **web-based Graphical User Interface (GU
 * [Pure Python](python)
 * [Docker](docker)
 * [Apache Airflow](airflow)
+* [Nextflow](nextflow)
 
 ## Copyright & Licensing
 This software has been developed in the [MMB group](http://mmb.irbbarcelona.org) at the [BSC](http://www.bsc.es/) & [IRB](https://www.irbbarcelona.org/) for the [European BioExcel](http://bioexcel.eu/), funded by the European Commission (EU Horizon Europe [101093290](https://cordis.europa.eu/project/id/101093290), EU H2020 [823830](http://cordis.europa.eu/projects/823830), EU H2020 [675728](http://cordis.europa.eu/projects/675728)).
