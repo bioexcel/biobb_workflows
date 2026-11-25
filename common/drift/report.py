@@ -15,7 +15,8 @@ Severity rules (documented in docs/ci.md §1.1d):
   YELLOW  everything else worth knowing: key package version changes, the three tools
           disagreeing on linux-64, mamba on a python env, micromamba failures, a Colab
           or GitHub-runner change
-  INFO    expected failures: osx-* when the wf has tests/python/MACOS_SKIP, osx-arm64
+  INFO    expected failures: osx-* when the wf has tests/{python,jupyter}/MACOS_SKIP
+          (python__ / jupyter__ envs), osx-arm64
           when osx-64 solves (CI and users fall back to osx-64 under Rosetta)
 
 Outputs in --out: report.md (job summary), issue_body.md (current state),
@@ -100,8 +101,9 @@ def load(root):
 
 def expected_failure(snap, key, repo):
     env, platform, solver = key
-    if platform.startswith("osx") and env.startswith("python__"):
-        skip = os.path.join(repo, env[len("python__"):], "tests", "python", "MACOS_SKIP")
+    flavour, _, wf = env.partition("__")
+    if platform.startswith("osx") and flavour in ("python", "jupyter"):
+        skip = os.path.join(repo, wf, "tests", flavour, "MACOS_SKIP")
         if os.path.isfile(skip):
             return "MACOS_SKIP: " + (open(skip).read().strip().splitlines() or ["no reason given"])[0]
     if platform == "osx-arm64":
