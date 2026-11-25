@@ -574,6 +574,8 @@ expected); dna_helparms, haddock and virtual-screening get past the imports and 
   installs. Fix: rebuild the imods macOS binaries against arpack 3.9 (no env change can
   do it). Of all our envs only jupyter flexdyn on osx-64 gets the gmx2026_2 build
   (drift snapshots).
+  Decision 2026-11-25: `tests/jupyter/MACOS_SKIP` for flexdyn and a note in its tutorial
+  README (macOS not supported for now; Binder instead) until imods is rebuilt.
 - Quiet failures: the haddock3 and Vina wrappers log "exit code 1" without raising; the
   notebook only fails later on a missing file (often as nglview's misleading "you must
   provide file extension"). `report_executed` lists those earlier cells.
