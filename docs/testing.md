@@ -545,7 +545,10 @@ expected); dna_helparms, haddock and virtual-screening get past the imports and 
 | FAIL: `reduce: command not found` (AmberTools 26, §1.5b); env only installs with the Intel conda | structure_checking |
 | FAIL: Vina "PDBQT parsing error" (Open Babel 3.2.1, §1.5b) | virtual-screening_fpocket |
 | FAIL: CNS "Library not loaded: /opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib" | haddock → PASS with `brew install gcc` (`MACOS_BREW`) |
-| not run: "job was not acquired" (GitHub macOS arm64 capacity, not a test result) | amber_md_setup_lig, autoencoder, dna_helparms, flexdyn |
+| not run: "job was not acquired" (GitHub macOS arm64 capacity, not a test result); re-run 2026-11-25 (run 45588426439), results below | amber_md_setup_lig, autoencoder, dna_helparms, flexdyn |
+| PASS (re-run): autoencoder native arm64; dna_helparms only with the Intel conda (Python 3.14) | autoencoder, dna_helparms |
+| FAIL (re-run): `reduce: command not found` (AmberTools 26, §1.5b), then acpype exit 19; Intel conda | amber_md_setup_lig |
+| FAIL (re-run): `cpptraj: command not found`: the env has no AmberTools on a Mac (below); Intel conda | flexdyn |
 
 - haddock: `biobb_haddock 5.3.3` needs `haddock_biobb ==2025.11`. Its current recipe
   (build 1) is linux-64 only (`skip: true  # [osx]`: the bundled macOS CNS binaries are
@@ -560,6 +563,17 @@ expected); dna_helparms, haddock and virtual-screening get past the imports and 
   build 0 broken (bioconda-recipes#72215) was withdrawn: it would remove the only Mac
   route. Lasting fix, not done: an osx build of `haddock_biobb` that uses conda-forge's
   `libgfortran` (it ships `libquadmath`) via `install_name_tool`, so no Homebrew is needed.
+- flexdyn: on osx-64 the solver takes `biobb_analysis-5.3.0-gmx2026_2` (an older arch
+  build, gromacs only) instead of `noarch/biobb_analysis-5.3.0-pyhdfd78af_1` (needs
+  `ambertools >=23.0`), so there is no cpptraj. It is the only Mac solution, not a
+  preference: adding `ambertools` to the env makes osx-64 unsolvable (checked
+  2026-11-25). Cause: `imods` (needed by biobb_flexdyn) pins `arpack ==3.7.0` in every
+  osx-64 build (prebuilt binaries; recipe `recipes/imods`, sources on mmb.irbbarcelona.org),
+  while AmberTools >=23.6 needs arpack 3.8-3.9 and older AmberTools conflict with
+  gromacs 2026's icu. On linux-64, imods build 0 has no arpack pin, so AmberTools 26
+  installs. Fix: rebuild the imods macOS binaries against arpack 3.9 (no env change can
+  do it). Of all our envs only jupyter flexdyn on osx-64 gets the gmx2026_2 build
+  (drift snapshots).
 - Quiet failures: the haddock3 and Vina wrappers log "exit code 1" without raising; the
   notebook only fails later on a missing file (often as nglview's misleading "you must
   provide file extension"). `report_executed` lists those earlier cells.
