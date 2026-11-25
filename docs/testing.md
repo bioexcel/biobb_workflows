@@ -466,6 +466,14 @@ State on 2026-11-23, at the first check (the `.ga` files were last edited for bi
 | server behind | every `biobb_analysis_*` tool: the server has 3.0.2, the workflows ask for 4.0.x (md_setup, protein-complex_md_setup, amber_md_setup(_lig), flexserv, flexdyn, godmd) |
 | server newer | 152 steps in all 11 workflows (4.0.x → 5.3.x): `galaxy_wf.py update` |
 
+Update on 2026-11-25, after INB said the server was updated:
+
+| | |
+| --- | --- |
+| now installed | godmd tools (5.3.1): godmd's `tests/galaxy/SKIP` removed |
+| still missing | ToolShed `cmonjeau/ziptool` (flexdyn, still skipped) |
+| still behind | all 20 `biobb_analysis_*` tools at 3.0.2 (23 steps in 7 workflows); asked INB for 5.3.0 |
+
 ### 2.4 Colab check (2026-11-24)
 
 How it works: `docs/ci.md` §1.1f (`common/colab/run_colab_test.sh`, `colab-check.yaml`).
