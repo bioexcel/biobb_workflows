@@ -28,9 +28,11 @@ Keep a scratch folder for the release files (use the session scratchpad); below 
 1. Ask the user for the release label if they did not give it.
 2. `git status` on `main`, up to date with origin (`git pull --ff-only`). Uncommitted
    user changes: leave them alone and never stage them; ask if they block a step.
-3. `git submodule update --init` so every `<wf>/jupyter` checkout exists, and in each
-   jupyter checkout `git switch main && git pull --ff-only` (they live in separate repos
-   `bioexcel/<repo>`; the three amber sub-workflows share `bioexcel/biobb_wf_amber`).
+3. The jupyter tutorial repos (`bioexcel/<repo>`; the three amber sub-workflows share
+   `bioexcel/biobb_wf_amber`) are edited ONLY in their own checkouts in
+   `/Users/gbayarri/projects/BioBB/tutorials/<repo>` (`$BIOBB_TUTORIALS` overrides),
+   never through this repo's `<wf>/jupyter` submodules. In each:
+   `git status -sb` clean and on main (ask otherwise), then `git pull --ff-only`.
 4. `gh auth status` works (pushes, workflow runs).
 5. Create the branch `release/$LABEL` in this repo.
 
@@ -94,7 +96,7 @@ only expected when the wf has `tests/python/MACOS_SKIP` (arm64 falls back to osx
      user which envs cannot get Colab's Python with the chosen versions. Then try the fix
      without editing anything: `gh workflow run colab-check.yaml -f try_python_fix=true`
      (env with Colab's Python + matching paths, test copy only). Agree the cell change
-     with the user before editing the jupyter repos (`grep -rn "python3\." <wf>/jupyter/*/notebooks`
+     with the user before editing the jupyter repos (`grep -rn "python3\." $BIOBB_TUTORIALS/<repo>/*/notebooks`
      also finds pmx's `gmxlib` path);
    - `docker/VERSION` was set to `$LABEL` by `apply --docker-version`.
 4. Markdown files are not edited by the script; `scan` lists those quoting versions:
@@ -102,7 +104,7 @@ only expected when the wf has `tests/python/MACOS_SKIP` (arm64 falls back to osx
 
 ## 4. Review (GATE 2)
 
-Show the user: files changed per workflow (`git diff --stat`, and `git -C <jupyter> diff
+Show the user: files changed per workflow (`git diff --stat`, and `git -C tutorials/<repo> diff
 --stat` for each jupyter repo), the decisions from step 1, solve results, Galaxy report.
 GATE 2: push only on yes.
 
@@ -115,9 +117,10 @@ Order matters (docs/ci.md §1.2): images and the jupyter e2e read the jupyter re
    envs under the old label while this repo is still being tested:
    `gh workflow disable jupyter-sync.yaml` (drift-daily leaves manually disabled
    workflows alone).
-2. Each jupyter repo (one checkout per repo; the others `git pull` afterwards): commit
+2. Each jupyter repo, in `tutorials/<repo>`: commit
    `Update biobb packages to the $LABEL release` and push to `main`.
-3. This repo, on `release/$LABEL`: commit the edits plus the submodule pointer bumps
+3. This repo, on `release/$LABEL`: `git submodule update --remote` (the `<wf>/jupyter`
+   pointers move to the pushed commits), commit the edits plus the pointer bumps
    (`git add <wf>/jupyter`), push. Every touched flavour's tests start on the branch,
    for all 19 workflows in parallel (docs/ci.md §1.1b).
 4. Watch with `gh run list --branch release/$LABEL` / `gh run watch`. For each failure:

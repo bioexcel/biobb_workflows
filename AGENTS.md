@@ -8,6 +8,7 @@
 - Recorded e2e pitfalls + bug fixes: `docs/testing.md` §2.1 — read it before touching `tests/` scripts or calling the Airflow CLI (key rule: never parse `table` CLI output in non-TTY; use `-o json`/`-o plain`).
 - When bumping a wf's biobb versions, also create/update `<wf>/docker/VERSION` (one line, e.g. `2026.1`) — `common/docker/sync_dockerfiles.sh` uses it as the image's version label.
 - The same bump must also update `<wf>/python/requirements.txt` (container mode pip list) and the `container_image` tags in `<wf>/python/workflow.{docker,singularity}.yml`; `python3 common/python/check_versions.py` must pass (CI: `python-lint.yaml`).
+- Jupyter tutorials are separate repos (`bioexcel/biobb_wf_<name>`) checked out in `../tutorials/<repo>` and linked here as submodules `<wf>/jupyter`. To change one: edit and push in `../tutorials/<repo>`, then `git submodule update --remote` here. Never edit inside `<wf>/jupyter`.
 - A BioBB release (new biobb versions everywhere) goes through the `/biobb-release` skill (`.claude/skills/biobb-release/`, scripts in `common/release/`). Never edit version strings by hand.
 - WorkflowHub entries are published from `workflowhub.manifest.yml` with `workflowhub-publish.yml` (skill `.claude/skills/workflowhub-submission/`). `isBasedOn` must equal the entry's source link on WorkflowHub verbatim.
 - A red drift issue or scheduled run: use the `/drift-triage` skill (`.claude/skills/drift-triage/`); it explains the cause and prepares draft PRs, never merges.

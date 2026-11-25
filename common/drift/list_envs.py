@@ -16,9 +16,10 @@ because that is what users, the Colab cell and the Docker image builds get today
 
 Only the standard library is used (the runner's system python runs it).
 Usage: python3 common/drift/list_envs.py OUT_DIR [--local-jupyter]
-  --local-jupyter  read the jupyter env files from the local submodule checkouts
-                   (<wf>/jupyter/conda_env/environment.yml) instead of GitHub main:
-                   used by the release skill to test edits before pushing them
+  --local-jupyter  read the jupyter env files from the local tutorial checkouts
+                   (<tutorials>/<repo>/conda_env/environment.yml; <tutorials> =
+                   $BIOBB_TUTORIALS or the "tutorials" folder next to this repo) instead
+                   of GitHub main: used by the release skill to test edits before pushing
 """
 import configparser
 import os
@@ -108,7 +109,11 @@ def main():
         url = RAW.format(owner_repo=owner_repo)
         try:
             if local:
-                url = os.path.join(sorted(wfs)[0], "jupyter", "conda_env", "environment.yml")
+                tutorials = os.environ.get("BIOBB_TUTORIALS") or os.path.join(
+                    os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(
+                        os.path.abspath(__file__))))), "tutorials")
+                url = os.path.join(tutorials, owner_repo.split("/", 1)[1],
+                                   "conda_env", "environment.yml")
                 text = open(url).read()
             else:
                 with urllib.request.urlopen(url, timeout=60) as r:
