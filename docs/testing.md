@@ -474,6 +474,15 @@ Update on 2026-11-25, after INB said the server was updated:
 | still missing | ToolShed `cmonjeau/ziptool` (flexdyn, still skipped) |
 | still behind | all 20 `biobb_analysis_*` tools at 3.0.2 (23 steps in 7 workflows); asked INB for 5.3.0 |
 
+Second update on 2026-11-25: INB installed the rest. `galaxy_wf.py check` reports 0 missing
+tools and 0 steps where the server is behind in all 11 workflows.
+
+| | |
+| --- | --- |
+| now installed | ToolShed `cmonjeau/ziptool`: flexdyn's `tests/galaxy/SKIP` removed, so no Galaxy workflow is skipped |
+| now up to date | `biobb_analysis_*` tools at 5.3.1 |
+| left for the release | `galaxy_wf.py update`: the `.ga` files still name 4.0.x tool versions; the server is newer in all 11 |
+
 ### 2.4 Colab check (2026-11-24)
 
 How it works: `docs/ci.md` §1.1f (`common/colab/run_colab_test.sh`, `colab-check.yaml`).
