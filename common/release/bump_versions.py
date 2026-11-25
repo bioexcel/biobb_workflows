@@ -70,8 +70,15 @@ def workflows():
     return sorted(d for d in os.listdir(ROOT) if d.startswith("biobb_wf_") and os.path.isdir(os.path.join(ROOT, d)))
 
 
+# The jupyter tutorial repos are edited in their own checkouts, never through this repo's
+# <wf>/jupyter submodules: modify <tutorials>/<repo>, push, then
+# `git submodule update --remote` here. Default: the folder next to this repo.
+TUTORIALS = os.environ.get("BIOBB_TUTORIALS") or os.path.join(os.path.dirname(ROOT), "tutorials")
+
+
 def jupyter_env_files():
-    """One checkout per jupyter repo (the three amber sub-wfs share biobb_wf_amber):
+    """The env files of each jupyter repo, in its checkout under TUTORIALS (one per repo:
+    the three amber sub-wfs share biobb_wf_amber).
     returns ([files to edit], {repo_url: [all submodule paths]})."""
     cp = configparser.ConfigParser()
     cp.read(os.path.join(ROOT, ".gitmodules"))
@@ -81,10 +88,13 @@ def jupyter_env_files():
         if path.endswith("/jupyter"):
             by_url.setdefault(url, []).append(path)
     files = []
-    for url, paths in sorted(by_url.items()):
-        first = sorted(paths)[0]
+    for url in sorted(by_url):
+        repo = os.path.join(TUTORIALS, url.rstrip("/").split("/")[-1].removesuffix(".git"))
+        if not os.path.isdir(repo):
+            sys.exit(f"ERROR: no checkout of {url} at {repo} (set BIOBB_TUTORIALS to the "
+                     "folder holding the tutorial repos)")
         for rel in ("conda_env/environment.yml", "binder/environment.yml"):
-            f = os.path.join(ROOT, first, rel)
+            f = os.path.join(repo, rel)
             if os.path.isfile(f):
                 files.append(f)
     return files, by_url
@@ -407,12 +417,8 @@ def cmd_apply(args):
     verb = "would change" if args.dry_run else "changed"
     print(f"\n{verb} {total} files in {len(changed)} folders")
     if args.jupyter and not args.dry_run:
-        _, by_url = jupyter_env_files()
-        shared = {u: p for u, p in by_url.items() if len(p) > 1}
-        for url, paths in shared.items():
-            print(f"note: {url} is checked out {len(paths)} times ({', '.join(sorted(paths))}); "
-                  f"only {sorted(paths)[0]} was edited - commit and push there, then "
-                  "`git -C <path> pull` the others")
+        print(f"note: the jupyter env files were edited in {TUTORIALS}/<repo>: commit and push "
+              "there, then `git submodule update --remote` in this repo")
     return 0
 
 

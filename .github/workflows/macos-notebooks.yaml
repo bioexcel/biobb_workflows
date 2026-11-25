@@ -8,7 +8,10 @@ name: macOS notebooks
 #
 # When: weekly round, Sunday (docs/ci.md §1.1c); by hand (wf_names); on a push touching
 # the check itself: two workflows only (canary).
-# A wf opts out with tests/jupyter/MACOS_SKIP (first line = reason).
+# A wf opts out with tests/jupyter/MACOS_SKIP (first line = reason). A wf whose README
+# asks Mac users to install Homebrew formulae lists them in tests/jupyter/MACOS_BREW (one
+# per line, # comments), installed before the run. By hand: ignore_skip runs the named wfs
+# anyway, brew installs extra formulae first (to test a workaround).
 # macOS runners: at most 5 jobs at a time on this account (max-parallel below).
 # No workflow-level `concurrency:` (AGENTS.md): it is per workflow folder, at job level.
 
@@ -21,6 +24,15 @@ on:
         description: 'Workflow folders, comma separated (empty = all with a jupyter test)'
         required: false
         default: ''
+      brew:
+        description: 'Homebrew formulae to install first, space separated (to test a workaround, e.g. gcc)'
+        required: false
+        default: ''
+      ignore_skip:
+        description: 'Run the named workflows even if they have tests/jupyter/MACOS_SKIP'
+        type: boolean
+        required: false
+        default: false
   push:
     paths:
       - 'common/macos/**'
@@ -46,6 +58,7 @@ jobs:
         env:
           EVENT: ${{ github.event_name }}
           WANTED: ${{ inputs.wf_names }}
+          IGNORE_SKIP: ${{ inputs.ignore_skip && 'yes' || '' }}
         run: |
           python3 - <<'PY'
           import json, os, sys
@@ -61,7 +74,7 @@ jobs:
           out = []
           for w in names or have:
               skip = f"{w}/tests/jupyter/MACOS_SKIP"
-              if os.path.exists(skip):
+              if os.path.exists(skip) and not (names and os.environ.get("IGNORE_SKIP")):
                   print(f"::warning::{w} opted out of the macOS check: {open(skip).readline().strip()}")
                   continue
               out.append(w)
@@ -86,6 +99,18 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
+      - name: Install Homebrew formulae (tests/jupyter/MACOS_BREW, input brew)
+        env:
+          BREW: ${{ inputs.brew }}
+          WF: ${{ matrix.wf }}
+        run: |
+          f="$WF/tests/jupyter/MACOS_BREW"
+          pkgs="$BREW"
+          [[ -f "$f" ]] && pkgs="$pkgs $(grep -v '^#' "$f" | tr '\n' ' ')"
+          pkgs="$(echo $pkgs)"
+          if [[ -z "$pkgs" ]]; then echo "nothing to install"; exit 0; fi
+          echo "::notice::$WF: brew install $pkgs (what the tutorial README asks Mac users to do)"
+          brew install $pkgs
       - name: Run the notebook on macOS
         env:
           NB_ARTIFACT_DIR: ${{ runner.temp }}/executed
