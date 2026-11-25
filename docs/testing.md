@@ -544,7 +544,7 @@ expected); dna_helparms, haddock and virtual-screening get past the imports and 
 | PASS, native arm64 conda | amber_abc_setup, amber_md_setup, flexserv, godmd, ligand_parameterization, md_setup, mem, pmx_tutorial, protein-complex_md_setup |
 | FAIL: `reduce: command not found` (AmberTools 26, §1.5b); env only installs with the Intel conda | structure_checking |
 | FAIL: Vina "PDBQT parsing error" (Open Babel 3.2.1, §1.5b) | virtual-screening_fpocket |
-| FAIL: CNS "Library not loaded: /opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib" | haddock → `MACOS_SKIP` |
+| FAIL: CNS "Library not loaded: /opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib" | haddock → PASS with `brew install gcc` (`MACOS_BREW`) |
 | not run: "job was not acquired" (GitHub macOS arm64 capacity, not a test result) | amber_md_setup_lig, autoencoder, dna_helparms, flexdyn |
 
 - haddock: `biobb_haddock 5.3.3` needs `haddock_biobb ==2025.11`. Its current recipe
@@ -552,9 +552,14 @@ expected); dna_helparms, haddock and virtual-screening get past the imports and 
   arm64 only, `x86_64-darwin.bin` included, and link Homebrew's libquadmath). On a Mac,
   conda silently falls back to the old noarch build `haddock_biobb-2025.11-pyhdfd78af_0`,
   which installs and then fails at the first CNS step (the later haddock3 "division by
-  zero" only means no models came out). Decision 2026-11-25: haddock is Linux-only, so
-  `tests/jupyter/MACOS_SKIP`, a note in the tutorial README, and a request to bioconda to
-  mark the old noarch build broken (so a Mac gets a clear solve error).
+  zero" only means no models came out).
+  Decision 2026-11-25: `brew install gcc` first is enough (run 45580641026: the whole
+  notebook passes on arm64 with build 0 and Homebrew gcc 16.2.0). So the tutorial README
+  tells Mac users to run it, `tests/jupyter/MACOS_BREW` (`gcc`) makes the weekly check do
+  the same (replaces the first day's `MACOS_SKIP`), and the request to bioconda to mark
+  build 0 broken (bioconda-recipes#72215) was withdrawn: it would remove the only Mac
+  route. Lasting fix, not done: an osx build of `haddock_biobb` that uses conda-forge's
+  `libgfortran` (it ships `libquadmath`) via `install_name_tool`, so no Homebrew is needed.
 - Quiet failures: the haddock3 and Vina wrappers log "exit code 1" without raising; the
   notebook only fails later on a missing file (often as nglview's misleading "you must
   provide file extension"). `report_executed` lists those earlier cells.

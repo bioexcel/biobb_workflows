@@ -1,6 +1,0 @@
-haddock_biobb (HADDOCK3) is Linux-only: its bundled macOS CNS binaries are arm64 only and link Homebrew's libquadmath, so CNS cannot run in a conda env on a Mac
-Found by the macOS check, run 45417825057 (2026-11-24): on macOS conda falls back to the old
-noarch build haddock_biobb-2025.11-pyhdfd78af_0; its CNS fails with "Library not loaded:
-/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib". The current recipe (build 1)
-skips osx on purpose. The tutorial README says macOS is not supported. Remove this file
-only if a haddock_biobb build for osx-arm64 exists again.

@@ -8,8 +8,10 @@ name: macOS notebooks
 #
 # When: weekly round, Sunday (docs/ci.md §1.1c); by hand (wf_names); on a push touching
 # the check itself: two workflows only (canary).
-# A wf opts out with tests/jupyter/MACOS_SKIP (first line = reason); by hand, ignore_skip
-# runs the named wfs anyway and brew installs Homebrew formulae first (workaround tests).
+# A wf opts out with tests/jupyter/MACOS_SKIP (first line = reason). A wf whose README
+# asks Mac users to install Homebrew formulae lists them in tests/jupyter/MACOS_BREW (one
+# per line, # comments), installed before the run. By hand: ignore_skip runs the named wfs
+# anyway, brew installs extra formulae first (to test a workaround).
 # macOS runners: at most 5 jobs at a time on this account (max-parallel below).
 # No workflow-level `concurrency:` (AGENTS.md): it is per workflow folder, at job level.
 
@@ -97,13 +99,18 @@ jobs:
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v4
-      - name: Install Homebrew formulae (workaround test)
-        if: inputs.brew != ''
+      - name: Install Homebrew formulae (tests/jupyter/MACOS_BREW, input brew)
         env:
           BREW: ${{ inputs.brew }}
+          WF: ${{ matrix.wf }}
         run: |
-          echo "::notice::workaround test: brew install $BREW"
-          brew install $BREW
+          f="$WF/tests/jupyter/MACOS_BREW"
+          pkgs="$BREW"
+          [[ -f "$f" ]] && pkgs="$pkgs $(grep -v '^#' "$f" | tr '\n' ' ')"
+          pkgs="$(echo $pkgs)"
+          if [[ -z "$pkgs" ]]; then echo "nothing to install"; exit 0; fi
+          echo "::notice::$WF: brew install $pkgs (what the tutorial README asks Mac users to do)"
+          brew install $pkgs
       - name: Run the notebook on macOS
         env:
           NB_ARTIFACT_DIR: ${{ runner.temp }}/executed

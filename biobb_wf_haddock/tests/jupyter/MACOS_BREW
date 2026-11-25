@@ -1,0 +1,6 @@
+# Homebrew formulae installed before the macOS notebook check (macos-notebooks.yaml),
+# because the tutorial README asks Mac users to install them. One per line.
+# gcc: the CNS binary bundled with haddock3 (haddock_biobb noarch build 0, the only one
+# conda finds on a Mac) links /opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib.
+# Tested 2026-11-25, run 45580641026: the notebook passes. docs/testing.md §2.5.
+gcc

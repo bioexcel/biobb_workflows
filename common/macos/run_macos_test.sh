@@ -74,6 +74,19 @@ conda_for() {  # arm64|x86_64 -> path of a conda executable (installs Miniconda 
   echo "$CONDA_HOME/$arch/bin/conda"
 }
 
+# Homebrew formulae the tutorial README asks Mac users to install (CI installs them first;
+# here we only check, never install on someone's Mac)
+BREW_FILE="$REPO_ROOT/$WF/tests/jupyter/MACOS_BREW"
+if [[ -f "$BREW_FILE" ]]; then
+  for f in $(grep -v '^#' "$BREW_FILE"); do
+    if command -v brew >/dev/null && brew list --versions "$f" >/dev/null 2>&1; then
+      echo "  Homebrew $f: installed (tests/jupyter/MACOS_BREW)"
+    else
+      echo "::warning::$WF needs Homebrew '$f' (tests/jupyter/MACOS_BREW): brew install $f"
+    fi
+  done
+fi
+
 echo ">>> [1/5] clone $NB_REPO_URL (as the README says)"
 rm -rf "$WORK"; mkdir -p "$WORK"
 git clone --quiet --depth 1 "$NB_REPO_URL" "$WORK/repo"
