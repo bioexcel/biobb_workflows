@@ -531,8 +531,36 @@ expected); dna_helparms, haddock and virtual-screening get past the imports and 
   Proposal for the release: make them automatic with `if 'google.colab' in sys.modules:`
   (as flexdyn's `prefix` lines already do), so no manual edit is needed;
 - virtual-screening: the Vina output viewer gets no file (`nglview ... you must provide
-  file extension`): the docking step left no `output_vina_pdbqt`; to investigate (the
-  Vina/Open Babel drift case of §1.5b is a candidate).
+  file extension`): the docking step left no `output_vina_pdbqt`. Confirmed on macOS
+  (§2.5): Vina stops with "PDBQT parsing error ... COMPND", the Open Babel 3.2.1 case of
+  §1.5b; fix at the release (pin `openbabel 3.1.1`).
+
+### 2.5 macOS check (2026-11-24, run 45417825057)
+
+`macos-notebooks.yaml` (docs/ci.md §1.1g), GitHub's Apple Silicon runner, first full round:
+
+| Result | Workflows |
+|---|---|
+| PASS, native arm64 conda | amber_abc_setup, amber_md_setup, flexserv, godmd, ligand_parameterization, md_setup, mem, pmx_tutorial, protein-complex_md_setup |
+| FAIL: `reduce: command not found` (AmberTools 26, §1.5b); env only installs with the Intel conda | structure_checking |
+| FAIL: Vina "PDBQT parsing error" (Open Babel 3.2.1, §1.5b) | virtual-screening_fpocket |
+| FAIL: CNS "Library not loaded: /opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib" | haddock → `MACOS_SKIP` |
+| not run: "job was not acquired" (GitHub macOS arm64 capacity, not a test result) | amber_md_setup_lig, autoencoder, dna_helparms, flexdyn |
+
+- haddock: `biobb_haddock 5.3.3` needs `haddock_biobb ==2025.11`. Its current recipe
+  (build 1) is linux-64 only (`skip: true  # [osx]`: the bundled macOS CNS binaries are
+  arm64 only, `x86_64-darwin.bin` included, and link Homebrew's libquadmath). On a Mac,
+  conda silently falls back to the old noarch build `haddock_biobb-2025.11-pyhdfd78af_0`,
+  which installs and then fails at the first CNS step (the later haddock3 "division by
+  zero" only means no models came out). Decision 2026-11-25: haddock is Linux-only, so
+  `tests/jupyter/MACOS_SKIP`, a note in the tutorial README, and a request to bioconda to
+  mark the old noarch build broken (so a Mac gets a clear solve error).
+- Quiet failures: the haddock3 and Vina wrappers log "exit code 1" without raising; the
+  notebook only fails later on a missing file (often as nglview's misleading "you must
+  provide file extension"). `report_executed` lists those earlier cells.
+- Logs: a job's log is readable while the run goes on
+  (`gh api --allow-escape-sequences repos/bioexcel/biobb_workflows/actions/jobs/<id>/logs`);
+  the executed notebook of a failed job is the artifact `<wf>-macos-executed`.
 
 ## 3. Phase 2 plan: scale to all workflows + wire into CI
 

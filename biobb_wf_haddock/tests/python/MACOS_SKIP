@@ -4,8 +4,11 @@ CNS binary runs but writes no rigidbody PDBs, so caprieval fails with
 
 The haddock3 version is pinned by biobb_haddock 5.3.3 (haddock_biobb 2025.11),
 and the CNS binary ships inside the haddock3 PyPI package
-(haddock/cns/bin/arm64-darwin.bin). Upstream issue: needs reproducing locally
-to capture the CNS stderr (CI runs with --remove, no artifacts left).
+(haddock/cns/bin/arm64-darwin.bin). Cause found 2026-11-24 by the macOS notebook
+check (docs/testing.md §2.5): the CNS binary links Homebrew's
+/opt/homebrew/opt/gcc/lib/gcc/current/libquadmath.0.dylib ("Library not loaded").
+The current haddock_biobb recipe (build 1) is linux-64 only on purpose; on a Mac conda
+falls back to the old noarch build 0 (asked bioconda to mark it broken).
 
 Opts this workflow out of the macOS CI lane only (python-tests.yaml, via the
 detect job); the ubuntu-latest lane and all container flavours are unaffected.

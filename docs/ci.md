@@ -166,7 +166,7 @@ the submodule pointer). Mac platforms are solved from Linux with `CONDA_SUBDIR` 
   - Colab's Ubuntu, Python minor version or runtime list changed;
   - `ubuntu-latest`'s Ubuntu, Python minor version or glibc changed.
 - **expected** (listed, never alarming):
-  - osx-* for a wf with `tests/python/MACOS_SKIP`;
+  - osx-* for a wf with `tests/python/MACOS_SKIP` (python env) or `tests/jupyter/MACOS_SKIP` (jupyter env);
   - osx-arm64 when osx-64 solves (CI and Mac users fall back to Rosetta).
 
 **Issue "Drift: daily check"** (label `drift`; set the repo variable `DRIFT_ASSIGNEE` to a
