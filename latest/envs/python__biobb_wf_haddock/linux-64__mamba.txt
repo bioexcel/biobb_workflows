@@ -55,7 +55,7 @@ libxml2-16 2.15.4 hbdfff7e_1 conda-forge
 libzlib 1.3.2 h25fd6f3_3 conda-forge
 llvm-openmp 23.1.6 h7148c6a_0 conda-forge
 markupsafe 3.0.4 py313h2af15c8_5 conda-forge
-mkl 2026.1.0 hd2095e1_246 conda-forge
+mkl 2026.2.1 hd2095e1_11 conda-forge
 mpc 1.4.1 ha2cb11d_0 conda-forge
 mpfr 4.2.2 ha2cb11d_1 conda-forge
 mpmath 1.4.1 pyhd8ed1ab_0 conda-forge
@@ -67,7 +67,7 @@ numpy 2.5.5 py313hb5f73ae_1 conda-forge
 onednn 3.14.2 omp_h64ed1e9_1 conda-forge
 openssl 3.6.5 h781a0a9_0 conda-forge
 optree 0.20.0 py313h6bdb861_3 conda-forge
-packaging 26.3 pyhc364b38_0 conda-forge
+packaging 26.4 pyhc364b38_0 conda-forge
 pandas 2.3.3 py313h08cd8bf_2 conda-forge
 pathspec 1.1.1 pyhd8ed1ab_0 conda-forge
 pdb-tools 2.7.1 pyh5ded981_0 conda-forge
@@ -92,7 +92,7 @@ rpds-py 2026.9.1 py313ha296275_0 conda-forge
 scikit-build-core 1.1.2 pyhcb39dcd_0 conda-forge
 scipy 1.18.1 py313hb5f73ae_4 conda-forge
 setuptools 84.2.1 pyhe730653_0 conda-forge
-sleef 3.9.0 ha0421bc_0 conda-forge
+sleef 3.9.0 h8b5b50b_1 conda-forge
 sortedcontainers 2.4.0 pyhd8ed1ab_1 conda-forge
 sympy 1.14.0 pyh2585a3b_106 conda-forge
 tbb 2023.2.0 haa8c3ee_0 conda-forge

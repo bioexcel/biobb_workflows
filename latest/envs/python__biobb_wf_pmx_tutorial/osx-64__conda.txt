@@ -134,7 +134,7 @@ opencl-headers 2025.06.13 hcc62823_0 conda-forge
 openjpeg 2.5.4 he4eae51_1 conda-forge
 openldap 2.6.13 h2f5043c_0 conda-forge
 openssl 3.6.5 h332eb6d_0 conda-forge
-packaging 26.3 pyhc364b38_0 conda-forge
+packaging 26.4 pyhc364b38_0 conda-forge
 pandas 2.3.3 py312h86abcb1_2 conda-forge
 parmed 4.3.1 py312h651baad_1 conda-forge
 pcre2 10.49 h31793e3_0 conda-forge
@@ -161,7 +161,7 @@ qhull 2020.2 h15054a0_6 conda-forge
 rdkit 2026.03.5 py312h6ccd692_0 conda-forge
 readline 8.3 h000c2f7_1 conda-forge
 referencing 0.37.0 pyhcf101f3_0 conda-forge
-reportlab 5.1.0 pyh5ded981_0 conda-forge
+reportlab 5.1.1 pyh5ded981_0 conda-forge
 requests 2.34.2 pyhcf101f3_0 conda-forge
 rich 15.0.0 pyhcf101f3_0 conda-forge
 rlpycairo 0.4.0 pyh6c17108_0 conda-forge

@@ -134,7 +134,7 @@ matplotlib-base 3.11.2 py312hfe9aac7_1 conda-forge
 mda-xdrlib 0.2.0 pyhd8ed1ab_1 conda-forge
 mdanalysis 2.11.0 np2py312h748b537_1 conda-forge
 mdurl 0.1.2 pyhd8ed1ab_1 conda-forge
-mkl 2026.1.0 hd2095e1_246 conda-forge
+mkl 2026.2.1 hd2095e1_11 conda-forge
 mmtf-python 1.1.3 pyhd8ed1ab_0 conda-forge
 mpc 1.4.1 ha2cb11d_0 conda-forge
 mpfr 4.2.2 ha2cb11d_1 conda-forge
@@ -153,7 +153,7 @@ numpy 2.2.6 py312h72c5963_0 conda-forge
 openbabel 3.2.1 py312hfeebd6e_1 conda-forge
 openjpeg 2.5.4 heb1ab33_2 conda-forge
 openssl 3.6.5 h781a0a9_0 conda-forge
-packaging 26.3 pyhc364b38_0 conda-forge
+packaging 26.4 pyhc364b38_0 conda-forge
 pandas 3.1.1 np2py312h91ec553_0 conda-forge
 parmed 4.3.1 py312he864675_1 conda-forge
 patsy 1.0.3 pyhcf101f3_0 conda-forge
@@ -192,7 +192,7 @@ seaborn 0.13.2 hd8ed1ab_3 conda-forge
 seaborn-base 0.13.2 pyhd8ed1ab_3 conda-forge
 setuptools 84.2.1 pyhe730653_0 conda-forge
 shellingham 1.5.4 pyhd8ed1ab_2 conda-forge
-snappy 1.3.1 h7edda9a_1 conda-forge
+snappy 1.3.1 h7edda9a_2 conda-forge
 statsmodels 0.15.0 np2py312h32d774f_2 conda-forge
 sympy 1.14.0 pyh2585a3b_106 conda-forge
 tbb 2023.2.0 haa8c3ee_0 conda-forge

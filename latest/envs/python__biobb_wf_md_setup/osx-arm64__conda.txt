@@ -132,7 +132,7 @@ openbabel 3.2.1 py312hfbd7681_1 conda-forge
 opencl-headers 2025.06.13 hf6b4638_0 conda-forge
 openjpeg 2.5.4 h4d1e80c_2 conda-forge
 openssl 3.6.5 h55eecbc_0 conda-forge
-packaging 26.3 pyhc364b38_0 conda-forge
+packaging 26.4 pyhc364b38_0 conda-forge
 pandas 3.1.1 np2py312ha2f16c6_0 conda-forge
 parmed 4.3.1 py312hc8151c1_1 conda-forge
 pcre2 10.49 he63d830_0 conda-forge

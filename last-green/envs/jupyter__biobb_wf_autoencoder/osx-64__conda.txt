@@ -201,7 +201,7 @@ openjpeg 2.5.4 he4eae51_1 conda-forge
 openssl 3.6.5 h332eb6d_0 conda-forge
 optree 0.20.0 py312hababfa3_3 conda-forge
 overrides 7.7.0 pyhd8ed1ab_1 conda-forge
-packaging 26.3 pyhc364b38_0 conda-forge
+packaging 26.4 pyhc364b38_0 conda-forge
 pandas 3.1.1 np2py312h3da1a71_0 conda-forge
 pandocfilters 1.5.1 pyh5ded981_0 conda-forge
 parmed 4.3.1 py312h651baad_1 conda-forge

@@ -209,7 +209,7 @@ opencl-headers 2025.06.13 hf6b4638_0 conda-forge
 openjpeg 2.5.4 h4d1e80c_2 conda-forge
 openssl 3.6.5 h55eecbc_0 conda-forge
 overrides 7.7.0 pyhd8ed1ab_1 conda-forge
-packaging 26.3 pyhc364b38_0 conda-forge
+packaging 26.4 pyhc364b38_0 conda-forge
 pandas 3.1.1 np2py312ha2f16c6_0 conda-forge
 pandocfilters 1.5.1 pyh5ded981_0 conda-forge
 parmed 4.3.1 py312hc8151c1_1 conda-forge
@@ -222,7 +222,7 @@ pillow 13.0.0 py312h20572eb_1 conda-forge
 pip 26.2.2 pyh8b19718_2 conda-forge
 pixman 0.46.4 h784d473_3 conda-forge
 platformdirs 4.14.8 pyh5ded981_0 conda-forge
-plotly 7.1.0 pyhd8ed1ab_0 conda-forge
+plotly 7.2.0 pyhd8ed1ab_0 conda-forge
 pooch 1.9.0 pyhd8ed1ab_0 conda-forge
 prometheus_client 0.26.0 pyhd8ed1ab_0 conda-forge
 prompt-toolkit 3.0.53 pyha770c72_0 conda-forge

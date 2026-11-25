@@ -100,7 +100,7 @@ numpy 2.5.5 py312h722b997_1 conda-forge
 openbabel 3.1.1 py312h38d6ea8_9 conda-forge
 openjpeg 2.5.4 he4eae51_1 conda-forge
 openssl 3.6.5 h332eb6d_0 conda-forge
-packaging 26.3 pyhc364b38_0 conda-forge
+packaging 26.4 pyhc364b38_0 conda-forge
 pandas 3.1.1 np2py312h3da1a71_0 conda-forge
 parmed 4.3.1 py312h651baad_1 conda-forge
 pcre2 10.49 h31793e3_0 conda-forge

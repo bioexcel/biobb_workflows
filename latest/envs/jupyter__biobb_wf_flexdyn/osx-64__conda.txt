@@ -139,7 +139,7 @@ ocl_icd_wrapper_apple 1.0.0 hbcb3906_0 conda-forge
 opencl-headers 2025.06.13 hcc62823_0 conda-forge
 openssl 3.6.5 h332eb6d_0 conda-forge
 overrides 7.7.0 pyhd8ed1ab_1 conda-forge
-packaging 26.3 pyhc364b38_0 conda-forge
+packaging 26.4 pyhc364b38_0 conda-forge
 pandas 2.3.3 py312h86abcb1_2 conda-forge
 pandocfilters 1.5.1 pyh5ded981_0 conda-forge
 parso 0.8.7 pyhcf101f3_0 conda-forge
@@ -148,7 +148,7 @@ perl 5.32.1 10_hd115831_perl5 conda-forge
 pexpect 4.9.0 pyhd8ed1ab_1 conda-forge
 pip 26.2.2 pyh8b19718_2 conda-forge
 platformdirs 4.14.8 pyh5ded981_0 conda-forge
-plotly 7.1.0 pyhd8ed1ab_0 conda-forge
+plotly 7.2.0 pyhd8ed1ab_0 conda-forge
 prody 2.6.1 py312hd63087c_0 conda-forge
 prometheus_client 0.26.0 pyhd8ed1ab_0 conda-forge
 prompt-toolkit 3.0.53 pyha770c72_0 conda-forge

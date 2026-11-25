@@ -186,7 +186,7 @@ openjpeg 2.5.4 h4d1e80c_2 conda-forge
 openssl 3.6.5 h55eecbc_0 conda-forge
 optree 0.20.0 py312h1178310_3 conda-forge
 overrides 7.7.0 pyhd8ed1ab_1 conda-forge
-packaging 26.3 pyhc364b38_0 conda-forge
+packaging 26.4 pyhc364b38_0 conda-forge
 pandas 3.1.1 np2py312ha2f16c6_0 conda-forge
 pandocfilters 1.5.1 pyh5ded981_0 conda-forge
 parmed 4.3.1 py312hc8151c1_1 conda-forge
@@ -198,7 +198,7 @@ pexpect 4.9.0 pyhd8ed1ab_1 conda-forge
 pillow 13.0.0 py312h20572eb_1 conda-forge
 pip 26.2.2 pyh8b19718_2 conda-forge
 platformdirs 4.14.8 pyh5ded981_0 conda-forge
-plotly 7.1.0 pyhd8ed1ab_0 conda-forge
+plotly 7.2.0 pyhd8ed1ab_0 conda-forge
 pluggy 1.7.0 pyh5ded981_0 conda-forge
 prometheus_client 0.26.0 pyhd8ed1ab_0 conda-forge
 prompt-toolkit 3.0.53 pyha770c72_0 conda-forge
@@ -261,7 +261,7 @@ toml 0.10.2 pyhcf101f3_3 conda-forge
 tomli 2.5.0 pyh5ded981_0 conda-forge
 tomli-w 1.2.0 pyhd8ed1ab_0 conda-forge
 tornado 6.6.1 py312h4de8a2e_1 conda-forge
-tox 4.67.15 pyh5ded981_0 conda-forge
+tox 4.67.16 pyh5ded981_0 conda-forge
 traitlets 5.16.1 pyhcf101f3_0 conda-forge
 typing-extensions 4.16.0 h69aa097_0 conda-forge
 typing-inspection 0.4.5 pyh5ded981_0 conda-forge
