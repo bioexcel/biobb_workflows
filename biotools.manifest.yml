@@ -13,8 +13,8 @@
 # out), skip: true (never touched), fix_urls (outdated URLs found by --check-links: old: new
 # replaces it in homepage/link/download/documentation, old: null removes it).
 #
-# Editing rights (2026-11-24): the job's account (`gbayarri`) can edit all 20 entries (2
-# its own; the other 18 belong to Adam Hospital's account, which added it as an editor:
+# Editing rights (2026-11-24): the job's account (the bio.tools user of BIOTOOLS_TOKEN) can
+# edit all 20 entries (2 its own; the other 18 belong to another account, which added it as an editor:
 # bio.tools entry -> Update -> Permissions). The DNA entry's check-only address is blocked
 # by the SDU firewall; the script saves it without that check (see biotools_update.py).
 entries:
