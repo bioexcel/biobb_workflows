@@ -18,9 +18,10 @@ name: Drift triage
 # red comment (workflow_call), or by hand.
 
 on:
-  # TEMPORARY (remove before merging): test runs from the setup branch
-  push:
-    branches: [drift-triage-setup]
+  # TEMPORARY (remove before merging): test runs from the setup PR (the action does not
+  # accept push events; workflow_dispatch needs the file on main)
+  pull_request:
+    paths: ['.github/workflows/drift-triage.yaml']
   workflow_dispatch:
     inputs:
       run_id:
@@ -61,9 +62,9 @@ permissions:
 
 env:
   # TEMPORARY push fallbacks (remove before merging)
-  RUN_IDS: ${{ inputs.run_id || (github.event_name == 'push' && '43861222321') || '' }}
-  ISSUE: ${{ inputs.issue || (github.event_name == 'push' && '4') || '' }}
-  PREPARE_FIX: ${{ inputs.prepare_fix || (github.event_name == 'push' && 'false') || 'false' }}
+  RUN_IDS: ${{ inputs.run_id || (github.event_name == 'pull_request' && '43861222321') || '' }}
+  ISSUE: ${{ inputs.issue || (github.event_name == 'pull_request' && '4') || '' }}
+  PREPARE_FIX: ${{ inputs.prepare_fix || (github.event_name == 'pull_request' && 'false') || 'false' }}
 
 jobs:
   analyse:
