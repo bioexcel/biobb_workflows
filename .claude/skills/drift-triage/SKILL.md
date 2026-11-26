@@ -38,9 +38,9 @@ language: say what broke, why, what you propose, how sure you are.
 
    | Cause | Signals | Usual fix |
    | --- | --- | --- |
-   | A conda package changed upstream | the daily check's "changed since the last all-green day" lists a package used by the failing step; errors like exit code 127 (binary gone), ImportError, changed CLI/API; several workflows sharing that package fail together | pin the package (or a build) in the env files, or move to a fixed biobb version. Check the package's changelog / feedstock first |
+   | A conda package changed upstream | the daily check's "Changed since the last good day" table lists a package used by the failing step; errors like exit code 127 (binary gone), ImportError, changed CLI/API; several workflows sharing that package fail together | pin the package (or a build) in the env files, or move to a fixed biobb version. Check the package's changelog / feedstock first |
    | GitHub's machine changed | runner change in the daily check (Ubuntu, Python, glibc); errors about wheels, compilers, glibc, executable stack; only pip/container mode or only one OS fails | a CI-side line: `.github/workflows/*.yaml`, `tests/*/run_*.sh` (e.g. setup-python, CFLAGS) |
-   | conda tools disagree | daily check "tools disagree"; only micromamba or mamba fails | usually document only; pin if users are affected (mamba = the Colab cell) |
+   | conda tools disagree | daily check table "conda, mamba and micromamba pick different versions", or "installs with … but not with …"; only micromamba or mamba fails | usually document only; pin if users are affected (mamba = the Colab cell) |
    | Colab changed | daily check Colab change (Python, Ubuntu, runtime list, image tag); a red `colab-check.yaml` job whose first error is an ImportError of a compiled module from `/usr/local/miniforge/envs/<env>/lib/python3.X/` (env Python ≠ Colab's) | the notebooks' Colab cell, in the jupyter repos: propose only, the user decides. Test the proposal first with `gh workflow run colab-check.yaml -f try_python_fix=true` (docs/ci.md §1.1f) |
    | External service or data | downloads from RCSB/PDB/MMB APIs, HTTP 5xx, timeouts, DNS; fails once, passes on re-run | re-run; report if it persists |
    | GitHub capacity | "job was not acquired", cancelled macOS jobs | re-run, nothing to fix |
