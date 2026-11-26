@@ -3,11 +3,11 @@
 #
 #   update_issue.sh TITLE BODY_FILE COMMENT_FILE RED NOTABLE RUN_URL
 #
-#   RED > 0      open the issue (create or reopen), refresh its body, and comment
-#                only if NOTABLE=true (something changed since the last run)
-#   RED == 0     if open: refresh body, comment (COMMENT_FILE or "all green"), close
-#                if not open and NOTABLE=true: comment on the closed issue (create it
-#                and close it at once if it never existed)
+#   RED > 0      open the issue (create or reopen), refresh its body, and comment only if
+#                NOTABLE=true (something newly broke: needs action). Each comment emails the
+#                assignee, so nothing else comments.
+#   RED == 0     refresh the body of the existing issue and close it if open, WITHOUT a
+#                comment (the user wants mail only when something needs fixing)
 #
 # Env: GH_TOKEN, REPO (owner/name), optional ASSIGNEE (login to assign on creation,
 # which makes GitHub notify that person). Label: drift.
@@ -37,23 +37,10 @@ if [ "$red" -gt 0 ]; then
       gh issue comment "$num" --repo "$REPO" --body-file "$comment"
     fi
   fi
-elif [ "$state" = OPEN ]; then
+elif [ -n "$num" ]; then
+  # all good: keep the text current, close quietly (no comment, no mail)
   gh issue edit "$num" --repo "$REPO" --body-file "$body" >/dev/null
-  if [ -s "$comment" ]; then
-    gh issue comment "$num" --repo "$REPO" --body-file "$comment"
-  else
-    gh issue comment "$num" --repo "$REPO" --body "### 🟢 All green again ([run]($run_url))"
-  fi
-  gh issue close "$num" --repo "$REPO"
-elif [ "$notable" = true ] && [ -s "$comment" ]; then
-  if [ -z "$num" ]; then
-    num=$(create)
-    gh issue comment "$num" --repo "$REPO" --body-file "$comment"
-    gh issue close "$num" --repo "$REPO"
-  else
-    gh issue edit "$num" --repo "$REPO" --body-file "$body" >/dev/null
-    gh issue comment "$num" --repo "$REPO" --body-file "$comment"
-  fi
+  if [ "$state" = OPEN ]; then gh issue close "$num" --repo "$REPO"; fi
 else
   echo "nothing to report on \"$title\""
 fi

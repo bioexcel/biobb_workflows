@@ -51,6 +51,7 @@ def nice_date(iso):
     except ValueError:
         return iso[:10]
 BAD = {"failure", "timed_out", "startup_failure"}
+BOT_STARTED = {"colab-check.yaml"}  # also counts its runs started by drift-daily.yaml
 
 
 def gh(*args):
@@ -59,8 +60,14 @@ def gh(*args):
 
 
 def runs(repo, wf, event, n=2):
+    fields = "databaseId,conclusion,status,createdAt,url"
     rs = gh("run", "list", "--repo", repo, "--workflow", wf, "--event", event, "--limit", "10",
-            "--json", "databaseId,conclusion,status,createdAt,url")
+            "--json", fields)
+    if wf in BOT_STARTED and event == "schedule":
+        # the daily check starts the Colab check by itself when Colab changes
+        rs += gh("run", "list", "--repo", repo, "--workflow", wf, "--event", "workflow_dispatch",
+                 "--user", "github-actions[bot]", "--limit", "10", "--json", fields)
+        rs.sort(key=lambda r: r["createdAt"], reverse=True)
     return [r for r in rs if r["status"] == "completed"][:n]
 
 
@@ -103,17 +110,17 @@ def main():
             prev_failed = jobs(args.repo, rs[1]["databaseId"])[0] if len(rs) > 1 else {}
             new = sorted(set(failed) - set(prev_failed))
             fixed = sorted(set(prev_failed) - set(failed))
-            if new or fixed or len(rs) == 1 and failed:
-                icon = "🔴" if failed else "🟢"
-                comment.append(f"### {icon} {what} ({day} {nice_date(rs[0]['createdAt'])}): "
-                               f"what changed since last week — [run]({rs[0]['url']})\n")
-                if new:
-                    comment.append("**Now failing**: " + links({n: failed[n] for n in new}) + "\n")
-                if fixed:
-                    comment.append("**Passing again**: " + ", ".join(short_name(n) for n in fixed) + "\n")
+            if len(rs) == 1 and failed:
+                new = sorted(failed)
+            if new:  # only a NEW failure comments (each comment emails the user)
+                comment.append(f"### 🔴 {what}: something needs fixing — [run]({rs[0]['url']})\n")
+                comment.append("These tests passed last time and fail now: " +
+                               links({n: failed[n] for n in new}) + "\n")
                 still = sorted(set(failed) & set(prev_failed))
                 if still:
-                    comment.append("Still failing: " + ", ".join(short_name(n) for n in still) + "\n")
+                    comment.append("Already failing before (no change): " +
+                                   ", ".join(short_name(n) for n in still) + "\n")
+                comment.append("Claude will add its explanation and a proposed fix below in a few minutes.\n")
 
     n_fail_flavours = sum(1 for r in rows if r[4])
     head = (f"## 🔴 Last weekly round: {total_failed} test{'s' if total_failed != 1 else ''} failing"
