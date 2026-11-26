@@ -1,10 +1,9 @@
 biobb_structure_utils==5.3.0
-biobb_chemistry==5.3.0
-biobb_analysis==5.3.0
-biobb_io==5.3.1
+biobb_chemistry==5.3.2
+biobb_analysis==5.3.1
+biobb_io==5.3.2
 biobb_model==5.3.0
 biobb_gromacs==5.3.2
 jupyter
 plotly
-nglview<=4.0
-mdanalysis
+molviewspec>=1.8

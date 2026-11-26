@@ -1,7 +1,7 @@
 # OK
 _openmp_mutex 4.5 20_gnu conda-forge
 _python_abi3_support 1.0 hd8ed1ab_3 conda-forge
-acpype 2026.10.15 pyhd8ed1ab_0 conda-forge
+acpype 2026.11.25 pyhd8ed1ab_0 conda-forge
 ambertools 23.6 cuda_None_nompi_py312h41aabf6_105 conda-forge
 annotated-doc 0.0.7 pyh5ded981_0 conda-forge
 annotated-types 0.8.0 pyhd8ed1ab_0 conda-forge

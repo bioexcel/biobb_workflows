@@ -2,8 +2,8 @@ biobb_pytorch==5.3.0
 biobb_analysis==5.3.0
 biobb_gromacs==5.3.2
 biobb_io==5.3.1
+jupyter
 numpy
-nglview<=4.0
-ipywidgets
+molviewspec>=1.8
 requests
 matplotlib

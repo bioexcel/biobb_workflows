@@ -1,6 +1,6 @@
 # OK
 _python_abi3_support 1.0 hd8ed1ab_3 conda-forge
-acpype 2026.10.15 pyhd8ed1ab_0 conda-forge
+acpype 2026.11.25 pyhd8ed1ab_0 conda-forge
 ambertools 24.8 cuda_None_nompi_py312h9f183f7_101 conda-forge
 annotated-doc 0.0.7 pyh5ded981_0 conda-forge
 annotated-types 0.8.0 pyhd8ed1ab_0 conda-forge
