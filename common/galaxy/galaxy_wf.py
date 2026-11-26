@@ -160,9 +160,15 @@ def api(server, method, path, payload=None):
     data = json.dumps(payload).encode() if payload is not None else None
     req = urllib.request.Request(f"{server}/api/{path}", data=data, method=method,
                                  headers={**UA, "x-api-key": key, "Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=120) as r:
-        body = r.read().decode()
-        return json.loads(body) if body.strip() else {}
+    try:
+        with urllib.request.urlopen(req, timeout=120) as r:
+            body = r.read().decode()
+            return json.loads(body) if body.strip() else {}
+    except urllib.error.HTTPError as e:
+        # Galaxy explains a refusal in the body (e.g. which tool versions are missing)
+        detail = e.read().decode(errors="replace")[:4000]
+        print(f"::error::{method} /api/{path}: HTTP {e.code}: {detail}")
+        raise
 
 
 def cmd_run(args):
@@ -199,7 +205,7 @@ def cmd_run(args):
                     failed += 1
                     break
                 if state == "scheduled" and not busy:
-                    print(f"  all jobs finished OK")
+                    print("  all jobs finished OK")
                     break
                 if time.time() > deadline:
                     print(f"::error::{os.path.relpath(f, ROOT)}: timeout after {args.timeout} min")
