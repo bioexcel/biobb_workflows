@@ -258,6 +258,18 @@ def fmt_key(key):
     return f"**{label(env)}** on {PLATFORM.get(platform, platform)}{tool}"
 
 
+def impact(key):
+    """What a failing solve breaks, in plain words."""
+    env, platform, solver = key
+    tut = env.startswith("jupyter__")
+    if solver == "mamba":
+        return "the tutorial's Colab cell (it installs with mamba)"
+    if platform == "linux-64":
+        return ("the tutorial for users on Linux and its tests" if tut
+                else "the CI tests, the Docker image build and users on Linux")
+    return f"{'the tutorial' if tut else 'the workflow'} for users on {PLATFORM.get(platform, platform)} and the Mac checks"
+
+
 def short(reason):
     reason = (reason or "").replace("|", "/").replace("\n", " ")
     return reason if len(reason) <= MAX_REASON else reason[:MAX_REASON] + " …"
@@ -459,39 +471,24 @@ def main():
           "comments say what changed and when. How it works: `docs/ci.md` §1.1d.</sub>", ""]
     body = "\n".join(b)
 
-    # ---------------- comment: only what changed today ----------------
+    # ---------------- comment: only when something newly broke (it emails the user) ----------------
     c = []
     if new_red:
-        c += ["**No longer installs**", ""] + [f"- {fmt_key(k)}: {short(red[k])}" for k in new_red] + [""]
-    if fixed:
-        c += ["**Installs again**: " + "; ".join(fmt_key(k) for k in fixed), ""]
-    if new_yfail:
-        c += ["**🟡 New, not broken**", ""] + [f"- {fmt_key(k)} does not install: {short(yfail[k])}"
-                                              for k in new_yfail] + [""]
-    if fixed_yfail:
-        c += ["**🟡 Installs again**: " + "; ".join(fmt_key(k) for k in fixed_yfail), ""]
-    if dis_changed:
-        c += ["**conda, mamba and micromamba: new differences (or agreeing again)**", ""]
-        c += disagreement_lines(dis, dis_changed) + [""]
-    if metas:
-        c += ["**Colab or GitHub's machine changed**", ""] + [f"- {x}" for x in metas] + [""]
-    if prev and new["warnings"] != prev["warnings"]:
-        added = sorted(new["warnings"] - prev["warnings"])
-        if added:
-            c += ["**Lines conda ignores in an environment file**", ""] + \
-                 [f"- {label(e)}: `{l}`" for e, l in added] + [""]
-    notable = bool(c)
-    if notable:
+        c += [f"### 🔴 {date}: something needs fixing", "",
+              "These environments installed yesterday and no longer do:", ""]
+        for k in new_red:
+            c.append(f"- {fmt_key(k)}. This breaks {impact(k)}.")
+        c += ["", "What the installer says:", ""]
+        for k in new_red:
+            c.append(f"- {label(k[0])}: {short(red[k])}")
+        c.append("")
         if today_changes:
-            c += ["**Package changes since yesterday**", "", changes_table(today_changes, spec_changed, 20)]
-        elif spec_changed:
-            c += ["Environment files we edited since yesterday: " + ", ".join(label(e) for e in spec_changed), ""]
-        if tools:
-            c += ["Install tool versions: " + "; ".join(tools), ""]
-        icon = "🔴" if red else "🟢"
-        c.insert(0, f"### {icon} {date}: what changed since yesterday\n")
+            c += ["Packages that changed since yesterday (one of them is usually the cause):", "",
+                  changes_table(today_changes, spec_changed, 20)]
+        c += ["Claude will add its explanation and a proposed fix below in a few minutes.", ""]
         if run_link:
             c.append(run_link)
+    notable = bool(new_red)
     comment = "\n".join(c)
 
     # ---------------- full report (job summary) ----------------
