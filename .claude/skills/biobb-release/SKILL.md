@@ -97,7 +97,9 @@ only expected when the wf has `tests/python/MACOS_SKIP` (arm64 falls back to osx
      without editing anything: `gh workflow run colab-check.yaml -f try_python_fix=true`
      (env with Colab's Python + matching paths, test copy only). Agree the cell change
      with the user before editing the jupyter repos (`grep -rn "python3\." $BIOBB_TUTORIALS/<repo>/*/notebooks`
-     also finds pmx's `gmxlib` path);
+     also finds pmx's `gmxlib` path). Once the Colab check passes with the new cell, remove
+     the `colab-check.yaml` line from `common/drift/known_failures.tsv` (it hides the
+     Colab failures from the weekly issue until then);
    - `docker/VERSION` was set to `$LABEL` by `apply --docker-version`.
 4. Markdown files are not edited by the script; `scan` lists those quoting versions:
    update READMEs only where a version is part of an instruction.
