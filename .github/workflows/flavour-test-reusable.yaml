@@ -82,8 +82,10 @@ jobs:
         shell: bash -l {0}
         env:
           # galaxy flavour only: enables the run on the BioBB Galaxy server (optional
-          # secret; callers pass it with `secrets: inherit`, empty otherwise)
-          GALAXY_API_KEY: ${{ secrets.GALAXY_API_KEY }}
+          # secret; callers pass it with `secrets: inherit`, empty otherwise). Only when
+          # the repository variable GALAXY_RUN is 'true': off since 2026-11-26 until INB
+          # fixes the server's _ext wrappers (docs/testing.md §2.3); the tool check still runs.
+          GALAXY_API_KEY: ${{ vars.GALAXY_RUN == 'true' && secrets.GALAXY_API_KEY || '' }}
           # wait at most 5.5 h for the server's jobs: a GitHub-hosted job is killed at 6 h
           # (whatever timeout-minutes says), and then galaxy_wf.py could not clean up
           GALAXY_TIMEOUT_MIN: '330'

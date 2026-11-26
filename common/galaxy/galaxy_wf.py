@@ -202,7 +202,7 @@ def report_failed_jobs(server, invocation_id):
 def cmd_run(args):
     import time
     if not os.environ.get("GALAXY_API_KEY"):
-        print("GALAXY_API_KEY is not set: run test skipped")
+        print("GALAXY_API_KEY is not set (in CI: secret missing or repository variable GALAXY_RUN not 'true'): run test skipped")
         return 0
     files = ga_files([args.wf])
     if not files:
