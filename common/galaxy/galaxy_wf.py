@@ -175,6 +175,30 @@ def api(server, method, path, payload=None, quiet=False):
         raise
 
 
+def report_failed_jobs(server, invocation_id):
+    """Print tool, exit code and the end of stderr/stdout of each failed job (the history
+    is purged afterwards, so this is the only record)."""
+    try:
+        jobs = api(server, "GET", f"jobs?invocation_id={invocation_id}&state=error&limit=20", quiet=True)
+    except Exception as e:
+        print(f"  could not list the failed jobs: {e}")
+        return
+    for j in jobs:
+        try:
+            d = api(server, "GET", f"jobs/{j['id']}?full=true", quiet=True)
+        except Exception as e:
+            print(f"  job {j.get('id')}: details not available ({e})")
+            continue
+        print(f"::group::failed job: {d.get('tool_id')} {d.get('tool_version', '')} (exit code {d.get('exit_code')})")
+        for key in ("tool_stderr", "tool_stdout", "job_stderr", "job_messages"):
+            val = d.get(key)
+            if val:
+                text = val if isinstance(val, str) else json.dumps(val)
+                print(f"--- {key} (last 3000 chars)")
+                print(text[-3000:])
+        print("::endgroup::")
+
+
 def cmd_run(args):
     import time
     if not os.environ.get("GALAXY_API_KEY"):
@@ -223,6 +247,7 @@ def cmd_run(args):
                 print(f"  invocation {state}, jobs {states}")
                 if state in ("failed", "cancelled") or bad:
                     print(f"::error::{os.path.relpath(f, ROOT)}: workflow run failed ({state}, {states})")
+                    report_failed_jobs(args.server, inv["id"])
                     failed += 1
                     break
                 if state == "scheduled" and not busy:
