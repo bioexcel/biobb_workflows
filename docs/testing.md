@@ -495,6 +495,11 @@ Run on the server (2026-11-26, secret `GALAXY_API_KEY` set; `galaxy_wf.py run`):
 `run` prints each failed job's stderr/stdout before purging the history. Wait limit 330 min
 (GitHub-hosted jobs stop at 6 h).
 
+The run part is OFF until INB fixes the wrappers: CI passes the key only when the repository
+variable `GALAXY_RUN` is `true` (`gh variable set GALAXY_RUN --body true -R bioexcel/biobb_workflows`
+to switch it on, `gh variable delete GALAXY_RUN ...` to switch it off). The tool check runs
+every Saturday either way.
+
 ### 2.4 Colab check (2026-11-24)
 
 How it works: `docs/ci.md` §1.1f (`common/colab/run_colab_test.sh`, `colab-check.yaml`).
