@@ -27,7 +27,9 @@ Subcommands (no account needed; anonymous read-only API calls):
                     runs it in a new history (the BioBB workflows fetch their own inputs,
                     no upload needed), waits until every job finishes, then deletes the
                     workflow and purges the history. Exit 1 if any job fails or on timeout.
-                    Not yet exercised in CI (no key yet, see docs/testing.md).
+                    Steps whose newer server tool has parameters the .ga lacks are
+                    reported (warning) and run with the tools' defaults
+                    (allow_tool_state_corrections).
 
   --server URL     default https://biobb.usegalaxy.es   (env GALAXY_URL overrides)
 
@@ -155,7 +157,7 @@ def cmd_update(args):
     return 0
 
 
-def api(server, method, path, payload=None):
+def api(server, method, path, payload=None, quiet=False):
     key = os.environ["GALAXY_API_KEY"]
     data = json.dumps(payload).encode() if payload is not None else None
     req = urllib.request.Request(f"{server}/api/{path}", data=data, method=method,
@@ -167,7 +169,9 @@ def api(server, method, path, payload=None):
     except urllib.error.HTTPError as e:
         # Galaxy explains a refusal in the body (e.g. which tool versions are missing)
         detail = e.read().decode(errors="replace")[:4000]
-        print(f"::error::{method} /api/{path}: HTTP {e.code}: {detail}")
+        e.detail = detail
+        if not quiet:
+            print(f"::error::{method} /api/{path}: HTTP {e.code}: {detail}")
         raise
 
 
@@ -188,8 +192,25 @@ def cmd_run(args):
         wf = api(args.server, "POST", "workflows", {"workflow": ga, "publish": False})
         hist = None
         try:
-            inv = api(args.server, "POST", f"workflows/{wf['id']}/invocations",
-                      {"history": f"hist_name={name}", "inputs": {}})
+            payload = {"history": f"hist_name={name}", "inputs": {}}
+            try:
+                inv = api(args.server, "POST", f"workflows/{wf['id']}/invocations", payload, quiet=True)
+            except urllib.error.HTTPError as e:
+                # The server's tools are newer than the .ga's tool_version and some steps
+                # lack a parameter the new version added. Galaxy refuses such a workflow
+                # unless asked to fill the gaps with the tools' defaults (what saving it
+                # in the Galaxy editor does). Report the gaps, then run with defaults.
+                if e.code != 400 or "upgrade messages" not in getattr(e, "detail", ""):
+                    print(f"::error::POST invocations: HTTP {e.code}: {getattr(e, 'detail', '')}")
+                    raise
+                try:
+                    gaps = json.loads(e.detail).get("err_data", {})
+                except ValueError:
+                    gaps = e.detail
+                print(f"::warning::{os.path.relpath(f, ROOT)}: steps with parameters missing for the "
+                      f"server's tool version, run with the tools' defaults: {json.dumps(gaps)}")
+                payload["allow_tool_state_corrections"] = True
+                inv = api(args.server, "POST", f"workflows/{wf['id']}/invocations", payload)
             hist = inv.get("history_id")
             print(f"{os.path.relpath(f, ROOT)}: invocation {inv['id']} started")
             deadline = time.time() + args.timeout * 60
