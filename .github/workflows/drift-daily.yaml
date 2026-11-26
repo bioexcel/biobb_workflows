@@ -105,6 +105,9 @@ jobs:
     needs: [prepare, solve]
     if: always() && needs.prepare.result == 'success'
     runs-on: ubuntu-latest
+    outputs:
+      red: ${{ steps.cmp.outputs.red }}
+      notable: ${{ steps.cmp.outputs.notable }}
     permissions:
       contents: write   # push the snapshot branch
       issues: write     # the drift issue
@@ -222,3 +225,23 @@ jobs:
               *) echo "$wf: $state" ;;
             esac
           done
+
+  # Claude explains a NEW red result (the issue just got a red comment) and may prepare
+  # a draft PR: drift-triage.yaml, docs/ci.md §1.1h
+  triage:
+    name: Triage (Claude)
+    needs: report
+    if: >-
+      github.ref == 'refs/heads/main' && needs.report.result == 'success' &&
+      needs.report.outputs.red != '0' && needs.report.outputs.red != '' &&
+      needs.report.outputs.notable == 'true'
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      actions: write
+    uses: ./.github/workflows/drift-triage.yaml
+    with:
+      prepare_fix: true
+    secrets:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}

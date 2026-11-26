@@ -37,6 +37,9 @@ jobs:
     name: 'Update the Drift: weekly tests issue'
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.event == 'schedule'
     runs-on: ubuntu-latest
+    outputs:
+      red: ${{ steps.sum.outputs.red }}
+      notable: ${{ steps.sum.outputs.notable }}
     permissions:
       contents: read
       actions: read
@@ -59,3 +62,25 @@ jobs:
           bash common/drift/update_issue.sh "Drift: weekly tests" rep/issue_body.md rep/comment.md \
             "${{ steps.sum.outputs.red }}" "${{ steps.sum.outputs.notable }}" \
             "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+  # Claude explains a NEW set of failures (the issue just got a red comment) and may
+  # prepare a draft PR: drift-triage.yaml, docs/ci.md §1.1h
+  triage:
+    name: Triage (Claude)
+    needs: report
+    if: >-
+      github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'failure' &&
+      needs.report.result == 'success' &&
+      needs.report.outputs.red != '0' && needs.report.outputs.red != '' &&
+      needs.report.outputs.notable == 'true'
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      actions: write
+    uses: ./.github/workflows/drift-triage.yaml
+    with:
+      run_id: ${{ format('{0}', github.event.workflow_run.id) }}
+      prepare_fix: true
+    secrets:
+      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
