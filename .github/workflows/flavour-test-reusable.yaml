@@ -84,6 +84,9 @@ jobs:
           # galaxy flavour only: enables the run on the BioBB Galaxy server (optional
           # secret; callers pass it with `secrets: inherit`, empty otherwise)
           GALAXY_API_KEY: ${{ secrets.GALAXY_API_KEY }}
+          # wait at most 5.5 h for the server's jobs: a GitHub-hosted job is killed at 6 h
+          # (whatever timeout-minutes says), and then galaxy_wf.py could not clean up
+          GALAXY_TIMEOUT_MIN: '330'
         working-directory: ${{ inputs.wf_name }}/tests/${{ inputs.flavour }}
         run: ./run_test.sh
 
