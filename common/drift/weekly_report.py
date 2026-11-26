@@ -18,17 +18,38 @@ import os
 import subprocess
 
 ROUND = [  # (workflow file, day, what)
-    ("python-tests.yaml", "Mon", "python (conda), Linux + macOS"),
-    ("python-container-tests.yaml", "Tue", "python, container mode"),
+    ("python-tests.yaml", "Mon", "Python, with conda (Linux and Mac)"),
+    ("python-container-tests.yaml", "Tue", "Python, with containers"),
     ("cwl-tests.yaml", "Wed", "CWL"),
     ("airflow-tests.yaml", "Wed", "Airflow"),
     ("nextflow-tests.yaml", "Thu", "Nextflow"),
-    ("flavour-tests.yaml", "Thu", "Docker images (test only)"),
+    ("flavour-tests.yaml", "Thu", "Docker images (built and tested, not published)"),
     ("jupyter-tests.yaml", "Fri", "Jupyter notebooks"),
-    ("galaxy-tests.yaml", "Sat", "Galaxy (BioBB Galaxy server)"),
-    ("colab-check.yaml", "Sat", "Colab (notebooks in Google's Colab image)"),
-    ("macos-notebooks.yaml", "Sun", "notebooks on a real Mac"),
+    ("galaxy-tests.yaml", "Sat", "Galaxy (tools installed on the BioBB Galaxy server)"),
+    ("colab-check.yaml", "Sat", "Notebooks in Google Colab"),
+    ("macos-notebooks.yaml", "Sun", "Notebooks on a real Mac"),
 ]
+
+
+def short_name(job):
+    """'biobb_wf_md_setup (ubuntu-latest)' -> 'md_setup (Linux)'."""
+    n = job.replace("biobb_wf_", "")
+    for a, b in (("(ubuntu-latest)", "(Linux)"), ("(macos-latest)", "(Mac)"), ("(macOS)", "(Mac)")):
+        n = n.replace(a, b)
+    return n
+
+
+def links(d):
+    return ", ".join(f"[{short_name(n)}]({u})" for n, u in sorted(d.items()))
+
+
+def nice_date(iso):
+    import datetime
+    try:
+        d = datetime.date.fromisoformat(iso[:10])
+        return f"{d.day} {d:%b}"
+    except ValueError:
+        return iso[:10]
 BAD = {"failure", "timed_out", "startup_failure"}
 
 
@@ -83,34 +104,42 @@ def main():
             new = sorted(set(failed) - set(prev_failed))
             fixed = sorted(set(prev_failed) - set(failed))
             if new or fixed or len(rs) == 1 and failed:
-                comment.append(f"### {what} ({day}) — [run]({rs[0]['url']})\n")
+                icon = "🔴" if failed else "🟢"
+                comment.append(f"### {icon} {what} ({day} {nice_date(rs[0]['createdAt'])}): "
+                               f"what changed since last week — [run]({rs[0]['url']})\n")
                 if new:
-                    comment.append("**Newly failing**: " + ", ".join(f"[{n}]({failed[n]})" for n in new) + "\n")
+                    comment.append("**Now failing**: " + links({n: failed[n] for n in new}) + "\n")
                 if fixed:
-                    comment.append("**Fixed**: " + ", ".join(fixed) + "\n")
+                    comment.append("**Passing again**: " + ", ".join(short_name(n) for n in fixed) + "\n")
                 still = sorted(set(failed) & set(prev_failed))
                 if still:
-                    comment.append("Still failing: " + ", ".join(still) + "\n")
+                    comment.append("Still failing: " + ", ".join(short_name(n) for n in still) + "\n")
 
-    head = (f"## 🔴 {total_failed} test job(s) failing in the latest weekly round"
-            if total_failed else "## 🟢 the latest weekly round is green")
+    n_fail_flavours = sum(1 for r in rows if r[4])
+    head = (f"## 🔴 Last weekly round: {total_failed} test{'s' if total_failed != 1 else ''} failing"
+            f" in {n_fail_flavours} flavour{'s' if n_fail_flavours != 1 else ''}"
+            if total_failed else "## 🟢 Last weekly round: all tests pass")
     b = [head, "",
-         "Updated after every scheduled test run (`.github/workflows/drift-weekly-report.yaml`, "
-         "docs/ci.md §1.1c). A red scheduled run usually means the outside world changed "
-         "(conda packages, runner image), not a bad push: compare with the "
-         "\"Drift: daily check\" issue and `docs/testing.md` §1.5b.", "",
-         "| day | flavour | last scheduled run | result | failing |", "| --- | --- | --- | --- | --- |"]
+         "Every day one flavour of the tests runs on a timetable; this table shows the latest "
+         "result of each. A red result usually means something outside our code changed (conda "
+         "packages, GitHub's machines, Colab): the \"Drift: daily check\" issue often shows what.", "",
+         "| Day | Tests | Last run | Result |", "| --- | --- | --- | --- |"]
     for day, what, wf, run, failed, cancelled, ok in rows:
         if not run:
-            b.append(f"| {day} | {what} | not run yet | | |")
+            b.append(f"| {day} | {what} | not run yet | |")
             continue
-        res = f"{ok} ok" + (f", {len(failed)} failed" if failed else "") + \
-              (f", {len(cancelled)} cancelled" if cancelled else "")
-        fl = ", ".join(f"[{n}]({u})" for n, u in sorted(failed.items())) or "—"
-        b.append(f"| {day} | {what} | [{run['createdAt'][:10]}]({run['url']}) | {res} | {fl} |")
-    b += ["", "Cancelled jobs are not failures: a push to the same workflow cancels its scheduled "
-          "job (the push run tests the newer state), and macOS jobs can be cancelled when GitHub "
-          "has no runner available.", ""]
+        total = ok + len(failed)
+        if failed:
+            res = f"🔴 {len(failed)} of {total} failed: {links(failed)}"
+        else:
+            res = f"🟢 {ok} passed" if ok else "🟢 nothing to test"
+        if cancelled:
+            res += f" ({len(cancelled)} cancelled)"
+        b.append(f"| {day} | {what} | [{nice_date(run['createdAt'])}]({run['url']}) | {res} |")
+    b += ["", "<sub>Cancelled is not failed: a push cancels the scheduled run of the same tests (the "
+          "push run tests the newer code), and Mac jobs are cancelled when GitHub has no Mac free. "
+          "Updated after every scheduled run by `drift-weekly-report.yaml`; how it works: "
+          "`docs/ci.md` §1.1c.</sub>", ""]
 
     os.makedirs(args.out, exist_ok=True)
     open(os.path.join(args.out, "issue_body.md"), "w").write("\n".join(b))
