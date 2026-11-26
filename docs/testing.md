@@ -483,6 +483,18 @@ tools and 0 steps where the server is behind in all 11 workflows.
 | now up to date | `biobb_analysis_*` tools at 5.3.1 |
 | left for the release | `galaxy_wf.py update`: the `.ga` files still name 4.0.x tool versions; the server is newer in all 11 |
 
+Run on the server (2026-11-26, secret `GALAXY_API_KEY` set; `galaxy_wf.py run`):
+
+| | |
+| --- | --- |
+| import | works |
+| invoke | Galaxy refuses steps whose newer server tool has a parameter the `.ga` lacks ("Workflow step has upgrade messages", e.g. `properties|assembly` of `biobb_io_pdb_ext` 5.3.2). `run` now reports them as a warning and invokes with `allow_tool_state_corrections` (the tools' defaults, as the Galaxy editor does) |
+| md_setup (run 45793366901) | step 1 `biobb_io_pdb_ext` 5.3.2 fails: the JSON the wrapper builds from the `properties` section (`config.sele: option3`) reaches `pdb --config` sanitized (`__oc____dq__properties__dq__...`), so biobb_common looks for a file of that name (`FileNotFoundError: Configuration file ... not found`). A fault of the server's `_ext` wrapper (installed locally by INB, not from the ToolShed; not in bioexcel/biobb_adapters). All 251 tool steps of the 11 workflows use `option3`; reported to INB |
+| amber_abc_setup (run 45794058350) | its first job fails before running (no exit code, no stderr): the workflow needs an input dataset, and `run` does not upload any yet (the other 10 download their structure themselves) |
+
+`run` prints each failed job's stderr/stdout before purging the history. Wait limit 330 min
+(GitHub-hosted jobs stop at 6 h).
+
 ### 2.4 Colab check (2026-11-24)
 
 How it works: `docs/ci.md` §1.1f (`common/colab/run_colab_test.sh`, `colab-check.yaml`).
