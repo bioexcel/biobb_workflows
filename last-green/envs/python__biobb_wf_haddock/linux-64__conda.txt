@@ -33,7 +33,7 @@ ld_impl_linux-64 2.46.1 default_hbd61a6d_103 conda-forge
 libabseil 20260817.0 cxx17_hbb87c76_2 conda-forge
 libblas 3.11.0 12_h5875eb1_mkl conda-forge
 libcblas 3.11.0 12_hfef963f_mkl conda-forge
-libexpat 2.9.0 hd2095e1_0 conda-forge
+libexpat 2.11.0 hd2095e1_0 conda-forge
 libffi 3.7.0 h81df57d_1 conda-forge
 libgcc 16.2.0 ha9f2e26_7 conda-forge
 libgfortran 16.2.0 h69a702a_7 conda-forge

@@ -11,7 +11,7 @@ biobb_structure_utils 5.3.0 pyhdfd78af_0 bioconda
 biopython 1.88 py312h6ea13a3_2 conda-forge
 bzip2 1.0.8 h374f1ed_10 conda-forge
 ca-certificates 2026.11.20 hbd8a1cb_0 conda-forge
-cachetools 8.0.2 pyhd8ed1ab_0 conda-forge
+cachetools 8.0.3 pyhd8ed1ab_0 conda-forge
 certifi 2026.11.20 pyhd8ed1ab_0 conda-forge
 charset-normalizer 3.5.3 h86c1381_0 conda-forge
 colorama 0.4.6 pyhd8ed1ab_1 conda-forge
@@ -37,7 +37,7 @@ libabseil 20260817.0 cxx17_h76dead1_2 conda-forge
 libblas 3.9.0 20_osx64_mkl conda-forge
 libcblas 3.9.0 20_osx64_mkl conda-forge
 libcxx 23.1.6 h88b51c2_0 conda-forge
-libexpat 2.9.0 h6e061ac_0 conda-forge
+libexpat 2.11.0 h3332baf_0 conda-forge
 libffi 3.7.0 h6b3a05b_1 conda-forge
 libgcc 16.2.0 h13771c8_7 conda-forge
 libgfortran 16.2.0 h7e5c614_7 conda-forge
@@ -97,7 +97,7 @@ rpds-py 2026.9.1 py312h3b11fa5_0 conda-forge
 scikit-build-core 1.1.2 pyhcb39dcd_0 conda-forge
 scipy 1.18.1 py312hbbb90ee_4 conda-forge
 setuptools 84.2.1 pyhe730653_0 conda-forge
-sleef 3.9.0 h289094c_0 conda-forge
+sleef 3.9.0 h57651c5_1 conda-forge
 sortedcontainers 2.4.0 pyhd8ed1ab_1 conda-forge
 sympy 1.14.0 pyh2585a3b_106 conda-forge
 tbb 2021.13.0 hf9f308f_9 conda-forge

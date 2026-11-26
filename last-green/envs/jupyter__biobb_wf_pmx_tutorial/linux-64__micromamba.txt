@@ -131,7 +131,7 @@ libcurl 8.23.0 ha042cf0_0 conda-forge
 libdeflate 1.26 h351257e_0 conda-forge
 libedit 3.1.20260512 pl5321h373387f_0 conda-forge
 libev 4.33 h280c20c_3 conda-forge
-libexpat 2.9.0 hd2095e1_0 conda-forge
+libexpat 2.11.0 hd2095e1_0 conda-forge
 libffi 3.7.0 h81df57d_1 conda-forge
 libfreetype 2.14.3 ha770c72_2 conda-forge
 libfreetype6 2.14.3 h5e6c136_2 conda-forge
@@ -251,7 +251,7 @@ qhull 2020.2 haf43d43_6 conda-forge
 rdkit 2026.09.2 py312h5eb2359_0 conda-forge
 readline 8.3 hd6e31c0_1 conda-forge
 referencing 0.37.0 pyhcf101f3_0 conda-forge
-reportlab 5.1.1 pyh5ded981_0 conda-forge
+reportlab 5.1.2 pyh5ded981_0 conda-forge
 requests 2.34.2 pyhcf101f3_0 conda-forge
 rfc3339-validator 0.1.4 pyhd8ed1ab_1 conda-forge
 rfc3986-validator 0.1.1 pyh9f0ad1d_0 conda-forge

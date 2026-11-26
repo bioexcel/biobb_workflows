@@ -24,7 +24,7 @@ brotli 1.2.1 h505cf86_1 conda-forge
 brotli-bin 1.2.1 h9908984_1 conda-forge
 bzip2 1.0.8 hda65f42_10 conda-forge
 c-ares 1.34.9 hebe6cf0_0 conda-forge
-c-blosc2 3.7.0 h37d8631_0 conda-forge
+c-blosc2 3.8.0 h37d8631_0 conda-forge
 ca-certificates 2026.11.20 hbd8a1cb_0 conda-forge
 certifi 2026.11.20 pyhd8ed1ab_0 conda-forge
 charset-normalizer 3.5.3 h1114479_0 conda-forge
@@ -69,7 +69,7 @@ libcurl 8.21.0 hcf29cc6_1 conda-forge
 libdeflate 1.26 h351257e_0 conda-forge
 libedit 3.1.20260512 pl5321h373387f_0 conda-forge
 libev 4.33 h280c20c_3 conda-forge
-libexpat 2.9.0 hd2095e1_0 conda-forge
+libexpat 2.11.0 hd2095e1_0 conda-forge
 libffi 3.7.0 h81df57d_1 conda-forge
 libfreetype 2.14.3 ha770c72_2 conda-forge
 libfreetype6 2.14.3 h5e6c136_2 conda-forge
@@ -150,7 +150,7 @@ pydantic 2.14.4 pyh5ded981_0 conda-forge
 pydantic-core 2.50.5 py312hc767a74_0 conda-forge
 pygments 2.21.0 pyhcf101f3_0 conda-forge
 pyparsing 3.3.2 pyhcf101f3_0 conda-forge
-pytables 3.11.1 py312hf79d073_9 conda-forge
+pytables 3.11.1 py312hf79d073_10 conda-forge
 python 3.12.16 h5f976f7_0_cpython conda-forge
 python-dateutil 4.0.0 pyh5ded981_0 conda-forge
 python-gil 3.12.16 hd8ed1ab_0 conda-forge

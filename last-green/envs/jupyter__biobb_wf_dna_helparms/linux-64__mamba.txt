@@ -128,7 +128,7 @@ libedit 3.1.20260512 pl5321h373387f_0 conda-forge
 libegl 1.7.0 ha4b6fd6_5 conda-forge
 libegl-devel 1.7.0 ha4b6fd6_5 conda-forge
 libev 4.33 h280c20c_3 conda-forge
-libexpat 2.9.0 hd2095e1_0 conda-forge
+libexpat 2.11.0 hd2095e1_0 conda-forge
 libffi 3.7.0 h81df57d_1 conda-forge
 libfreetype 2.14.3 ha770c72_2 conda-forge
 libfreetype6 2.14.3 h5e6c136_2 conda-forge
