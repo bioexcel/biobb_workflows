@@ -30,7 +30,7 @@ Keep a scratch folder for the release files (use the session scratchpad); below 
    user changes: leave them alone and never stage them; ask if they block a step.
 3. The jupyter tutorial repos (`bioexcel/<repo>`; the three amber sub-workflows share
    `bioexcel/biobb_wf_amber`) are edited ONLY in their own checkouts in
-   `/Users/gbayarri/projects/BioBB/tutorials/<repo>` (`$BIOBB_TUTORIALS` overrides),
+   `../tutorials/<repo>` next to this repo (`$BIOBB_TUTORIALS` overrides),
    never through this repo's `<wf>/jupyter` submodules. In each:
    `git status -sb` clean and on main (ask otherwise), then `git pull --ff-only`.
 4. `gh auth status` works (pushes, workflow runs).
@@ -147,7 +147,7 @@ GATE 3: all green (or every red explained and accepted by the user). Then:
    entry), then the same with `-f apply=true`. It adds the
    version, the WorkflowHub links of every flavour, the GitHub folder and the GHCR image;
    it keeps a backup of each record (job artifact). "NO PERMISSION" = the entry's owner
-   must add the job's account (`gbayarri`) as an editor; "not checked" = the SDU firewall in
+   must add the job's account (the bio.tools user of `BIOTOOLS_TOKEN`) as an editor; "not checked" = the SDU firewall in
    front of bio.tools blocks the check-only address of that entry (the DNA one), so the
    apply run saves it directly and bio.tools checks it on save; "BLOCKED" = the firewall
    refused the save too: edit it by hand on the website. Report dead links.
