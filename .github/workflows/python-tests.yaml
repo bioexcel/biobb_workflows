@@ -35,7 +35,8 @@ jobs:
     name: Detect workflows to test
     uses: ./.github/workflows/detect.yaml
     # the bot that syncs generated files (Dockerfiles, READMEs) is not a test trigger
-    if: github.actor != 'github-actions[bot]'
+    # a dispatch is always a request (drift-triage.yaml starts the tests of its fix branches)
+    if: github.event_name == 'workflow_dispatch' || github.actor != 'github-actions[bot]'
     with:
       wf_names: ${{ github.event.inputs.wf_names || '' }}
       # without a flavour, require_path is empty and every wf is eligible

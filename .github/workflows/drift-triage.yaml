@@ -15,13 +15,11 @@ name: Drift triage
 # It never merges, never pushes to main, never publishes, never closes issues.
 #
 # Started by drift-daily.yaml and drift-weekly-report.yaml when their issue gets a new
-# red comment (workflow_call), or by hand.
+# red comment (workflow_call), or by hand. claude-code-action accepts only
+# workflow_dispatch, schedule, workflow_run, repository_dispatch and issue/PR events
+# (not push); a workflow_call runs with the caller's event.
 
 on:
-  # TEMPORARY (remove before merging): test runs from the setup PR (the action does not
-  # accept push events; workflow_dispatch needs the file on main)
-  pull_request:
-    paths: ['.github/workflows/drift-triage.yaml']
   workflow_dispatch:
     inputs:
       run_id:
@@ -61,10 +59,9 @@ permissions:
   contents: read
 
 env:
-  # TEMPORARY push fallbacks (remove before merging)
-  RUN_IDS: ${{ inputs.run_id || (github.event_name == 'pull_request' && '45785831006') || '' }}
-  ISSUE: ${{ inputs.issue || (github.event_name == 'pull_request' && '4') || '' }}
-  PREPARE_FIX: ${{ inputs.prepare_fix || (github.event_name == 'pull_request' && 'true') || 'false' }}
+  RUN_IDS: ${{ inputs.run_id }}
+  ISSUE: ${{ inputs.issue }}
+  PREPARE_FIX: ${{ inputs.prepare_fix }}
 
 jobs:
   analyse:
@@ -131,7 +128,6 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           # the read-only job token instead of the Claude GitHub app's (which can write)
           github_token: ${{ github.token }}
-          show_full_output: ${{ github.event_name == 'pull_request' }}   # TEMPORARY: debug the test runs
           prompt: |
             You run inside GitHub Actions (workflow drift-triage.yaml, run ${{ github.run_id }}).
             Follow .claude/skills/drift-triage/SKILL.md, mode "In GitHub Actions".
