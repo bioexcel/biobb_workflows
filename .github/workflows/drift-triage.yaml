@@ -62,9 +62,9 @@ permissions:
 
 env:
   # TEMPORARY push fallbacks (remove before merging)
-  RUN_IDS: ${{ inputs.run_id || (github.event_name == 'pull_request' && '43861222321') || '' }}
+  RUN_IDS: ${{ inputs.run_id || (github.event_name == 'pull_request' && '45785831006') || '' }}
   ISSUE: ${{ inputs.issue || (github.event_name == 'pull_request' && '4') || '' }}
-  PREPARE_FIX: ${{ inputs.prepare_fix || (github.event_name == 'pull_request' && 'false') || 'false' }}
+  PREPARE_FIX: ${{ inputs.prepare_fix || (github.event_name == 'pull_request' && 'true') || 'false' }}
 
 jobs:
   analyse:
@@ -125,6 +125,7 @@ jobs:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           # the read-only job token instead of the Claude GitHub app's (which can write)
           github_token: ${{ github.token }}
+          show_full_output: ${{ github.event_name == 'pull_request' }}   # TEMPORARY: debug the test runs
           prompt: |
             You run inside GitHub Actions (workflow drift-triage.yaml, run ${{ github.run_id }}).
             Follow .claude/skills/drift-triage/SKILL.md, mode "In GitHub Actions".
