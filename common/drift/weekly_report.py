@@ -13,6 +13,7 @@ Needs the gh CLI (GH_TOKEN). Usage:
   python3 weekly_report.py --repo OWNER/NAME --out DIR [--trigger FILE] [--event schedule]
 """
 import argparse
+import fnmatch
 import json
 import os
 import subprocess
@@ -52,6 +53,28 @@ def nice_date(iso):
         return iso[:10]
 BAD = {"failure", "timed_out", "startup_failure"}
 BOT_STARTED = {"colab-check.yaml"}  # also counts its runs started by drift-daily.yaml
+KNOWN_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "known_failures.tsv")
+
+
+def load_known(path=KNOWN_FILE):
+    """[(workflow file, job glob, reason)] from known_failures.tsv."""
+    out = []
+    if os.path.isfile(path):
+        for line in open(path):
+            if line.startswith("#") or not line.strip():
+                continue
+            parts = line.rstrip("\n").split("\t")
+            if len(parts) >= 3:
+                out.append((parts[0], parts[1], parts[2]))
+    return out
+
+
+def known_reason(known, wf, job):
+    name = job.replace("biobb_wf_", "")
+    for kwf, pat, reason in known:
+        if kwf == wf and (fnmatch.fnmatch(name, pat) or fnmatch.fnmatch(job, pat)):
+            return reason
+    return None
 
 
 def gh(*args):
@@ -98,16 +121,20 @@ def main():
     args = ap.parse_args()
 
     rows, total_failed, comment = [], 0, []
+    known = load_known()
     for wf, day, what in ROUND:
         rs = runs(args.repo, wf, args.event)
         if not rs:
-            rows.append((day, what, wf, None, {}, {}, 0))
+            rows.append((day, what, wf, None, {}, {}, 0, {}))
             continue
         failed, cancelled, ok = jobs(args.repo, rs[0]["databaseId"])
+        knownf = {n: u for n, u in failed.items() if known_reason(known, wf, n)}
+        failed = {n: u for n, u in failed.items() if n not in knownf}
         total_failed += len(failed)
-        rows.append((day, what, wf, rs[0], failed, cancelled, ok))
+        rows.append((day, what, wf, rs[0], failed, cancelled, ok, knownf))
         if wf == args.trigger:
             prev_failed = jobs(args.repo, rs[1]["databaseId"])[0] if len(rs) > 1 else {}
+            prev_failed = {n: u for n, u in prev_failed.items() if not known_reason(known, wf, n)}
             new = sorted(set(failed) - set(prev_failed))
             fixed = sorted(set(prev_failed) - set(failed))
             if len(rs) == 1 and failed:
@@ -123,26 +150,41 @@ def main():
                 comment.append("Claude will add its explanation and a proposed fix below in a few minutes.\n")
 
     n_fail_flavours = sum(1 for r in rows if r[4])
+    n_known = sum(len(r[7]) for r in rows)
     head = (f"## 🔴 Last weekly round: {total_failed} test{'s' if total_failed != 1 else ''} failing"
             f" in {n_fail_flavours} flavour{'s' if n_fail_flavours != 1 else ''}"
-            if total_failed else "## 🟢 Last weekly round: all tests pass")
+            if total_failed else
+            (f"## 🟢 Last weekly round: nothing new failing ({n_known} known failures, see the table)"
+             if n_known else "## 🟢 Last weekly round: all tests pass"))
     b = [head, "",
          "Every day one flavour of the tests runs on a timetable; this table shows the latest "
          "result of each. A red result usually means something outside our code changed (conda "
          "packages, GitHub's machines, Colab): the \"Drift: daily check\" issue often shows what.", "",
          "| Day | Tests | Last run | Result |", "| --- | --- | --- | --- |"]
-    for day, what, wf, run, failed, cancelled, ok in rows:
+    stale = []
+    for day, what, wf, run, failed, cancelled, ok, knownf in rows:
         if not run:
             b.append(f"| {day} | {what} | not run yet | |")
             continue
-        total = ok + len(failed)
+        total = ok + len(failed) + len(knownf)
         if failed:
             res = f"🔴 {len(failed)} of {total} failed: {links(failed)}"
+        elif knownf:
+            res = f"🟢 {ok} passed" if ok else "🟢"
         else:
             res = f"🟢 {ok} passed" if ok else "🟢 nothing to test"
+        if knownf:
+            reasons = sorted({known_reason(known, wf, n) for n in knownf})
+            res += f"; ⚪ {len(knownf)} known failure{'s' if len(knownf) != 1 else ''}, not counted: " + \
+                   "; ".join(reasons)
+        elif any(k[0] == wf for k in known) and ok:
+            stale.append(what)
         if cancelled:
             res += f" ({len(cancelled)} cancelled)"
         b.append(f"| {day} | {what} | [{nice_date(run['createdAt'])}]({run['url']}) | {res} |")
+    if stale:
+        b += ["", "ℹ️ Listed as known failures but passing now: " + ", ".join(stale) +
+              ". Remove their line from `common/drift/known_failures.tsv`."]
     b += ["", "<sub>Cancelled is not failed: a push cancels the scheduled run of the same tests (the "
           "push run tests the newer code), and Mac jobs are cancelled when GitHub has no Mac free. "
           "Updated after every scheduled run by `drift-weekly-report.yaml`; how it works: "

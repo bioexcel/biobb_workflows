@@ -131,6 +131,8 @@ avoid GitHub's top-of-hour scheduler congestion):
   scheduled result of every flavour with links to the failing jobs. A comment (= an email)
   is added only when a test of that workflow NEWLY fails (since 2026-11-26: not when tests
   pass again). The Colab checks that the daily check starts on a Colab change count too.
+  Failures listed in `common/drift/known_failures.tsv` (workflow, job pattern, reason;
+  e.g. Colab until the release fixes its cell) are shown as "known" and never count as red.
   Cancelled jobs are listed but are not failures. The issue opening and closing logic
   is shared with the daily check (`common/drift/update_issue.sh`).
 - A failed scheduled run is not a regression of anyone's push. Read it as "the outside

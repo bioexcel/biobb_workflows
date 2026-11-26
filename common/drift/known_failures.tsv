@@ -1,0 +1,6 @@
+# Known failures of the weekly round: shown as "known" in the "Drift: weekly tests" issue,
+# never counted as red, so they never open the issue or email anyone. Anything that fails
+# and is NOT matched here alerts as usual. Remove a line as soon as its fix is in.
+#
+# workflow file<TAB>job name pattern (shell glob, after "biobb_wf_" is removed)<TAB>reason
+colab-check.yaml	*	Colab moved to Python 3.13; the notebooks' Colab cell is fixed at the next release (docs/testing.md §2.4)
