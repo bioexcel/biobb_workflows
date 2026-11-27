@@ -617,8 +617,17 @@ expected); dna_helparms, haddock and virtual-screening get past the imports and 
   **except NOLB**: `nolb_nma` crashes with exit code 139 (segmentation fault, no message).
   bioconda `nolb` 1.9 osx-64 is Inria's 2020 x86_64 binary (macOS 10.13 SDK, links
   Accelerate), so it runs under Rosetta on the arm64 runner; not known yet whether it also
-  crashes on an Intel Mac. No newer macOS build at files.inria.fr. MACOS_SKIP stays, with
-  NOLB as the reason.
+  crashes on an Intel Mac. No newer macOS build at files.inria.fr.
+  Same day, on a real Apple Silicon Mac (`common/macos/run_macos_test.sh biobb_wf_flexdyn`):
+  **PASS**, with the same osx-64 packages under Rosetta (imods build 4, nolb 1.9, AmberTools
+  26). NOLB alone also works there, on the full structure and on the CA-only chain. So the
+  crash is specific to GitHub's macOS runner. MACOS_SKIP removed; the runner failure is a
+  line in `common/drift/known_failures.tsv` (not red, no email; the weekly issue says when it
+  passes). The tutorial README now tells Apple Silicon users to create the env with
+  `CONDA_SUBDIR=osx-64` (flexdyn has no osx-arm64 solution) instead of "not supported".
+  Side finding: that local run said "arm64 conda" but installed osx-64 packages, because of a
+  `subdir: osx-64` in the user's `~/.condarc`. `run_macos_test.sh` now sets `CONDA_SUBDIR` for
+  each attempt and reports the installed platform.
 - Quiet failures: the haddock3 and Vina wrappers log "exit code 1" without raising; the
   notebook only fails later on a missing file (often as nglview's misleading "you must
   provide file extension"). `report_executed` lists those earlier cells.

@@ -109,7 +109,10 @@ for arch in "${TRY[@]}"; do
   c="$(conda_for "$arch")"
   echo "  trying $arch conda ($("$c" --version))"
   rm -rf "$WORK/env"
-  if "$c" env create -q -f "$ENV_FILE" -p "$WORK/env"; then
+  # pin the platform: a `subdir:` in the user's ~/.condarc (e.g. osx-64) would
+  # otherwise make the arm64 conda install Intel packages (seen 2026-11-27)
+  [[ "$arch" == arm64 ]] && sd=osx-arm64 || sd=osx-64
+  if CONDA_SUBDIR="$sd" "$c" env create -q -f "$ENV_FILE" -p "$WORK/env"; then
     CONDA="$c"; USED="$arch"; break
   fi
   echo "::warning::$WF: the env does not install with the $arch conda"
@@ -117,7 +120,8 @@ done
 [[ -n "$CONDA" ]] || { echo "FAIL: $WF: the env does not install on this Mac (tried: ${TRY[*]})"; exit 1; }
 [[ "$USED" == x86_64 && "$(uname -m)" == arm64 ]] && \
   echo "::notice::$WF: env installed only with the Intel conda (osx-64, Rosetta 2): no Apple Silicon solution"
-echo "  env installed with the $USED conda: $("$CONDA" run -p "$WORK/env" python --version)"
+PLATFORM="$(python3 -c 'import glob,json,sys; f=glob.glob(sys.argv[1]+"/conda-meta/python-[0-9]*.json"); print(json.load(open(f[0])).get("subdir","?") if f else "?")' "$WORK/env")"
+echo "  env installed with the $USED conda: $("$CONDA" run -p "$WORK/env" python --version), packages for $PLATFORM"
 
 echo ">>> [3/5] prepare a copy next to the notebook (short runs)"
 cp "$WORK/repo/$NOTEBOOK" "$NB_DIR/_macos_check.ipynb"

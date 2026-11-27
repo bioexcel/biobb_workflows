@@ -1,7 +1,0 @@
-NOLB crashes on a Mac: bioconda nolb 1.9 (Inria's 2020 x86_64 macOS binary) ends with a segmentation fault (exit code 139) in nolb_nma; every other step works since imods build 4 (2026-11-26)
-Re-run 45971429433 (2026-11-27, ignore_skip): the env installs with the Intel conda
-(osx-64, Rosetta 2) with AmberTools 26 + arpack 3.9.1 now that imods build 4 relaxed its
-pins (bioconda-recipes#72281). cpptraj, CONCOORD, imods, gmx cluster and pcz_* all finish
-with exit code 0; only NOLB crashes, and the 4 cells after it miss its output.
-Fix: a working NOLB macOS binary (Inria), or check whether it only crashes under Rosetta.
-docs/testing.md §2.5. Remove this file after the fix.

@@ -4,3 +4,4 @@
 #
 # workflow file<TAB>job name pattern (shell glob, after "biobb_wf_" is removed)<TAB>reason
 colab-check.yaml	*	Colab moved to Python 3.13; the notebooks' Colab cell is fixed at the next release (docs/testing.md §2.4)
+macos-notebooks.yaml	flexdyn (macOS)	NOLB crashes (segmentation fault) only on GitHub's macOS runner; the same env passes on a real Mac (2026-11-27, docs/testing.md §2.5)
