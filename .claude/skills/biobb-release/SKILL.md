@@ -100,6 +100,18 @@ only expected when the wf has `tests/python/MACOS_SKIP` (arm64 falls back to osx
      also finds pmx's `gmxlib` path). Once the Colab check passes with the new cell, remove
      the `colab-check.yaml` line from `common/drift/known_failures.tsv` (it hides the
      Colab failures from the weekly issue until then);
+   - Colab biopython workaround (added by the user in Nov 2026 to md_setup,
+     protein-complex_md_setup and ligand_parameterization): `!pip install biopython==1.86`
+     after the env is created. It works only because the env (3.12) is APPENDED to the
+     kernel's `sys.path`. pip puts a Python-3.13 biopython into Colab's own site-packages,
+     which comes first and replaces the env's 3.12-compiled `Bio.PDB.ccealign` (the first
+     error in most notebooks, docs/testing.md §2.4). Once the cell builds the env with
+     Colab's Python, the line is not needed. Worse, it then shadows the env's biopython
+     with a version biobb did not ask for. So: in the notebooks whose cell gets the Python
+     fix, remove the line (`grep -rn "pip install biopython" $BIOBB_TUTORIALS/*/*/notebooks`).
+     Keep it only for a notebook whose env still cannot get Colab's Python, and there make
+     its version match the env's biopython (`conda list -n <env> biopython` in the solve).
+     It does not help for other 3.12-compiled modules (MDAnalysis, mdtraj);
    - `docker/VERSION` was set to `$LABEL` by `apply --docker-version`.
 4. Markdown files are not edited by the script; `scan` lists those quoting versions:
    update READMEs only where a version is part of an instruction.

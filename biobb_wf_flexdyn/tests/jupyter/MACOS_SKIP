@@ -1,6 +1,7 @@
-No AmberTools on a Mac: imods (needed by biobb_flexdyn) pins arpack 3.7.0 in every osx build, current AmberTools needs arpack 3.8-3.9, so the env installs without cpptraj
-Found by the macOS check, re-run 45588426439 (2026-11-25): "cpptraj: command not found".
-conda takes biobb_analysis-5.3.0-gmx2026_2 (no ambertools dependency) because adding
-ambertools makes osx-64 unsolvable. Fix: rebuild the imods macOS binaries against arpack
-3.9 (bioconda recipes/imods, sources on mmb.irbbarcelona.org). The tutorial README says
-macOS is not supported for now. docs/testing.md §2.5. Remove this file after the fix.
+NOLB crashes on a Mac: bioconda nolb 1.9 (Inria's 2020 x86_64 macOS binary) ends with a segmentation fault (exit code 139) in nolb_nma; every other step works since imods build 4 (2026-11-26)
+Re-run 45971429433 (2026-11-27, ignore_skip): the env installs with the Intel conda
+(osx-64, Rosetta 2) with AmberTools 26 + arpack 3.9.1 now that imods build 4 relaxed its
+pins (bioconda-recipes#72281). cpptraj, CONCOORD, imods, gmx cluster and pcz_* all finish
+with exit code 0; only NOLB crashes, and the 4 cells after it miss its output.
+Fix: a working NOLB macOS binary (Inria), or check whether it only crashes under Rosetta.
+docs/testing.md §2.5. Remove this file after the fix.

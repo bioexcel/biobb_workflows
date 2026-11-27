@@ -610,6 +610,15 @@ expected); dna_helparms, haddock and virtual-screening get past the imports and 
   (drift snapshots).
   Decision 2026-11-25: `tests/jupyter/MACOS_SKIP` for flexdyn and a note in its tutorial
   README (macOS not supported for now; Binder instead) until imods is rebuilt.
+  **imods fixed 2026-11-26** (bioconda-recipes#72281, imods build 4: `arpack >=3.7.0,<4`,
+  `mkl >=2023.0,<2024`, sources moved to github.com/mmb-irb/imods_biobb). The osx-64 env now
+  gets AmberTools 26 + arpack 3.9.1. Re-run 2026-11-27 (run 45971429433, `ignore_skip`):
+  every step works on the Mac (cpptraj, CONCOORD, imod_imode/imod_imc, gmx cluster, pcz_*)
+  **except NOLB**: `nolb_nma` crashes with exit code 139 (segmentation fault, no message).
+  bioconda `nolb` 1.9 osx-64 is Inria's 2020 x86_64 binary (macOS 10.13 SDK, links
+  Accelerate), so it runs under Rosetta on the arm64 runner; not known yet whether it also
+  crashes on an Intel Mac. No newer macOS build at files.inria.fr. MACOS_SKIP stays, with
+  NOLB as the reason.
 - Quiet failures: the haddock3 and Vina wrappers log "exit code 1" without raising; the
   notebook only fails later on a missing file (often as nglview's misleading "you must
   provide file extension"). `report_executed` lists those earlier cells.
