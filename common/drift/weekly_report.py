@@ -51,6 +51,8 @@ def nice_date(iso):
         return f"{d.day} {d:%b}"
     except ValueError:
         return iso[:10]
+
+
 BAD = {"failure", "timed_out", "startup_failure"}
 BOT_STARTED = {"colab-check.yaml"}  # also counts its runs started by drift-daily.yaml
 KNOWN_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "known_failures.tsv")
@@ -136,13 +138,16 @@ def main():
             prev_failed = jobs(args.repo, rs[1]["databaseId"])[0] if len(rs) > 1 else {}
             prev_failed = {n: u for n, u in prev_failed.items() if not known_reason(known, wf, n)}
             new = sorted(set(failed) - set(prev_failed))
-            fixed = sorted(set(prev_failed) - set(failed))
             if len(rs) == 1 and failed:
                 new = sorted(failed)
             if new:  # only a NEW failure comments (each comment emails the user)
                 comment.append(f"### 🔴 {what}: something needs fixing — [run]({rs[0]['url']})\n")
-                comment.append("These tests passed last time and fail now: " +
-                               links({n: failed[n] for n in new}) + "\n")
+                if len(rs) == 1:  # no earlier scheduled run to compare with
+                    comment.append("First scheduled run of these tests; these fail: " +
+                                   links({n: failed[n] for n in new}) + "\n")
+                else:
+                    comment.append("These tests passed last time and fail now: " +
+                                   links({n: failed[n] for n in new}) + "\n")
                 still = sorted(set(failed) & set(prev_failed))
                 if still:
                     comment.append("Already failing before (no change): " +

@@ -40,6 +40,19 @@ fi
 # Enable libmamba as solver
 RUN conda config --set solver libmamba
 
+# conda-forge + bioconda only, like the env files. Miniconda lists Anaconda's
+# `defaults` channel in its own config, and `conda env create` does not drop it
+# for the env file's `nodefaults`: in Nov 2026 defaults' mkl/nomkl/tbb pushed
+# biobb_wf_autoencoder to an ancient pytorch 2.5.1 whose libtorch_cpu.so needs an
+# executable stack, which the image refuses (docs/testing.md §1.5b). Same fix
+# as the python CI (python-reusable.yaml).
+RUN conda config --show-sources | sed -n 's/^==> \(.*\) <==$/\1/p' | while read -r f; do \
+        if [ -f "$f" ]; then conda config --file "$f" --remove channels defaults 2>/dev/null || true; fi; \
+    done && \
+    conda config --add channels bioconda && \
+    conda config --add channels conda-forge && \
+    conda config --show channels
+
 # Create new environment
 RUN conda env create -f /app/workflow.env.yml
 # Fix OpenMP issues when running amd64 image on ARM64 via QEMU emulation
