@@ -63,14 +63,19 @@ conda_for() {  # arm64|x86_64 -> path of a conda executable (installs Miniconda 
     curl -fsSL "https://repo.anaconda.com/miniconda/$build.sh" -o "/tmp/$build.sh"
     rm -rf "$CONDA_HOME/$arch"
     bash "/tmp/$build.sh" -b -p "$CONDA_HOME/$arch" >/dev/null
-    # conda-forge + bioconda only, like the env files (nodefaults): drop Anaconda's
-    # defaults from Miniconda's own config (see python-reusable.yaml)
-    "$CONDA_HOME/$arch/bin/conda" config --show-sources | sed -n 's/^==> \(.*\) <==$/\1/p' |
-      while read -r f; do
-        [[ -f "$f" ]] && "$CONDA_HOME/$arch/bin/conda" config --file "$f" --remove channels defaults 2>/dev/null || true
-      done
     "$CONDA_HOME/$arch/bin/conda" config --set solver libmamba
   fi
+  # conda-forge + bioconda only, like the env files (nodefaults): drop Anaconda's
+  # defaults from Miniconda's own config (see python-reusable.yaml) AND set the two
+  # channels: with no channels configured, conda 25.7 adds `defaults` back implicitly
+  # ("Adding 'defaults' to channel list implicitly", pkgs/main + pkgs/r; seen
+  # 2026-11-27). Done on every call, so an older install gets it too.
+  "$CONDA_HOME/$arch/bin/conda" config --show-sources | sed -n 's/^==> \(.*\) <==$/\1/p' |
+    while read -r f; do
+      [[ -f "$f" ]] && "$CONDA_HOME/$arch/bin/conda" config --file "$f" --remove channels defaults 2>/dev/null || true
+    done
+  "$CONDA_HOME/$arch/bin/conda" config --file "$CONDA_HOME/$arch/.condarc" --add channels bioconda 2>/dev/null || true
+  "$CONDA_HOME/$arch/bin/conda" config --file "$CONDA_HOME/$arch/.condarc" --add channels conda-forge 2>/dev/null || true
   echo "$CONDA_HOME/$arch/bin/conda"
 }
 
@@ -122,6 +127,18 @@ done
   echo "::notice::$WF: env installed only with the Intel conda (osx-64, Rosetta 2): no Apple Silicon solution"
 PLATFORM="$(python3 -c 'import glob,json,sys; f=glob.glob(sys.argv[1]+"/conda-meta/python-[0-9]*.json"); print(json.load(open(f[0])).get("subdir","?") if f else "?")' "$WORK/env")"
 echo "  env installed with the $USED conda: $("$CONDA" run -p "$WORK/env" python --version), packages for $PLATFORM"
+# key versions, and any package NOT from conda-forge/bioconda (a defaults leak)
+"$CONDA" list -p "$WORK/env" --json | python3 -c '
+import json, sys
+pk = json.load(sys.stdin)
+key = ("biopython", "numpy", "scipy", "ambertools", "biobb_structure_checking", "openbabel", "reduce")
+print("  key packages: " + ", ".join(f"{p['"'"'name'"'"']} {p['"'"'version'"'"']}" for p in pk if p["name"] in key))
+odd = [f"{p['"'"'name'"'"']} {p['"'"'version'"'"']} ({p['"'"'channel'"'"']})" for p in pk
+       if p.get("channel") not in ("conda-forge", "bioconda", "salilab", "pypi") ]
+if odd:
+    print("::warning::packages from other channels (defaults leak?): " + ", ".join(odd))
+'
+
 
 echo ">>> [3/5] prepare a copy next to the notebook (short runs)"
 cp "$WORK/repo/$NOTEBOOK" "$NB_DIR/_macos_check.ipynb"
