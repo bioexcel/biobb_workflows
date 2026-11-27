@@ -628,6 +628,13 @@ expected); dna_helparms, haddock and virtual-screening get past the imports and 
   Side finding: that local run said "arm64 conda" but installed osx-64 packages, because of a
   `subdir: osx-64` in the user's `~/.condarc`. `run_macos_test.sh` now sets `CONDA_SUBDIR` for
   each attempt and reports the installed platform.
+- 2026-11-27, structure_checking on the Intel conda: `check_structure` stopped with "ERROR:
+  fetching/parsing structure" (push run 45978292146), while Linux passed. Cause: the script
+  removed `defaults` from Miniconda's config but set no channels, so conda 25.7 added
+  `defaults` back implicitly (pkgs/main + pkgs/r). Fixed in f224093 (conda-forge + bioconda
+  set on every call; the script now prints key versions and warns about packages from other
+  channels). Re-run 45980464017: md_setup (arm64) and structure_checking (Intel) PASS, the
+  latter end to end with `reduce` 4.15 (biobb_chemistry 5.3.2 in the tutorial env).
 - Quiet failures: the haddock3 and Vina wrappers log "exit code 1" without raising; the
   notebook only fails later on a missing file (often as nglview's misleading "you must
   provide file extension"). `report_executed` lists those earlier cells.
