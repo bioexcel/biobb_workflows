@@ -85,7 +85,7 @@ libgcc-ng 16.2.0 h69a702a_7 conda-forge
 libgd 2.3.3 h5fbf134_12 conda-forge
 libgfortran 16.2.0 h69a702a_7 conda-forge
 libgfortran5 16.2.0 h6b99dfc_7 conda-forge
-libglib 2.90.1 hb382ddc_4 conda-forge
+libglib 2.90.2 hb382ddc_0 conda-forge
 libgomp 16.2.0 he0feb66_7 conda-forge
 libharfbuzz 15.0.0 h23af247_0 conda-forge
 libharu 2.4.6 h36e74d4_0 conda-forge

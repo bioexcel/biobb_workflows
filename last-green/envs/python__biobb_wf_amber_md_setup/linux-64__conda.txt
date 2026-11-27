@@ -29,7 +29,7 @@ brotli-bin 1.2.1 h9908984_1 conda-forge
 bzip2 1.0.8 hda65f42_10 conda-forge
 c-ares 1.34.9 hebe6cf0_0 conda-forge
 ca-certificates 2026.11.20 hbd8a1cb_0 conda-forge
-cairo 1.18.6 h3c89d7e_0 conda-forge
+cairo 1.18.6 h9f5ca07_2 conda-forge
 certifi 2026.11.20 pyhd8ed1ab_0 conda-forge
 charset-normalizer 3.5.3 h1114479_0 conda-forge
 cloudpickle 3.1.3 pyh5ded981_0 conda-forge
@@ -57,7 +57,7 @@ graphite2 1.3.15 h54a6638_1 conda-forge
 gromacs 2026.3 nompi_h26635d9_100 conda-forge
 hdf4 4.2.15 h2a13503_7 conda-forge
 hdf5 2.2.0 nompi_h918fce0_103 conda-forge
-icu 78.3 py310h44b86e0_2 conda-forge
+icu 79.1 py314hb486520_0 conda-forge
 idna 3.20 pyh5ded981_0 conda-forge
 joblib 1.6.0 pyhcf101f3_0 conda-forge
 jsonschema 4.26.0 pyhcf101f3_1 conda-forge
@@ -87,9 +87,9 @@ libgcc 16.2.0 ha9f2e26_7 conda-forge
 libgcc-ng 16.2.0 h69a702a_7 conda-forge
 libgfortran 16.2.0 h69a702a_7 conda-forge
 libgfortran5 16.2.0 h6b99dfc_7 conda-forge
-libglib 2.90.1 hb382ddc_4 conda-forge
+libglib 2.90.2 hb382ddc_0 conda-forge
 libgomp 16.2.0 he0feb66_7 conda-forge
-libharfbuzz 15.0.0 h23af247_0 conda-forge
+libharfbuzz 15.2.0 h3ca84f1_0 conda-forge
 libhwloc 2.13.0 default_he001693_1000 conda-forge
 libiconv 1.18 h0cb94f2_3 conda-forge
 libjpeg-turbo 3.2.1 h7cc23a3_0 conda-forge
@@ -100,10 +100,10 @@ libnghttp2 1.71.0 hc5e5977_0 conda-forge
 libnsl 2.0.1 hb9d3cd8_1 conda-forge
 libopenblas 0.3.34 pthreads_hf13c14d_2 conda-forge
 libpng 1.6.59 h922cc85_0 conda-forge
-libpsl 0.23.1 hd9e3e90_1 conda-forge
+libpsl 0.23.1 h7fe8442_2 conda-forge
 libpython 3.12.16 ha57cdbe_0_cpython conda-forge
 libraqm 0.11.0 h6406941_0 conda-forge
-libsqlite 3.54.1 h13e7031_0 conda-forge
+libsqlite 3.54.1 hf739112_1 conda-forge
 libssh2 1.11.1 h6154650_1 conda-forge
 libstdcxx 16.2.0 h934c35e_7 conda-forge
 libstdcxx-ng 16.2.0 hdf11a46_7 conda-forge
@@ -112,8 +112,8 @@ libuuid 2.42.4 hcfc3c73_1 conda-forge
 libwebp-base 1.6.0 hd42ef1d_1 conda-forge
 libxcb 1.17.0 hb83e432_3 conda-forge
 libxcrypt 4.4.38 h280c20c_0 conda-forge
-libxml2 2.15.4 h7df9aa5_1 conda-forge
-libxml2-16 2.15.4 hf3af7cc_1 conda-forge
+libxml2 2.15.4 he62e462_2 conda-forge
+libxml2-16 2.15.4 h8e18bcb_2 conda-forge
 libzip 1.12.1 h6008cf6_0 conda-forge
 libzlib 1.3.2 h25fd6f3_3 conda-forge
 llvm-openmp 23.1.6 h7148c6a_0 conda-forge
@@ -177,7 +177,7 @@ sympy 1.14.0 pyh2585a3b_106 conda-forge
 tbb 2023.1.0 hfd44327_0 conda-forge
 threadpoolctl 3.8.0 pyhc455866_0 conda-forge
 tk 8.6.13 noxft_h1df4ec4_4 conda-forge
-typer 0.29.2 pyh5ded981_0 conda-forge
+typer 0.29.3 pyh5ded981_0 conda-forge
 typing-extensions 4.16.0 h69aa097_0 conda-forge
 typing-inspection 0.4.5 pyh5ded981_0 conda-forge
 typing_extensions 4.16.0 pyhcf101f3_0 conda-forge

@@ -162,7 +162,7 @@ threadpoolctl 3.8.0 pyhc455866_0 conda-forge
 tidynamics 1.1.2 pyhd8ed1ab_0 conda-forge
 tk 8.6.13 ha6c374e_4 conda-forge
 tqdm 4.70.1 pyhfa0c392_0 conda-forge
-typer 0.29.2 pyh5ded981_0 conda-forge
+typer 0.29.3 pyh5ded981_0 conda-forge
 typing-extensions 4.16.0 h69aa097_0 conda-forge
 typing-inspection 0.4.5 pyh5ded981_0 conda-forge
 typing_extensions 4.16.0 pyhcf101f3_0 conda-forge

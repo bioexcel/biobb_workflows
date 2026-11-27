@@ -51,8 +51,8 @@ libpython 3.12.16 h1b2126f_0_cpython conda-forge
 libsqlite 3.54.1 ha5db789_101 conda-forge
 libtorch 2.14.1 cpu_mkl_he0efe64_102 conda-forge
 libuv 1.52.1 ha3d0635_1 conda-forge
-libxml2 2.15.4 h3668fe6_1 conda-forge
-libxml2-16 2.15.4 h341e563_1 conda-forge
+libxml2 2.15.4 h3e44c86_2 conda-forge
+libxml2-16 2.15.4 h44be935_2 conda-forge
 libzlib 1.3.2 hbb4bfdb_3 conda-forge
 llvm-openmp 23.1.6 h8c1e6b9_0 conda-forge
 markupsafe 3.0.4 py312h9d40a6d_5 conda-forge

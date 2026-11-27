@@ -19,7 +19,7 @@ biobb_common 5.3.1 pyhdfd78af_0 bioconda
 biobb_gromacs 5.3.2 pyhdfd78af_0 bioconda
 biobb_pmx 5.3.0 pyhdfd78af_0 bioconda
 biopython 1.88 py312h6ea13a3_2 conda-forge
-blosc 1.21.7 h4a00637_2 conda-forge
+blosc 1.21.7 h857728b_3 conda-forge
 brotli 1.2.1 ha9642f3_1 conda-forge
 brotli-bin 1.2.1 h086410e_1 conda-forge
 bzip2 1.0.8 h374f1ed_10 conda-forge
@@ -67,13 +67,13 @@ lcms2 2.20 h4e6bd4b_0 conda-forge
 lerc 4.3.0 h64318d8_0 conda-forge
 libaec 1.1.8 h306069d_1 conda-forge
 libblas 3.11.0 12_he492b99_openblas conda-forge
-libboost 1.90.0 hd38a60b_3 conda-forge
-libboost-python 1.90.0 py312h34b9cfc_3 conda-forge
+libboost 1.90.0 hbc0036d_4 conda-forge
+libboost-python 1.90.0 py312h47cd782_4 conda-forge
 libbrotlicommon 1.2.1 he0616a4_1 conda-forge
 libbrotlidec 1.2.1 h4a2f56c_1 conda-forge
 libbrotlienc 1.2.1 h3d41943_1 conda-forge
 libcblas 3.11.0 12_h9b27e0a_openblas conda-forge
-libcurl 8.23.0 h5318221_0 conda-forge
+libcurl 8.23.0 h133525a_1 conda-forge
 libcxx 23.1.6 h88b51c2_0 conda-forge
 libdeflate 1.26 hb7db194_0 conda-forge
 libedit 3.1.20260512 pl5321hba2e2ab_0 conda-forge
@@ -93,7 +93,7 @@ libintl 1.0 h98e67c8_1 conda-forge
 libjpeg-turbo 3.2.1 hd115831_0 conda-forge
 liblapack 3.11.0 12_h859234e_openblas conda-forge
 liblzma 5.8.3 hbb4bfdb_1 conda-forge
-libnetcdf 4.10.1 nompi_h3bd0c3d_203 conda-forge
+libnetcdf 4.10.1 nompi_h1c1b53a_204 conda-forge
 libnghttp2 1.71.0 h180c657_0 conda-forge
 libntlm 1.8 h9ec13f6_3 conda-forge
 libopenblas 0.3.34 openmp_h5c7ac21_1 conda-forge
@@ -105,7 +105,7 @@ libraqm 0.11.0 h1888d0e_0 conda-forge
 librdkit 2026.03.5 hacb95ea_0 conda-forge
 libsqlite 3.54.1 h59ff3a2_0 conda-forge
 libssh2 1.11.1 hd53bb72_2 conda-forge
-libtiff 4.7.2 h293186d_2 conda-forge
+libtiff 4.7.2 h1fb3b34_3 conda-forge
 libwebp-base 1.6.0 hb276fe9_1 conda-forge
 libxcb 1.17.0 h2478c6c_3 conda-forge
 libxml2 2.15.4 hb56241c_1 conda-forge
@@ -113,7 +113,7 @@ libxml2-16 2.15.4 h8376fb4_1 conda-forge
 libzip 1.12.1 h99362d9_0 conda-forge
 libzlib 1.3.2 hbb4bfdb_3 conda-forge
 llvm-openmp 23.1.6 h8c1e6b9_0 conda-forge
-llvmlite 0.50.0 py312h48412d1_1 conda-forge
+llvmlite 0.45.0 py312h9f67ac4_0 conda-forge
 lz4-c 1.11.1 h484783a_0 conda-forge
 markdown-it-py 4.3.0 pyhd8ed1ab_0 conda-forge
 matplotlib-base 3.11.2 py312had7407c_1 conda-forge
@@ -127,7 +127,7 @@ ncurses 6.6 hcc0dc9a_1 conda-forge
 netcdf-fortran 4.6.4 nompi_h4de1b4c_102 conda-forge
 networkx 3.7 pyhc364b38_0 conda-forge
 nlopt 2.11.0 np2py312hfa968ca_3 conda-forge
-numba 0.68.1 py312h9a5cd42_1 conda-forge
+numba 0.62.1 py312hae945ca_0 conda-forge
 numpy 1.26.4 py312he3a82b2_0 conda-forge
 ocl_icd_wrapper_apple 1.0.0 hbcb3906_0 conda-forge
 opencl-headers 2025.06.13 hcc62823_0 conda-forge
@@ -191,4 +191,4 @@ xorg-libxext 1.3.7 hd115831_1 conda-forge
 xorg-libxt 1.3.1 hd115831_1 conda-forge
 yaml 0.2.7 h5a9b756_0 conda-forge
 zlib-ng 2.3.3 h646e873_1 conda-forge
-zstd 1.5.7 hbc1a06c_7 conda-forge
+zstd 1.6.0 h7710f1d_0 conda-forge

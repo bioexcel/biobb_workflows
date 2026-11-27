@@ -94,7 +94,7 @@ libgcc-ng 16.2.0 h69a702a_7 conda-forge
 libgfortran 16.2.0 h69a702a_7 conda-forge
 libgfortran-ng 16.2.0 h69a702a_7 conda-forge
 libgfortran5 16.2.0 h6b99dfc_7 conda-forge
-libglib 2.90.1 hb382ddc_4 conda-forge
+libglib 2.90.2 hb382ddc_0 conda-forge
 libgomp 16.2.0 he0feb66_7 conda-forge
 libharfbuzz 15.0.0 h23af247_0 conda-forge
 libhwloc 2.13.0 default_he001693_1000 conda-forge
@@ -108,11 +108,11 @@ libnsl 2.0.1 hb9d3cd8_1 conda-forge
 libntlm 1.8 hebe6cf0_3 conda-forge
 libopenblas 0.3.34 pthreads_hf13c14d_2 conda-forge
 libpng 1.6.59 h922cc85_0 conda-forge
-libpq 18.7 h3883810_1 conda-forge
+libpq 18.7 h3883810_2 conda-forge
 libpsl 0.23.1 hd9e3e90_1 conda-forge
 libpython 3.12.16 ha57cdbe_0_cpython conda-forge
 libraqm 0.11.0 h6406941_0 conda-forge
-librdkit 2026.09.2 h61648e3_0 conda-forge
+librdkit 2026.09.3 h61648e3_0 conda-forge
 libsanitizer 15.3.0 h54950a5_7 conda-forge
 libsqlite 3.54.1 h13e7031_0 conda-forge
 libssh2 1.11.1 h6154650_1 conda-forge
@@ -175,7 +175,7 @@ python_abi 3.12 9_cp312 conda-forge
 pytz 2026.6 pyh5ded981_0 conda-forge
 pyyaml 6.0.3 py312h8b7ec3f_4 conda-forge
 qhull 2020.2 haf43d43_6 conda-forge
-rdkit 2026.09.2 py312h5eb2359_0 conda-forge
+rdkit 2026.09.3 py312h5eb2359_0 conda-forge
 readline 8.3 hd6e31c0_1 conda-forge
 referencing 0.37.0 pyhcf101f3_0 conda-forge
 reportlab 5.1.2 pyh5ded981_0 conda-forge

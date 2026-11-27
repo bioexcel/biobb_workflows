@@ -13,10 +13,10 @@ arrow 1.4.0 pyhcf101f3_0 conda-forge
 asttokens 3.0.2 pyhd8ed1ab_0 conda-forge
 async-lru 2.4.0 pyh5ded981_0 conda-forge
 attrs 26.1.0 pyhcf101f3_0 conda-forge
-babel 2.18.0 pyhcf101f3_1 conda-forge
+babel 2.19.0 pyh5ded981_0 conda-forge
 beautifulsoup4 4.15.0 pyha770c72_0 conda-forge
 biobb_amber 5.3.1 py312h8be3e24_1 bioconda
-biobb_chemistry 5.3.0 pyhdfd78af_1 bioconda
+biobb_chemistry 5.3.2 pyhdfd78af_0 bioconda
 biobb_cmip 5.3.0 pyhdfd78af_0 bioconda
 biobb_common 5.3.1 pyhdfd78af_0 bioconda
 biobb_io 5.3.1 pyhdfd78af_0 bioconda
@@ -36,13 +36,13 @@ cached_property 2.0.1 pyhcf101f3_0 conda-forge
 cairo 1.18.4 h950ec3b_0 conda-forge
 certifi 2026.11.20 pyhd8ed1ab_0 conda-forge
 cffi 2.1.1 py312ha4ebf3d_4 conda-forge
-cftime 1.6.5 py312h7393e0f_2 conda-forge
+cftime 1.6.6 py311h888ea4b_1 conda-forge
 charset-normalizer 3.5.3 h86c1381_0 conda-forge
 cloudpickle 3.1.3 pyh5ded981_0 conda-forge
 cmip 2.7.0 h2b17ec4_1 bioconda
 colorama 0.4.6 pyhd8ed1ab_1 conda-forge
 comm 0.2.3 pyhe01879c_0 conda-forge
-contourpy 1.3.3 py312hb0c38da_4 conda-forge
+contourpy 1.4.0 py312hcba6f97_1 conda-forge
 cpython 3.12.16 py312hd8ed1ab_0 conda-forge
 cycler 0.12.1 pyhcf101f3_2 conda-forge
 debugpy 1.8.22 py312haab1465_1 conda-forge
@@ -71,7 +71,7 @@ hdf4 4.2.15 h8138101_7 conda-forge
 hdf5 1.14.6 nompi_hc8237f9_102 conda-forge
 hpack 4.2.0 pyhd8ed1ab_0 conda-forge
 httpcore 1.0.9 pyh29332c3_0 conda-forge
-httpx 0.28.1 pyhd8ed1ab_0 conda-forge
+httpx 0.29.0 pyhd8ed1ab_0 conda-forge
 hyperframe 6.1.0 pyhd8ed1ab_0 conda-forge
 icu 75.1 h120a0e1_0 conda-forge
 idna 3.20 pyh5ded981_0 conda-forge
@@ -91,7 +91,7 @@ jsonschema 4.26.0 pyhcf101f3_1 conda-forge
 jsonschema-specifications 2025.9.1 pyhcf101f3_0 conda-forge
 jsonschema-with-format-nongpl 4.26.0 hcf101f3_1 conda-forge
 jupyter 1.1.1 pyhd8ed1ab_1 conda-forge
-jupyter-builder 1.3.0 pyh5ded981_0 conda-forge
+jupyter-builder 1.3.1 pyh5ded981_0 conda-forge
 jupyter-lsp 2.3.1 pyhcf101f3_0 conda-forge
 jupyter_client 8.10.0 pyhcf101f3_0 conda-forge
 jupyter_console 6.6.3 pyhd8ed1ab_1 conda-forge
@@ -111,6 +111,7 @@ lerc 4.3.0 h64318d8_0 conda-forge
 libaec 1.1.8 h306069d_1 conda-forge
 libblas 3.11.0 5_he492b99_openblas conda-forge
 libboost 1.86.0 hb2bbd1d_4 conda-forge
+libboost-python 1.86.0 py312h3a26c12_5 conda-forge
 libbrotlicommon 1.2.1 he0616a4_1 conda-forge
 libbrotlidec 1.2.1 h4a2f56c_1 conda-forge
 libbrotlienc 1.2.1 h3d41943_1 conda-forge
@@ -158,6 +159,7 @@ mdanalysis 2.11.0 np2py312ha7224d6_1 conda-forge
 mdurl 0.1.2 pyhd8ed1ab_1 conda-forge
 mistune 3.4.0 pyh5ded981_0 conda-forge
 mmtf-python 1.1.3 pyhd8ed1ab_0 conda-forge
+molviewspec 1.8.1 pyhd8ed1ab_0 conda-forge
 mrcfile 1.5.4 pyhd8ed1ab_0 conda-forge
 msgpack-python 1.2.4 py312ha5a0930_1 conda-forge
 munkres 1.1.4 pyhd8ed1ab_1 conda-forge
@@ -170,10 +172,9 @@ nest-asyncio2 1.7.4 pyh5ded981_0 conda-forge
 netcdf-fortran 4.6.2 nompi_hc6d3b56_100 conda-forge
 netcdf4 1.7.2 nompi_py312h5646c37_103 conda-forge
 networkx 3.7 pyhc364b38_0 conda-forge
-nglview 4.0 pyh309af5b_0 conda-forge
 notebook 7.6.5 pyh5ded981_0 conda-forge
 notebook-shim 0.2.4 pyhd8ed1ab_1 conda-forge
-numpy 1.26.4 py312he3a82b2_0 conda-forge
+numpy 2.2.6 py312h6693b03_0 conda-forge
 openbabel 3.1.1 py312h38d6ea8_9 conda-forge
 openjpeg 2.5.4 he4eae51_1 conda-forge
 openssl 3.6.5 h332eb6d_0 conda-forge
@@ -221,6 +222,7 @@ pyyaml 6.0.3 py312h9d40a6d_4 conda-forge
 pyzmq 27.3.0 py312h0293f73_1 conda-forge
 qhull 2020.2 h15054a0_6 conda-forge
 readline 8.3 h000c2f7_1 conda-forge
+reduce 4.15 py312hfc96be0_4 bioconda
 referencing 0.37.0 pyhcf101f3_0 conda-forge
 requests 2.34.2 pyhcf101f3_0 conda-forge
 rfc3339-validator 0.1.4 pyhd8ed1ab_1 conda-forge
@@ -235,7 +237,6 @@ seaborn-base 0.13.2 pyhd8ed1ab_3 conda-forge
 send2trash 2.2.0 pyhd24e8f7_0 conda-forge
 setuptools 84.2.1 pyhe730653_0 conda-forge
 shellingham 1.5.4 pyhd8ed1ab_2 conda-forge
-simpletraj 0.5 py312h5d6a8aa_1008 conda-forge
 six 1.17.0 pyhe01879c_1 conda-forge
 snappy 1.3.1 hab3474a_2 conda-forge
 sniffio 1.3.1 pyhd8ed1ab_2 conda-forge
@@ -247,11 +248,10 @@ threadpoolctl 3.8.0 pyhc455866_0 conda-forge
 tidynamics 1.1.2 pyhd8ed1ab_0 conda-forge
 tinycss2 1.4.0 pyhd8ed1ab_0 conda-forge
 tk 8.6.13 ha6c374e_4 conda-forge
-tomli 2.5.0 pyh5ded981_0 conda-forge
 tornado 6.6.1 py312h8be31a5_1 conda-forge
 tqdm 4.70.1 pyhfa0c392_0 conda-forge
 traitlets 5.16.1 pyhcf101f3_0 conda-forge
-typer 0.29.2 pyh5ded981_0 conda-forge
+typer 0.29.3 pyh5ded981_0 conda-forge
 typing-extensions 4.16.0 h69aa097_0 conda-forge
 typing-inspection 0.4.5 pyh5ded981_0 conda-forge
 typing_extensions 4.16.0 pyhcf101f3_0 conda-forge

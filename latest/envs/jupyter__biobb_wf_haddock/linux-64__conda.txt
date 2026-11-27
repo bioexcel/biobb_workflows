@@ -21,7 +21,7 @@ aws-c-io 0.27.5 h4f381ba_1 conda-forge
 aws-c-s3 0.13.1 h7508075_1 conda-forge
 aws-c-sdkutils 0.2.7 h01ee8f8_3 conda-forge
 aws-checksums 0.2.10 h01ee8f8_5 conda-forge
-babel 2.18.0 pyhcf101f3_1 conda-forge
+babel 2.19.0 pyh5ded981_0 conda-forge
 beautifulsoup4 4.15.0 pyha770c72_0 conda-forge
 biobb_common 5.3.1 pyhdfd78af_0 bioconda
 biobb_haddock 5.3.3 pyh106432d_0 bioconda
@@ -44,7 +44,7 @@ charset-normalizer 3.5.3 h1114479_0 conda-forge
 cloudpickle 3.1.3 pyh5ded981_0 conda-forge
 comm 0.2.3 pyhe01879c_0 conda-forge
 contourpy 1.4.0 py313h2551ef2_2 conda-forge
-cpython 3.13.18 py313hd8ed1ab_100 conda-forge
+cpython 3.13.18 py313hd8ed1ab_101 conda-forge
 cycler 0.12.1 pyhcf101f3_2 conda-forge
 debugpy 1.8.22 py313h901f96d_1 conda-forge
 defusedxml 0.7.1 pyhd8ed1ab_0 conda-forge
@@ -69,7 +69,7 @@ hdf4 4.2.15 h2a13503_7 conda-forge
 hdf5 2.2.0 nompi_hc529623_100 conda-forge
 hpack 4.2.0 pyhd8ed1ab_0 conda-forge
 httpcore 1.0.9 pyh29332c3_0 conda-forge
-httpx 0.28.1 pyhd8ed1ab_0 conda-forge
+httpx 0.29.0 pyhd8ed1ab_0 conda-forge
 hyperframe 6.1.0 pyhd8ed1ab_0 conda-forge
 idna 3.20 pyh5ded981_0 conda-forge
 importlib-metadata 10.0.0 pyh5ded981_0 conda-forge
@@ -88,7 +88,7 @@ jsonschema 4.26.0 pyhcf101f3_1 conda-forge
 jsonschema-specifications 2025.9.1 pyhcf101f3_0 conda-forge
 jsonschema-with-format-nongpl 4.26.0 hcf101f3_1 conda-forge
 jupyter 1.1.1 pyhd8ed1ab_1 conda-forge
-jupyter-builder 1.3.0 pyh5ded981_0 conda-forge
+jupyter-builder 1.3.1 pyh5ded981_0 conda-forge
 jupyter-lsp 2.3.1 pyhcf101f3_0 conda-forge
 jupyter_client 8.10.0 pyhcf101f3_0 conda-forge
 jupyter_console 6.6.3 pyhd8ed1ab_1 conda-forge
@@ -137,7 +137,7 @@ libnetcdf 4.10.1 nompi_he3e3c8e_201 conda-forge
 libnghttp2 1.71.0 hc5e5977_0 conda-forge
 libpng 1.6.59 h922cc85_0 conda-forge
 libprotobuf 7.35.1 h8a00109_4 conda-forge
-libpython 3.13.18 hd51c5da_100_cp313 conda-forge
+libpython 3.13.18 hd51c5da_101_cp313 conda-forge
 libsodium 1.0.22 hebe6cf0_3 conda-forge
 libsqlite 3.54.1 h0737f62_101 conda-forge
 libssh2 1.11.1 h6154650_1 conda-forge
@@ -150,8 +150,8 @@ libuv 1.52.1 h280c20c_1 conda-forge
 libwebp-base 1.6.0 hd42ef1d_1 conda-forge
 libxcb 1.17.0 hb83e432_3 conda-forge
 libxcrypt 4.4.38 h280c20c_0 conda-forge
-libxml2 2.15.4 ha7a5771_1 conda-forge
-libxml2-16 2.15.4 hbdfff7e_1 conda-forge
+libxml2 2.15.4 ha7a5771_2 conda-forge
+libxml2-16 2.15.4 hbdfff7e_2 conda-forge
 libzip 1.12.1 h6008cf6_0 conda-forge
 libzlib 1.3.2 h25fd6f3_3 conda-forge
 llvm-openmp 23.1.6 h7148c6a_0 conda-forge
@@ -216,11 +216,11 @@ pydantic 2.14.4 pyh5ded981_0 conda-forge
 pydantic-core 2.50.5 py313ha296275_0 conda-forge
 pygments 2.21.0 pyhcf101f3_0 conda-forge
 pyparsing 3.3.3 pyh5ded981_0 conda-forge
-python 3.13.18 hf47f18c_100_cp313 conda-forge
+python 3.13.18 hf47f18c_101_cp313 conda-forge
 python-abi3 3.13 h9bebd56_3 conda-forge
 python-dateutil 4.0.0 pyh5ded981_0 conda-forge
 python-fastjsonschema 2.22.3 pyh5ded981_0 conda-forge
-python-gil 3.13.18 h4df99d1_100 conda-forge
+python-gil 3.13.18 h4df99d1_101 conda-forge
 python-json-logger 4.2.0 pyhd8ed1ab_0 conda-forge
 python-tzdata 2026.6 pyh5ded981_0 conda-forge
 python_abi 3.13 9_cp313 conda-forge

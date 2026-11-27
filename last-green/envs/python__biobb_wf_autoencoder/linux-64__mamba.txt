@@ -100,8 +100,8 @@ libuv 1.52.1 h280c20c_1 conda-forge
 libwebp-base 1.6.0 hd42ef1d_1 conda-forge
 libxcb 1.17.0 hb83e432_3 conda-forge
 libxcrypt 4.4.38 h280c20c_0 conda-forge
-libxml2 2.15.4 ha7a5771_1 conda-forge
-libxml2-16 2.15.4 hbdfff7e_1 conda-forge
+libxml2 2.15.4 ha7a5771_2 conda-forge
+libxml2-16 2.15.4 hbdfff7e_2 conda-forge
 libzip 1.12.1 h6008cf6_0 conda-forge
 libzlib 1.3.2 h25fd6f3_3 conda-forge
 lightning 2.6.6 pyh5ded981_0 conda-forge

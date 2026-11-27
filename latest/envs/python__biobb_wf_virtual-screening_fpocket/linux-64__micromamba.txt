@@ -70,7 +70,7 @@ libgcc 16.2.0 ha9f2e26_7 conda-forge
 libgcc-ng 16.2.0 h69a702a_7 conda-forge
 libgfortran 16.2.0 h69a702a_7 conda-forge
 libgfortran5 16.2.0 h6b99dfc_7 conda-forge
-libglib 2.90.1 hb382ddc_4 conda-forge
+libglib 2.90.2 hb382ddc_0 conda-forge
 libgomp 16.2.0 he0feb66_7 conda-forge
 libhwloc 2.11.2 default_he43201b_1000 conda-forge
 libiconv 1.18 h0cb94f2_3 conda-forge
@@ -141,7 +141,7 @@ shellingham 1.5.4 pyhd8ed1ab_2 conda-forge
 snappy 1.3.1 h7edda9a_2 conda-forge
 tbb 2022.1.0 h4ce085d_0 conda-forge
 tk 8.6.13 noxft_h1df4ec4_4 conda-forge
-typer 0.29.2 pyh5ded981_0 conda-forge
+typer 0.29.3 pyh5ded981_0 conda-forge
 typing-extensions 4.16.0 h69aa097_0 conda-forge
 typing-inspection 0.4.5 pyh5ded981_0 conda-forge
 typing_extensions 4.16.0 pyhcf101f3_0 conda-forge

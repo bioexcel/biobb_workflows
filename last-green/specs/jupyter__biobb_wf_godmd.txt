@@ -1,8 +1,7 @@
-biobb_io==5.3.1
+biobb_io==5.3.2
 biobb_structure_utils==5.3.0
-biobb_analysis==5.3.0
-biobb_godmd==5.3.0
+biobb_analysis==5.3.1
+biobb_godmd==5.3.1
 emboss
 jupyter
-nglview<=4.0
-simpletraj
+molviewspec>=1.8

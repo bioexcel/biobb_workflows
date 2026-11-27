@@ -20,7 +20,7 @@ aws-c-io 1.1.2 hb517676_2 conda-forge
 aws-c-s3 1.5.2 hc414f84_1 conda-forge
 aws-c-sdkutils 1.0.1 ha404f16_0 conda-forge
 aws-checksums 1.0.1 ha404f16_1 conda-forge
-babel 2.18.0 pyhcf101f3_1 conda-forge
+babel 2.19.0 pyh5ded981_0 conda-forge
 beautifulsoup4 4.15.0 pyha770c72_0 conda-forge
 binutils_impl_linux-64 2.46.1 default_hfdba357_103 conda-forge
 biobb_analysis 5.3.0 pyhdfd78af_1 bioconda
@@ -80,7 +80,7 @@ hdf4 4.2.15 h2a13503_7 conda-forge
 hdf5 2.2.0 nompi_h918fce0_103 conda-forge
 hpack 4.2.0 pyhd8ed1ab_0 conda-forge
 httpcore 1.0.9 pyh29332c3_0 conda-forge
-httpx 0.28.1 pyhd8ed1ab_0 conda-forge
+httpx 0.29.0 pyhd8ed1ab_0 conda-forge
 hyperframe 6.1.0 pyhd8ed1ab_0 conda-forge
 icu 78.3 py310h44b86e0_2 conda-forge
 idna 3.20 pyh5ded981_0 conda-forge
@@ -99,7 +99,7 @@ jsonschema 4.26.0 pyhcf101f3_1 conda-forge
 jsonschema-specifications 2025.9.1 pyhcf101f3_0 conda-forge
 jsonschema-with-format-nongpl 4.26.0 hcf101f3_1 conda-forge
 jupyter 1.1.1 pyhd8ed1ab_1 conda-forge
-jupyter-builder 1.3.0 pyh5ded981_0 conda-forge
+jupyter-builder 1.3.1 pyh5ded981_0 conda-forge
 jupyter-lsp 2.3.1 pyhcf101f3_0 conda-forge
 jupyter_client 8.10.0 pyhcf101f3_0 conda-forge
 jupyter_console 6.6.3 pyhd8ed1ab_1 conda-forge
@@ -141,7 +141,7 @@ libgcc-ng 16.2.0 h69a702a_7 conda-forge
 libgfortran 16.2.0 h69a702a_7 conda-forge
 libgfortran-ng 16.2.0 h69a702a_7 conda-forge
 libgfortran5 16.2.0 h6b99dfc_7 conda-forge
-libglib 2.90.1 hb382ddc_4 conda-forge
+libglib 2.90.2 hb382ddc_0 conda-forge
 libgomp 16.2.0 he0feb66_7 conda-forge
 libharfbuzz 15.0.0 h23af247_0 conda-forge
 libhwloc 2.13.0 default_he001693_1000 conda-forge
@@ -155,11 +155,11 @@ libnsl 2.0.1 hb9d3cd8_1 conda-forge
 libntlm 1.8 hebe6cf0_3 conda-forge
 libopenblas 0.3.34 pthreads_hf13c14d_2 conda-forge
 libpng 1.6.59 h922cc85_0 conda-forge
-libpq 18.7 h3883810_1 conda-forge
+libpq 18.7 h3883810_2 conda-forge
 libpsl 0.23.1 hd9e3e90_1 conda-forge
 libpython 3.12.16 ha57cdbe_0_cpython conda-forge
 libraqm 0.11.0 h6406941_0 conda-forge
-librdkit 2026.09.2 h61648e3_0 conda-forge
+librdkit 2026.09.3 h61648e3_0 conda-forge
 libsanitizer 15.3.0 h54950a5_7 conda-forge
 libsodium 1.0.22 hebe6cf0_3 conda-forge
 libsqlite 3.54.1 h13e7031_0 conda-forge
@@ -248,7 +248,7 @@ pytz 2026.6 pyh5ded981_0 conda-forge
 pyyaml 6.0.3 py312h8b7ec3f_4 conda-forge
 pyzmq 27.3.0 py312h8a5ba0d_1 conda-forge
 qhull 2020.2 haf43d43_6 conda-forge
-rdkit 2026.09.2 py312h5eb2359_0 conda-forge
+rdkit 2026.09.3 py312h5eb2359_0 conda-forge
 readline 8.3 hd6e31c0_1 conda-forge
 referencing 0.37.0 pyhcf101f3_0 conda-forge
 reportlab 5.1.2 pyh5ded981_0 conda-forge
@@ -277,7 +277,6 @@ terminado 0.18.1 pyhc90fa1f_1 conda-forge
 threadpoolctl 3.8.0 pyhc455866_0 conda-forge
 tinycss2 1.4.0 pyhd8ed1ab_0 conda-forge
 tk 8.6.13 noxft_h1df4ec4_4 conda-forge
-tomli 2.5.0 pyh5ded981_0 conda-forge
 tornado 6.6.1 py312h1b36aeb_1 conda-forge
 traitlets 5.16.1 pyhcf101f3_0 conda-forge
 typing-extensions 4.16.0 h69aa097_0 conda-forge

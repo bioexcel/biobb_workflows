@@ -33,7 +33,7 @@ certifi 2026.11.20 pyhd8ed1ab_0 conda-forge
 charset-normalizer 3.5.3 h1114479_0 conda-forge
 cloudpickle 3.1.3 pyh5ded981_0 conda-forge
 concoord 2.1.2 h9ee0642_4 bioconda
-contourpy 1.3.3 py312h0a2e395_4 conda-forge
+contourpy 1.4.0 py312h9be0db6_2 conda-forge
 cpython 3.12.16 py312hd8ed1ab_0 conda-forge
 cycler 0.12.1 pyhcf101f3_2 conda-forge
 fftw 3.3.11 nompi_h3b011a4_100 conda-forge
@@ -50,7 +50,7 @@ gromacs 2026.3 nompi_h26635d9_100 conda-forge
 hdf4 4.2.15 h2a13503_7 conda-forge
 hdf5 2.2.0 nompi_hc529623_100 conda-forge
 idna 3.20 pyh5ded981_0 conda-forge
-imods 1.0.4 h9ee0642_0 bioconda
+imods 1.0.4 h953ea5b_4 bioconda
 joblib 1.6.0 pyhcf101f3_0 conda-forge
 jsonschema 4.26.0 pyhcf101f3_1 conda-forge
 jsonschema-specifications 2025.9.1 pyhcf101f3_0 conda-forge
@@ -100,8 +100,8 @@ libuuid 2.42.4 hcfc3c73_1 conda-forge
 libwebp-base 1.6.0 hd42ef1d_1 conda-forge
 libxcb 1.17.0 hb83e432_3 conda-forge
 libxcrypt 4.4.38 h280c20c_0 conda-forge
-libxml2 2.15.4 ha7a5771_1 conda-forge
-libxml2-16 2.15.4 hbdfff7e_1 conda-forge
+libxml2 2.15.4 ha7a5771_2 conda-forge
+libxml2-16 2.15.4 hbdfff7e_2 conda-forge
 libzip 1.12.1 h6008cf6_0 conda-forge
 libzlib 1.3.2 h25fd6f3_3 conda-forge
 llvm-openmp 23.1.6 h7148c6a_0 conda-forge
@@ -123,7 +123,7 @@ networkx 3.7 pyhc364b38_0 conda-forge
 nlopt 2.11.0 np2py312h1193b9d_3 conda-forge
 nolb 1.9 h9ee0642_0 bioconda
 numba 0.68.1 py312h80505a6_1 conda-forge
-numpy 1.26.4 py312heda63a1_0 conda-forge
+numpy 2.2.6 py312h72c5963_0 conda-forge
 ocl-icd 2.3.4 hb03c661_1 conda-forge
 opencl-headers 2025.06.13 hecca717_0 conda-forge
 openjpeg 2.5.4 heb1ab33_2 conda-forge

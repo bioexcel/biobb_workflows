@@ -22,7 +22,7 @@ aws-c-io 0.27.5 h82e2481_1 conda-forge
 aws-c-s3 0.13.1 h9d6a30e_1 conda-forge
 aws-c-sdkutils 0.2.7 hdead95b_3 conda-forge
 aws-checksums 0.2.10 hdead95b_5 conda-forge
-babel 2.18.0 pyhcf101f3_1 conda-forge
+babel 2.19.0 pyh5ded981_0 conda-forge
 beautifulsoup4 4.15.0 pyha770c72_0 conda-forge
 biobb_common 5.3.1 pyhdfd78af_0 bioconda
 biobb_haddock 5.3.3 pyh106432d_0 bioconda
@@ -73,7 +73,7 @@ hdf4 4.2.15 h8138101_7 conda-forge
 hdf5 2.2.0 nompi_h6160fcd_100 conda-forge
 hpack 4.2.0 pyhd8ed1ab_0 conda-forge
 httpcore 1.0.9 pyh29332c3_0 conda-forge
-httpx 0.28.1 pyhd8ed1ab_0 conda-forge
+httpx 0.29.0 pyhd8ed1ab_0 conda-forge
 hyperframe 6.1.0 pyhd8ed1ab_0 conda-forge
 idna 3.20 pyh5ded981_0 conda-forge
 importlib-metadata 10.0.0 pyh5ded981_0 conda-forge
@@ -92,7 +92,7 @@ jsonschema 4.26.0 pyhcf101f3_1 conda-forge
 jsonschema-specifications 2025.9.1 pyhcf101f3_0 conda-forge
 jsonschema-with-format-nongpl 4.26.0 hcf101f3_1 conda-forge
 jupyter 1.1.1 pyhd8ed1ab_1 conda-forge
-jupyter-builder 1.3.0 pyh5ded981_0 conda-forge
+jupyter-builder 1.3.1 pyh5ded981_0 conda-forge
 jupyter-lsp 2.3.1 pyhcf101f3_0 conda-forge
 jupyter_client 8.10.0 pyhcf101f3_0 conda-forge
 jupyter_console 6.6.3 pyhd8ed1ab_1 conda-forge
@@ -147,8 +147,8 @@ libtorch 2.14.1 cpu_mkl_he0efe64_102 conda-forge
 libuv 1.52.1 ha3d0635_1 conda-forge
 libwebp-base 1.6.0 hb276fe9_1 conda-forge
 libxcb 1.17.0 h2478c6c_3 conda-forge
-libxml2 2.15.4 h3668fe6_1 conda-forge
-libxml2-16 2.15.4 h341e563_1 conda-forge
+libxml2 2.15.4 h3e44c86_2 conda-forge
+libxml2-16 2.15.4 h44be935_2 conda-forge
 libzip 1.12.1 h99362d9_0 conda-forge
 libzlib 1.3.2 hbb4bfdb_3 conda-forge
 llvm-openmp 23.1.6 h8c1e6b9_0 conda-forge

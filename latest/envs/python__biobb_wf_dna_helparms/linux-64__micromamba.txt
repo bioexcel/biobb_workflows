@@ -27,7 +27,7 @@ certifi 2026.11.20 pyhd8ed1ab_0 conda-forge
 charset-normalizer 3.5.3 h1114479_0 conda-forge
 cloudpickle 3.1.3 pyh5ded981_0 conda-forge
 contourpy 1.4.0 py314h5383ef5_2 conda-forge
-cpython 3.14.10 py314hd8ed1ab_100 conda-forge
+cpython 3.14.10 py314hd8ed1ab_101 conda-forge
 curves 3.0.3 hb53fab8_2 bioconda
 cycler 0.12.1 pyhcf101f3_2 conda-forge
 fftw 3.3.11 nompi_h3b011a4_100 conda-forge
@@ -89,8 +89,8 @@ libuuid 2.42.4 hcfc3c73_1 conda-forge
 libwebp-base 1.6.0 hd42ef1d_1 conda-forge
 libxcb 1.17.0 hb83e432_3 conda-forge
 libxcrypt 4.4.38 h280c20c_0 conda-forge
-libxml2 2.15.4 ha7a5771_1 conda-forge
-libxml2-16 2.15.4 hbdfff7e_1 conda-forge
+libxml2 2.15.4 ha7a5771_2 conda-forge
+libxml2-16 2.15.4 hbdfff7e_2 conda-forge
 libzip 1.12.1 h6008cf6_0 conda-forge
 libzlib 1.3.2 h25fd6f3_3 conda-forge
 llvm-openmp 23.1.6 h7148c6a_0 conda-forge
@@ -126,7 +126,7 @@ pygments 2.21.0 pyhcf101f3_0 conda-forge
 pyparsing 3.3.3 pyh5ded981_0 conda-forge
 python 3.14.10 hcd007b5_100_cp314 conda-forge
 python-dateutil 4.0.0 pyh5ded981_0 conda-forge
-python-gil 3.14.10 h4df99d1_100 conda-forge
+python-gil 3.14.10 h4df99d1_101 conda-forge
 python-tzdata 2026.6 pyh5ded981_0 conda-forge
 python_abi 3.14 9_cp314 conda-forge
 pyyaml 6.0.3 py314h93e9acf_4 conda-forge

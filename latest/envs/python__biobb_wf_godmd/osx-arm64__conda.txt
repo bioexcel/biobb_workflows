@@ -83,7 +83,7 @@ libgcc 16.2.0 h3cf6597_7 conda-forge
 libgd 2.3.3 h05bcc79_12 conda-forge
 libgfortran 16.2.0 h07b0088_7 conda-forge
 libgfortran5 16.2.0 hdb7a957_7 conda-forge
-libglib 2.90.1 h412b552_4 conda-forge
+libglib 2.90.2 h082bad5_0 conda-forge
 libharfbuzz 15.0.0 hcda0f7c_0 conda-forge
 libharu 2.4.6 h8fb3f6e_0 conda-forge
 libhwloc 2.13.0 default_ha97f43a_1000 conda-forge
